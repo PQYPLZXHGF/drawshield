@@ -1,0 +1,53 @@
+#summary Overview of Drawshield Wiki
+#labels Featured
+
+= Introduction =
+
+This page is an outline of the proposed organisation for the Drawshield Wiki.
+
+
+= Proposed Organisation =
+
+ * About Drawshield
+   * Aims
+   * Background
+   * Acknowledgements
+ * Blazons and Heraldry
+   * Sources
+ * The Drawshield Program
+   * Program Overview
+   * The parser
+     * Parser Overview
+     * Lexical Analysis
+     * Matching Words
+   * BlazonML
+   * SVG Drawing
+     * SVG Overview
+     * Substitutions
+     * Preprocessing
+     * Placement Specification Format
+     * Object Specification Format
+     * Linetype Implementation
+     * Charge Data
+   * Calling drawshield
+   * Supporting Javascripts
+     * Common Functions
+     * Random Blazon Generation
+     * Blazon By Parts
+     * Blazonry Quiz
+ * Supported Heraldic Features
+   * Syntax and punctuation
+   * Marshalling
+   * Tinctures
+      * Colours
+      * Treatments
+      * Furs
+   * Divisions
+      * Division Modifiers
+   * Ordinaries
+      * Ordinary Modifiers
+   * Linetypes
+   * Charges
+   * Ordinaries
+
+In time, each of the items above will turn into a page!

@@ -9,7 +9,7 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
 = Proposed Organisation =
 
  * About Drawshield
-   * Aims
+   * [Aims]
    * Background
    * Acknowledgements
  * Blazons and Heraldry

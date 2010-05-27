@@ -17,7 +17,7 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
  * The Drawshield Program
    * Program Overview
       * [Requirements]
-      * [Change Log]
+      * [ChangeLog Change Log]
    * The parser
      * Parser Overview
      * Lexical Analysis
@@ -32,6 +32,8 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
      * Linetype Implementation
      * Charge Data
    * Calling drawshield
+   * Supporting Programs
+     * Regression Test Suite
    * Supporting Javascripts
      * Common Functions
      * Random Blazon Generation
@@ -51,10 +53,5 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
    * Linetypes
    * Charges
    * Ordinaries
- * Supporting Programs
-   * Regression Test Suite
-   * Shield Builder
-   * Random Blazon Generator
-   * Blazon Quiz
 
 In time, each of the items above will turn into a page!

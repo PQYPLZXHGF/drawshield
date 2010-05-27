@@ -15,9 +15,9 @@ I reproduced everything that our original program could do, but just couldn't se
 
 ==Subsidiary Aims==
 
-  Learning about and keeping current with modern programming languages and techniques
-  Learning about heraldry and blazonry
-  Creating some good heraldic artwork
-  Learning about and keeping current with modern integrated development environments
-  Conversing with interesting folks with similar interests
-  Setting challenges for myself and enjoying the satisfaction of achieving them!
+ *  Learning about and keeping current with modern programming languages and techniques
+ *  Learning about heraldry and blazonry
+ *  Creating some good heraldic artwork
+ *  Learning about and keeping current with modern integrated development environments
+ *  Conversing with interesting folks with similar interests
+ *  Setting challenges for myself and enjoying the satisfaction of achieving them!

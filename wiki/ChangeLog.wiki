@@ -1,4 +1,4 @@
-#This is the change log history
+#summary This is the change log history
 =Shield Release Notes=
 
 Versions are numbered in four levels, as follows:
@@ -7,6 +7,48 @@ Versions are numbered in four levels, as follows:
   # The minor version number, changes on a significant rewrite of a major part of the code
   # The sub-version (a letter), changes when the actual program code is altered in some minor way
   # The sub-sub-version, changes when the program data is modified or added to, for example when a new charge is added or a placement corrected.
+
+=Version 2.2a2=
+
+==New Features==
+
+You may place <strong>on</strong> an ordinary <strong>another</strong> of a different colour, which is equivalent to <strong>voided. </strong>Thus "azure, on a bend or another of the first" is a long way of saying "azure a bend voided or".
+
+Charges may now be given a list of positions, so for example the shield of POTTOCK <strong>Azure, a saltire between in chief an arrow point upward argent, in the flaunches and base three hunting horns of the last</strong> is drawn correctly.
+
+<strong>Swords</strong> and <strong>thistles</strong> may now be <strong>proper.</strong>
+
+Up to 12 charges may be placed <strong>on a</strong> or <strong>in fess, pale or chief</strong> and they may be <strong>conjoined</strong>. Those that are <strong>in</strong> may also be <strong>throughout</strong>.
+
+==Corrections==
+
+Improved positioning of variant chevrons when a chief is present.
+
+Charges arranged <strong>pilewise</strong> are also inverted.
+
+<strong>tressures</strong> do not work at the moment.
+
+==Internal Changes==
+
+If a charge or ordinary was filled with a division the resulting SVG code (although valid) was not displayed by Safari and caused Chrome to crash. The program uses slightly different SVG if these browsers are detected. It doesn't always display correctly but at least it doesn't crash.
+
+The charge placement logic has been moved from the PHP code into an XSLT transform based on the intermediate blazonML data structure. This means that charge placement can be made dependent on <em>any</em> feature(s) of the shield, so for example <strong>five mascles on a cross</strong> can be given a different placement to five other things on a cross, or any other arbitrarily complex set of conditions.
+
+=Version 2.2a1=
+==New Features==
+Added the special ordinary <strong>ford (proper)</strong>
+
+Added <strong>quarterly quartered</strong> as a synonym for <strong>gyronny of 8</strong> (a <strong>saltire</strong> of this looks particularly nice).
+
+Added charge <strong>triangle {voided}</strong>.
+
+==Corrections==
+
+Divisions using bars, single diminutives and some charge positioning actions were broken. These have been fixed.
+
+Instead of a drawing a specific charge for <strong>fountain</strong>, the parser replaces it with a <strong>roundel barry wavy of six argent and azure.</strong>
+
+The internal size of the <strong>fret</strong> charge was wrong, causing it to be misplaced slightly.
 
 =Version 2.2a0=
 ==New Features==

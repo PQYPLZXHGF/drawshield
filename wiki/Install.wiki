@@ -20,3 +20,9 @@ environment).
 ==Other Information==
 
 See also the [Requirements] page for the PHP environment that has been used for development.
+
+=Testing the Installation=
+
+The shield folder also contains a file "demopage.html". It contains some simple html elements and some Javascript to demonstrate how to call the program using AJAX. Note that the Javascript code assumes that drawshield has been installed in `/include/shield`, modify the code where indicated if this is not the case.
+
+To use the demonstration, type in a blazon in the text box and click on the `Create!` button.

@@ -10,14 +10,15 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
 
  * About Drawshield
    * [Aims]
-   * Background
-   * Acknowledgements
+   * [Acknowl Acknowledgements]
  * Blazons and Heraldry
    * Sources
  * The Drawshield Program
    * Program Overview
       * [Requirements]
       * [ChangeLog Change Log]
+   * [Install Program Installation]
+   * [Usage Program Usage]
    * The parser
      * Parser Overview
      * Lexical Analysis
@@ -31,16 +32,15 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
      * Object Specification Format
      * Linetype Implementation
      * Charge Data
-   * Calling drawshield
    * Supporting Programs
-     * Regression Test Suite
+     * [RegressSuite Regression Test Suite]
    * Supporting Javascripts
      * Common Functions
      * Random Blazon Generation
      * Blazon By Parts
      * Blazonry Quiz
  * Supported Heraldic Features
-   * Syntax and punctuation
+   * [Syntax Syntax and punctuation]
    * Marshalling
    * Tinctures
       * Colours

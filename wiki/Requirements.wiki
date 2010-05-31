@@ -12,6 +12,9 @@ The regression test suite uses the PEAR Text_Diff extension.
 
 The author tests on Apache 1.3.37 with PHP 4.3.11 on a Windows XP host.
 
+Other than setting the include path and enabling the *domxml* and *xslt* extensions I have not made any
+changes to the PHP.ini file.
+
 =SVG Requirements=
 
 Almost all open source SVG implementations seem to be broken in one way or another. The author targets

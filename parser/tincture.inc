@@ -92,7 +92,7 @@ function tincture2() {
     // This could be [colour] [treatment] [colour],
     // unless it is followed by a comma
     comma();
-//    if ( !comma() ) {
+    if ( !semicolon() ) {
       if (($treat = treatment()) != null ) {
         $newNode = $dom->create_element('tincture');
         $newNode->append_child($child);
@@ -116,7 +116,7 @@ function tincture2() {
         $semyde->append_child($charge);
         $child = $semyde;
       }
-//    }
+    }
   // Look for annulletty and friends
   } elseif ( ($child = object_treatment()) != null ) {
     comma();

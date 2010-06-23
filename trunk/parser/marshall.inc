@@ -128,6 +128,8 @@ function halved() {
 
 function shield() {
   global $dom;
+  
+  $quartered = false;
 
   $node = $dom->create_element('shield');
 
@@ -142,9 +144,11 @@ function shield() {
       $split->append_child($node2);
       $child = $split;
     }
+  } else { // Shield was quartered
+    $quartered = true;
   }
   $node->append_child($child);
-  if ( ($overall = overall() ) != null ) {
+  if ( ($quartered or !semicolon()) and ($overall = overall() ) != null ) {
     $node->append_child($overall);
   }
   return $node;

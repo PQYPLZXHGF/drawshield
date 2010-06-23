@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function makeCharge($charge) {
+function makeCharge($charge, $mods = array() ) {
   $placements = array(0 => 'x/x/x/x/x/x');
   $locations = array(0 => 'default');
   $counts = array(0 => $charge->get_attribute('number'));
@@ -37,7 +37,7 @@ function makeCharge($charge) {
   for ( $i = 0; $i < count($placements); $i++ ) {
     // If more than one location, use location counts, otherwise use given number
     if ( $lcount > 1 ) $charge->set_attribute('number', $counts[$i]);
-    $retval .= place_charges ( $charge, $placements[$i] );
+    $retval .= place_charges ( $charge, $placements[$i], $mods );
     if ( $locations[$i] != 'default' ) {
       $in_data = explode(',',$locations[$i]);
       $transform = 'transform="' . sprintf("translate(%.2f,%.2f) scale(%.2f,%.2f)", $in_data[0], $in_data[1], $in_data[2]/1000, $in_data[3]/1000) . '" ';

@@ -121,6 +121,7 @@ function place_charges ( $node, $placement, $mods = array() ) {
       if ( in_array( 'sinister', $mods ))$cx = 1000 - $cx;
     }
     if ( isset($items[1]) and $items[1] != '' ) {
+     // my_trigger_error('x ' . implode(' ',$mods), E_SVG );
       $cy = $items[1];
       if ( in_array( 'inverted', $mods )) $cy = 1200 - $cy;
       if ( in_array( 'enhanced', $mods )) $cy -= 200;

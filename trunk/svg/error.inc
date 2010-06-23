@@ -78,13 +78,13 @@ function get_error_messages() {
     $this_error = '';
     switch ( $error_item['error_num'] ) {
       case E_SVG:
-        $this_error .= 'SVG PROBLEM:' . $error_item['error_string'];
+        $this_error .= 'SVG PROBLEM - ' . $error_item['error_string'];
         break;
       case E_PARSER:
         $this_error .= 'Problem in Blazon - ' . $error_item['error_string'];
         break;
       case E_USER_WARNING:
-        $this_error .= 'INTERNAL ERROR: ' . $error_item['error_string'];
+        $this_error .= 'INTERNAL ERROR - ' . $error_item['error_string'];
         break;
       case E_USER_NOTICE:
         $this_error .= 'Problem in Blazon - ' . $error_item['error_string'];

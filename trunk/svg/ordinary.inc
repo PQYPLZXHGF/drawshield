@@ -189,7 +189,7 @@ function makeOrdinary( $node ) {
     $retval .= apply_tincture ( $body2_col, choose_fit($ord_data['body2']), $bb, $rot, $rev, $inv);
   }
   // Does this ordinary go "between" some charges?
-  if ( $ord_between ) $retval .= makeCharge($ord_between);
+  if ( $ord_between ) $retval .= makeCharge($ord_between, $mods);
   // If there is something "ON" this ordinary, go find it
   if ( $on_ord ) {
     $what_on = $on_ord->first_child();
@@ -220,7 +220,7 @@ function makeOrdinary( $node ) {
         $retval .= $temp . add_def();
         break;
       case 'charge':
-        $retval .= makeCharge( $what_on );
+        $retval .= makeCharge( $what_on, $mods );
         break;
     }
   } 

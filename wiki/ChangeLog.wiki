@@ -8,6 +8,13 @@ Versions are numbered in four levels, as follows:
   # The sub-version (a letter), changes when the actual program code is altered in some minor way
   # The sub-sub-version, changes when the program data is modified or added to, for example when a new charge is added or a placement corrected.
 
+=Version 2.2a3=
+
+==Corrections==
+
+Fixes for issues 6 & 7. Charges are now properly placed on *inverted*, *abased* or *enhanced* ordinaries. The semi-colon is correctly interpreted
+as the end marker for each quarter of a *quartered* shield.
+
 =Version 2.2a2=
 
 ==New Features==

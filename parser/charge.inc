@@ -79,7 +79,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     array ( 'delf', 'delfs?','geometric' ),
     array ( 'fountain', 'fountains?', 'geometric' ),
     array ( 'saltorel', 'saltorels?' ,'geometric' ),
-    array ( 'goutte', 'gouttes?' ,'geometric' ),
+    array ( 'goutte', 'go?uttes?' ,'geometric' ),
     array ( 'plate', 'plates?' ,'geometric' ),
     array ( 'hurt', 'hurts?' ,'geometric' ),
     array ( 'torteau', 'torteaux?'  ,'geometric' ),
@@ -101,6 +101,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     // Symbols
     array ( 'fleurdelys', 'fleurs? de l(y|i)s' ,'symbol' ),
     array ( 'orb', '?royal (orb|mound)', 'symbol' ),
+    array ( 'ermine-spot', 'ermine spots?', 'symbol' ),
     // Tools
     array ( 'addice', 'addices?', 'tools' ),
     array ( 'axe', 'axes?', 'tools' ),
@@ -179,8 +180,14 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   // 'implied' (i.e. a fixed colour) the we only allow (optionally) "proper"
   $tinc = $node->first_child();
   if ( $tinc and $tinc->tagname() == 'tincture' ) {
-    $tinc = $tinc->first_child();
-    if (($tinc->tagname() == 'implied') and  !proper() and tincture(false)) raise_error ( $match[0] . ' has a fixed colour' );
+    $child = $tinc->first_child();
+    $tagname = $child->tagname();
+    if ($tagname == 'default') {
+      if ( $given_tinc = tincture(false) ) {
+       $node->replace_child($given_tinc,$node->first_child());
+      } 
+    }
+    if (($tagname == 'implied') and  !proper() and tincture(false)) raise_error ( $match[0] . ' has a fixed colour' );
   } else { // if not set in the charge function, allow any tincture
     if ( $tinc ) // existing node, but not tincture
       $node->insert_before(tincture(true),$node->first_child());
@@ -209,6 +216,7 @@ function charge( $assume_num = false ) {
 
   $on_charge = array (
     array ( true, 'charged with' ),
+    array ( true, 'on each' ),
   );
 
   $mods = array();

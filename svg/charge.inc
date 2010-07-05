@@ -107,8 +107,11 @@ function getCharge( $node ) {
         break;
     }
   }
-  // Apply proper colour (if there is one)
   $col_type = $charge_col->first_child();
+  if ( $col_type->node_name() == 'default' and array_key_exists('default', $chg_data) ) {
+    $col_type->set_attribute('spec', $chg_data['default']);
+  }
+  // Apply proper colour (if there is one)
   if ( $col_type->node_name() == 'proper' and array_key_exists('proper', $chg_data) ) 
   {
     $col_type->set_attribute('spec', $chg_data['proper']);

@@ -42,7 +42,7 @@ $colours = array (
   // "de" names (for gouttes particularly)
   array ( true, 'd eau', 'd-eau'  ),
   array ( true, 'de larmes', 'de-larmes'  ),
-  array ( true, 'de sangue', 'de-sangue' ),
+  array ( true, 'de sangu?e?', 'de-sangue' ),
   array ( true, 'de vin', 'de-vin'   ),
   array ( true, 'de poix', 'de-poix'  ),
   array ( true, 'd huile',  'd-huile' ),

@@ -32,6 +32,13 @@ function makeChg_symbol ( $node ) {
               'crossed' => array ( 'body' => '<path stroke-width="2" stroke="black" d="m40,80h20v-40h20v-20h-20v-20h-20v20h-20v20h20z" />' ),
         ),
     ),
+    'ermine-spot' => array ( 'height' => 200, 'width' => 111, 
+      'body' => '<circle r="10" cx="55" cy="30"/>
+            <circle r="10" cx="36" cy="55"/>
+            <circle r="10" cx="74" cy="55"/>
+            <path d="M 53 60 A 50 210 0 0,1 10,180 A 60 40 0 0,0 45,170 A 30 40 0, 0,0 55 200 A 30 40 0, 0,0 62,170 A 60 40 0 0,0 101, 180 A 50 210 0 0,1 57 60 Z"/>',
+      'default' => '0x050505',
+     ),
   );
   $type = $node->get_attribute('subtype');
   if ( isset($symbol_data[$type]) ) {

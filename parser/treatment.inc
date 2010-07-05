@@ -21,7 +21,6 @@ function treatment() {
     // 'plumetty', how to draw this one?
     // array ( 'lozengy',      'lozengy',  ), made this back into a division
     array ( 'checky',       '(checky|chequy)' ),
-    array ( 'bezanty',      'bezanty' ),
     array ( 'papelonny',    'papelonny',    ),
     array ( 'scaly',        'scaly',        ),
     array ( 'compony',      '(compony|gobone|gobonated)',        ),
@@ -32,6 +31,7 @@ function treatment() {
     array ( 'maily',        'maily',        ),
     array ( 'masoned',      'masoned',      ),
     array ( 'crusilly',     'crusilly',     ),
+    array ( 'vairy',        'vair(e|y)',     ),
   );
 
   $node = null;
@@ -49,8 +49,10 @@ function object_treatment( $base = null) {
     array ( 'annuletty',    'annuletty',    'geometric/annulet', ),
     array ( 'billetty',     'billetty',     'geometric/billet', ),
     array ( 'estoilly',     'estoilly',     'mullet/mullet', 'points/6' ),
-    array ( 'fleury',       'fleury|floretty/semy de lys', 'symbol/fleurdelys' ),
+    array ( 'fleury',       'fleury|floretty/sem(e|y) de l(i|y)s', 'symbol/fleurdelys' ),
     array ( 'goutty',       'go?utty',      'geometric/goutte', ),
+    array ( 'bezanty',      'bezant(y|e)',  'geometric/bezant' ),
+    array ( 'platy',        'platy',  'geometric/plate' ),
     array ( 'hurty',        'hurty',        'geometric/roundel' ),
     array ( 'mullety',      'mullett?y',    'mullet/mullet', 'points/5' ),
   );
@@ -71,7 +73,13 @@ function object_treatment( $base = null) {
     $types = explode('/',$match[2]);
     $charge->set_attribute('type',$types[0]);
     $charge->set_attribute('subtype',$types[1]);
-    $charge->append_child(tincture(false));
+    if ( $match[0] == 'bezanty' or $match[0] == 'platy' ) {
+      $tinc = $dom->create_element('tincture');
+      $tinc->append_child($dom->create_element('implied'));
+      $charge->append_child($tinc);
+    } else {
+      $charge->append_child(tincture(false));
+    }
     if ( isset($match[3]) ) {
       $mods = explode('/', $match[3]);
       $mod = make_mod($mods[0], $mods[1]);

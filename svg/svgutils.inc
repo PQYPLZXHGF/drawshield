@@ -73,6 +73,7 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       return $object;
       break;
     case 'colour':
+    case 'default':
     case 'proper':
       if ( $tinc->has_attribute('name') ) $spec = rgb($tinc->get_attribute('name'));
       elseif ( $tinc->has_attribute('spec') ) $spec = $tinc->get_attribute('spec');
@@ -213,13 +214,12 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       $field_tinc = $field->first_child();
       if ( $field_tinc->node_name() != 'division' ) return '<g fill="#050505"><title>Counterchange</title><desc>Not possible</desc>' . $object . '</g>';
       $div_data = makeDivision( $field_tinc, true );
-      list($width, $height, $data) = $div_data;
       $pattTrans = '';
       if ( $xscale or $yscale ) {
         $pattTrans = 'patternTransform="scale(' . ( 1 / $xscale) . ',' . (1/ $yscale) . ')"';
       }
       $patt_id = add_def ( 'pattern ' . $pattTrans . ' patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="' .
-          $offsetX . '" y="' . $offsetY . '" width="' . '1000" height="1200"', '<title>Colour</title><desc>counterchanged</desc>' . $data );
+          $offsetX . '" y="' . $offsetY . '" width="' . '1000" height="1200"', '<title>Colour</title><desc>counterchanged</desc>' . $div_data );
       $retval = '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
       $retval .= add_def();
       return $retval;

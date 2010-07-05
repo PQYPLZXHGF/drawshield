@@ -14,8 +14,8 @@ The main colours (and some common abbreviations and alternatives names) are:
 
 Less common colours are:
 
-*brunatre*, *carnation*, *celestial-azure [*bleu-celeste*], *cendree*, *murrey*, *rose*, *sanguine*,
-tenne [*tanned*], *bis* [*bisque*], *orange*, *senois*
+*brunatre*, *carnation*, *celestial-azure* {*bleu-celeste*}, *cendree*, *murrey*, *rose*, *sanguine*,
+*tenne* {*tanned*}, *bis* {*bisque*}, *orange*, *senois*
 
 ==Special Names==
 

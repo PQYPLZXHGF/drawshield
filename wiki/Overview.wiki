@@ -13,6 +13,20 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
    * [Acknowl Acknowledgements]
  * Blazons and Heraldry
    * Sources
+ * Supported Heraldic Features
+   * [Syntax Syntax and punctuation]
+   * Marshalling
+   * Tinctures
+      * Colours
+      * Treatments
+      * Furs
+   * Divisions
+      * Division Modifiers
+   * Ordinaries
+      * Ordinary Modifiers
+   * Linetypes
+   * Charges
+   * Ordinaries
  * The Drawshield Program
    * Program Overview
       * [Requirements]
@@ -39,19 +53,5 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
      * Random Blazon Generation
      * Blazon By Parts
      * Blazonry Quiz
- * Supported Heraldic Features
-   * [Syntax Syntax and punctuation]
-   * Marshalling
-   * Tinctures
-      * Colours
-      * Treatments
-      * Furs
-   * Divisions
-      * Division Modifiers
-   * Ordinaries
-      * Ordinary Modifiers
-   * Linetypes
-   * Charges
-   * Ordinaries
 
 In time, each of the items above will turn into a page!

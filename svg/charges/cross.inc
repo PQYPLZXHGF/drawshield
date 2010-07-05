@@ -39,19 +39,23 @@ function makeChg_cross ( $node ) {
   }
   if ( isset($cross_data[$type]) ) {
     $retval = $cross_data[$type];
-    if ( $num and array_key_exists('mountable', $retval) )  {
-      $width = max ( $retval['width'], 60 + ($num * 30) );
-      $height = $retval['height'] + 30 * $num;
-      $retval['body'] = preg_replace( '/{START}/', ($width / 2), $retval['body']);
-      for ( $count = 0; $count < $num; $count++ ) {
-        $inc = $count * 30;
-        $len = 90 + $inc + $inc;
-        $ypos = $retval['height'] + $inc;
-        $xpos = ($width - $len)/2;
-        $retval['body'] .= '<rect x="' . $xpos . '" y="' . $ypos .'" width="' . $len . '" height="30" stroke="#000000" stroke-width="3" />' . "\n";
+    if ( array_key_exists('mountable', $retval) )  {
+      if ( $num )  {
+        $width = max ( $retval['width'], 60 + ($num * 30) );
+        $height = $retval['height'] + 30 * $num;
+        $retval['body'] = preg_replace( '/{START}/', ($width / 2), $retval['body']);
+        for ( $count = 0; $count < $num; $count++ ) {
+          $inc = $count * 30;
+          $len = 90 + $inc + $inc;
+          $ypos = $retval['height'] + $inc;
+          $xpos = ($width - $len)/2;
+          $retval['body'] .= '<rect x="' . $xpos . '" y="' . $ypos .'" width="' . $len . '" height="30" stroke="#000000" stroke-width="3" />' . "\n";
+        }
+        $retval['width'] = $width;
+        $retval['height'] = $height;
+      } else {
+        $retval['body'] = preg_replace( '/{START}/', ($retval['width'] / 2), $retval['body']);
       }
-      $retval['width'] = $width;
-      $retval['height'] = $height;
     }
     return $retval;
   } else {

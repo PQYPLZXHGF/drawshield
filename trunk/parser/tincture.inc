@@ -61,13 +61,13 @@ function tincture2() {
   global $dom, $p_globals;
   
   $backrefs = array (
-    array ( 'ofsame', 'of the same' ,),
-    array ( 'oflast', 'of the last' ,),
-    array ( 'offield', 'of the field' ,),
-    array ( 'offirst', 'of the (first|1st)' ,),
-    array ( 'ofsecond', 'of the (second|2nd)' ,),
-    array ( 'ofthird', 'of the (third|3rd)' ,),
-    array ( 'offourth', 'of the (fourth|4th)' ,),
+    array ( 'ofsame', '(like|of|as) the same' ,),
+    array ( 'oflast', '(like|of|as) the last' ,),
+    array ( 'offield', '(like|of|as) the field' ,),
+    array ( 'offirst', '(like|of|as) the (first|1st)' ,),
+    array ( 'ofsecond', '(like|of|as) the (second|2nd)' ,),
+    array ( 'ofthird', '(like|of|as) the (third|3rd)' ,),
+    array ( 'offourth', '(like|of|as) the (fourth|4th)' ,),
   );
 
   $semyde = array (

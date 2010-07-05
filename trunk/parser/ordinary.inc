@@ -41,7 +41,7 @@ function shape_mods() {
 
   $shape_mods = array (
   //       modifier,     regexes
-  array ( 'fimbriated', 'fimbriated',  ),
+  array ( 'fimbriated', '(fimbriated|edged)',  ),
   array ( 'voided', 'voided',  ),
   array ( 'cotised', '(cotised|cotticed|endorsed)',  ),
   array ( 'cotised', 'between (2|two) cott?ices',  ),
@@ -112,6 +112,7 @@ function ordinary() {
     array ( 'bordure',      'bordure',                      'subordinary'  ),
     array ( 'canton',       'cantons?',                     'subordinary'  ),
     array ( 'gyron',        'gyrons?',                      'subordinary' ),
+    array ( 'gyron',        '?based e?s?quie?r?res?',           'subordinary' ),
     array ( 'gusset',       'gussets?',                     'subordinary' ),
     array ( 'graft',        'grafts?',                      'subordinary' ),
     array ( 'graft',         'gussets? in base' , 'subordinary' ),

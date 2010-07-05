@@ -78,7 +78,7 @@
           <xsl:when test="$ordtype='cross' and $chief='false'">500,500,200,200//200,500,220,220:800,500:500,250/200,500,200,200:500,220:800,500:500,800//200,500,200,200:500,200:800,500:500,500:500,800:500,1050</xsl:when>
           <xsl:when test="$ordtype='cross' and $chief='true'">500,700,160,160////250,700,160,160:750,700:500,450:500,700:500,950/x</xsl:when>
           <xsl:when test="$ordsubtype='saltire' and $chief='false'">500,500,160,160/x/x/250,250,160,160,-45:750,250,,,45:750,750,,,-45:250,750,,,45/500,500,160,160,0:250,250,,,-45:750,250,,,45:750,750,,,-45:250,750,,,45/x</xsl:when>
-          <xsl:when test="$ordsubtype='saltire' and $chief='true'">500,700,160,160/x/x/250,450,160,160,-45:750,450,,,45:750,950,,,-45:250,950,,,45/500,700,160,160,0:250,450,,,-45:750,450,,,45:750,950,,,-45:250,950,,,45/x</xsl:when>
+          <xsl:when test="$ordsubtype='saltire' and $chief='true'">500,700,160,160/x/x/250,450,160,160,-45:750,450,,,45:750,950,,,-45:250,950,,,45/500,740,160,160,0:250,490,,,-45:750,490,,,45:750,990,,,-45:250,990,,,45/x</xsl:when>
           <xsl:when test="$ordsubtype='inescutcheon' and $chief='false'"><xsl:value-of select="document(concat('calcPlace:w#',$number,'#',$conjoin,'#300,300,400,500'))" /></xsl:when>
           <xsl:when test="$ordsubtype='inescutcheon' and $chief='true'"><xsl:value-of select="document(concat('calcPlace:w#',$number,'#',$conjoin,'#300,600,400,250'))" /></xsl:when>
           <xsl:when test="$ordsubtype='pile' and $chief='false'"><xsl:value-of select="document(concat('calcPlace:w#',$number,'#',$conjoin,'#300,100,400,300'))" /></xsl:when>

@@ -40,6 +40,7 @@ function number( $only_digits = false ) {
   array (19, '(19|nineteen)' ),
   array (20, '(20|twenty)/a score ?of' ),
   array ('asmany', 'as many' ),
+  array ('asmany', 'so many' ),
   );
 
   $state = save();

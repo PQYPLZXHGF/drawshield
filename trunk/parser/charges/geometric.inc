@@ -31,23 +31,6 @@ function charge_geometric( &$node, &$mods ) {
     $tinc = $dom->create_element('tincture');
     $imp = $dom->create_element('implied');
     $tinc->append_child($imp);
-/*    $div = $dom->create_element('division');
-    $div->set_attribute('type','bar');
-    $div->set_attribute('subtype','barry');
-    $div->set_attribute('linetype', 'wavy');
-    $azure = $dom->create_element('tincture');
-    $temp = $dom->create_element('colour');
-    $temp->set_attribute('name','azure');
-    $azure->append_child($temp);
-    $argent = $dom->create_element('tincture');
-    $temp = $dom->create_element('colour');
-    $temp->set_attribute('name','argent');
-    $argent->append_child($temp);
-    $div->append_child($argent);
-    $div->append_child($azure);
-    $mod = make_mod('ofnum','6');
-    $div->append_child($mod);
-    $tinc->append_child($div); */
     $node->append_child($tinc);
   } 
   if ( $type == 'triangle' )

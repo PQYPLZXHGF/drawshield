@@ -1,0 +1,15 @@
+#summary Field - the shield background
+
+=Introduction=
+
+The field is the background of the shield, the lowest level of colouring, all other items are placed "above" the field.
+
+==The Field==
+
+The field can be either of the following:
+
+  * [Tincture] (A single colour or repeating pattern)
+  
+  * [Division] (The shield divided into two or three areas, each with its own colour or pattern)
+  
+

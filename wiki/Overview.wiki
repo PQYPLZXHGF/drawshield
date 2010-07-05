@@ -13,10 +13,13 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
    * [Acknowl Acknowledgements]
  * Blazons and Heraldry
    * Sources
- * Supported Heraldic Features
+ * [SupportedBlazonry Supported Heraldic Features]
    * [Syntax Syntax and punctuation]
-   * Marshalling
-   * Tinctures
+   * [Marshalling]
+   * [SimpleShield Simple Shield]
+   * Field
+   * [Number Numbers]
+   * [Tincture Tinctures]
       * Colours
       * Treatments
       * Furs
@@ -26,7 +29,6 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
       * Ordinary Modifiers
    * Linetypes
    * Charges
-   * Ordinaries
  * The Drawshield Program
    * Program Overview
       * [Requirements]

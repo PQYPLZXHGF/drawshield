@@ -1,0 +1,19 @@
+#Summary Overview of Blazon Features Supported by Drawshield
+
+= Introduction =
+The pages in this section list all the heraldic terms that are understood by the drawshield
+program. It is intended for those already familiar with blazons, if you are
+new to heraldry look at my [http://www.karlwilcox.com?page=shield suggested reading].
+
+In the pages that follow everything in *bold* is a word that the program understands, 
+items in curly brackets are
+synonyms for the preceding word. Common variations in spelling are also accepted (e.g.
+fleur-de-lys, fleur-de-lis) but not all are shown here. Plurals are also accepted where
+appropriate.
+
+Where there are restrictions or issues they are discussed below each section.
+
+For the precise meaning of each term look them up in
+["http://www.heraldsnet.org/saitou/parker/ www.heraldsnet.org/saitou/parker/]. Where there is a difference between 
+French and British heraldic tradition I have followed the British 
+interpretation.</p>

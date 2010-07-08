@@ -12,7 +12,7 @@ Versions are numbered in four levels, as follows:
 
 ==Corrections==
 
-Fixed issues 8, 7 (for Firefox only, falls foul of pattern fill bug in Chrome)
+Fixed issues 8, 7 (for Firefox only, falls foul of pattern fill bug in Chrome) and 34
 
 ==New Features==
 
@@ -21,6 +21,10 @@ Added *ermine spot* (issue 9) - sable if no colour given.
 Added *platy* (issue 28) and fixed *bezanty*.
 
 Added *vairy* as a treatment (issue 13) - needs two colours.
+
+Added *crow volant*, *crow*, and *crow's head* and *crow rising* (issue 11) which can be *beaked* and *legged*, and have a *proper* colour.
+
+Added *covered cup*, slightly better drawing of *chalice* (issue 62)
 
 Added the following synonyms:
 
@@ -31,6 +35,7 @@ Added the following synonyms:
   *(based) esquires* for *gyrons*
   *edged* for *fimbriated*
   *gutte* for *goutte* (issue 29)
+  *cup* for *chalice*
 
 =Version 2.2a3=
 

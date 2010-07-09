@@ -22,7 +22,7 @@ A tincture can be any one of the following:
 Heralds do not like to repeat themselves in a blazon and so will often use "back references" to previously used colours.
 Wherever a tincture is expected it may be replaced by any of the following:
 
-  * *Of the same*
+  * *Of the same* (*like* can be used instead of *of* throughout)
   * *Of the last*
   * *Of the first* {*of the 1st*}
   * *Of the second* {*of the 2nd*}
@@ -39,3 +39,10 @@ should the chief be coloured *or* (the last colour mentioned) or should it be *g
 (the last tincture mentioned)? I have decided that *same* should mean the last tincture (i.e. the whole
 treatment, if there is one) whilst *last* refers to the most recently mentioned [Colour colour], even if
 it is part of a treatment. I don't know whether this accords with heraldic practice, but there you go...
+
+==Forward Reference==
+
+In most situations, if no tincture is found where one is expected then the program will look forward through
+the blazon and use the next tincture that it finds. For example a list of charges can be given with the tincture 
+at the end. This is another example of heralds avoiding repitition.
+

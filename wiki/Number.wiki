@@ -10,7 +10,7 @@ feature are present.
 The following numbers (or number specifiers) are recognised:
 
 *a*, *an*, *one*, *two*, *three*, *four*, *five*, *six*, *seven*, *eight*, *nine*, *ten*,
-*eleven*, *twelve*, , *thirteen*, *fourteen*, *fifteen*, *sixteen*, *seventeed*, *eighteen*,
+*eleven*, *twelve*, *thirteen*, *fourteen*, *fifteen*, *sixteen*, *seventeen*, *eighteen*,
 *nineteen*, *twenty*, *a pair*, *a couple*, *a dozen*, *a half dozen*, *a score*.
 
 You can also just use the digits instead.

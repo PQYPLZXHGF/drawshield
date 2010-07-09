@@ -1,0 +1,17 @@
+#summary Treatments of two colours
+
+=Introduction=
+
+Treatments are repeating patterns that have two tinctures. They can be applied to most things
+but most commonly are found on the field or the larger ordinaries.
+
+==The Treatments==
+
+The treatments (and some common alternative names) are:
+
+*annuletty*, *billetty*, *bezanty*, *checky*, *crusilly*,
+*estoilly*, *fleury*, *fretty*, *goutty*,
+*grillage*, *honeycombed*, *hurty*, *maily*, *masoned*, *mullety*, *papelonny*, *scaly*, *semy-de-lys*, *vairy*
+
+
+

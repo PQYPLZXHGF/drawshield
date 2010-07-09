@@ -1,0 +1,15 @@
+#summary Furs of two fixed colours
+
+=Introduction=
+
+Furs are repeating patterns that have two, fixed colours.
+
+==The Furs==
+
+The furs (and some common alternative names) are:
+
+*counter-ermine* {*ermines*}, *counter-potent*, *counter-vair*, *ermine*, *erminois*, *pean*, *potent*,
+*potent-counter-potent*, *vair*, *vair-en-point*, *vair-in-pale*
+
+
+

@@ -1,0 +1,68 @@
+#summary Divisions - Partitions of two or more tinctures
+
+=Introduction=
+
+When a division is applied to a shape it is partitioned into two or more sections and can have
+either two or three tinctures. They can be applied to anything, but most commonly are applied to 
+the field.
+
+==Large Divisions of Two Tinctures==
+
+These divisions split the shield into two large areas.
+
+The basic syntax is:
+{{{
+[Division] [DivisionModifier] [Tincture] and [Tincture]
+}}}
+
+The available divisions are:
+
+*chape*, *chausse*, *per-bend*, *per-bend sinister*, 
+*per-chevron*, *per-fess*,
+*per-pale*, *per-pile*, *per-saltire*, *pily*, *pily-bendy*, *pily-bendy-sinister*,
+*quarterly*, *quarterly-per-fess*, *quarterly-per-pale*
+
+Instead of *per bend* you can use *party per bend* or *parted bendwise*, and similarly for the other divisions.
+
+==Large Divisions of Three Tinctures==
+
+{{{
+[Division] [DivisionModifier] [Tincture] and [Tincture] and [Tincture] 
+}}}
+
+The available divisions are:
+
+*per-pall*, *per-pall-reversed*, *tierced-in-pale*, *tierced-in-fess*
+      
+==Bar Type Divisions (Two Tinctures)==
+
+These divisions are made out of a variable number of bars, with the syntax
+
+{{{
+[Division] {of [Number]} [DivisionModifier] [Tincture] and [Tincture]
+}}}
+
+The available divisions are:
+
+*barry*, *barry-pily*, *bendy*, *bendy sinister*, *paly* 
+
+It is an error if the given number is odd, less than 4 or greater than 20.
+
+In addition, the following bar type divisions are available but it is not (yet) possible
+to specify the number of bars:
+
+*barry-bendy*, *barry-bendy-sinister*, *barry-indented the one in the other*, *paly-bendy*
+
+==Patterned Divisions (Two Tinctures)==
+
+These divisions are a bit like [Treatment treatments] but are of a fixed size. They are:
+
+*chevronny* {*of* 4,5,6,7 or 8}, *fusily*, *lozengy*, *gyronny* {*of* 6,8,10 or 12}
+
+
+
+
+
+
+
+

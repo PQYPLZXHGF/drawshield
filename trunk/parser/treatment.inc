@@ -21,7 +21,7 @@ function treatment() {
     // 'plumetty', how to draw this one?
     // array ( 'lozengy',      'lozengy',  ), made this back into a division
     array ( 'checky',       '(checky|chequy)' ),
-    array ( 'papelonny',    'papelonny',    ),
+    array ( 'papelonny',    'pap(e|i)l?lonn(y|e)',    ),
     array ( 'scaly',        'scaly',        ),
     array ( 'compony',      '(compony|gobone|gobonated)',        ),
     array ( 'compony',      'counter (compony|gobone|gobonated)',  ),

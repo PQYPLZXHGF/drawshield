@@ -26,6 +26,16 @@ Added *crow volant*, *crow*, and *crow's head* and *crow rising* (issue 11) whic
 
 Added *covered cup*, slightly better drawing of *chalice* (issue 62)
 
+Clarified and added some axes (issue 38), all of which can have *handles*
+{*hafts*, *staves*} and *blades* of different tinctures. Available axes are:
+
+  * *addice* {*carpenter's axe*}
+  * *battle axe*
+  * *common axe* {*hatchet*}
+  * *turner's axe*
+  
+If you just ask for an *axe* you will get the common axe.
+
 Added the following synonyms:
 
   *on each* for *charged with*

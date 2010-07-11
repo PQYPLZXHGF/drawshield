@@ -38,14 +38,14 @@ If you just ask for an *axe* you will get the common axe.
 
 Added the following synonyms:
 
-  *on each* for *charged with*
-  *as the* for *of the* (first etc.)
-  *like the* for *of the*
-  *so many* for *as many* 
-  *(based) esquires* for *gyrons*
-  *edged* for *fimbriated*
-  *gutte* for *goutte* (issue 29)
-  *cup* for *chalice*
+  * *on each* for *charged with*
+  * *as the* for *of the* (first etc.)
+  * *like the* for *of the*
+  * *so many* for *as many* 
+  * *(based) esquires* for *gyrons*
+  * *edged* for *fimbriated*
+  * *gutte* for *goutte* (issue 29)
+  * *cup* for *chalice*
 
 =Version 2.2a3=
 

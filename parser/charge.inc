@@ -55,6 +55,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     array ( 'bears-head', 'bears? heads? ?couped' ,'animal' ),
     array ( 'stags-head', 'stags? heads? ?couped' ,'animal' ),
     array ( 'dove', 'doves?', 'bird' ),
+    array ( 'crow', '(crow|daw|rook|raven)s?', 'crow' ),
     // Plants
     array ( 'rose', 'roses?', 'plant' ),
     array ( 'thistle', 'thistles?', 'plant' ),
@@ -103,13 +104,17 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     array ( 'orb', '?royal (orb|mound)', 'symbol' ),
     array ( 'ermine-spot', 'ermine spots?', 'symbol' ),
     // Tools
-    array ( 'addice', 'addices?', 'tools' ),
-    array ( 'axe', 'axes?', 'tools' ),
+    array ( 'addice', 'addices?/carpenters? axes?', 'axe' ),
+    array ( 'battle-axe', 'battle axes?/battleaxes?', 'axe' ),
+    array ( 'turner-axe', 'turners? axes?', 'axe' ),
+    array ( 'common-axe', 'common axes?/hatchets?', 'axe' ),
     array ( 'scythe', 'scythes?', 'tools' ),
     array ( 'water-bouget', '?water bougets?' ,'tools' ),
     // Crockery
     array ( 'cauldron', 'cauldrons?', 'crockery' ),
-    array ( 'chalice', 'chalices?', 'crockery' ),
+    array ( 'chalice', '?standing (chalice|cup)s?', 'crockery' ),
+    array ( 'covered-cup', '?standing (chalice|cup)s? covered', 'crockery' ),
+    array ( 'covered-cup', 'covered (chalice|cup)s?', 'crockery' ),
     array ( 'mug', 'mugs?', 'crockery' ),
     // Musical Instruments
     array ( 'clarion', 'clarions?', 'music' ),

@@ -37,7 +37,7 @@ if ( $format == 'svgtext' ) $format = 'svg';
 // Global Variables
 //
 
-$tagline1 = "drawshield 2.2a4";   // Advertising lines at bottom right
+$tagline1 = "drawshield 2.2a5";   // Advertising lines at bottom right
 $tagline2 = "shield.karlwilcox.com";
 
 // This is the list of words in the blazon, and the current parsing position

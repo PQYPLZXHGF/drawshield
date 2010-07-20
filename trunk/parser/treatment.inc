@@ -48,6 +48,7 @@ function object_treatment( $base = null) {
   $objects = array (
     array ( 'annuletty',    'annuletty',    'geometric/annulet', ),
     array ( 'billetty',     'billetty',     'geometric/billet', ),
+    array ( 'counter-billetty',     'billetty counter billetty',     'geometric/billet', ),
     array ( 'estoilly',     'estoilly',     'mullet/mullet', 'points/6' ),
     array ( 'fleury',       'fleury|floretty/sem(e|y) de l(i|y)s', 'symbol/fleurdelys' ),
     array ( 'goutty',       'go?utty',      'geometric/goutte', ),

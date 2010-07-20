@@ -107,9 +107,20 @@ function makeTreatment ( $node ) {
 function makeSemy( $node ) {
   $name = $node->get_attribute('name');
   $children = $node->child_nodes();
-  $semy = PlaceCharge($children[1], 100, 100, 50, 50);
-  $semy .= PlaceCharge($children[1], 100, 100, 150, 150);
-  $base = apply_tincture ( $children[0], '<rect x="0" y="0" width="200" height="200" />', '200,200' );
-  return array ( 200, 200, $base . $semy );
+  if ( strpos ( $name, 'counter-' ) === 0 ) {
+    // special layout
+    $semy = PlaceCharge($children[1], 100, 100, 50, 50, 90);
+    $semy .= PlaceCharge($children[1], 100, 100, 200, 50, 90);
+    $semy .= PlaceCharge($children[1], 100, 100, 25, 175);
+    $semy .= PlaceCharge($children[1], 100, 100, 125, 175);
+    $semy .= PlaceCharge($children[1], 100, 100, 225, 175);
+    $base = apply_tincture ( $children[0], '<rect x="0" y="0" width="300" height="250" />', '300,250' );
+    return array ( 300, 250, $base . $semy );
+  } else {
+    $semy = PlaceCharge($children[1], 100, 100, 50, 50);
+    $semy .= PlaceCharge($children[1], 100, 100, 150, 150);
+    $base = apply_tincture ( $children[0], '<rect x="0" y="0" width="200" height="200" />', '200,200' );
+    return array ( 200, 200, $base . $semy );
+  }
 }
 ?>

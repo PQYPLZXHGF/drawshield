@@ -20,8 +20,9 @@ function makeChg_geometric( $node ) {
                   <text x="50" y="65" font-size="30" text-anchor="middle">^UP^</text>', 'wflex' => 999, 'hflex' => 999 ),
     'annulet' => array ( 'width' => 500, 'height' => 500,
         'body' => '<path d="M 250,0 A 250 250 0 0,1 250,500 A 250 250 0 0,1 250,0 Z M 250,40 A 210 210 0 0,1 250,460 A 210 210 0 0,1 250,40 Z" fill-rule="evenodd" />' ),
-    'billet' => array ( 'width' => 350, 'height' => 500, 'wflex' => 1.0, 'hflex' => 2.0,
-        'body' => '<polygon points="0,0 0,500 350,500, 350,0" />' ),
+    'billet' => array ( 'width' => 250, 'height' => 500, 'wflex' => 1.0, 'hflex' => 2.0,
+        'body' => '<rect height="500" width="250" rx="20" ry="20" />
+        			<path stroke="none" fill="#4D4D4D" opacity="0.5" d="M 250.9,59.9 C 235.2,182.7 227.3,453 22.29,501 c -10,-2 201.41,3 210.71,1 9.3,-2 19.3,-6 19.3,-19 0,-12 -0.7,-422.4 -1.4,-423.1 z" />' ),
     'cartouche' => array ( 'width' => 100, 'height' => 400,  'wflex' => 1.5, 'hflex' => 2,
         'body' => '<rect x="0" y="0" height="400" width="100" rx="50" ry="50" />' ),
     'chevron' => array ( 'width' => 400, 'height' => 200, 'wflex' => 2, 'hflex' => 2,

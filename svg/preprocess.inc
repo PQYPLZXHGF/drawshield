@@ -40,34 +40,54 @@ function schemeHandler($xh, $func, $arg) {
 $handlerArray = array ( 'get_all' => 'schemeHandler' );
 
 function preprocess ( $dom ) {
-  global $handlerArray;
-  $arguments = array(
-       '/_xml' => $dom->dump_mem(),
-       '/_xsl' => file_get_contents('svg/substitutions.xslt')
-  );
-
-  // Allocate a new XSLT processor
-  $xh = xslt_create();
-
-  // Do substitutions
-  $result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments);
-  if (!$result) {
-    echo 'Error in transform ' . xslt_error($xh);
-    echo 'Error code ' . xslt_errno($xh);
+  $version = phpversion();
+  if ( $version{0} == '4' ) {
+    global $handlerArray;
+    $arguments = array(
+         '/_xml' => $dom->dump_mem(),
+         '/_xsl' => file_get_contents('svg/substitutions.xslt')
+    );
+  
+    // Allocate a new XSLT processor
+    $xh = xslt_create();
+  
+    // Do substitutions
+    $result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments);
+    if (!$result) {
+      echo 'Error in transform ' . xslt_error($xh);
+      echo 'Error code ' . xslt_errno($xh);
+      xslt_free($xh);
+      return $result;
+    }
+    
+    // Do placements
+    xslt_set_scheme_handlers($xh, $handlerArray);
+    $arguments['/_xml'] = $result;
+    $arguments['/_xsl'] = file_get_contents('svg/placements.xslt');
+    $result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments);
+    if (!$result) {
+      echo 'Error in transform2 ' . xslt_error($xh);
+      echo 'Error code ' . xslt_errno($xh);
+    }
     xslt_free($xh);
     return $result;
+  } elseif ( $version{0} == '5' ) {
+    $xp = new XsltProcessor();
+    $xsl = new DomDocument;
+    // Do substitutions
+    $xsl->load('svg/substitutions.xslt');
+    $result = $xp->transformToXML($dom);
+    if (!$result) {
+      echo 'Error in transforming XML(1)';
+      return $result;
+    }
+    // Do placements
+    $xsl->load('svg/placements5.xslt');
+    $result = $xp->transformToXML($result);
+    if (!$result) {
+      echo 'Error in transforming XML(2)';
+    }
+    return $result;
   }
-  
-  // Do placements
-  xslt_set_scheme_handlers($xh, $handlerArray);
-  $arguments['/_xml'] = $result;
-  $arguments['/_xsl'] = file_get_contents('svg/placements.xslt');
-  $result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments);
-  if (!$result) {
-    echo 'Error in transform2 ' . xslt_error($xh);
-    echo 'Error code ' . xslt_errno($xh);
-  }
-  xslt_free($xh);
-  return $result;
 }
 ?>

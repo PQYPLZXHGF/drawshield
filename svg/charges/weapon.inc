@@ -136,8 +136,12 @@ function makeChg_weapon ( &$node ) {
   );
   $type = $node->get_attribute('subtype');
   foreach ( $node->child_nodes() as $child ) {
-    if ( $child->node_name() == 'modifier'  and $child->get_attribute('name') == 'pointing' 
-      and $child->get_attribute('param')) $node->append_child(make_mod('inverted'));
+    if ( $child->node_name() == 'modifier' ) {
+      if ( $child->get_attribute('name') == 'pointing' and $child->get_attribute('param') == 'up')
+       $node->append_child(make_mod('inverted'));
+    elseif ( $type == 'sheaf-arrows' and $child->get_attribute('name') == 'subnum' and $child->get_attribute('param') != 3 )
+      my_trigger_error ( 'can only draw 3 arrows in a bundle, sorry', E_USER_WARNING );
+    }
   }
   if ( isset($sword_data[$type]) ) {
       $retval = $sword_data[$type];

@@ -61,6 +61,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     array ( 'thistle', 'thistles?', 'plant' ),
     array ( 'trefoil', 'trefoils?', 'plant' ),
     array ( 'cinquefoil', '(cinquefoil|fraise)s?', 'plant' ),
+    array ( 'reed', 'reeds?', 'plant' ),
     // Long crosses
     array ( 'crosslet', '?plain crosslets?',           'cross' ),
     array ( 'long', '(latin|long|passion) cross(es)?', 'cross' ),
@@ -96,7 +97,6 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     array ( 'pheon', '(f|ph)eons? ?heads?','weapon' ),
     array ( 'pheon', 'arrow heads?','weapon' ),
     array ( 'broad-arrow', 'broad arrow ?heads?','weapon' ),
-    array ( 'sheaf-arrows', '(sheaf|sheave|bundle)s? ?of arrows?','weapon' ),
     array ( 'helm', 'helm(et)?s?', 'clothes' ),
     array ( 'gauntlet', 'gauntlets?', 'clothes' ),
     // Symbols
@@ -140,6 +140,8 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     // Misc
     array ( 'flames', 'flames ?of ?fire', 'misc' ),
     array ( 'rainbow', 'rainbows?', 'misc' ),
+    // Collective nouns
+    array ( 'dummy', '(sheaf|sheave|bundle|tuft)s? ?of', 'collect' ),
   );
   $features = null;
   $mods = array();
@@ -167,7 +169,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   $node->set_attribute('subtype', $match[0]);
   $node->set_attribute('tokNum',$tokNum);
   $node->set_attribute('number',"$num");
-  // Prepare the ordinary function (if it exists)
+  // Prepare the charge function (if it exists)
   if ( file_exists('parser/charges/' . $match[2] . '.inc') ) {
     $chg_func = 'charge_' . $match[2];
     if ( ! function_exists($chg_func) ) {

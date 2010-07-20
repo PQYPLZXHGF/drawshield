@@ -1,6 +1,6 @@
 #summary Field - the shield background
 
-=Introduction=
+=Description=
 
 The field is the background of the shield, the lowest level of colouring, all other items are placed "above" the field.
 

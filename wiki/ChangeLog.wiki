@@ -8,6 +8,20 @@ Versions are numbered in four levels, as follows:
   # The sub-version (a letter), changes when the actual program code is altered in some minor way
   # The sub-sub-version, changes when the program data is modified or added to, for example when a new charge is added or a placement corrected.
 
+=Version 2.2a5=
+
+==Corrections==
+
+Can use e.g. *bundle of 3 arrows*, however the number is usually ignored.
+
+Improved *billet* (issue 113)
+
+==New Features==
+
+Added charges *reed* and *bundle of reeds* 
+
+Added treatment *billetty counter billetty*
+
 =Version 2.2a4=
 
 ==Corrections==

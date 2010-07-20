@@ -1,6 +1,6 @@
 #summary Numbers
 
-=Introduction=
+=Description=
 
 Numbers are used to specify how many charges are to be placed, and in some cases specify how many of a particular
 feature are present.

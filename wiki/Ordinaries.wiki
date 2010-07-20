@@ -1,0 +1,60 @@
+#summary Ordinaries - Shapes over the whole field
+
+=Description=
+
+Ordinaries are (typically) large shapes that occupy a significant portion of the [Field field]. They can be of
+any [Tincture tincture], and in most cases can themselves be split by a [Division division].
+
+The basic syntax is:
+
+{{{
+a [Ordinaries Ordinary] [LineTypes Line Type] [OrdModifier Ordinary Modifier] [Tincture]
+}}}
+
+==Large Ordinaries==
+
+These are the large ordinaries, most of which can be drawn with variant [LineTypes line types]:
+
+*base*, *bend*, *bordure*, *canton*, *chevron*, *chevron inverted*, *chevron rompu*, *chevron throughout*,
+*chevron couched*, *chevron fracted {disjoint*, *debruised}*, *chief*, *chief triangular*, *cross**, *
+*cross formy throughout*, *cross-fillet*, *cross quarter pierced*, *cross parted and fretty*,
+*cross tripartite and fretty*, *fess*, *flaunch*, *fret*, *gore*, *gyron*, *inescutcheon*, *orle*,
+*pale*, *pall*, *pile*, *pile inverted*, *quarter*, *saltire*, *tierce*
+
+
+==Combining Charges and Ordinaries==
+
+It is possible to combine [Charges] with [Ordinaries] in various ways:
+
+  * One or more charges placed around or within an ordinary
+  * One or more charges placed on the ordinary
+  * Some charges around the ordinary and some (other) charges on the ordinary
+  
+The basic syntax is as follows, where Ordinary indicates the normal syntax for an ordinary, as shown above.
+
+{{{
+[Ordinaries Ordinary] *between* [Number] [Charges]
+
+[Ordinaries Ordinary] *within* [Number] [Charges]
+
+*on* [Ordinaries Ordinary] [Number] [Charges]
+
+*on* [Ordinaries Ordinary] *between* [Number] [Charges Charges (between)] [Number] [Charges Charges (on)]
+}}}
+
+==Combining Ordinaries==
+
+It is also possible to place one ordinary on top of another:
+
+{{{
+[Ordinaries Ordinary] *on* 
+
+The *chief* and *canton* are often used as an augmentation or difference and so have an extra feature in
+that they can have another ordinary pla
+
+=Points To Note=
+
+If an ordinary cannot be drawn with the specified line type it is drawn with straight edges but no error message is generated.
+
+
+

@@ -1,6 +1,6 @@
 #summary Tincture - Colours and patterns
 
-=Introduction=
+=Description=
 
 A tincture is a single colour or a repeating pattern of two colours that can be applied to the whole shield or to some
 item on the shield.
@@ -17,9 +17,15 @@ A tincture can be any one of the following:
   
   * [Colour] *semy de* {*strewn with*} [Charge charges] (A single colour with small versions of the charge placed at regular intervals)
    
+==Forward Reference==
+
+In most situations, if no tincture is found where one is expected then the program will look forward through
+the blazon and use the next tincture that it finds. For example a list of charges can be given with the tincture 
+at the end. This is example of heralds avoiding repitition.
+
 ==Back References==
 
-Heralds do not like to repeat themselves in a blazon and so will often use "back references" to previously used colours.
+A noted above, Heralds do not like to repeat themselves in a blazon and so will often use "back references" to previously used colours.
 Wherever a tincture is expected it may be replaced by any of the following:
 
   * *Of the same* (*like* can be used instead of *of* throughout)
@@ -31,6 +37,8 @@ Wherever a tincture is expected it may be replaced by any of the following:
   
 Obviously it is an error if you refer to the third colour and have only used two so far.
 
+=Points to Note=
+
 There is an ambiguity with treatments and the meaning of *same* and *last*. For example in
 {{{
 azure, a base grillage azure and or and a chief of the same
@@ -40,9 +48,4 @@ should the chief be coloured *or* (the last colour mentioned) or should it be *g
 treatment, if there is one) whilst *last* refers to the most recently mentioned [Colour colour], even if
 it is part of a treatment. I don't know whether this accords with heraldic practice, but there you go...
 
-==Forward Reference==
-
-In most situations, if no tincture is found where one is expected then the program will look forward through
-the blazon and use the next tincture that it finds. For example a list of charges can be given with the tincture 
-at the end. This is another example of heralds avoiding repitition.
 

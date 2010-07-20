@@ -1,6 +1,6 @@
-#summary Single plain colours
+#summary Colours - Single plain colours
 
-=Introduction=
+=Description=
 
 Colours are single plain pigments, however in heraldry they have special names.
 

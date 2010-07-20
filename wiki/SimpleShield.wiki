@@ -1,11 +1,11 @@
 #summary A Simple Shield
 
-=Introduction=
+=Description=
 
 This is the simplest form of shield.
 
 ==Simple Shield==
 
-The shield consists of (at minimum) a [Field field], optionally followed by any number of [Ordinary ordinaries] and
-[Charge charges].
+The shield consists of (at minimum) a [Field field], optionally followed by any number of [Ordinaries ordinaries] and
+[Charges charges].
 

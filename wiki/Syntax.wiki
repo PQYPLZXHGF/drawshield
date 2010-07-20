@@ -1,9 +1,9 @@
 #summary Syntax and Punctuation supported by Drawshield
 
-= Introduction =
+= Description =
 
-Drawshield aims to be fairly flexible in use of punctuation, except in 
-situations where it is necessary to clarify situations where there are two
+Drawshield aims to be fairly flexible in use of punctuation, except 
+where it is necessary to clarify situations where there are two
 or more possible interpretations.
 Importantly, the punctuation scheme allows blazons in
 [http://www.heraldsnet.org/saitou/parker/ Parker's Glossary of Heraldry] to be cut and pasted directly into Drawshield.

@@ -24,10 +24,9 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
       * [Treatment Treatments]
       * [Fur Furs]
    * [Division Divisions]
-      * Division Modifiers
-   * Ordinaries
+   * [Ordinaries]
       * Ordinary Modifiers
-   * Linetypes
+   * [LineTypes]
    * Charges
  * The Drawshield Program
    * Program Overview

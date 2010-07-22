@@ -7,9 +7,8 @@ any [Tincture tincture], and in most cases can themselves be split by a [Divisio
 
 The basic syntax is:
 
-{{{
-a [Ordinaries Ordinary] [LineTypes Line Type] [OrdModifier Ordinary Modifier] [Tincture]
-}}}
+*a* (*an*) [Ordinaries Ordinary] [LineTypes Line Type] [OrdModifier Ordinary Modifier] [Tincture]
+
 
 ==Large Ordinaries==
 
@@ -32,7 +31,7 @@ It is possible to combine [Charges] with [Ordinaries] in various ways:
   
 The basic syntax is as follows, where Ordinary indicates the normal syntax for an ordinary, as shown above.
 
-{{{
+
 [Ordinaries Ordinary] *between* [Number] [Charges]
 
 [Ordinaries Ordinary] *within* [Number] [Charges]
@@ -40,17 +39,25 @@ The basic syntax is as follows, where Ordinary indicates the normal syntax for a
 *on* [Ordinaries Ordinary] [Number] [Charges]
 
 *on* [Ordinaries Ordinary] *between* [Number] [Charges Charges (between)] [Number] [Charges Charges (on)]
-}}}
+
 
 ==Combining Ordinaries==
 
 It is also possible to place one ordinary on top of another:
 
-{{{
-[Ordinaries Ordinary] *on* 
+*on* [Ordinaries Ordinary] [Ordinaries Ordinary] 
 
-The *chief* and *canton* are often used as an augmentation or difference and so have an extra feature in
-that they can have another ordinary pla
+Normally the second ordinary is only visible where it overlays the first one, look for example at:
+
+[images/ordinary-ex1.phg]
+
+{{{
+Azure, on a bend or Azure, a fess gules
+}}}
+
+However, the *chief* and *canton* are often used as an augmentation or difference and so are treated a little
+differently if they are the first ordinary - the second ordinary is scaled to fit entirely on the chief or
+canton.
 
 =Points To Note=
 

@@ -13,7 +13,7 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
    * [Acknowl Acknowledgements]
  * Blazons and Heraldry
    * Sources
- * [SupportedBlazonry Supported Heraldic Features]
+ * [SupportedHeraldry Supported Heraldic Features]
    * [Syntax Syntax and punctuation]
    * [Marshalling]
    * [SimpleShield Simple Shield]

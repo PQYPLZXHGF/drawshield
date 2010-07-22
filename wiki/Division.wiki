@@ -4,7 +4,7 @@
 
 When a division is applied to a shape it is partitioned into two or more sections and can have
 either two or three tinctures. They can be applied to anything, but most commonly are applied to 
-the field. Some of the divisions may be further modified by specifying a [LineType line type] which
+the field. Some of the divisions may be further modified by specifying a [LineTypes line type] which
 draws the major division lines in a pattern rather than straight. Typically, only the larger divisions
 can be drawn with variant line types, however all line types are accepted, if the program cannot draw
 them they are silently ignored.
@@ -14,9 +14,11 @@ them they are silently ignored.
 These divisions split the shield into two large areas.
 
 The basic syntax is:
-{{{
-[Division] [LineType] [Tincture] and [Tincture]
-}}}
+
+
+[Division] [LineType] [Tincture] *and* [Tincture]
+
+
 
 The available divisions are:
 
@@ -29,9 +31,9 @@ Instead of *per bend* you can use *party per bend* or *parted bendwise*, and sim
 
 ==Large Divisions of Three Tinctures==
 
-{{{
-[Division] [LineType] [Tincture] and [Tincture] and [Tincture] 
-}}}
+
+[Division] [LineType] [Tincture] *and* [Tincture] *and* [Tincture] 
+
 
 The available divisions are:
 
@@ -41,9 +43,9 @@ The available divisions are:
 
 These divisions are made out of a variable number of bars, with the syntax
 
-{{{
-[Division] {of [Number]} [LineType] [Tincture] and [Tincture]
-}}}
+
+[Division] {*of* [Number]} [LineType] [Tincture] *and* [Tincture]
+
 
 The available divisions are:
 

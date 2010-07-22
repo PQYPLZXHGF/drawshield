@@ -6,3 +6,5 @@
   * [Install Program Installation]
   * [Usage Program Usage]
 * Blazons and Heraldry
+  * [SupportedHeraldry Supported Heraldry]
+  

@@ -19,7 +19,7 @@ You can combine quarters, e.g. *first and third* SimpleShield.
 
 == Overall ==
 
-Any [Ordinary ordinaries] or [Charge charges] that are preceeded by *overall* will be placed
+Any [Ordinaries ordinaries] or [Charge charges] that are preceeded by *overall* will be placed
 "on top" of anything else on the shield, i.e. without regard to anything else on the shield that
 would normally cause adjustments.
 

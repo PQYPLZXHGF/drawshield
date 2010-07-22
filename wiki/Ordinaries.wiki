@@ -14,12 +14,59 @@ The basic syntax is:
 
 These are the large ordinaries, most of which can be drawn with variant [LineTypes line types]:
 
-*base*, *bend*, *bordure*, *canton*, *chevron*, *chevron inverted*, *chevron rompu*, *chevron throughout*,
-*chevron couched*, *chevron fracted {disjoint*, *debruised}*, *chief*, *chief triangular*, *cross**, *
+*base*, *bend*, *bend sinister*, *chevron*, *chevron inverted*, *chevron rompu*, *chevron throughout*,
+*chevron couched*, *chevron fracted {disjoint*, *debruised}*, *chief*, *chief triangular*, *cross*,
 *cross formy throughout*, *cross-fillet*, *cross quarter pierced*, *cross parted and fretty*,
-*cross tripartite and fretty*, *fess*, *flaunch*, *fret*, *gore*, *gyron*, *inescutcheon*, *orle*,
-*pale*, *pall*, *pile*, *pile inverted*, *quarter*, *saltire*, *tierce*
+*cross tripartite and fretty*, *fess*, *inescutcheon*,
+*pale*, *pall*, *pile*, *pile inverted*, *quarter*, *quarter sinister*, *saltire*, *tierce*,
+*tierce sinister*
 
+==Diminutives==
+
+Some of the larger ordinaries come in smaller versions, that can appear multiple times. (If no number is
+given, or the diminutive is plural, then 4 is assumed). Note that *between* 
+and *on* (see below) don't really make sense with these ordinaries. The available diminutives are:
+
+*bar*, *bar gemel*, *palet*, *bendlet* {*scarpe*}, (up to 8 of each) *chevronel*, *chevronel interlaced* 
+{*chevronel braced*}, *piles* (up to 4 of each)
+
+There are various nuances, which are shown in the table below:
+
+|| *Diminutive* || *Can be drawn with Variant Linetypes?* || *Number Range* ||
+|| bar || Yes || 1 - 8 ||
+|| bar gemel || Yes || 1 - 8 ||
+|| palet || Yes || 1 - 8 ||
+|| bendlet || Yes || 1 - 8 ||
+|| chevronel || No || 1 - 4 ||
+|| chevronel interlaced || No || 2 - 4 ||
+|| piles || No || 2 - 4 ||
+ 
+
+==Sub-Ordinaries
+
+These ordinaries are generally smaller and take up less of the space on the field.
+
+*fret*, *escutcheon*, *orle*, *bordure*, *canton*, *gyron*, *baton*, *graft*, *gusset*, *shakefork*, *pall*, *tressure*, *double-tressure*, *flaunch*, *square flaunch*
+
+They have various little nuances, which are captured in the table below
+
+|| *Sub-Ordinary* || *Can be drawn with Variant Linetypes?* || *Action if 2 requested* || *Action if > 2 requested* || 
+|| fret  || No	|| Treated as a charge || Treated as a charge || 
+|| escutcheon || No	|| Treated as a charge || Treated as a charge ||
+|| orle || No	|| Number silently ignored || Number silently ignored ||
+|| bordure || No	|| Number silently ignored || Number silently ignored ||
+|| canton || Yes || Dexter and sinister drawn || Number silently ignored ||
+|| gore || Yes || Dexter and sinister drawn || Number silently ignored ||
+|| gyron || Yes || Dexter and sinister drawn || Number silently ignored ||
+|| baton || No	|| Number silently ignored || Number silently ignored ||
+|| graft || No  || Dexter and sinister drawn || Number silently ignored || 
+|| gusset || No  || Dexter and sinister drawn || Number silently ignored || 
+|| shakefork || No	|| Number silently ignored || Number silently ignored ||
+|| pall || No	|| Number silently ignored || Number silently ignored ||
+|| tressure || No	|| Number silently ignored || Number silently ignored ||
+|| double-tressure || No	|| Number silently ignored || Number silently ignored ||
+|| flaunch || No  || Dexter and sinister drawn || Number silently ignored || 
+|| square flaunch || No  || Dexter and sinister drawn || Number silently ignored || 
 
 ==Combining Charges and Ordinaries==
 
@@ -49,15 +96,19 @@ It is also possible to place one ordinary on top of another:
 
 Normally the second ordinary is only visible where it overlays the first one, look for example at:
 
-[images/ordinary-ex1.phg]
 
 {{{
-Azure, on a bend or Azure, a fess gules
+Azure, on a bend or a fess gules
 }}}
+[http://www.karlwilcox.com/images/wiki/ordinary-ex1.png]
 
 However, the *chief* and *canton* are often used as an augmentation or difference and so are treated a little
 differently if they are the first ordinary - the second ordinary is scaled to fit entirely on the chief or
-canton.
+canton. Compare the blazon below with the one above:
+{{{
+Azure, on a canton or a fess gules
+}}}
+[http://www.karlwilcox.com/images/wiki/ordinary-ex2.png]
 
 =Points To Note=
 

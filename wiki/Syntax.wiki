@@ -19,3 +19,7 @@ At present Drawshield does *NOT* support accented characters. Please replace all
 || # || (hash) Everything following a hash is ignored completely, and does not even appear in the shield caption ||
 || , || (comma) This character should be used after each separate tincture, for example 	  the list of tinctures <em>per pall azure, grillage or and azure, ermine</em>. The word 	  <em>and</em> serves the same purpose. A comma should also be used to separate multiple charges, e.g. <em>a heart gules, in chief 3 pommes</em> || 
 || ; || (semi-colon) This character can be used to indicate the end of the 	  description of each quarter of a quartered shield. It <em>must</em> be used if there is a charge that is <strong>overall</strong> the quartered shield. Without the semi-colon the program could not tell if the charge were to be placed over the final quarter of the shield, or over the whole shield.||
+
+=Navigation=
+
+Previous [SupportedHeraldry] Top [SupportedHeraldry] Next [Marshalling]

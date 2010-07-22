@@ -7,42 +7,56 @@ any [Tincture tincture], and in most cases can themselves be split by a [Divisio
 
 The basic syntax is:
 
-*a* (*an*) [Ordinaries Ordinary] [LineTypes Line Type] [OrdModifier Ordinary Modifier] [Tincture]
+*a* {*an*} [Ordinaries Ordinary] [LineTypes Line Type] [OrdinaryModifier Ordinary Modifier] [Tincture]
 
 
 ==Large Ordinaries==
 
 These are the large ordinaries, most of which can be drawn with variant [LineTypes line types]:
 
-*base*, *bend*, *bend sinister*, *chevron*, *chevron inverted*, *chevron rompu*, *chevron throughout*,
+*base*, *bend*, *bend* (*bar*) *sinister*, *chevron*, *chevron inverted*, *chevron rompu*, *chevron throughout*,
 *chevron couched*, *chevron fracted {disjoint*, *debruised}*, *chief*, *chief triangular*, *cross*,
 *cross formy throughout*, *cross-fillet*, *cross quarter pierced*, *cross parted and fretty*,
 *cross tripartite and fretty*, *fess*, *inescutcheon*,
 *pale*, *pall*, *pile*, *pile inverted*, *quarter*, *quarter sinister*, *saltire*, *tierce*,
 *tierce sinister*
 
+There is also a special ordinary, *ford* which does not need a tincture. It is equivalent to
+*a base barry wavy azure and argent*.
+
 ==Diminutives==
 
-Some of the larger ordinaries come in smaller versions, that can appear multiple times. (If no number is
+Some of the larger ordinaries come in smaller versions, called diminutives that can appear multiple times. (If no number is
 given, or the diminutive is plural, then 4 is assumed). Note that *between* 
 and *on* (see below) don't really make sense with these ordinaries. The available diminutives are:
 
-*bar*, *bar gemel*, *palet*, *bendlet* {*scarpe*}, (up to 8 of each) *chevronel*, *chevronel interlaced* 
-{*chevronel braced*}, *piles* (up to 4 of each)
+*bar*, *bar gemel*, *palet*, *bendlet* {*scarpe*}, *chevronel*, *chevronel interlaced* 
+{*chevronel braced*}, *piles*
 
 There are various nuances, which are shown in the table below:
 
 || *Diminutive* || *Can be drawn with Variant Linetypes?* || *Number Range* ||
-|| bar || Yes || 1 - 8 ||
+|| bar || Yes (see below) || 1 - 8 ||
 || bar gemel || Yes || 1 - 8 ||
-|| palet || Yes || 1 - 8 ||
-|| bendlet || Yes || 1 - 8 ||
+|| palet || Yes (see below) || 1 - 8 ||
+|| bendlet || Yes (see below) || 1 - 8 ||
 || chevronel || No || 1 - 4 ||
 || chevronel interlaced || No || 2 - 4 ||
 || piles || No || 2 - 4 ||
- 
 
-==Sub-Ordinaries
+Not only can *bars*, *palets* and *bendlets* be given a [LineType line type], but you can specify different line types for
+different bars or whatever, using any combination of *the inner*, *the outer*, *the upper*, *the lower*, *the dexter*,
+*the sinister*, *the first*, *the last*, *the inside*, *the outside*. For example:
+
+{{{
+sable 4 bars the outer invected the inner engrailed vert
+}}}
+[http://www.karlwilcox.com/images/wiki/ordinary-ex3.png]
+
+Finally, note that a *bar* will draw a thick horizontal line but *bar sinister* will draw a *bend sinister*. This is the correct
+heraldic usage. 
+
+==Sub-Ordinaries==
 
 These ordinaries are generally smaller and take up less of the space on the field.
 
@@ -57,7 +71,7 @@ They have various little nuances, which are captured in the table below
 || bordure || No	|| Number silently ignored || Number silently ignored ||
 || canton || Yes || Dexter and sinister drawn || Number silently ignored ||
 || gore || Yes || Dexter and sinister drawn || Number silently ignored ||
-|| gyron || Yes || Dexter and sinister drawn || Number silently ignored ||
+|| gyron || No || Dexter and sinister drawn || Number silently ignored ||
 || baton || No	|| Number silently ignored || Number silently ignored ||
 || graft || No  || Dexter and sinister drawn || Number silently ignored || 
 || gusset || No  || Dexter and sinister drawn || Number silently ignored || 
@@ -110,9 +124,22 @@ Azure, on a canton or a fess gules
 }}}
 [http://www.karlwilcox.com/images/wiki/ordinary-ex2.png]
 
+You may also use the construction:
+
+*on* [Ordinaries Ordinary] *another* [Tincture]
+
+This is exactly equivalent to:
+
+[Ordinaries Ordinary] *voided* [Tincture]
+
+See [OrdinaryModifiers Ordinary Modifiers] for more details.
+
 =Points To Note=
 
 If an ordinary cannot be drawn with the specified line type it is drawn with straight edges but no error message is generated.
 
+=Navigation=
+
+Previous [Divisions] Top [SupportedHeraldry] Next [OrdinaryModifiers]
 
 

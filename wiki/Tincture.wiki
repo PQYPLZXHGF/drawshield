@@ -9,13 +9,13 @@ item on the shield.
 
 A tincture can be any one of the following:
 
-  * [Colour] (A single colour)
+  * [Colour] - (A single colour)
   
-  * [Fur] (A repeating pattern with two, fixed colours)
+  * [Fur] - (A repeating pattern with two, fixed colours)
   
-  * [Treatment] (A repeating pattern in which both colours are provided in the blazon)
+  * [Treatment] - (A repeating pattern in which both colours are provided in the blazon)
   
-  * [Colour] *semy de* {*strewn with*} [Charge charges] (A single colour with small versions of the charge placed at regular intervals)
+  * [Colour] *semy de* (*strewn with*) [Charge charges] - (A single colour with small versions of the charge placed at regular intervals)
    
 ==Forward Reference==
 
@@ -30,10 +30,10 @@ Wherever a tincture is expected it may be replaced by any of the following:
 
   * *Of the same* (*like* can be used instead of *of* throughout)
   * *Of the last*
-  * *Of the first* {*of the 1st*}
-  * *Of the second* {*of the 2nd*}
-  * *Of the third* {*of the 3rd*}
-  * *Of the fourth* {*of the 4th*}
+  * *Of the first* (*of the 1st*)
+  * *Of the second* (*of the 2nd*)
+  * *Of the third* (*of the 3rd*)
+  * *Of the fourth* (*of the 4th*)
   
 Obviously it is an error if you refer to the third colour and have only used two so far.
 
@@ -48,4 +48,7 @@ should the chief be coloured *or* (the last colour mentioned) or should it be *g
 treatment, if there is one) whilst *last* refers to the most recently mentioned [Colour colour], even if
 it is part of a treatment. I don't know whether this accords with heraldic practice, but there you go...
 
+=Navigation=
+
+Previous [Number] Top [SupportedHeraldry] Next [Colour]
 

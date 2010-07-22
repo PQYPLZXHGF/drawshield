@@ -64,6 +64,8 @@ These divisions are a bit like [Treatment treatments] but are of a fixed size. T
 
 *chevronny* {*of* 4,5,6,7 or 8}, *fusily*, *lozengy*, *gyronny* {*of* 6,8,10 or 12}
 
+*gyronny* without a number defaults to 8, *chevronny* defaults to 4.
+
 =Combining Divisions=
 
 It is possible to have two divisions on the same shield, where the second division
@@ -72,6 +74,7 @@ is *counterchanged* (i.e. of opposite colours to the first). For example:
 {{{
 Barry azure and or per pale counterchanged
 }}}
+[http://www.karlwilcox.com/images/wiki/division-ex1.png]
 
 =Points to Note=
 
@@ -81,6 +84,9 @@ in the centre of each of the two triangular areas. If you _do not_ want this
 behaviour place the charges *overall* (see [Marshalling]).
 
 
+=Navigation=
+
+Previous [Fur] Top [SupportedHeraldry] Next [Ordinaries]
 
 
 

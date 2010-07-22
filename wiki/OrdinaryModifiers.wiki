@@ -1,0 +1,50 @@
+#summary Ordinary Modifiers - Changes to features of ordinaries
+
+=Description=
+
+In addition to be being drawn with variant edge types, ordinaries may also have other modifiers applied
+which may affect how they are drawn, or their placement. They usually come between the ordinary and its tincture,
+however there are some exceptions noted below.
+
+==The Modifiers==
+
+The following modifiers are available:
+
+*voided*, *fimbriated* (*edged*), {*double*, *treble*} *cotised* (*endorsed*, *cotticed*), 
+*enhanced*, *abased*, *couped* {*in base*, *in chief*, *dexter*, *sinister*}, 
+*lozengy*, *compony* (*gobony*), *counter compony*.
+
+There are many quirks to each of these, which I have tried to capture in this table:
+
+|| *Modifier* || *Description* || *Tinctures* || *position* ||
+|| voided || Drawn in outline only || if followed by a tincture the interior is drawn that colour || follows the ordinary tincture ||
+|| fimbriated || Edges drawn in different colour || must be followed by a tincture || follows the ordinary tincture ||
+|| cotised || 1, 2 or 3 extra edges drawn || if followed by a tincture, extra edges drawn in that colour || follows the ordinary tincture, can also have their own variant line type, see below ||
+|| enhanced, abased || moved up, down || none || before or after the ordinary ||
+|| couped || cut short (at a particular end) || none || between the ordinary and its tincture ||
+|| lozengy, compony, counter compony || filled with a fixed pattern || must be followed by two tinctures || follows the ordinary ||
+
+Cotticing can be quite complex, here are some examples:
+
+{{{
+Azure a bend cotticed or
+
+Azure a bend or cotticed vert
+
+Azure a bend or cotticed invected vert 
+
+Azure a bend or double cotticed invected vert
+}}}
+
+=Points to Note=
+
+There are many situations when combinations of modifiers, or modifiers and particular ordinaries
+do not make sense. The program may ignore these or may draw strange things. If you stick to real
+blazons then you should not come across these situations.
+
+=Navigation=
+
+Previous [Ordinaries] Top [SupportedHeraldry] Next [LineTypes]
+
+
+

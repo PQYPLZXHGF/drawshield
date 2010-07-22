@@ -9,7 +9,7 @@ edges, rather than straight lines.
 
 The variant line types available are:
 
-*battled-embattled*, *battled-counter-embattled*, *dancetty*, *dovetailed*, *embattled*, *engrailed*, *indented*, *invected*, *nebuly*, *potenty*, *raguly*, *rayonny*, *urdy*, *wavy*, *angled*, *bevilled*, *escartelly*, *nowy*, *arched* {*enarched*}, *double-arched*
+*battled-embattled*, *battled-counter-embattled*, *dancetty*, *dovetailed*, *embattled*, *engrailed*, *indented*, *invected*, *nebuly*, *potenty*, *raguly*, *rayonny*, *urdy*, *wavy*, *angled*, *bevilled*, *escartelly*, *nowy*, *arched* (*enarched*), *double-arched*
 
 =Points to Note=
 
@@ -17,4 +17,8 @@ There are some limitations, and some
 situations where the program does not join lines neatly. I am thinking about
 ways of improving this but it is proving difficult to find a neat, generic
 solution that works in every situation!
+
+=Navigation=
+
+Previous [OrdinaryModifiers] Top [SupportedHeraldry] Next [Charges]
 

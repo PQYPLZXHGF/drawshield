@@ -16,6 +16,7 @@ The following numbers (or number specifiers) are recognised:
 You can also just use the digits instead.
 
 *the* is an acceptable subsititute for one, as for example in 
+
 {{{
 Azure, the letter 'A' gules
 }}}
@@ -30,5 +31,8 @@ previous number. Wherever a number is expected you may use either of:
 
 Obviously it is an error to refer to a previous number without having used one.
 
+=Navigation=
+
+Previous [Field] Top [SupportedHeraldry] Next [Tincture]
 
 

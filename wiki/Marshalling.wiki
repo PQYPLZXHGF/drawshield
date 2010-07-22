@@ -12,8 +12,8 @@ SimpleShield *impaled with* SimpleShield
 
 == Combining Up to Four Shields ==
 
-*Quartered* {*quarterly*} *first* {*1st*, *I*} SimpleShield *second* {*2nd*, *II*} SimpleShield
-*third* {*3rd*, *III*} SimpleShield *fourth* {*4th*, *IV*} SimpleShield
+*Quartered* (*quarterly*) *first* (*1st*, *I*) SimpleShield *second* (*2nd*, *II*) SimpleShield
+*third* (*3rd*, *III*) SimpleShield *fourth* (*4th*, *IV*) SimpleShield
 
 You can combine quarters, e.g. *first and third* SimpleShield.
 
@@ -30,4 +30,7 @@ There is an ambiguity with marshalled shields - if the blazon ends with somethin
 shields? Drawshield resolves this ambiguity by use of the ';' (semi-colon). If there is a semi-colon
 before the word *overall* then the items are placed over the whole shield, otherwise the items will
 be placed over the last !SimpleShield.
- 
+
+=Navigation=
+
+Previous [Syntax] Top [SupportedHeraldry] Next [SimpleShield]

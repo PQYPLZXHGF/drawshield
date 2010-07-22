@@ -6,11 +6,16 @@ The pages in this section list all the heraldic terms that are understood by the
 program. It is intended for those already familiar with blazons, if you are
 new to heraldry look at my [http://www.karlwilcox.com?page=shield suggested reading].
 
-In the pages that follow everything in *bold* is a word that the program understands, 
-items in curly brackets are
-synonyms for the preceding word. Common variations in spelling are also accepted (e.g.
-fleur-de-lys, fleur-de-lis) but not all are shown here. Plurals are also accepted where
-appropriate.
+In the pages of this section the following conventions have been used:
+
+  * Everything in *bold* is a term that the program understands. 
+  * Items in round brackets are synonyms for the preceding word.
+    * Common variations in spelling are also accepted (e.g. fleur-de-lys, fleur-de-lis) but not all are shown here.
+    * Plurals are also accepted where appropriate.
+    * Use of a synonym does not change anything on the shield
+  * Items in curly brackets are additional, optional terms
+    * These terms appear _in addition to_ the preceeding word
+    * They will cause a different appearnce on the shield if they are present
 
 Examples of actual blazonry are shown like this:
 
@@ -39,4 +44,9 @@ interpretation.
  * [Ordinaries]
     * Ordinary Modifiers
  * [LineTypes]
- * Charges
+ * [Charges]
+    * [ChargeFeatures]
+    * [ChargeModifiers]
+    * [ChargeArrangement]
+    * [ChargePosition]
+ 

@@ -8,7 +8,7 @@ Furs are repeating patterns that have two, fixed colours.
 
 The furs (and some common alternative names) are:
 
-*counter-ermine* {*ermines*}, *counter-potent*, *counter-vair*, *ermine*, *erminois*, *pean*, *potent*,
+*counter-ermine* (*ermines*), *counter-potent*, *counter-vair*, *ermine*, *erminois*, *pean*, *potent*,
 *potent-counter-potent*, *vair*, *vair-en-point*, *vair-in-pale*
 
 =Points to Note=
@@ -17,6 +17,9 @@ In general, furs retain their orientation even if the item that they are colouri
 inverted. There are a few exceptions, for example, a fur placed on a bend will be turned to be parallel
 with the bend.
 
+=Navigation=
+
+Previous [Treatment] Top [SupportedHeraldry] Next [Division]
 
 
 

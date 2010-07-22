@@ -14,6 +14,8 @@ Versions are numbered in four levels, as follows:
 
 Can use e.g. *bundle of 3 arrows*, however the number is usually ignored.
 
+*chevronny* and variant line types on bars were broken. They have been fixed.
+
 Improved *billet* (issue 113)
 
 ==New Features==

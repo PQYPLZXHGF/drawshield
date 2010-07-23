@@ -315,7 +315,7 @@ function calcPlace( $type, $number, $conjoined = 'false', $bb = '100,200,800,800
     '4,4,3',
     '4,4,4',
   );
-  if ( $number > 12 ) return 's';
+  if ( $number > 12 ) return $number;
   switch ( $type ) {
     case 'h': // single horizontal row
       $row_list = array($number);

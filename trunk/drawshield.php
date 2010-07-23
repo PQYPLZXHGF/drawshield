@@ -44,6 +44,9 @@ $tagline2 = "shield.karlwilcox.com";
 $words = array();
 $cur_word = 0;
 
+if (PHP_VERSION>='5')
+  require_once('domxml.inc');
+
 // This is our XML generator and top level item for the parse tree
 $dom = domxml_new_doc('1.0');
 

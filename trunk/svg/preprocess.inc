@@ -39,7 +39,7 @@ function schemeHandler($xh, $func, $arg) {
 
 $handlerArray = array ( 'get_all' => 'schemeHandler' );
 
-function preprocess ( $dom ) {
+function preprocess ( &$dom ) {
   $version = phpversion();
   if ( $version{0} == '4' ) {
     global $handlerArray;
@@ -73,19 +73,27 @@ function preprocess ( $dom ) {
     return $result;
   } elseif ( $version{0} == '5' ) {
     $xp = new XsltProcessor();
+    $xp->registerPHPFunctions();
     $xsl = new DomDocument;
+    $raw_xml = $dom->dump_mem();
+    $dom5 = new DomDocument;
+    $dom5->loadXML($raw_xml);
     // Do substitutions
     $xsl->load('svg/substitutions.xslt');
-    $result = $xp->transformToXML($dom);
+    $xp->importStylesheet($xsl);
+    $result = $xp->transformToDoc($dom5);
     if (!$result) {
       echo 'Error in transforming XML(1)';
       return $result;
     }
     // Do placements
     $xsl->load('svg/placements5.xslt');
+    $xp->importStylesheet($xsl);
     $result = $xp->transformToXML($result);
     if (!$result) {
       echo 'Error in transforming XML(2)';
+    } else {
+      $dom = domxml_open_mem($result);
     }
     return $result;
   }

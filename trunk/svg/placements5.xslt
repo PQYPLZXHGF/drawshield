@@ -66,23 +66,23 @@
           <xsl:when test="$ordsubtype='chief-triangular'">500,200,200,200/375,180,180,180:625,180/325,140,160,180:500,240:675,140/x/x/x</xsl:when>
           <xsl:when test="$ordsubtype='canton'">125,125,200,200/83.33,125,80,200:166.67,125/83.33,83.33,80,90:166.67,83.33:125,166.67/83.33,83.33,80,90:83.33,166.67:166.67,83.33:166.67,166.67/s/s</xsl:when>
           <xsl:when test="$ordsubtype='gyron'">80,200,100,100/s/s/s/s/s</xsl:when>
-          <xsl:when test="$ordtype='chief'"><xsl:value-of select="php:function('calcPlace',concat('h#',$number,'#',$conjoin,'#100,50,800,200'))" /></xsl:when>
-          <xsl:when test="$ordtype='fess'"><xsl:value-of select="php:function('calcPlace',concat('h#',$number,'#',$conjoin,'#100,400,800,200'))" /></xsl:when>
+          <xsl:when test="$ordtype='chief'"><xsl:value-of select="php:function('calcPlace','h',string($number),string($conjoin),'100,50,800,200')" /></xsl:when>
+          <xsl:when test="$ordtype='fess'"><xsl:value-of select="php:function('calcPlace','h',string($number),string($conjoin),'100,400,800,200')" /></xsl:when>
           <xsl:when test="$ordsubtype='gore'">130,700,160,160/130,600,140,140:130,800/x/x/x/x</xsl:when>
-          <xsl:when test="$ordtype='pale' and $chief='false'"><xsl:value-of select="php:function('calcPlace',concat('v#',$number,'#',$conjoin,'#350,100,200,1000'))" /></xsl:when>
-          <xsl:when test="$ordtype='pale' and $chief='true'"><xsl:value-of select="php:function('calcPlace',concat('v#',$number,'#',$conjoin,'#350,350,200,750'))" /></xsl:when>
-          <xsl:when test="$ordtype='tierce' and $chief='false'"><xsl:value-of select="php:function('calcPlace',concat('v#',$number,'#',$conjoin,'#75,100,200,800'))" /></xsl:when>
-          <xsl:when test="$ordtype='tierce' and $chief='true'"><xsl:value-of select="php:function('calcPlace',concat('v#',$number,'#',$conjoin,'#75,350,200,650'))" /></xsl:when>
+          <xsl:when test="$ordtype='pale' and $chief='false'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'350,100,200,1000')" /></xsl:when>
+          <xsl:when test="$ordtype='pale' and $chief='true'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'350,350,200,750')" /></xsl:when>
+          <xsl:when test="$ordtype='tierce' and $chief='false'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'75,100,200,800')" /></xsl:when>
+          <xsl:when test="$ordtype='tierce' and $chief='true'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'75,350,200,650')" /></xsl:when>
           <xsl:when test="$ordtype='chevron' and $chief='false'">500,400,100,100/250,625,100,100,45:750,625,,,-45/250,625,100,100,45:500,400,,,0:750,625,,,-45/200,675,100,100,45:400,475:600,475,,,-45:800,675/200,675,100,100,45:350,525:500,400,,,0:650,525,,,-45:800,675/150,725,100,100,45:250,625:350,525:650,525,,,-45:750,625:850,725</xsl:when>
           <xsl:when test="$ordtype='chevron' and $chief='true'">500,550,100,100/250,775,100,100,45:750,775,,,-45/250,775,100,100,45:500,550,,,0:750,775,,,-45/200,825,100,100,45:400,625:600,625,,,-45:800,825/200,825,100,100,45:350,675:500,550,,,0:650,625,,,-45:800,825/150,875,100,100,45:250,775:350,675:650,675,,,-45:750,775:850,875</xsl:when>
           <xsl:when test="$ordtype='cross' and $chief='false'">500,500,200,200//200,500,220,220:800,500:500,250/200,500,200,200:500,220:800,500:500,800//200,500,200,200:500,200:800,500:500,500:500,800:500,1050</xsl:when>
           <xsl:when test="$ordtype='cross' and $chief='true'">500,700,160,160////250,700,160,160:750,700:500,450:500,700:500,950/x</xsl:when>
           <xsl:when test="$ordsubtype='saltire' and $chief='false'">500,500,160,160/x/x/250,250,160,160,-45:750,250,,,45:750,750,,,-45:250,750,,,45/500,500,160,160,0:250,250,,,-45:750,250,,,45:750,750,,,-45:250,750,,,45/x</xsl:when>
           <xsl:when test="$ordsubtype='saltire' and $chief='true'">500,700,160,160/x/x/250,450,160,160,-45:750,450,,,45:750,950,,,-45:250,950,,,45/500,740,160,160,0:250,490,,,-45:750,490,,,45:750,990,,,-45:250,990,,,45/x</xsl:when>
-          <xsl:when test="$ordsubtype='inescutcheon' and $chief='false'"><xsl:value-of select="php:function('calcPlace',concat('w#',$number,'#',$conjoin,'#300,300,400,500'))" /></xsl:when>
-          <xsl:when test="$ordsubtype='inescutcheon' and $chief='true'"><xsl:value-of select="php:function('calcPlace',concat('w#',$number,'#',$conjoin,'#300,600,400,250'))" /></xsl:when>
-          <xsl:when test="$ordsubtype='pile' and $chief='false'"><xsl:value-of select="php:function('calcPlace',concat('w#',$number,'#',$conjoin,'#300,100,400,300'))" /></xsl:when>
-          <xsl:when test="$ordsubtype='pile' and $chief='true'"><xsl:value-of select="php:function('calcPlace',concat('w#',$number,'#',$conjoin,'#300,400,400,300'))" /></xsl:when>
+          <xsl:when test="$ordsubtype='inescutcheon' and $chief='false'"><xsl:value-of select="php:function('calcPlace','w',string($number),string($conjoin),'300,300,400,500')" /></xsl:when>
+          <xsl:when test="$ordsubtype='inescutcheon' and $chief='true'"><xsl:value-of select="php:function('calcPlace','w',string($number),string($conjoin),'300,600,400,250')" /></xsl:when>
+          <xsl:when test="$ordsubtype='pile' and $chief='false'"><xsl:value-of select="php:function('calcPlace','w',string($number),string($conjoin),'300,100,400,300')" /></xsl:when>
+          <xsl:when test="$ordsubtype='pile' and $chief='true'"><xsl:value-of select="php:function('calcPlace','w',string($number),string($conjoin),'300,400,400,300')" /></xsl:when>
           <xsl:when test="$ordsubtype='cross-formy' and $chief='false'">x///100,500,120,120:900,500:500,100:500,900/s/s</xsl:when>
           <xsl:when test="$ordsubtype='cross-formy' and $chief='true'">x///100,700,120,120:900,700:500,400:500,1100/s/s</xsl:when>
           <xsl:when test="$ordsubtype='quarter' and $chief='false'">250,250,350,350/150,150,150,150:350,350/150,150,150,150:350,150:250,250/166,166,120,120:334,166:166,334,334,334:100,100,100,100:400,100:250,250:400,100:400,400</xsl:when>
@@ -103,7 +103,7 @@
           <xsl:when test="$ordsubtype='chevron-couched'">n</xsl:when>
           <xsl:when test="$ordsubtype='chevron-throughout'">n</xsl:when>
           <xsl:when test="starts-with($ordsubtype,'chevronel')">x/x/200,200,180,180:500,900,240,240:800,200,180,180/x/x/x</xsl:when>
-          <xsl:when test="starts-with($ordsubtype,'tressure')"><xsl:value-of select="php:function('calcPlace',concat('w#',$number,'#',$conjoin,'#300,300,400,500'))" /></xsl:when>
+          <xsl:when test="starts-with($ordsubtype,'tressure')"><xsl:value-of select="php:function('calcPlace','w',string($number),string($conjoin),'300,300,400,500')" /></xsl:when>
           <xsl:when test="$ordsubtype='chevron-rompu' and $chief='false'">x/200,500,300,300:800,500,300,300/200,500,340,340:500,1050,200,200:800,500,340,340/200,500,200,240:500,140,200,160:500,1050,200,200:800,500,200,240/s/s</xsl:when>
           <xsl:when test="$ordsubtype='chevron-rompu' and $chief='true'">x/200,500,300,300:800,500,300,300/200,500,340,340:500,1050,200,200:800,500,340,340/s/s/s</xsl:when>
           <xsl:when test="$ordsubtype='saltire' and $chief='false'">x///150,500,180,180:850,500:500,150:500,850/x/x</xsl:when>
@@ -126,20 +126,20 @@
           <xsl:when test="$ordsubtype='pile' and $chief='true'">x/150,900,180,180:850,900/x/130,800,160,160:870,800:200,1040:800,1040/x/x</xsl:when>
           <xsl:when test="$ordtype='cross2' and $chief='false'">x/175,750,180,300:825,750/x/175,620,180,160:825,620:175,840:825:840/x/x</xsl:when>
           <xsl:when test="$ordtype='cross2' and $chief='true'">x/175,850,180,300:825,850/x/175,720,180,160:825,720:175,940:825:840/x/x</xsl:when>
-          <xsl:when test="($ordsubtype='orle' or $ordsubtype='double-tressure') and $chief='false'"><xsl:value-of select="php:function('calcPlace',concat('w#',$number,'#',$conjoin,'#250,250,500,600'))" /></xsl:when>
-          <xsl:when test="($ordsubtype='orle' or $ordsubtype='double-tressure') and $chief='true'"><xsl:value-of select="php:function('calcPlace',concat('w#',$number,'#',$conjoin,'#250,550,500,300'))" /></xsl:when>
+          <xsl:when test="($ordsubtype='orle' or $ordsubtype='double-tressure') and $chief='false'"><xsl:value-of select="php:function('calcPlace','w',string($number),string($conjoin),'250,250,500,600')" /></xsl:when>
+          <xsl:when test="($ordsubtype='orle' or $ordsubtype='double-tressure') and $chief='true'"><xsl:value-of select="php:function('calcPlace','w',string($number),string($conjoin),'250,550,500,300')" /></xsl:when>
           <xsl:when test="$ordtype='pale'">x/175,550,300,800:825,550/x/175,383.33,300,350:175,716.67:825,383.33:825,716.67/x/175,300,250,200:175,550:175,800:825,300:825,550:825,800</xsl:when>
           <xsl:when test="$ordtype='fess'">x/500,150,400,180:500,850,400,300/333,150,200,200:666,150:500,850,400,300/333.33,150,300,180:667.67,150:333.33,850,300,300:667.66,850/250,150,200,180:500,150:750,150:333.33,850,300,300:667.66,850/250,150,200,180:500,150:750,150:250,850,200,300:500,850:750,850</xsl:when>
           <xsl:when test="($ordsubtype='pall' or $ordsubtype='shakefork') and $chief='false'">x/220,760,240,400:780,760/220,760,240,400:500,150,180,180:780,760,240,400/220,600,200,180:780,600:220,840:780,840/220,600,200,180:780,600:500,150,180,180:220,840,200,180:780,840/x</xsl:when>
           <xsl:when test="($ordsubtype='pall' or $ordsubtype='shakefork') and $chief='true'">x/220,1060,200,300:780,1060/220,1060,200,300:500,450,180,180:780,1060,200,300/220,900,200,160:780,900:220,840:780,1120/220,900,200,180:780,900:500,350,180,180:220,1120,200,160:780,1120/x</xsl:when>
-          <xsl:when test="$ordsubtype='flaunch' or $ordsubtype='square-flaunch'"><xsl:value-of select="php:function('calcPlace',concat('n#',$number,'#',$conjoin,'#300,300,400,600'))" /></xsl:when>
+          <xsl:when test="$ordsubtype='flaunch' or $ordsubtype='square-flaunch'"><xsl:value-of select="php:function('calcPlace','n',string($number),string($conjoin),'300,300,400,600')" /></xsl:when>
           <xsl:otherwise>n</xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <!-- explicit rows -->
       <xsl:when test="modifier[@name='rows']">
         <xsl:variable name="rows"><xsl:value-of select="modifier[@name='rows']/@param"/></xsl:variable>
-        <xsl:value-of select="php:function('calcPlace',concat('r#',$rows,'#',$conjoin,'#',$boundingBox))" />
+        <xsl:value-of select="php:function('calcPlace','r',$rows,string($conjoin),$boundingBox)" />
       </xsl:when>
       <!-- base on underlying division -->
       <xsl:when test="parent::ord_chgs/parent::plain/tincture/division[@subtype='per-bend'] and @number='2' and $chief='false'">x/300,700,350,350:700,300/x/x/x/x</xsl:when>
@@ -168,10 +168,10 @@
       <xsl:otherwise>
           <xsl:choose>
             <xsl:when test="modifier[@name='position'][@param='indexchief' or @param='insinchief' or @param='insinside' or @param='indexside']">
-              <xsl:value-of select="php:function('calcPlace',concat('n#',@number,'#',$conjoin,'#',$boundingBox))" />
+              <xsl:value-of select="php:function('calcPlace','n',string($number),string($conjoin),$boundingBox)" />
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="php:function('calcPlace',concat('w#',@number,'#',$conjoin,'#',$boundingBox))" />
+              <xsl:value-of select="php:function('calcPlace','w',string($number),string($conjoin),$boundingBox)" />
             </xsl:otherwise>
           </xsl:choose> 
       </xsl:otherwise>
@@ -196,18 +196,18 @@
         <xsl:choose>
           <xsl:when test="@param='inbend' and $chief='false'">500,500,400,800,-45/333.33,333.33,180,180,45:666.67,666.67/250,250,200,200,45:500,500:750,750/200,200,200,200,45:400,400:600,600:800,800/166.67,166.67,160,160,45:333.33,333.33:500,500:666.67,666.67:833.33,833.33/142.86,142.86,140,140,45:285.71,285.71:428.57,428.57:571.43,571.43:714.29,714.29:857.14,857.14</xsl:when>
           <xsl:when test="@param='inbend' and $chief='true'">500,800,350,700,-45/333.33,633.33,180,180,45:666.67,966.67/200,500,180,180,45:400,700:600,900/166.67,466.67,180,180,45:333.33,633.33:500,800:666.67,966.67/142.86,442.86,180,180,45:285.71,585.71:428.57,728.57:571.43,871.43:714.29,1014.29/s</xsl:when>
-          <xsl:when test="@param='inpale' and $chief='false'"><xsl:value-of select="php:function('calcPlace',concat('v#',$number,'#',$conjoin,'#350,100,300,1000'))" /></xsl:when>
-          <xsl:when test="@param='inpale' and $chief='true'"><xsl:value-of select="php:function('calcPlace',concat('v#',$number,'#',$conjoin,'#350,350,300,750'))" /></xsl:when>
-          <xsl:when test="@param='inchief'"><xsl:value-of select="php:function('calcPlace',concat('h#',$number,'#',$conjoin,'#100,25,800,250'))" /></xsl:when>
-          <xsl:when test="@param='inchiefthrough'"><xsl:value-of select="php:function('calcPlace',concat('h#',$number,'#',$conjoin,'#0,25,1000,250'))" /></xsl:when>
+          <xsl:when test="@param='inpale' and $chief='false'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'350,100,300,1000')" /></xsl:when>
+          <xsl:when test="@param='inpale' and $chief='true'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'350,350,300,750')" /></xsl:when>
+          <xsl:when test="@param='inchief'"><xsl:value-of select="php:function('calcPlace','h',string($number),string($conjoin),'100,25,800,250')" /></xsl:when>
+          <xsl:when test="@param='inchiefthrough'"><xsl:value-of select="php:function('calcPlace','h',string($number),string($conjoin),'0,25,1000,250')" /></xsl:when>
           <xsl:when test="@param='inbase'">500,950,500,240/333.33,950,300,200:666.67,950/333.33,900,160,160:666.67,900:500,1050/x/x/x</xsl:when>
           <xsl:when test="@param='inflank'">x/100,500,150,800:900,500/x/100,333,150,320:900,333:100,666:900:666/x/100,250,150,250:900,250:100,500:900,500:100,750:900,750/x</xsl:when>
           <xsl:when test="@param='inpall' and $chief='false'">x/x/250,250,180,400,-45:750,250,,,45:500,750,,,0/s/s/s'</xsl:when>
           <xsl:when test="@param='inpall' and $chief='true'">x/x/250,550,180,400,-45:750,550,,,45:500,950,,,0/s/s/s</xsl:when>
-          <xsl:when test="@param='inpalethrough' and $chief='false'"><xsl:value-of select="php:function('calcPlace',concat('v#',$number,'#',$conjoin,'#350,0,300,1200'))" /></xsl:when>
-          <xsl:when test="@param='inpalethrough' and $chief='true'"><xsl:value-of select="php:function('calcPlace',concat('v#',$number,'#',$conjoin,'#350,300,300,900'))" /></xsl:when>
-          <xsl:when test="@param='infess'"><xsl:value-of select="php:function('calcPlace',concat('h#',$number,'#',$conjoin,'#100,300,800,300'))" /></xsl:when>
-          <xsl:when test="@param='infessthrough'"><xsl:value-of select="php:function('calcPlace',concat('h#',$number,'#',$conjoin,'#0,300,1000,300'))" /></xsl:when>
+          <xsl:when test="@param='inpalethrough' and $chief='false'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'350,0,300,1200')" /></xsl:when>
+          <xsl:when test="@param='inpalethrough' and $chief='true'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'350,300,300,900')" /></xsl:when>
+          <xsl:when test="@param='infess'"><xsl:value-of select="php:function('calcPlace','h',string($number),string($conjoin),'100,300,800,300')" /></xsl:when>
+          <xsl:when test="@param='infessthrough'"><xsl:value-of select="php:function('calcPlace','h',string($number),string($conjoin),'0,300,1000,300')" /></xsl:when>
           <xsl:when test="@param='inbendsin'">500,500,200,200,-45/333.33,666.67,200,200,-45:666.67,333.33/250,750,200,200,-45:500,500:750,250/200,800,200,200,-45:400,600:600,400:800,200/166.67,833.33,160,160,-45:333.33,666.67:500,500:666.67,333.33:833.33,166.67/142.86,857.14,140,140,-45:285.71,714.29:428.57,571.43:571.43,428.57:714.29,285.71:857.14,142.86</xsl:when>
           <xsl:when test="@param='inchevron' and $chief='false'">x/250,625,160,160,45:750,625,,,-45/250,625,150,150,45:500,400,,,0:750,625,,,-45/200,675,140,140,45:400,475:600,475,,,-45:800,675/200,675,140,140,45:350,525:500,400,,,0:650,525,,,-45:800,675/150,725,120,120,45:250,625:350,525:650,525,,,-45:750,625:850,725</xsl:when>
           <xsl:when test="@param='inchevron' and $chief='true'">x/250,725,160,160,45:750,725,,,-45/250,725,150,150,45:500,500,,,0:750,725,,,-45/200,775,140,140,45:400,575:600,575,,,-45:800,775/200,775,140,140,45:350,625:500,500,,,0:650,625,,,-45:800,775/150,825,120,120,45:250,725:350,625:650,625,,,-45:750,725:850,825</xsl:when>

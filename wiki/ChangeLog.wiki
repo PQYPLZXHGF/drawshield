@@ -24,6 +24,12 @@ Added charges *reed* and *bundle of reeds*
 
 Added treatment *billetty counter billetty*
 
+==Other==
+
+The program now works on PHP5 (thanks to a Alexandre Alapetite's brilliant and useful script at
+[http://alexandre.alapetite.fr/doc-alex/domxml-php4-php5/index.en.html]). When my web host moves 
+to PHP5 (or I move web hosts, whichever happens first) I will migrate fully and properly to PHP5.
+
 =Version 2.2a4=
 
 ==Corrections==

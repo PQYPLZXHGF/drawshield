@@ -7,7 +7,7 @@ any [Tincture tincture], and in most cases can themselves be split by a [Divisio
 
 The basic syntax is:
 
-*a* {*an*} [Ordinaries Ordinary] [LineTypes Line Type] [OrdinaryModifier Ordinary Modifier] [Tincture]
+*a* {*an*} [Ordinaries Ordinary] [LineTypes Line Type] [OrdinaryModifier Ordinary Modifiers] [Tincture]
 
 
 ==Large Ordinaries==
@@ -44,7 +44,7 @@ There are various nuances, which are shown in the table below:
 || chevronel interlaced || No || 2 - 4 ||
 || piles || No || 2 - 4 ||
 
-Not only can *bars*, *palets* and *bendlets* be given a [LineType line type], but you can specify different line types for
+Not only can *bars*, *palets* and *bendlets* be given a [LineTypes line type], but you can specify different line types for
 different bars or whatever, using any combination of *the inner*, *the outer*, *the upper*, *the lower*, *the dexter*,
 *the sinister*, *the first*, *the last*, *the inside*, *the outside*. For example:
 
@@ -140,6 +140,6 @@ If an ordinary cannot be drawn with the specified line type it is drawn with str
 
 =Navigation=
 
-Previous [Divisions] Top [SupportedHeraldry] Next [OrdinaryModifiers]
+Previous [Division] Top [SupportedHeraldry] Next [OrdinaryModifiers]
 
 

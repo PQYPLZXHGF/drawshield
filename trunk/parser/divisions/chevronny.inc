@@ -26,10 +26,7 @@ function division_chevronny( $node ) {
 
   if( ($match = search_match($of)) != null ) {
     if ( ($num = number()) != null ) {
-      search_match($pieces);
-      $mod = $dom->create_element('modifier');
-      $mod->set_attribute('name','ofnum');
-      $mod->set_attribute('parameter1', "$num");
+      $mod = make_mod('ofnum', "$num");
       $node->append_child($mod);
     } else {
       restore($state);

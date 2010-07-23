@@ -33,7 +33,7 @@ function assign_layer ( $node ) {
 function ord_chgs(){
   global $dom;
 
-  $mirror_if_2 = array ( 'canton', 'gyron', 'gusset', 'graft', 'flaunch', 'square-flaunch' );
+  $mirror_if_2 = array ( 'canton', 'gyron', 'gusset', 'graft', 'flaunch', 'square-flaunch', 'gore' );
 
   $node = null;
   $items = array();

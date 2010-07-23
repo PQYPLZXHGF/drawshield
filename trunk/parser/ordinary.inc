@@ -54,7 +54,7 @@ function shape_mods() {
   while( ($match = search_match($shape_mods)) != null ) {
     $node = make_mod($match[0]);
     $node->set_attribute('tokNum',$tokNum);
-    if ( ($linetype = linetype()) != 'none' ) $node->set_attribute('parameter1',$linetype);
+    if ( ($linetype = linetype()) != 'none' ) $node->set_attribute('param',$linetype);
     if (($tinc = tincture()) != null ) {
       $node->append_child($tinc);
     }
@@ -70,7 +70,7 @@ function ordinary() {
   static $ordinaries = array (
     // Common
     array ( 'grid',         'grid',                         'common' ),
-    array ( 'diamond',      'diamond',                      'common' ),
+  //  array ( 'diamond',      'diamond',                      'common' ),
   //  array ( 'square',       'square',                      'common' ),
   //  array ( 'octogon',      'octogon',                      'common' ),
     array ( 'another',		'another',                      'common' ),

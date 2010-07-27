@@ -23,6 +23,11 @@ function charge_plant ( &$node, &$mods ) {
       array ( 'slipped', 'slipped' ),
       array ( 'leaved', 'leaved' ),
     ),
+   'columbine' => array (
+      array ( 'slipped', '(slipped|stalked|leaved)' ),
+      array ( 'barbed', 'barbed' ),
+      array ( 'flowers', '(flowered|flowers|buds)')
+    )
   );
 
   if ( array_key_exists($node->get_attribute('subtype'), $charge_data) ) {

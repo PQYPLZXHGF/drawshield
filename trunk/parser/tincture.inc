@@ -22,7 +22,12 @@ function proper() {
 
 function colour_or_fur() {
   global $dom, $p_globals;
+  $plain_of = array (
+    array ( true, 'of'),
+  );
 
+  $state = save();
+  $dummy = search_match($plain_of);
   if ( (($temp = colour()) != null) or (($temp = fur()) != null) ) {
     $p_globals['oflast'] = deep_copy($temp);
     if ( $p_globals['offirst'] == null ) {
@@ -35,6 +40,8 @@ function colour_or_fur() {
       $p_globals['offourth'] = deep_copy($temp);
     }
   }
+  if ( $temp == null )
+    restore($state);
   return $temp;
 }
 
@@ -73,7 +80,7 @@ function tincture2() {
   $semyde = array (
     array ( true, 'sem(e|y)|strewn de|with|of' ),
   );
-
+  
   $node = $dom->create_element('tincture');
   $node->set_attribute('tokNum',tokNum());
 

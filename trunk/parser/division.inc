@@ -31,7 +31,7 @@ function division( $depth = 1 ) {
     array ( 'chevronny',          'chevronn?(ell)?y', 'chevronny',  ),
     array ( 'chausse',            'chausse', 'common',  ),
     array ( 'quarterly-quartered','quarterly quartered', 'gyronny',  ),
-    array ( 'gyronny',            'gyronny', 'gyronny',  ),
+    array ( 'gyronny',            'g(i|y)ronny', 'gyronny',  ),
     array ( 'bendy',              'bendy', 'bar',  ),
     array ( 'bendy-sinister',     'bendy sinister' , 'bar',  ),
     array ( 'per-fess',           '?party per fesse?' , 'common', ),

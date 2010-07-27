@@ -17,11 +17,8 @@ function makeDiv_chevronny( $node, $div_num ) {
 
   if ( $div_num != 2 ) return '';
 
-  $num_of = 6;
-
-  //if ( $line_type == 'nebuly' ) $name .= '-nebuly';
-
   $num_of = get_mod ($node, 'ofnum');
+  if ( $num_of < 1 ) $num_of = 4;
 
   $NC = '';
   $CH = '';

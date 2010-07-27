@@ -20,7 +20,7 @@ function treatment() {
     // Field treatments
     // 'plumetty', how to draw this one?
     // array ( 'lozengy',      'lozengy',  ), made this back into a division
-    array ( 'checky',       '(checky|chequy)' ),
+    array ( 'checky',       '(checky|cheque?y)' ),
     array ( 'papelonny',    'pap(e|i)l?lonn(y|e)',    ),
     array ( 'scaly',        'scaly',        ),
     array ( 'compony',      '(compony|gobone|gobonated)',        ),

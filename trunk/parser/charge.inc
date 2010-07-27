@@ -62,6 +62,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     array ( 'trefoil', 'trefoils?', 'plant' ),
     array ( 'cinquefoil', '(cinquefoil|fraise)s?', 'plant' ),
     array ( 'reed', 'reeds?', 'plant' ),
+    array ( 'columbine', 'columbines? ?pendent ?slips ?crossed ?and ?drooping', 'plant' ),
     // Long crosses
     array ( 'crosslet', '?plain crosslets?',           'cross' ),
     array ( 'long', '(latin|long|passion) cross(es)?', 'cross' ),
@@ -104,10 +105,11 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     array ( 'orb', '?royal (orb|mound)', 'symbol' ),
     array ( 'ermine-spot', 'ermine spots?', 'symbol' ),
     // Tools
+    array ( 'pick-axe', 'pick axes?/hews?/miners axes?', 'axe' ),
     array ( 'addice', 'addices?/carpenters? axes?', 'axe' ),
     array ( 'battle-axe', 'battle axes?/battleaxes?', 'axe' ),
     array ( 'turner-axe', 'turners? axes?', 'axe' ),
-    array ( 'common-axe', 'common axes?/hatchets?', 'axe' ),
+    array ( 'common-axe', '?common axes?/hatchets?', 'axe' ),
     array ( 'scythe', 'scythes?', 'tools' ),
     array ( 'water-bouget', '?water bougets?' ,'tools' ),
     // Crockery

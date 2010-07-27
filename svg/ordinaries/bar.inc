@@ -36,7 +36,7 @@ function makeOrd_bar($node) {
         case 'outer':
           $linetype = $child->get_attribute('param');
           $locs = $bar_locs[$mod][$num];
-          if ( $locs != 'x' ) foreach ( explode(',',$locs) as $pos ) $mods[$pos] = $linetype;
+          if ( $locs != 'x' ) foreach ( explode(',',$locs) as $pos ) $mods[$pos-1] = $linetype;
           break;
       }
     }

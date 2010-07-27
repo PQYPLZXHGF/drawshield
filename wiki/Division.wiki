@@ -62,7 +62,7 @@ to specify the number of bars:
 
 These divisions are a bit like [Treatment treatments] but are of a fixed size. They are:
 
-*chevronny* {*of* 4,5,6,7 or 8}, *fusily*, *lozengy*, *gyronny* {*of* 6,8,10 or 12}
+*chevronny* {*of* 4,5,6,7 or 8}, *fusily*, *lozengy*, *gyronny* {*of* 6,8,10,12 or 16}
 
 *gyronny* without a number defaults to 8, *chevronny* defaults to 4.
 

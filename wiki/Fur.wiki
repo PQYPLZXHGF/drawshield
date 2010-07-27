@@ -11,6 +11,10 @@ The furs (and some common alternative names) are:
 *counter-ermine* (*ermines*), *counter-potent*, *counter-vair*, *ermine*, *erminois*, *pean*, *potent*,
 *potent-counter-potent*, *vair*, *vair-en-point*, *vair-in-pale*
 
+== Of ==
+
+In all cases, the fur may optionally be preceeded by the word *of*.
+
 =Points to Note=
 
 In general, furs retain their orientation even if the item that they are colouring is rotated or

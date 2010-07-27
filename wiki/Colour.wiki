@@ -29,6 +29,10 @@ Although not officially part of the heraldic language you can also used all of t
 e.g. *light sea green*, if the name is the same as a heraldic colour
 the heraldic colour definition takes precedence.
 
+== Of ==
+
+In all cases, the colour may optionally be preceeded by the word *of*.
+
 =Navigation=
 
 Previous [Tincture] Top [SupportedHeraldry] Next [Treatment]

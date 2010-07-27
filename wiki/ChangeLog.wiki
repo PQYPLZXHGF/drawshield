@@ -18,11 +18,18 @@ Can use e.g. *bundle of 3 arrows*, however the number is usually ignored.
 
 Improved *billet* (issue 113)
 
+*erminois* and *pean* were incorrectly coloured (issue 82)
+
 ==New Features==
 
-Added charges *reed* and *bundle of reeds* 
+Added charges *reed* and *bundle of reeds*, also *pick-axe* (issue 172); and *columbine* (issue 107) which
+can be *proper* and have *flowers*, *buds*, *slipped*, *leaved*, *barbed* of different tinctures.
 
 Added treatment *billetty counter billetty*
+
+Added *gironny of 16* (issue 31)
+
+Can put the word *of* in front of a colour (e.g. "a crown of gold")
 
 ==Other==
 

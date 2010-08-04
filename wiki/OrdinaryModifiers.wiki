@@ -8,7 +8,7 @@ however there are some exceptions noted below.
 
 ==The Modifiers==
 
-The following modifiers are available:
+The following modifiers, (which go after the ordinary) are available:
 
 *voided*, *fimbriated* (*edged*), {*double*, *treble*} *cotised* (*endorsed*, *cotticed*), 
 *enhanced*, *abased*, *couped* {*in base*, *in chief*, *dexter*, *sinister*}, 
@@ -28,13 +28,27 @@ Cotticing can be quite complex, here are some examples:
 
 {{{
 Azure a bend cotticed or
-
-Azure a bend or cotticed vert
-
-Azure a bend or cotticed invected vert 
-
-Azure a bend or double cotticed invected vert
 }}}
+[http://www.karlwilcox.com/images/wiki/ordmod-ex1.png]
+{{{
+Azure a bend or cotticed vert
+}}}
+[http://www.karlwilcox.com/images/wiki/ordmod-ex2.png]
+{{{
+Azure a bend or cotticed invected vert 
+}}}
+[http://www.karlwilcox.com/images/wiki/ordmod-ex3.png]
+{{{
+Azure a bend engrailed or double cotticed invected vert
+}}}
+[http://www.karlwilcox.com/images/wiki/ordmod-ex4.png]
+
+There is also a modifier which goes before the ordinary:
+
+*debruised* (*depressed*) *with* (*by* or *of*)
+
+With this modifier the ordinary in question will be drawn on top of the previous charge or ordinary, (normally
+ordinaries are drawn below charges). The ordinary will also have a thin black border to make it stand out.
 
 =Points to Note=
 

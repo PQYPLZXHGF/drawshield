@@ -44,7 +44,7 @@ interpretation.
  * [Ordinaries]
     * Ordinary Modifiers
  * [LineTypes]
- * [Charges]
+ * [Charge Charges]
     * [ChargeFeatures]
     * [ChargeModifiers]
     * [ChargeArrangement]

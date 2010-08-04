@@ -14,6 +14,8 @@ implement them all.
 
 ==Available Charges==
 
+This is a temporary list of charges, in [ChargeAlpha alphabetical order].
+
 =Points to Note=
 
 Some of the charges are not very good!

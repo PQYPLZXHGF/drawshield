@@ -16,7 +16,7 @@ These divisions split the shield into two large areas.
 The basic syntax is:
 
 
-[Division] [LineType] [Tincture] *and* [Tincture]
+[Division] [LineTypes LineType] [Tincture] *and* [Tincture]
 
 
 
@@ -32,7 +32,7 @@ Instead of *per bend* you can use *party per bend* or *parted bendwise*, and sim
 ==Large Divisions of Three Tinctures==
 
 
-[Division] [LineType] [Tincture] *and* [Tincture] *and* [Tincture] 
+[Division] [LineTypes LineType] [Tincture] *and* [Tincture] *and* [Tincture] 
 
 
 The available divisions are:
@@ -44,7 +44,7 @@ The available divisions are:
 These divisions are made out of a variable number of bars, with the syntax
 
 
-[Division] {*of* [Number]} [LineType] [Tincture] *and* [Tincture]
+[Division] {*of* [Number]} [LineTypes LineType] [Tincture] *and* [Tincture]
 
 
 The available divisions are:

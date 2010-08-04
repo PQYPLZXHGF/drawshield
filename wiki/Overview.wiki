@@ -27,7 +27,7 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
    * [Ordinaries]
       * Ordinary Modifiers
    * [LineTypes]
-   * Charges
+   * [Charge Charges]
  * The Drawshield Program
    * Program Overview
       * [Requirements]

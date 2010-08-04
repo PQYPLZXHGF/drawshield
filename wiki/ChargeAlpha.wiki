@@ -1,0 +1,136 @@
+#summary Charges - Pictures of things
+
+=Description=
+
+Charges in alphabetical order (not including any features or modifications - to be done).
+
+==Charge List==
+
+addice
+altar
+annulet
+arch
+arm
+arrow
+arrow head
+battle axe
+battleaxe
+bears head {couped}
+bee
+bezant
+billet
+boar head {couped}
+broad arrow {head}
+buckle
+bundle of (things)
+calvary cross
+carpenter axe
+cartouche
+cauldron
+cinquefoil
+clarion
+columbine {pendent} {slips} {crossed} {and} {drooping}
+covered chalice
+covered cup
+crescent
+crow
+crow rising
+crow volant
+daw
+delf
+digit
+dove
+ermine spot
+escallop
+escutcheon
+feon {head}
+flames {of} {fire}
+fleur de lys
+fountain
+fraise
+fusil
+gauntlet
+golpe
+goutte
+gunstone
+harp
+hatchet
+helm
+helmet
+hew
+hurt
+latin cross
+letter
+lion
+lion couchant
+lion passant
+lion rampant
+lion salient
+lion sejant
+lion sejant affronte
+lion sejant erect
+lion statant
+lioncel
+long cross
+lozenge
+martlett
+mascle
+maunche
+miners axe
+molet
+mug
+mullet
+number
+numeral
+ogress
+passion cross
+patriarchal cross
+pellet
+pheon {head}
+pick axe
+plate
+pomme
+rainbow
+raven
+reed
+rook
+rose
+roundel
+roundle
+rustre
+saltorel
+scallop
+scythe
+sheaf of (things)
+sheave of (things)
+stags head {couped}
+sword
+table
+thistle
+tiger
+torteaux
+tower
+trefoil
+triangle
+tuft of (things)
+turner axe
+tyger
+unicorn
+word
+{antique} crown
+{bounding} box
+{common} axe
+{cornish} chough
+{dexter} hand
+{human} heart
+{hunting} horn
+{plain} crosslet
+{royal} mound
+{royal} orb
+{standing} chalice {covered}
+{standing} cup {covered}
+{water} bouget
+
+=Navigation=
+
+Previous [LineTypes] Top [SupportedHeraldry] Next [ChargeFeatures]

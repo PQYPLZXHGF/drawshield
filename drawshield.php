@@ -23,7 +23,7 @@ $asText = false;
 $size = 500;
 $format = 'svg';
 // Process arguments
-if (isset($_GET['blazon'])) $blazon = strip_tags ($_GET['blazon']);
+if (isset($_GET['blazon'])) $blazon = html_entity_decode(strip_tags ($_GET['blazon']));
 if (isset($_GET['format'])) $format = strip_tags ($_GET['format']);;
 if (isset($_GET['asfile'])) $asFile = true; 
 if (isset($_GET['size'])) {
@@ -37,7 +37,7 @@ if ( $format == 'svgtext' ) $format = 'svg';
 // Global Variables
 //
 
-$tagline1 = "drawshield 2.2a5";   // Advertising lines at bottom right
+$tagline1 = "drawshield 2.2b1";   // Advertising lines at bottom right
 $tagline2 = "shield.karlwilcox.com";
 
 // This is the list of words in the blazon, and the current parsing position
@@ -56,9 +56,10 @@ while ( ($file = readdir($dir)) != false ) {
   if ( substr($file,-4) == '.inc' ) require 'parser/' . $file;
 }
 
-fill_words();
-
 $errors = $dom->create_element('errors');
+
+fill_words($blazon);
+
 $node = $dom->create_element('blazon');
 $node->set_attribute("blazonText", $blazon);
 $node->set_attribute("blazonTokens", implode(' ',$words));

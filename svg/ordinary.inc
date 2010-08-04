@@ -185,6 +185,7 @@ function makeOrdinary( $node ) {
   $body .= $cotise;
   $retval .= apply_tincture ( $ord_body_col, $body, $bb, $rot, $rev, $inv );
   if ( $fim_col != '' ) $retval = '<g stroke="' . rgb($fim_col) . '" stroke-width="15">' . "$retval</g>";
+  if ( get_mod($node,'depressed') ) $retval = '<g stroke="#000000" stroke-width="7">' . "$retval</g>";
   if ( $body2_col != '' ) {
     $retval .= apply_tincture ( $body2_col, choose_fit($ord_data['body2']), $bb, $rot, $rev, $inv);
   }
@@ -200,7 +201,7 @@ function makeOrdinary( $node ) {
           // For canton and chief, the whole ordinary is scaled to fit within the canton or chief
           case 'canton':
             $clip = add_def('clipPath', '<path d="M0,0L300,0 300,300 0,300Z" />');
-            $temp = '<g clip-path="url(#' . $clip . ')" ><g transform="scale(0.30,0.25)">' . $new_ord . "</g></g>";
+            $temp = '<g clip-path="url(#' . $clip . ')" ><g transform="scale(0.30,0.3)">' . $new_ord . "</g></g>";
             if ( $rev ) $temp = '<g transform="translate(300,0) scale(-1,1)">' . $temp . '</g>';
             break;
           case 'chief':

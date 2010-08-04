@@ -19,16 +19,19 @@ function makeDiv_chevronny( $node, $div_num ) {
 
   $num_of = get_mod ($node, 'ofnum');
   if ( $num_of < 1 ) $num_of = 4;
+  // Each chevron is counted, not just the coloured ones
+  //$num_of = 3;//(($num_of % 2) == 0) ? ($num_of / 2) : max(2,$num_of - 2);
+  $num = $num_of / 2;
 
   $NC = '';
   $CH = '';
-  $stepV = 846.5 / $num_of;
+  $stepV = 846.5 / $num;
   $width = $stepV * 0.707;
   $upper = 848.4 + $width;
-  $stepVC = 700.0 / $num_of;
+  $stepVC = 700.0 / $num;
   $widthC = $stepVC * 0.707;
   $upperC = 848.4 + $widthC;
-  for ( $i = 0; $i < $num_of; $i++ ) {
+  for ( $i = 0; $i < $num; $i++ ) {
     $startY = 1200 - ( $i * 2 * $stepV);
     $NC .= "X500Y{$startY}D848f{$width}H{$upper}B{$upper}d{$width}F848     ";
     $startYC = 1200 - ( $i * 2 * $stepVC );

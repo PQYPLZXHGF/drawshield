@@ -38,7 +38,7 @@ function either( $type ) {
     array ( 'cross-moline',       'cross(let|lets|es)? (molines?|ancre|anchory)','quadrate', 'charge' ),
     array ( 'maltese-cross',      'maltese cross(let|lets|es)?',   'quadrate', 'charge' ),
     array ( 'maltese-cross',      'cross(let|lets|es)? of (8|eight|huit) points','quadrate', 'charge' ),
-    array ( 'cross-cercele',      'cross(let|lets|es)? (re)?cerceles?','quadrate', 'charge' ),
+    array ( 'cross-cercele',      'cross(let|lets|es)? (re)?cercelee?s?','quadrate', 'charge' ),
     array ( 'cross-patonce',      'cross(let|lets|es)? patonces?', 'quadrate', 'charge' ),
     array ( 'cross-formy',        'cross(let|lets|es)? (formy|patt?y)', 'quadrate',   'charge' ),
     array ( 'cross-formy',        'cross(let|lets|es)? (formee|pattee)', 'quadrate',   'charge' ),
@@ -48,13 +48,12 @@ function either( $type ) {
     array ( 'fylfot',             'cross(es)? gammadions?',                'quadrate', 'charge' ),
     array ( 'fylfot',             'fylfots?',                                         'quadrate', 'charge' ),
     // Chevrons
-    array ( 'chevron',            'chevrons?', 'chevron/geometric', 'either' ),
+    array ( 'chevron',            'chevron(el)?s?', 'chevron/geometric', 'either' ),
     // Subordinaries
     array ( 'fret', 'frets?',     'subordinary/geometric', 'either' ),
     array ( 'fret-couped',        'frets? couped' , 'common', 'ordinary' ),
   );
 
-  $state = save();
   if ( ($match = search_match($either)) == null ) return null;
   if ( $match[3] == 'either' ) { // we have a match
     list($ordinary,$charge) = explode('/',$match[2]);
@@ -66,6 +65,7 @@ function either( $type ) {
   } elseif ( $match[3] != $type ) { // no match
     return null;
   }
+  unset ($match[3]);
   return $match; 
 }
 ?>

@@ -24,6 +24,8 @@ function assign_layer ( $node ) {
     array ( 'subtype', 'grid', 6 ), // Ensure highest number matches line CHANGE HERE below
   ); 
 
+  // Special case, depressed ordinaries (poor things...) mix in with charges (and above other ordinaries)
+  if ( get_mod ( $node, 'depressed' )) return 2; 
   $layer = 0;
   foreach ( $layerNums as $layerNum ) 
     if ( $node->get_attribute($layerNum[0]) == $layerNum[1] ) $layer = $layerNum[2];

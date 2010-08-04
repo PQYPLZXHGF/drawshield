@@ -19,15 +19,15 @@
 
 // Fill the words array with words from the blazon
 // Punctuation and spaces ignored
-// Words changed to lower case
-function fill_words() {
-  global $words, $blazon;
+function fill_words($blazon_in) {
+  global $words;
   $ignore_words = array ( 'also',  );
+  $blazon = iconv("UTF-8", "ASCII//TRANSLIT", $blazon_in);
+  // raise_error('hello ' . $blazon);
 
   $i = 0;
   $comment = false;
   $this_word = '';
- // $blazon = strtolower($blazon);
   $end = strlen($blazon);
   while ( $i < $end ) {
     switch ( $blazon[$i] ) {
@@ -91,6 +91,9 @@ function fill_words() {
         break;
       case "'":
       case '\\':
+      case '`':
+      case '~':
+      case '^':
         break;
       default:
         $this_word .= $blazon[$i];
@@ -135,7 +138,7 @@ function check_match2 ( $match_string ) {
       } else {
         return 0;
       }
-    }
+    } // Note search is case insensitive
     if ( ($res = preg_match ( '/^' . $regex . '$/i',  $words[$t_word] ))) {
       $t_word += 1; // Got a match, move on
     } elseif ( ! ($optional)) {
@@ -154,6 +157,10 @@ function search_match ( $terms ) {
   $max_match = 0;
   $match = null;
   foreach ($terms as $term) {
+     if ( !is_array($term) or count($term) < 2 ) {
+       raise_error ( 'AARRGH! ' . $term[0] );
+       return null;
+     }
      if ( ( $count = check_match($term[1])) ) {
        if ( $count > $max_match ) {
          $max_match = $count;

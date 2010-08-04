@@ -15,8 +15,8 @@
 
 function charge_axe ( &$node, &$mods ) {
   return array (
-      array ( 'handle', '(handled?s?|staved?s?|hafts|hafted)' ),
-      array ( 'blade', 'blades?d?' ),
+      array ( 'handle', '(handled?s?|staved?s?|hafts|hafted)', 'feature' ),
+      array ( 'blade', 'blades?d?', 'feature' ),
     );
 }
 ?>

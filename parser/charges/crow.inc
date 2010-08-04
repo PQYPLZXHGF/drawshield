@@ -15,21 +15,13 @@
 
 function charge_crow ( &$node, &$mods ) {
   $crow_data = array (
-    array ( 'legged', 'legged' ),
-    array ( 'beaked', 'beaked' ),
+    array ( 'legged', 'legged', 'feature' ),
+    array ( 'beaked', 'beaked', 'feature' ),
+    array ( 'crow-volant', 'volant', 'subtype' ),
+    array ( 'crow-rising', 'rising', 'subtype' ),
+    array ( 'crow-head', 'heads?', 'subtype' ),
   );
 
-  $crow_types = array (
-    array ( 'volant', 'volant' ),
-    array ( 'rising', 'rising' ),
-    array ( 'head', 'heads?' ),
-  );
-  if ( ($match = search_match($crow_types)) != null ) {
-    $type = 'crow-' . $match[0];
-  } else { // default lion
-    $type = 'crow';
-  }
-  $node->set_attribute('subtype', $type);
   return $crow_data;
 }
 ?>

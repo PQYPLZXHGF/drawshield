@@ -13,22 +13,15 @@
    limitations under the License. */
 
 function charge_symbol ( &$node, &$mods ) {
-  global $dom;
   
   $charge_data = array (
    'orb' => array (
-      array ( 'banded', 'banded|encircled' ),
-      array ( 'crossed', 'crossed/ensigned with a cross' ),
+      array ( 'banded', 'banded|encircled', 'feature' ),
+      array ( 'crossed', 'crossed/ensigned with a cross', 'feature' ),
     ),
   );
   $subtype = $node->get_attribute('subtype');
 
-  if ( $subtype == 'ermine-spot' ) {
-    $tinc = $dom->create_element('tincture');
-    $imp = $dom->create_element('default');
-    $tinc->append_child($imp);
-    $node->append_child($tinc);
-  }
   if ( array_key_exists($subtype, $charge_data) ) {
     return $charge_data[$subtype];
   } else {

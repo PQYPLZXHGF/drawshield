@@ -47,6 +47,6 @@ function charge_mullet( &$node, &$mods ) {
   $mods[] = make_mod('points', "$n");
   if ( $pierced ) $mods[] = make_mod('pierced');
 
-  return null;
+  return array ( array ( null, '(pierced|voided)', 'mod', 'pierced' ));
 }
 ?>

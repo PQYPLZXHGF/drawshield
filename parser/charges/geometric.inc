@@ -14,28 +14,31 @@
 
 
 function charge_geometric( &$node, &$mods ) {
-  global $dom;
+ 
+  $charge_data = array (
+   'fountain' => array (
+      array ( null, 'barry wavy of six argent ?and azure', 'ignore' ),
+      ),
+    'triangle' => array (
+      array ( 'triangle-voided', 'voided', 'subtype' ),
+      ),
+    'chevron' => array ( 
+        array ( 'chevron-sinister', 'couched sinister', 'subtype' ),
+        array ( 'chevron-dexter', 'couched dexter', 'subtype' ),
+       ),
+    'crescent' => array (
+         array ( null, 'pendent', 'mod', 'inverted' ),
+       ),
+    'annulet' => array (
+         array ( null, 'one (within|inside) ?the other', 'mod', 'concentric' ),
+       ),
+  );
+  $subtype = $node->get_attribute('subtype');
 
-  $fixed = array ( 'pomme', 'plate', 'hurt', 'torteau', 'bezant', 'golpe', 'pellet' );
-
-  $type = $node->get_attribute('subtype');
-  if ( in_array( $type, $fixed ) ) {
-    $tinc = $dom->create_element('tincture');
-    $tinc->append_child($dom->create_element('implied'));
-    $node->append_child($tinc);
-  }
-  if ( $type == 'fountain' ) {
-//    $node->set_attribute('subtype','roundel');
-    proper();
-    search_match( array ( array ( true, 'barry wavy of six argent ?and azure' ) ) );
-    $tinc = $dom->create_element('tincture');
-    $imp = $dom->create_element('implied');
-    $tinc->append_child($imp);
-    $node->append_child($tinc);
-  } 
-  if ( $type == 'triangle' )
-    return array ( array ( 'voided', 'voided' ) );
-  else
+  if ( array_key_exists($subtype, $charge_data) ) {
+    return $charge_data[$subtype];
+  } else {
     return null;
+  }
 }
 ?>

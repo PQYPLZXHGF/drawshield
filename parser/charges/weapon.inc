@@ -17,32 +17,30 @@ function charge_weapon ( &$node, &$mods ) {
 
   $charge_data = array (
     'sword' => array ( 
-      array ('hilt', 'hilts?|hilted' ),
-      array ('pommell', 'pom?mell?s?|pomm?ell?ed' ),
-      //array ('handle', 'handle(ds)?'),
-      //array ('jewel', '(be)?jewel(s|led)?' ),
+      array ('hilt', 'hilts?|hilted', 'feature' ),
+      array ('pommell', 'pom?mell?s?|pomm?ell?ed', 'feature' ),
     ),
     'sheaf-arrows' => array (
-      array ( 'barbed', 'barbed|armed' ),
-      array ( 'feathered', '(flighted|feathered)' ),
+      array ( 'barbed', 'barbed|armed', 'feature' ),
+      array ( 'feathered', '(flighted|feathered)', 'feature' ),
+      array ( 'up',  'points? upwards?', 'mod', 'pointing' ),
+      array ( 'down',  'points? downwards?', 'mod', 'pointing' ),
     ),
     'arrow' => array (
-      array ( 'barbed', 'barbed|armed' ),
-      array ( 'feathered', '(flighted|feathered)' ),
+      array ( 'barbed', 'barbed|armed', 'feature' ),
+      array ( 'feathered', '(flighted|feathered)', 'feature' ),
+      array ( 'up',  'points? upwards?', 'mod', 'pointing' ),
+      array ( 'down',  'points? downwards?', 'mod', 'pointing' ),
+    ),
+    'pheon' => array (
+      array ( 'up',  'points? upwards?', 'mod', 'pointing' ),
+      array ( 'down',  'points? downwards?', 'mod', 'pointing' ),
+    ),
+    'broad-arrow' => array (
+      array ( 'up',  'points? upwards?', 'mod', 'pointing' ),
+      array ( 'down',  'points? downwards?', 'mod', 'pointing' ),
     ),
   );
-
-  $updown = array ( 
-    array ( 'up',  'points? upwards?' ),
-    array ( 'down',  'points? downwards?' ),
-  );
-
-  $pointing = array ( 'pheon', 'arrow', 'broad-arrow','sheaf-arrows' );
-  comma();
-
-  if (( in_array($node->get_attribute('subtype'), $pointing ) ) and ( ($match = search_match($updown)) != null )) {
-    $node->append_child(make_mod('pointing',$match[0]));
-  }
 
   if ( array_key_exists($node->get_attribute('subtype'), $charge_data )) {
     return $charge_data[$node->get_attribute('subtype')];

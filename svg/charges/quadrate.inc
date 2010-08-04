@@ -83,6 +83,6 @@ function makeChg_quadrate ( $node ) {
       $body = $quadrate_data[$type] . '<path d="M150,375 L200,450 250,375Z " />';
       break;
     }
-    return compact('body', 'width', 'height', 'fixed');
+    return compact('body', 'width', 'height' );
 }
 ?>

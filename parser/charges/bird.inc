@@ -16,8 +16,8 @@
 function charge_bird ( &$node, &$mods ) {
   $charge_data = array (
    'chough' => array (
-      array ( 'legged', 'legged' ),
-      array ( 'beaked', 'beaked' ),
+      array ( 'legged', 'legged', 'feature' ),
+      array ( 'beaked', 'beaked', 'feature' ),
     ),
   );
 

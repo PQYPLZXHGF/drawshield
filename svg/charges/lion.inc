@@ -101,6 +101,7 @@ C 120.99,66.86 108.13,46.48 116.17,58.39 C 123.95,63.50 128.13,53.31 129.77,49.3
 ', ),
 );
   $type = $node->get_attribute('subtype');
+  if ( $type == 'lion' ) $type = 'lion-rampant';
   $retval = null;
   if ( isset($lion_data[$type]) ) {
       $retval = $lion_data[$type];

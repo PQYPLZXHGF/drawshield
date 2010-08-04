@@ -52,13 +52,14 @@ function object_treatment( $base = null) {
     array ( 'estoilly',     'estoilly',     'mullet/mullet', 'points/6' ),
     array ( 'fleury',       'fleury|floretty/sem(e|y) de l(i|y)s', 'symbol/fleurdelys' ),
     array ( 'goutty',       'go?utty',      'geometric/goutte', ),
-    array ( 'bezanty',      'bezant(y|e)',  'geometric/bezant' ),
-    array ( 'platy',        'platy',  'geometric/plate' ),
+    array ( 'bezanty',      'bezant(y|e)',  'geometric/roundel', 'tincture/or' ),
+    array ( 'platy',        'platy',  'geometric/roundel', 'tincture/argent' ),
     array ( 'hurty',        'hurty',        'geometric/roundel' ),
     array ( 'mullety',      'mullett?y',    'mullet/mullet', 'points/5' ),
   );
 
   $node = null;
+  $mods = null;
   if ( ($match = search_match($objects)) != null ) {
     $node = $dom->create_element('semyde');
     $node->set_attribute('name', $match[0]);
@@ -74,17 +75,20 @@ function object_treatment( $base = null) {
     $types = explode('/',$match[2]);
     $charge->set_attribute('type',$types[0]);
     $charge->set_attribute('subtype',$types[1]);
-    if ( $match[0] == 'bezanty' or $match[0] == 'platy' ) {
-      $tinc = $dom->create_element('tincture');
-      $tinc->append_child($dom->create_element('implied'));
-      $charge->append_child($tinc);
+    if ( isset($match[3]) ) $mods = explode('/', $match[3]);
+    if ( $mods and $mods[0] == 'tincture' ) {
+        $tinc = $dom->create_element('tincture');
+        $col = $dom->create_element('colour');
+        $col->set_attribute('name', $mods[1]);
+        $tinc->append_child($col);
+        $charge->append_child($tinc);
+        $mods = null;
     } else {
-      $charge->append_child(tincture(false));
+        $charge->append_child(tincture(false));
     }
-    if ( isset($match[3]) ) {
-      $mods = explode('/', $match[3]);
-      $mod = make_mod($mods[0], $mods[1]);
-      $charge->append_child($mod);
+    if ( $mods ) {
+        $mod = make_mod($mods[0], $mods[1]);
+        $charge->append_child($mod);
     }
     $mod = make_mod('hflex','1');
     $charge->append_child($mod);

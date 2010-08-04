@@ -45,7 +45,7 @@ function makeOrd_bar($node) {
   if ( $num > 8 ) { $num = 8; }
   $body = '';
   $spacing = 1000/($num+1);
-  $H1 = 400 / $num;
+  $H1 = min ( 200, (400 / $num) );
   $H2 = $H1 / 2;
   for ( $i = 0; $i < $num; $i++ ) {
     switch ( $name ) {

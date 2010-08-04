@@ -16,9 +16,9 @@
 function charge_heart ( &$node, &$mods ) {
 
   $heart_features = array (
-    array ( 'flammant', 'flammant' ), 
-    array ( 'flammant', 'emitting flames of fire' ), 
-    array ( 'crowned', '?imperially crowned' ), 
+    array ( 'flammant', 'flammant', 'feature' ), 
+    array ( 'flammant', 'emitting flames of fire', 'feature' ), 
+    array ( 'crowned', '?imperially crowned', 'feature' ), 
   );
   
   return $heart_features; 

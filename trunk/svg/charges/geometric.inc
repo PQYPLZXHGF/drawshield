@@ -18,8 +18,6 @@ function makeChg_geometric( $node ) {
     'bbox' => array ( 'width' => 100, 'height' => 100,
         'body' => '<path fill-rule="evenodd" d="M0,0h100v100h-100zM15,15h70v70h-70z" />
                   <text x="50" y="65" font-size="30" text-anchor="middle">^UP^</text>', 'wflex' => 999, 'hflex' => 999 ),
-    'annulet' => array ( 'width' => 500, 'height' => 500,
-        'body' => '<path d="M 250,0 A 250 250 0 0,1 250,500 A 250 250 0 0,1 250,0 Z M 250,40 A 210 210 0 0,1 250,460 A 210 210 0 0,1 250,40 Z" fill-rule="evenodd" />' ),
     'billet' => array ( 'width' => 250, 'height' => 500, 'wflex' => 1.0, 'hflex' => 2.0,
         'body' => '<rect height="500" width="250" rx="20" ry="20" />
         			<path stroke="none" fill="#4D4D4D" opacity="0.5" d="M 250.9,59.9 C 235.2,182.7 227.3,453 22.29,501 c -10,-2 201.41,3 210.71,1 9.3,-2 19.3,-6 19.3,-19 0,-12 -0.7,-422.4 -1.4,-423.1 z" />' ),
@@ -27,6 +25,10 @@ function makeChg_geometric( $node ) {
         'body' => '<rect x="0" y="0" height="400" width="100" rx="50" ry="50" />' ),
     'chevron' => array ( 'width' => 400, 'height' => 200, 'wflex' => 2, 'hflex' => 2,
         'body' => '<polygon points="0,200 200,0 400,200 320,200 200,80 80,200" />' ),
+    'chevron-sinister' => array ( 'width' => 200, 'height' => 400, 'wflex' => 2, 'hflex' => 2,
+        'body' => '<polygon points="0,200 120,0 200,0 80,200 200,400 120,400" />' ),
+    'chevron-dexter' => array ( 'width' => 200, 'height' => 400, 'wflex' => 2, 'hflex' => 2,
+        'body' => '<polygon points="0,0 80,0 200,200 80,400 0,400 120,200" />' ),
     'crescent' => array ( 'width' => 400, 'height' => 400,  'wflex' => 2, 'hflex' => 2,
         'body' => '<path stroke="#000000" stroke-width="6" d="M 400,200 C 400,310 310,400 200,400 90,400 0,310 0,200 0,150 71,9.9 130,8.8 46,110 150,150 200,150 260,150 350,94 270,8.8 340,11 400,140 400,200" />
                    <path stroke="#000000" stroke-width="6" fill="none" d="M 130,8.8 C 71,9.9 28,130 50,200 c 18,60 90,90 150,90 60,0 130,-40 150,-90 C 370,130 340,11 270,8.8" />', ),
@@ -47,18 +49,9 @@ function makeChg_geometric( $node ) {
     'saltorel' => array ( 'width' => 520, 'height' => 603,
         'body' => '<path d="M 518,150 455,87 3,540 66,603 518,150 z M 65,86 2,150 455,602 518,539 65,86 z" />' ),
     'roundel' => array ( 'width' => 500, 'height' => 500, 'body' => '<circle cx="250" cy="250" r="250" />' ),
-    'pomme' => array ( 'fixed' => true, 'width' => 500, 'height' => 500, 'body' => '<circle fill="#149414" cx="250" cy="250" r="250" />' ),
-    'plate' => array ( 'fixed' => true, 'width' => 500, 'height' => 500, 'body' => '<circle fill="#F0F0F0" cx="250" cy="250" r="250" />' ),
-    'hurt' => array ( 'fixed' => true, 'width' => 500, 'height' => 500, 'body' => '<circle fill="#1E7FCB" cx="250" cy="250" r="250" />' ),
-    'torteau' => array ( 'fixed' => true, 'width' => 500, 'height' => 500, 'body' => '<circle fill="#E21313" cx="250" cy="250" r="250" />' ),
-    'bezant' => array ( 'fixed' => true, 'width' => 500, 'height' => 500, 'body' => '<circle fill="#EFD807" cx="250" cy="250" r="250" />' ),
-    'golpe' => array ( 'fixed' => true, 'width' => 500, 'height' => 500, 'body' => '<circle fill="#965578" cx="250" cy="250" r="250" />' ),
-    'pellet' => array ( 'fixed' => true, 'width' => 500, 'height' => 500, 'body' => '<circle fill="#050505" cx="250" cy="250" r="250" />' ),
     'fret' => array ( 'width' => 370, 'height' => 370, 'body' => '<path d="m 212,248 -18,19 -9,9 -91,-91 28,-27 18,18 -9,9 54,54 9,-9 18,18 z m -36,-108 -18,-18 27,-28 91,91 -28,27 -18,-18 9,-9 -54,-54 -9,9 z M 19.7,2 176,158 158,176 1.6,20 19.7,2 z M 212,194 371,351 351,371 194,212 212,194 z m -18,-36 18,18 -36,36 -18,-18 36,-36 z m -72,72 18,18 L 19.6,367 1.5,351 122,230 z M 351,1 367,20 248,140 230,122 351,1 z" />' ),
-    'triangle' => array ( 'width' => 100, 'height' => 66, 'body' => '',
-               'features' => array (
-                  'voided' => array ( 'body' => '<path fill-rule="evenodd" d="M15,59 L50,12 85,59z M0,66 L50,0 100,66z" />', 'notpresent' => '<path d="M0,66 L50,0 100,66z" />' )
-                 )  ), 
+    'triangle' => array ( 'width' => 100, 'height' => 66, 'body' => '<path d="M0,66 L50,0 100,66z" />', ),
+    'triangle-voided' => array ( 'width' => 100, 'height' => 66, 'body' => '<path fill-rule="evenodd" d="M15,59 L50,12 85,59z M0,66 L50,0 100,66z" />', ),
   );
   $name = $node->get_attribute('subtype');
   $retval = null;

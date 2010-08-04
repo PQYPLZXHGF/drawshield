@@ -16,12 +16,10 @@
 function charge_quadrate ( &$node, &$mods ) {
 
   $fitchy_words = array (
-    array ( 'fitchy', 'fitch(y|ee)' ),
-    array ( 'fitchy-foot', 'fitch(y|ee) at ?the foot' ),
+    array ( null, 'fitch(y|ee)', 'mod', 'fitchy' ),
+    array ( null, 'fitch(y|ee) at ?the foot', 'mod', 'fitchy-foot' ),
   );
 
-  if ( ($match = search_match($fitchy_words)) != null ) $mods[] = make_mod($match[0]);
-
-  return null;
+  return $fitchy_words;
 }
 ?>

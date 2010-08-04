@@ -37,6 +37,7 @@ function makeOrd_diminutive($node) {
     'chevronel-braced1' => '<path d="M 503.05,210.05 L 822.26,1240.40 C 822.26,1240.40 711.14,1240.40 713.16,1240.40 C 715.18,1240.40 507.09,551.48
           507.09,551.48 L 288.90,1240.40 C 288.90,1240.40 169.70,1240.40 175.76,1240.40 C 181.82,1240.40 505.07,208.03 503.05,210.05 z" />',
     'pile1' => array ( 'shape_spec' => array ( 'NC' => 'X50Y0J900K900L900M900', 'CH' => 'X50Y300J900K900L900M900' ),  ),
+    'depressing-pile' => '<path d="M350,-100 500,900 650,-100z" />',
     'pile2' => '<path d="M 464.67,1086.86 L 345.47,-38.44 L -24.24,-38.44 L 464.67,1086.86 z" />
           <path d="M 535.75,1086.86 L 654.95,-38.44 L 1024.67,-38.44 L 535.75,1086.86 z" />',
     'pile3' => '<path d="M 359.61,1086.86 L 256.57,-38.44 L -24.24,-38.44 L 359.61,1086.86 z" />
@@ -46,12 +47,15 @@ function makeOrd_diminutive($node) {
           <path d="M 262.51,-38.44 L 474.64,1086.86 L 460.50,-38.44 L 262.51,-38.44 z" />
           <path d="M 574.16,1086.86 L 804.47,-38.44 L 1020.64,-38.44 L 574.16,1086.86 z" />
           <path d="M 733.88,-38.44 L 521.75,1086.86 L 535.89,-38.44 L 733.88,-38.44 z" />',
-  );
+    );
 
   $name = $node->get_attribute('subtype');
   $num = $node->get_attribute('number');
   if ( $num > 4 ) { $num = 4; }
-  $name .= $num;
+  if ( $name == 'pile' and $num == 1 and get_mod($node,'depressed'))
+    $name = 'depressing-pile';
+  else
+    $name .= $num;
   if ( isset($ord_data[$name]) ) {
     if ( is_array($ord_data[$name]) ) {
       $retval = $ord_data[$name];

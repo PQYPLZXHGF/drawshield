@@ -16,19 +16,19 @@
 function charge_animal ( &$node, &$mods ) {
   $charge_data = array (
    'boars-head' => array (
-      array ( 'armed', 'armed' ),
+      array ( 'armed', 'armed', 'feature' ),
     ),
   'bears-head' => array (
-      array ( 'tongued', 'tongued' ),
-      array ( 'muzzled', 'muzzled' ),
+      array ( 'tongued', 'tongued', 'feature' ),
+      array ( 'muzzled', 'muzzled', 'feature' ),
     ),
   'tiger' => array (
-      array ( 'armed', 'armed' ),
-      array ( 'tongued', 'tongued' ),
+      array ( 'armed', 'armed', 'feature' ),
+      array ( 'tongued', 'tongued', 'feature' ),
     ),
   'unicorn' => array (
-      array ( 'armed', 'armed' ),
-      array ( 'tongued', 'tongued' ),
+      array ( 'armed', 'armed', 'feature' ),
+      array ( 'tongued', 'tongued', 'feature' ),
     ),
   );
 

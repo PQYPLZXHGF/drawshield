@@ -113,7 +113,11 @@ function make_mod($name, $param = null) {
 
 function get_mod($node, $name) {
   foreach ( $node->child_nodes() as $child ) {
-    if ( $child->tagname() == 'modifier' and $child->get_attribute('name') == $name ) return $child->get_attribute('param');
+    if ( $child->tagname() == 'modifier' and $child->get_attribute('name') == $name ) {
+      $retval = $child->get_attribute('param');
+      if ( $retval == null ) $retval = true; // Just say the modifier exists
+      return $retval;
+    }
   }
   return null;
 }

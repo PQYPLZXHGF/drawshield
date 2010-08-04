@@ -19,7 +19,7 @@ function position_mods() {
   $position_mods = array (
     array ( 'sinister', 'sinister', ),
     array ( 'dexter', 'dexter', ),
-    array ( 'inverted', '(inverted|pendent)', ),
+    array ( 'inverted', 'inverted', ),
     array ( 'enhanced', 'enhanced', ),
     array ( 'abased', '(abased|abaisse)', ),
   );
@@ -108,6 +108,7 @@ function ordinary() {
     array ( 'piles',        'piles',                          'diminutive' ),
     // Sub-ordinaries
     array ( 'orle',         'orle',                         'subordinary'  ),
+    array ( 'fillet',        'fillet',                          'subordinary' ),
     array ( 'inescutcheon', 'inescut?cheon',                 'subordinary'  ),
     array ( 'bordure',      'bordure',                      'subordinary'  ),
     array ( 'canton',       'cantons?',                     'subordinary'  ),
@@ -143,12 +144,14 @@ function ordinary() {
   static $on_word = array ( array ( true, 'on'), );
   static $charge_with = array ( array ( true, 'charged with'  ), );
   static $within = array ( array ( true, '(within|inside)' ), );
+  static $dep_with = array ( array ( 'depressed', '(debruised|depressed) (with|by|of)', ), );
   
   $state = save();
 
   // Look for "prefixes" to ordinary, then a number
   $found_on = (search_match($on_word) != null);
   $inside = (search_match($within) != null);
+  $depressed = (search_match($dep_with) != null);
   if ( ($ord_num = number()) == null ) $ord_num = 1;
   $tokNum = tokNum();
   
@@ -166,6 +169,7 @@ function ordinary() {
   $node->set_attribute('tokNum',$tokNum);
   $node->append_child($dom->create_element('tincture'));
   if ( isset($match[3]) ) $node->append_child(make_mod($match[3]));
+  if ( $depressed ) $node->append_child(make_mod('depressed'));
 
   $mods = array_merge($mods, position_mods()); // for "bend sinister (angled).."
   if ( ($variant = search_match($common_variants)) != null ) {

@@ -18,6 +18,7 @@ function ordinary_chevron($node, &$mods) {
     array ( '-rompu', 'rompu' ),
     array ( '-throughout', 'throughout' ),
     array ( '-couched', 'couched' ),
+    array ( '-inarched', 'inarched' ),
     array ( '-debruised', '(de)?bruised|fracted|disjoint ?at ?the ?top' ),
   );
 

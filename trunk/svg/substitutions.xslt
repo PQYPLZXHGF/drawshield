@@ -25,6 +25,13 @@
     <modifier name="arrangement" param="inpale" />
     <modifier name="orientation" param="fesswise" />
   </xsl:template>
+  <!-- We implement concentric annulets as a single charge of "number" rings -->
+  <xsl:template match="charge[@subtype='annulet']">
+    <charge type="annulet" subtype="annulet" number="1">
+      <xsl:apply-templates select="node()[not(self::modifier/@name='concentric')]" />
+      <modifier name="concentric" param="{@number}"/>
+    </charge>
+  </xsl:template>
   <!-- fountain -->
   <xsl:template match="charge[@subtype='fountain']" >
     <charge type="geometric" subtype="roundel" number="{@number}">
@@ -37,6 +44,29 @@
       </tincture>
       <xsl:apply-templates select="node()[not(self::tincture)]" />
     </charge>
+  </xsl:template>
+  <!-- Named Roundels -->
+  <xsl:template match="charge[@type='roundel']">
+    <charge type="geometric" subtype="roundel" number="{@number}">
+      <tincture>
+        <colour>
+          <xsl:attribute name="name">
+            <xsl:choose>
+              <xsl:when test="@subtype='bezant'">or</xsl:when>
+              <xsl:when test="@subtype='plate'">argent</xsl:when>
+              <xsl:when test="@subtype='hurt'">azure</xsl:when>
+              <xsl:when test="@subtype='torteau'">gules</xsl:when>
+              <xsl:when test="@subtype='pellet'">sable</xsl:when>
+              <xsl:when test="@subtype='pomme'">vert</xsl:when>
+              <xsl:when test="@subtype='golpe'">purpure</xsl:when>
+              <xsl:when test="@subtype='orange'">tenne</xsl:when>
+              <xsl:when test="@subtype='guze'">sanguine</xsl:when>
+            </xsl:choose>
+          </xsl:attribute>
+        </colour>
+      </tincture>
+      <xsl:apply-templates select="node()[not(self::tincture)]" />
+    </charge> 
   </xsl:template>
   <!-- on ordinary another of the first => voided -->
   <xsl:template match="ordinary/modifier[@name='on' and child::ordinary/@subtype='another']">

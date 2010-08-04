@@ -65,6 +65,7 @@ function add_def($element = '', $content = '', $name = '', $title = '', $desc = 
 function apply_tincture ( $tincture, $object, $bb = '1000,1200',
         $rot = '0', $rev = false, $inv = false, $offsetX = 0, $offsetY = 0,
         $xscale = 0, $yscale = 0  ) {
+  global $_SERVER;
 
   $bb = choose_fit($bb);
   $tinc = $tincture->first_child();
@@ -155,7 +156,7 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       if ( $parent->node_name() == 'plain' ) return $div_data;
       list($bb_width,$bb_height,$bbX,$bbY) = explode(',', $bb . ',0,0');
       $type = $tinc->get_attribute('subtype');
-      $height = ($type == 'per-bend' || $type == 'per-bend-sinister') ? 1000 : 1200;
+      $height = ($type == 'per-bend' || $type == 'per-bend-sinister' || $type == 'quarterly') ? 1000 : 1200;
       if ( preg_match ( '/Firefox/' , $_SERVER['HTTP_USER_AGENT'] ) != 0 ) {
         $xScale = $bb_width / 1000; $yScale = $bb_height / $height;
         $patt_id = add_def ( 'pattern patternTransform="scale(' . $xScale . ',' . $yScale .

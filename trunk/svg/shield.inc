@@ -97,7 +97,8 @@ function draw() {
   $trailer = "</svg>\n";
 
   $blazonNode = $dom->document_element();
-  $body = '<desc>' . htmlentities($blazonNode->get_attribute('blazonText')) . '</desc>';
+//  $body = '<desc>' . htmlentities($blazonNode->get_attribute('blazonText')) . '</desc>';
+  $body = '<desc>' . $blazonNode->get_attribute('blazonText') . '</desc>';
   foreach ( $blazonNode->child_nodes() as $node ) {
     switch ( $node->node_name() ) {
       case 'shield':
@@ -144,12 +145,6 @@ function makeshield( $node ) {
             case 'ord_chgs':
               // process ordinaries and charges
               $retval .= makeOrdChgs($kid);
-              break;
-            case 'absolute': // TODO Is this still needed?
-              //region('push','PL');
-              chief('push','NC');
-              $retval .= makeOrdChgs($kid->first_child());
-              chief('pop');
               break;
           }
         }

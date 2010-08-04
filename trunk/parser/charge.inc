@@ -33,7 +33,38 @@ function between(&$mods, $found_between = false) {
   }
 }
 
-function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
+function get_features ( &$features, &$node, &$mods ) {
+  global $dom;
+  
+/*  if ( $features != null and !is_array($features) ) {
+    raise_error ( $features );
+    return null;
+  } */
+  
+  // Get any feature colours
+  while ( $features and ($match2 = search_match($features)) != null ) {
+    switch ( $match2[2] ) {
+      case 'feature':
+        $feature = $dom->create_element('feature');
+        $feature->set_attribute('name', $match2[0]);
+        $feature->append_child(tincture(true));
+        $node->append_child($feature);
+        break;
+      case 'mod':
+        $mods[] = make_mod ( $match2[3], $match2[0] );
+        break;
+      case 'subtype':
+        $node->set_attribute('subtype',$match2[0]);
+        break;
+      case 'ignore':
+        break;
+    }
+    comma();
+    andd();
+  }
+}
+
+function simple_charge( $assume_num = false, $allow_arr_pos = false, $makelist = false ) {
   global $dom;
   
   static $charges = array (
@@ -62,7 +93,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     array ( 'trefoil', 'trefoils?', 'plant' ),
     array ( 'cinquefoil', '(cinquefoil|fraise)s?', 'plant' ),
     array ( 'reed', 'reeds?', 'plant' ),
-    array ( 'columbine', 'columbines? ?pendent ?slips ?crossed ?and ?drooping', 'plant' ),
+    array ( 'columbine', 'columbines?', 'plant' ),
     // Long crosses
     array ( 'crosslet', '?plain crosslets?',           'cross' ),
     array ( 'long', '(latin|long|passion) cross(es)?', 'cross' ),
@@ -80,16 +111,18 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     array ( 'rustre', 'rustres?' ,'geometric' ),
     array ( 'cartouche', 'cartouches?' ,'geometric' ),
     array ( 'delf', 'delfs?','geometric' ),
-    array ( 'fountain', 'fountains?', 'geometric' ),
+    array ( 'fountain', 'fountains?', 'geometric', false ),
     array ( 'saltorel', 'saltorels?' ,'geometric' ),
     array ( 'goutte', 'go?uttes?' ,'geometric' ),
-    array ( 'plate', 'plates?' ,'geometric' ),
-    array ( 'hurt', 'hurts?' ,'geometric' ),
-    array ( 'torteau', 'torteaux?'  ,'geometric' ),
-    array ( 'bezant', 'bezants?' ,'geometric' ),
-    array ( 'golpe', 'golpes?' ,'geometric' ),
-    array ( 'pellet', 'pellets?/gunstones?/ogress(es)?' ,'geometric' ),
-    array ( 'pomme', 'pommes?' ,'geometric' ),
+    array ( 'plate', 'plates?' ,'roundel', false ),
+    array ( 'hurt', 'hurts?' ,'roundel', false ),
+    array ( 'torteau', 'torteaux?'  ,'roundel', false ),
+    array ( 'bezant', 'bezants?' ,'roundel', false ),
+    array ( 'golpe', 'golpes?' ,'roundel', false ),
+    array ( 'pellet', 'pellets?/gunstones?/ogress(es)?' ,'roundel', false ),
+    array ( 'pomme', 'pommes?' ,'roundel', false ),
+    array ( 'orange', 'oranges?' ,'roundel', false ),
+    array ( 'guze', 'guzes?' ,'roundel', false ),
     array ( 'triangle', 'triangles?', 'geometric' ),
     array ( 'mullet', 'm(o|u)ll?ets?', 'mullet' ),
     // Weapons  and armour
@@ -103,7 +136,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     // Symbols
     array ( 'fleurdelys', 'fleurs? de l(y|i)s' ,'symbol' ),
     array ( 'orb', '?royal (orb|mound)', 'symbol' ),
-    array ( 'ermine-spot', 'ermine spots?', 'symbol' ),
+    array ( 'ermine-spot', 'ermine spots?', 'symbol', 'sable' ),
     // Tools
     array ( 'pick-axe', 'pick axes?/hews?/miners axes?', 'axe' ),
     array ( 'addice', 'addices?/carpenters? axes?', 'axe' ),
@@ -112,6 +145,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     array ( 'common-axe', '?common axes?/hatchets?', 'axe' ),
     array ( 'scythe', 'scythes?', 'tools' ),
     array ( 'water-bouget', '?water bougets?' ,'tools' ),
+    array ( 'anvil', '?smiths anvil', 'tools' ),
     // Crockery
     array ( 'cauldron', 'cauldrons?', 'crockery' ),
     array ( 'chalice', '?standing (chalice|cup)s?', 'crockery' ),
@@ -145,6 +179,9 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     // Collective nouns
     array ( 'dummy', '(sheaf|sheave|bundle|tuft)s? ?of', 'collect' ),
   );
+  if ($makelist) { // only used for construction of documentation
+    return make_list ($charges);
+  }
   $features = null;
   $mods = array();
 
@@ -180,40 +217,36 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     $features = $chg_func($node, $mods);
   }
   comma();
+  get_features ( $features, $node, $mods );
+  comma();
+  comma();
   postfix($mods);
   orientation($mods);
   conjoined($mods);
   if ( $allow_arr_pos ) arr_pos($mods);
 
-  // The tincture may have been set in the charge function, if it was set
-  // 'implied' (i.e. a fixed colour) the we only allow (optionally) "proper"
-  $tinc = $node->first_child();
-  if ( $tinc and $tinc->tagname() == 'tincture' ) {
-    $child = $tinc->first_child();
-    $tagname = $child->tagname();
-    if ($tagname == 'default') {
-      if ( $given_tinc = tincture(false) ) {
-       $node->replace_child($given_tinc,$node->first_child());
-      } 
-    }
-    if (($tagname == 'implied') and  !proper() and tincture(false)) raise_error ( $match[0] . ' has a fixed colour' );
-  } else { // if not set in the charge function, allow any tincture
-    if ( $tinc ) // existing node, but not tincture
-      $node->insert_before(tincture(true),$node->first_child());
-    else
-      $node->append_child(tincture(true));
+  $tinc = null;
+  $need_tinc = (isset ($match[3])? $match[3] : 'find' );
+  switch ( $need_tinc ) {
+    case false: // only allow proper (& discard it)
+      proper();
+      break;
+    case 'find': // Go and find one
+      $tinc = tincture(true);
+      break;
+    default: // If you can't find one, use this colour
+      if ( ($tinc = tincture(false)) == null ) {
+        $tinc = $dom->create_element('tincture');
+        $col = $dom->create_element('colour');
+        $col->set_attribute('name',$need_tinc);
+        $tinc->append_child($col);
+      }
+      break;
   }
+  if ( $tinc ) $node->insert_before($tinc,$node->first_child());
   comma();
 
-  // Get any feature colours
-  while ( $features and ($match2 = search_match($features)) != null ) {
-    $feature = $dom->create_element('feature');
-    $feature->set_attribute('name', $match2[0]);
-    $feature->append_child(tincture(true));
-    $node->append_child($feature);
-    comma();
-    andd();
-  }
+  get_features ( $features, $node, $mods );
   
   foreach($mods as $mod) $node->append_child($mod);
   

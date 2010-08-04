@@ -16,17 +16,20 @@
 function charge_plant ( &$node, &$mods ) {
   $charge_data = array (
    'rose' => array (
-      array ( 'barbed', 'barbed' ),
-      array ( 'seeded', 'seeded' ),
+      array ( 'barbed', 'barbed', 'feature' ),
+      array ( 'seeded', 'seeded', 'feature' ),
     ),
    'thistle' => array (
-      array ( 'slipped', 'slipped' ),
-      array ( 'leaved', 'leaved' ),
+      array ( 'slipped', 'slipped', 'feature' ),
+      array ( 'leaved', 'leaved', 'feature' ),
     ),
    'columbine' => array (
-      array ( 'slipped', '(slipped|stalked|leaved)' ),
-      array ( 'barbed', 'barbed' ),
-      array ( 'flowers', '(flowered|flowers|buds)')
+      array ( 'slipped', '(slipped|stalked|leaved)', 'feature' ),
+      array ( 'barbed', 'barbed', 'feature' ),
+      array ( 'flowers', '(flowered|flowers|buds)', 'feature'),
+      array ( null, 'pendent', 'ignore' ),
+      array ( null, 'slips crossed', 'ignore' ),
+      array ( null, 'drooping', 'ignore' ),
     )
   );
 

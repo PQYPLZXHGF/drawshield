@@ -15,27 +15,19 @@
 
 function charge_lion ( &$node, &$mods ) {
   $lion_data = array (
-    array ( 'armed', 'armed' ),
-    array ( 'tongued', 'langued' ),
-    array ( 'crowned', 'crowned' ),
+    array ( 'armed', 'armed', 'feature' ),
+    array ( 'tongued', 'langued', 'feature' ),
+    array ( 'crowned', 'crowned', 'feature' ),
+    array ( 'lion-rampant', 'rampant', 'subtype' ),
+    array ( 'lion-salient', 'salient', 'subtype' ),
+    array ( 'lion-passant', 'passant', 'subtype' ),
+    array ( 'lion-statant', 'statant', 'subtype' ),
+    array ( 'lion-sejant',  'sejant', 'subtype' ),
+    array ( 'lion-sejant-affronte',  'sejant affronte', 'subtype'  ),
+    array ( 'lion-sejant-erect',  'sejant erect', 'subtype'  ),
+    array ( 'lion-couchant', 'couchant', 'subtype' ),
   );
 
-  $lion_types = array (
-    array ( 'rampant', 'rampant' ),
-    array ( 'salient', 'salient' ),
-    array ( 'passant', 'passant' ),
-    array ( 'statant', 'statant' ),
-    array ( 'sejant',  'sejant' ),
-    array ( 'sejant-affronte',  'sejant affronte'  ),
-    array ( 'sejant-erect',  'sejant erect'  ),
-    array ( 'couchant', 'couchant' ),
-  );
-  if ( ($match = search_match($lion_types)) != null ) {
-    $type = 'lion-' . $match[0];
-  } else { // default lion
-    $type = 'lion-rampant';
-  }
-  $node->set_attribute('subtype', $type);
   return $lion_data;
 }
 ?>

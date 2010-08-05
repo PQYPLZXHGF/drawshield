@@ -20,6 +20,10 @@ Fixed the chevron counts on *chevronnelly* (issue 170) - there were twice as man
 
 Ordinaries on a canton, and cantons coloured by divisions now fit better (issue 96).
 
+*as many* now only refers back to counts of charges, not numbers used in positioning (issue 173)
+
+Automatic layout of charges in triangular arrangements has been fixed (issue 185)
+
 ==New Features==
 
 (Issue 191) When describing charges you can now freely mix _modifiers_ (like "points upwards") with _features_
@@ -39,9 +43,11 @@ drawn on top (issue 25), and will also have a thin black border.
 
 *Annulets* may be drawn *one within the other* (issue 25).
 
+Up to 20 charges can now be arranged automatically on the field.
+
 ==Internal Changes==
 
-Changed how charges of a fixed colour (like pommes) are represented internally.
+I have rewritten the code and data that describe how charges are parsed, it is much cleaner and smaller.
 
 =Version 2.2a5=
 

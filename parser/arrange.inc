@@ -204,8 +204,6 @@ function rows(&$mods) {
 }
 
 /* Have not used these (yet...?)
-    array ( true,            'sinister', 'sinister' ),
-    array ( true,            'dexter', 'dexter' ),
     array ( 'tonorth',       'to chief' , 'direction' ),
     array ( 'tonortheast',   'to sinister (chief|canton)', 'direction' ),
     array ( 'tosoutheast',   'to sinister base' , 'direction' ),

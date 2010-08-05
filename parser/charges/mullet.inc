@@ -13,40 +13,11 @@
    limitations under the License. */
 
 
-function charge_mullet( &$node, &$mods ) {
-  global $dom;
+function charge_mullet( $subtype ) {
 
-  $of_array = array (
-    array ( 0, 'of|de' ),
+  return array ( 
+    array ( null, '(pierced|voided)', 'mod', 'pierced' ),
+    array ( 5, '(of|de) # ?points', 'mod', 'points' ),
   );
-  $points_array = array (
-    array ( 0, 'points' ),
-  );
-  $voided_array = array (
-    array ( 0, 'voided)' ),
-  );
-  $pierced_array = array (
-    array ( 0, '(pierced|voided)' ),
-  );
-
-  $pierced = false;
-  $n = 5; // default
-  $state = save();
-  if ( search_match ( $of_array ) != null ) {
-    if ( ($n = number()) == null ) {
-      restore($state);
-      return null;
-    } else {
-      search_match ( $points_array );
-      if ( search_match( $pierced_array) != null ) $pierced = true; 
-    }
-  }
-  if ( search_match( $pierced_array) != null ) $pierced = true; 
-  if ( $n < 3 ) $n = 5;
-
-  $mods[] = make_mod('points', "$n");
-  if ( $pierced ) $mods[] = make_mod('pierced');
-
-  return array ( array ( null, '(pierced|voided)', 'mod', 'pierced' ));
 }
 ?>

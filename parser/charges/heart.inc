@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function charge_heart ( &$node, &$mods ) {
+function charge_heart ( $subtype ) {
 
   $heart_features = array (
     array ( 'flammant', 'flammant', 'feature' ), 

@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function charge_crow ( &$node, &$mods ) {
+function charge_crow ( $subtype ) {
   $crow_data = array (
     array ( 'legged', 'legged', 'feature' ),
     array ( 'beaked', 'beaked', 'feature' ),

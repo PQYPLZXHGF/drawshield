@@ -13,35 +13,10 @@
    limitations under the License. */
 
 
-function charge_letter ( &$node, &$mods ) {
-  global $dom;
+function charge_letter ( $subtype ) {
 
-  $numbers = array ( 'one' => '1', 'two' => '2', 'three' => '3', 'four' => '4', 'five' => '5',
-        'six' => '6', 'seven' => '7', 'eight' => '8', 'nine' => '9', 'zero' => '0' );
-
-  if ( ($item = next_word()) == null ) {
-    raise_error ( 'expecting a ' . $node->get_attribute('subtype') );
-    return null;
-  }
-  $first = strtolower($item{0});
-  switch ( $node->get_attribute('subtype') ) {
-    case 'letter':
-      $item = $first;
-      break;
-    case 'digit':
-      if (ctype_digit($first)) {
-        $item = $first;
-      } elseif ( array_key_exists($item, $numbers) ) {
-        $item = $numbers[$item];
-      } else {
-        raise_error('Expecting digit, found ' . $item );
-        $item = '1';
-      }
-      break;
-    // case 'word: just use $item
-  }
-  $node->append_child(make_mod('item',$item));
-
-  return null;
+  return array (
+    array ( null, '*', 'mod', 'item' ),
+  );
 }
 ?>

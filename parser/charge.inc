@@ -33,6 +33,39 @@ function between(&$mods, $found_between = false) {
   }
 }
 
+
+// TODO can say e.g. reed bundles. How this handled?
+// TODO should generate bundles of n, not be fixed
+
+function get_collection ( &$node, &$mods ) {
+
+  $collect_words = array (
+    // subtype, tokens, type, default subnum
+    array ( 'sheaf-arrows', 'arrows?', 'weapon', 3 ),
+    array ( 'bundle-reeds', 'reeds?', 'plant', 3 ),
+  );
+  
+  $subnum = number();
+
+  if ( ($match = search_match($collect_words)) != null ) {
+    if ($subnum == null) $subnum = $match[3];
+    $node->set_attribute('subtype', $match[0]);
+    $node->set_attribute('type', $match[2]);
+    $mods[] = make_mod('subnum',$subnum);  
+    // Prepare the charge function (if it exists)
+    if ( file_exists('parser/charges/' . $match[2] . '.inc') ) {
+      $chg_func = 'charge_' . $match[2];
+      if ( ! function_exists($chg_func) ) {
+        require_once ( 'parser/charges/' . $match[2] . '.inc' );
+      }
+      $features = $chg_func($match[0]);
+  }
+    
+  } else {
+    raise_error ( 'unknown bundle item' );
+  }
+}
+
 function get_features ( &$features, &$node, &$mods ) {
   global $dom;
   
@@ -52,6 +85,7 @@ function get_features ( &$features, &$node, &$mods ) {
         break;
       case 'mod':
         $mods[] = make_mod ( $match2[3], $match2[0] );
+        if ( $match2[1] == '*' ) break 2; // only match this once
         break;
       case 'subtype':
         $node->set_attribute('subtype',$match2[0]);
@@ -214,8 +248,9 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false, $makelist =
     if ( ! function_exists($chg_func) ) {
       require_once ( 'parser/charges/' . $match[2] . '.inc' );
     }
-    $features = $chg_func($node, $mods);
+    $features = $chg_func($match[0]);
   }
+  if ( $match[2] == 'collect' ) get_collection($node, $mods);
   comma();
   get_features ( $features, $node, $mods );
   comma();
@@ -295,6 +330,8 @@ function charge( $assume_num = false ) {
     rows($mods);
     orientation($mods);
     if ( !$arr_pos ) arr_pos($mods);
+    // If there is an explicit position, a following "between" is redundant (e.g. issue 173)
+    search_match( array ( array ( null, 'between' )));
   }
 
   foreach( $mods as $mod) $node->append_child($mod);

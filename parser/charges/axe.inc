@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function charge_axe ( &$node, &$mods ) {
+function charge_axe ( $subtype ) {
   return array (
       array ( 'handle', '(handled?s?|staved?s?|hafts|hafted)', 'feature' ),
       array ( 'blade', 'blades?d?', 'feature' ),

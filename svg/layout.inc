@@ -286,19 +286,27 @@ function PlaceCharge ( $node,  // images
 
 function calcPlace( $type, $number, $conjoined = 'false', $bb = '100,200,800,800'  ) {
   $wide_rows = array (
-    '0',
-    '1',
-    '2',
-    '2,1',
-    '3,1',
-    '3,2',
-    '3,2,1',
-    '3,3,1',
-    '3,3,2',
-    '3,3,3',
-    '5,3,2',
-    '5,4,2',
-    '5,4,3',
+    '0',          // 0
+    '1',          // 1
+    '2',          // 2
+    '2,1',        // 3
+    '3,1',        // 4
+    '3,2',        // 5
+    '3,2,1',      // 6
+    '3,3,1',      // 7
+    '3,3,2',      // 8
+    '3,3,3',      // 9
+    '4,3,2,1',    // 10
+    '4,3,3,1',    // 11
+    '4,3,3,2',    // 12
+    '4,3,3,3',    // 13
+    '5,4,3,2',    // 14
+    '5,4,3,2,1',  // 15
+    '5,4,3,3,1',  // 16
+    '5,4,3,3,2',  // 17
+    '6,5,4,2,1',  // 18
+    '6,5,4,3,1',  // 19
+    '6,5,4,3,2',  // 20
   );
   $narrow_rows = array (
     '0',
@@ -313,9 +321,17 @@ function calcPlace( $type, $number, $conjoined = 'false', $bb = '100,200,800,800
     '3,3,3',
     '4,3,3',
     '4,4,3',
-    '4,4,4',
+    '4,4,4',      // 12
+    '4,4,3,2',    // 13
+    '4,4,3,2,1',  // 14
+    '4,4,4,3',    // 15
+    '4,4,4,4',    // 16
+    '4,4,4,4,1',  // 17
+    '4,4,4,4,2',  // 18
+    '4,4,4,4,3',  // 19
+    '4,4,4,4,4',  // 20
   );
-  if ( $number > 12 ) return $number;
+  if ( $number > 20 ) return $number;
   switch ( $type ) {
     case 'h': // single horizontal row
       $row_list = array($number);
@@ -360,14 +376,15 @@ function calcPlace( $type, $number, $conjoined = 'false', $bb = '100,200,800,800
     $vert_gap = ($num_rows == 1) ? 0 : ($bb_h * $space_pct) / ($num_rows-1);
     $cbb_height = ($num_rows == 1) ? $bb_h : ($bb_h * (1-$space_pct)) / $num_rows;
     $cbb_width = ($max_row == 1 ) ? $bb_w : ($bb_w * (1-$space_pct)) / $max_row;
+    $horiz_gap = ($bb_w * $space_pct) / max(1,($max_row - 1));
     for ( $i = 0; $i < $num_rows; $i++ ) {
-      $horiz_gap = ($row_list[$i] == 1) ? 0 : ($bb_w * $space_pct) / ($row_list[$i] - 1);
       $centre_y = $bb_y + (($cbb_height + $vert_gap) * $i) + ($cbb_height / 2);
+      $offset = ($bb_w - ($cbb_width * $row_list[$i]) - ($horiz_gap * ($row_list[$i]-1)))/2;
       for ( $j = 0; $j < $row_list[$i]; $j++ ) {
-        if ( $row_list[$i] == $max_row and $max_row != 1 ) {
-          $centre_x = $bb_x + (($cbb_width + $horiz_gap) * $j) + ($cbb_width/2);
+        if ( $row_list[$i] != 1 ) {
+          $centre_x = $bb_x + $offset + (($cbb_width + $horiz_gap) * $j) + ($cbb_width/2);
         } else {
-          $centre_x = $bb_x + (($j+1) * ($bb_w/($row_list[$i]+1)));
+          $centre_x = $bb_x + ($bb_w/2);
         }
         $placement .= sprintf ( "%.2f,%.2f,%.2f,%.2f:",$centre_x,$centre_y,$cbb_width,$cbb_height);
       }

@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function number( $only_digits = false ) {
+function number( $layout_only = false ) {
   global $p_globals;
 
   $numbers = array (
@@ -47,7 +47,7 @@ function number( $only_digits = false ) {
   if ( ($number = search_match($numbers)) != null ) {
     $number = $number[0];
     if ( $number == 'a' ) {
-      if ( $only_digits ) {
+      if ( $layout_only ) {
         restore($state);
         return null;
       } else {
@@ -60,7 +60,7 @@ function number( $only_digits = false ) {
       } else {
         $number = $p_globals['asmany'];
       }
-    } elseif ( $number > 1 ) {
+    } elseif ( $number > 1 and !$layout_only ) {
         $p_globals['asmany'] = $number;
     }
   }

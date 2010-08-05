@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function charge_lion ( &$node, &$mods ) {
+function charge_lion ( $subtype ) {
   $lion_data = array (
     array ( 'armed', 'armed', 'feature' ),
     array ( 'tongued', 'langued', 'feature' ),

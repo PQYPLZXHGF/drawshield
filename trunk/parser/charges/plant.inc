@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function charge_plant ( &$node, &$mods ) {
+function charge_plant ( $subtype ) {
   $charge_data = array (
    'rose' => array (
       array ( 'barbed', 'barbed', 'feature' ),
@@ -33,8 +33,8 @@ function charge_plant ( &$node, &$mods ) {
     )
   );
 
-  if ( array_key_exists($node->get_attribute('subtype'), $charge_data) ) {
-    return $charge_data[$node->get_attribute('subtype')];
+  if ( array_key_exists($subtype, $charge_data) ) {
+    return $charge_data[$subtype];
   } else {
     return null;
   }

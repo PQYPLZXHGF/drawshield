@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function charge_quadrate ( &$node, &$mods ) {
+function charge_quadrate ( $subtype ) {
 
   $fitchy_words = array (
     array ( null, 'fitch(y|ee)', 'mod', 'fitchy' ),

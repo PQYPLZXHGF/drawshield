@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function charge_animal ( &$node, &$mods ) {
+function charge_animal ( $subtype ) {
   $charge_data = array (
    'boars-head' => array (
       array ( 'armed', 'armed', 'feature' ),
@@ -32,10 +32,10 @@ function charge_animal ( &$node, &$mods ) {
     ),
   );
 
-  if ( array_key_exists($node->get_attribute('subtype'), $charge_data) ) {
-    return $charge_data[$node->get_attribute('subtype')];
+  if ( array_key_exists($subtype, $charge_data) ) {
+    return $charge_data[$subtype];
   } else {
-    return false;
+    return null;
   }
 }
 ?>

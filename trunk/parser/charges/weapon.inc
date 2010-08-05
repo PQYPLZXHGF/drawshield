@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function charge_weapon ( &$node, &$mods ) {
+function charge_weapon ( $subtype ) {
 
   $charge_data = array (
     'sword' => array ( 
@@ -42,8 +42,8 @@ function charge_weapon ( &$node, &$mods ) {
     ),
   );
 
-  if ( array_key_exists($node->get_attribute('subtype'), $charge_data )) {
-    return $charge_data[$node->get_attribute('subtype')];
+  if ( array_key_exists($subtype, $charge_data )) {
+    return $charge_data[$subtype];
   } else {
     return null;
   }

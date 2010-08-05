@@ -13,27 +13,21 @@
    limitations under the License. */
 
 
-function charge_cross ( &$node, &$mods ) {
-  global $dom;
- 
-  $mounted = array (
-    array ( true, '?mounted on' ),
-  );
-  $degrees = array (
-    array ( true, '(degree|ascent)s?' )
+function charge_cross ( $subtype ) {
+
+  $charge_data = array (
+   'calvary' => array (
+      array ( null, '?mounted on # (degree|ascent)s?', 'mod', 'mounted' ),
+      ),
+    'patriarchal' => array (
+      array ( null, '?mounted on # (degree|ascent)s?', 'mod', 'mounted' ),
+      ),
   );
 
-  $mountable = array ( 'calvary', 'patriarchal' );
-
-  $state = save();
-  if ( (in_array( $node->get_attribute('subtype'), $mountable )) and (search_match( $mounted ) != null) ) {
-    if ( (($num = number()) != null ) and ( search_match( $degrees ) != null)) {
-      $mods[] = make_mod('mounted', "$num");
-    } else {
-      restore($state);
-      return null;
-    }
+  if ( array_key_exists($subtype, $charge_data) ) {
+    return $charge_data[$subtype];
+  } else {
+    return null;
   }
-  return null;
 }
 ?>

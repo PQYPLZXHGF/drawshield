@@ -12,7 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-function charge_symbol ( &$node, &$mods ) {
+function charge_symbol ( $subtype ) {
   
   $charge_data = array (
    'orb' => array (
@@ -20,7 +20,6 @@ function charge_symbol ( &$node, &$mods ) {
       array ( 'crossed', 'crossed/ensigned with a cross', 'feature' ),
     ),
   );
-  $subtype = $node->get_attribute('subtype');
 
   if ( array_key_exists($subtype, $charge_data) ) {
     return $charge_data[$subtype];

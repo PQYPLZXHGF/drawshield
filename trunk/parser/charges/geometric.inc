@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function charge_geometric( &$node, &$mods ) {
+function charge_geometric( $subtype ) {
  
   $charge_data = array (
    'fountain' => array (
@@ -33,7 +33,6 @@ function charge_geometric( &$node, &$mods ) {
          array ( null, 'one (within|inside) ?the other', 'mod', 'concentric' ),
        ),
   );
-  $subtype = $node->get_attribute('subtype');
 
   if ( array_key_exists($subtype, $charge_data) ) {
     return $charge_data[$subtype];

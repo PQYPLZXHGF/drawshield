@@ -12,6 +12,8 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
+$matched_number = null;
+$matched_word = null;
 
 //
 // LEXICAL FUNCTIONS
@@ -105,6 +107,54 @@ function fill_words($blazon_in) {
   }
 }
 
+function match_number ( &$count, $t_word ) {
+  global $p_globals;
+  global $words, $cur_word;
+  
+  $numbers = array (
+  array (0, '(0|zero)' ) ,// just for completeness...
+  array (1, '(1|one)' ),
+  array (2, '(2|two)' ),
+  array (3, '(3|three)' ),
+  array (4, '(4|four)' ),
+  array (5, '(5|five)' ),
+  array (6, '(6|six)'  ),
+  array (7, '(7|seven)' ),
+  array (8, '(8|eight)' ),
+  array (9, '(9|nine)' ),
+  array (10, '(10|ten)' ),
+  array (11, '(11|eleven)' ),
+  array (12, '(12|twelve)' ),
+  array (13, '(13|thirteen)' ),
+  array (14, '(14|fourteen)' ),
+  array (15, '(15|fifteen)' ),
+  array (16, '(16|sixteen)' ),
+  array (17, '(17|seventeen)' ),
+  array (18, '(18|eighteen)' ),
+  array (19, '(19|nineteen)' ),
+  array (20, '(20|twenty)' ),
+  );
+  $number = null;
+  if ( preg_match ( '/^(as|so)$/i',  $words[$t_word] ) and ($tword+1 < sizeof($words)) and preg_match ( '/^many$/i',  $words[$t_word+1] ) ) {
+    $count = 2;
+    if ($p_globals['asmany'] == null ) {
+      my_trigger_error('No previous number', E_PARSER);
+      $number = 2;
+    } else {
+      $number = $p_globals['asmany'];
+    }
+  } else {
+    foreach ( $numbers as $number_word ) {
+      if (preg_match ( '/^' . $number_word[1] . '$/i',  $words[$t_word] )) {
+        $number = $number_word[0];
+        $p_globals['asmany'] = $number;
+        break;
+      }
+    }
+  }
+  return $number;
+}
+
 function check_match ( $match_string ) {
 
   $phrases = explode('/', $match_string);
@@ -119,9 +169,11 @@ function check_match ( $match_string ) {
 // words matched on success 
 // An initial '?' indicates match is optional
 function check_match2 ( $match_string ) {
-	global $words, $cur_word;
-	
+  global $words, $cur_word, $matched_number, $matched_word;
+
   $regexs = explode(' ', $match_string);
+  $matched_number = null;
+  $matched_word = null;
 
   $t_word = $cur_word;
   foreach ( $regexs as $regex ) {
@@ -138,9 +190,16 @@ function check_match2 ( $match_string ) {
       } else {
         return 0;
       }
-    } // Note search is case insensitive
-    if ( ($res = preg_match ( '/^' . $regex . '$/i',  $words[$t_word] ))) {
-      $t_word += 1; // Got a match, move on
+    } 
+    $number = null;
+    $count = 1;
+    if ( $regex == '*' ) {
+      $matched_word = $words[$t_word];
+      $t_word += 1;
+    // Note search is case insensitive
+    } elseif ( $regex == '*' or ( $regex == '#' and (($number = match_number( $count, $t_word )) != null) ) or ($res = preg_match ( '/^' . $regex . '$/i',  $words[$t_word] ))) {
+      $t_word += $count; // Got a match, move on
+      if ( $number ) $matched_number = $number;
     } elseif ( ! ($optional)) {
       if ( $res === false ) raise_error('(INTERNAL) bad regex - ' . $regex );
       return 0;
@@ -152,11 +211,13 @@ function check_match2 ( $match_string ) {
 
 
 function search_match ( $terms ) {
-  global $cur_word;
+  global $cur_word, $matched_number, $matched_word;
 
   $max_match = 0;
   $match = null;
   foreach ($terms as $term) {
+     $max_number = null;
+     $max_word = null;
      if ( !is_array($term) or count($term) < 2 ) {
        raise_error ( 'AARRGH! ' . $term[0] );
        return null;
@@ -165,11 +226,15 @@ function search_match ( $terms ) {
        if ( $count > $max_match ) {
          $max_match = $count;
          $match = $term;
+         $max_number = $matched_number;
+         $max_word = $matched_word;
        }
     }
   }
   if ( $match != null ) {
     $cur_word = $max_match;
+    if ( $max_number != null ) $match[0] = $max_number;
+    if ( $max_word != null ) $match[0] = $max_word;
   }
   return $match;
 }

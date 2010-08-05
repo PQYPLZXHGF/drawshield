@@ -66,7 +66,18 @@ function get_collection ( &$node, &$mods ) {
   }
 }
 
-function get_features ( &$features, &$node, &$mods ) {
+function get_next_word ( &$node, &$mods ) {
+  global $words, $cur_word;
+  
+  if ($cur_word < sizeof($words)) {
+    $mods[] = make_mod('item',$words[$cur_word]);
+    $cur_word += 1;
+  } else {
+    raise_error ( 'Missing letter or digit' );
+  }
+}
+
+  function get_features ( &$features, &$node, &$mods ) {
   global $dom;
   
 /*  if ( $features != null and !is_array($features) ) {
@@ -85,7 +96,6 @@ function get_features ( &$features, &$node, &$mods ) {
         break;
       case 'mod':
         $mods[] = make_mod ( $match2[3], $match2[0] );
-        if ( $match2[1] == '*' ) break 2; // only match this once
         break;
       case 'subtype':
         $node->set_attribute('subtype',$match2[0]);
@@ -250,10 +260,19 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false, $makelist =
     }
     $features = $chg_func($match[0]);
   }
-  if ( $match[2] == 'collect' ) get_collection($node, $mods);
+  // Special (awkward!) cases
+  switch ( $match[2] ) {
+    case 'collect': 
+      get_collection($node, $mods);
+      break;
+    case 'letter':
+    case 'digit':
+    case 'word':
+      get_next_word($node, $mods);
+      break;
+  }
   comma();
   get_features ( $features, $node, $mods );
-  comma();
   comma();
   postfix($mods);
   orientation($mods);

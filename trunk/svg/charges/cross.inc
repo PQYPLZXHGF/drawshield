@@ -29,8 +29,8 @@ function makeChg_cross ( $node ) {
         'body' => '<path d="M{START},0h25v100h75v50h-75v250h-50v-250h-75v-50h75v-100z" stroke="#000000" stroke-width="4" />'),
     'patriarchal' => array ( 'height' => 400, 'width' => 240, 'mountable' => true,
         'body' => '<path d="M{START},0h20v50h50v40h-50v50h100v40h-100v250h-40v-250h-100v-40h100v-50h-50v-40h50v-50z" stroke="#000000" stroke-width="4" />'),
-    'tau' => array ( 'height' => 400, 'width' => 300,
-        'body' => '<path d="M0,0L50,25 250,25 300,0 300,100 250,75 175,75 175,350 200,400 100,400 125,350 125,75 50,75 0 100Z" stroke="#000000" stroke-width="4" />' ),
+//    'tau' => array ( 'height' => 400, 'width' => 300,
+//        'body' => '<path d="M0,0L50,25 250,25 300,0 300,100 250,75 175,75 175,350 200,400 100,400 125,350 125,75 50,75 0 100Z" stroke="#000000" stroke-width="4" />' ),
   );
   $type = $node->get_attribute('subtype');
   $num = 0;

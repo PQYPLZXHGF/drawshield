@@ -59,13 +59,23 @@ function getCharge( $node ) {
     $type = $node->get_attribute('type');
     $subtype = $node->get_attribute('subtype');
 
+    if ( $type{0} == '/' ) {
+      $SVG = true;
+      include_once ( 'charges' . $type . '/' . $subtype );
+      $chg_func = substr ( $subtype, 0, strlen($subtype) - 4 );
+      $chg_func = preg_replace( '/-/', '_', $chg_func );
+      $chg_func = 'charge_' . $chg_func;
+      unset ($SVG);
+    }
     // Find and execute the charge function, extracting useful bits
+    else {
     $chg_func = 'makeChg_' . $type;
     if ( ! function_exists($chg_func)) {
       @include ( 'charges/' . $type . '.inc' );
     }
+    }
     if ( ! function_exists($chg_func) ) {
-      my_trigger_error("Cannot draw $subtype", E_SVG, __FILE__, __LINE__);
+      my_trigger_error("Cannot draw $chg_func", E_SVG, __FILE__, __LINE__);
     } else {
       $chg_data = $chg_func( $node );
     }

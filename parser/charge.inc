@@ -77,7 +77,7 @@ function get_next_word ( &$node, &$mods ) {
   }
 }
 
-  function get_features ( &$features, &$node, &$mods ) {
+  function get_features ( &$features, &$node, &$mods, &$subtype_features ) {
   global $dom;
   
 /*  if ( $features != null and !is_array($features) ) {
@@ -86,7 +86,8 @@ function get_next_word ( &$node, &$mods ) {
   } */
   
   // Get any feature colours
-  while ( $features and ($match2 = search_match($features)) != null ) {
+  while ( $features ) {
+    if ( ($match2 = search_match($features)) == null ) break;
     switch ( $match2[2] ) {
       case 'feature':
         $feature = $dom->create_element('feature');
@@ -98,7 +99,13 @@ function get_next_word ( &$node, &$mods ) {
         $mods[] = make_mod ( $match2[3], $match2[0] );
         break;
       case 'subtype':
-        $node->set_attribute('subtype',$match2[0]);
+        $subtype = $match[0];
+        $node->set_attribute('subtype',$subtype);
+        if ( array_key_exists ($subtype, $subtype_features)) {
+          // We allow one level of indirection
+          if ( !is_array($subtype_features[$subtype])) $subtype = $subtype_features[$subtype];
+          $features = array_merge($features,$subtype_features[$subtype]);
+        }
         break;
       case 'ignore':
         break;
@@ -108,127 +115,26 @@ function get_next_word ( &$node, &$mods ) {
   }
 }
 
-function simple_charge( $assume_num = false, $allow_arr_pos = false, $makelist = false ) {
+function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   global $dom;
   
-  static $charges = array (
-    // Debugging
-    array ( 'bbox', '?bounding box(es)?' ,'geometric' ),
-    // Humans (or parts thereof)
-    array ( 'heart', '?human hearts?', 'heart' ),
-    array ( 'arm', 'arms?', 'human' ),
-    array ( 'hand', '?dexter hands?','human' ),
-    // Animals
-    array ( 'lion', 'lion(cel)?s?', 'lion' ),
-    array ( 'scallop', 'e?scallops?', 'animal' ),
-    array ( 'tiger', 't(i|y)gers?', 'animal' ),
-    array ( 'unicorn', 'unicorns?', 'animal' ),
-    array ( 'bee', 'bees?', 'animal' ),
-    array ( 'chough', '?cornish choughs?' ,'bird' ),
-    array ( 'martlett', 'martletts?', 'bird' ),
-    array ( 'boars-head', 'boars? heads? ?couped' ,'animal' ),
-    array ( 'bears-head', 'bears? heads? ?couped' ,'animal' ),
-    array ( 'stags-head', 'stags? heads? ?couped' ,'animal' ),
-    array ( 'dove', 'doves?', 'bird' ),
-    array ( 'crow', '(crow|daw|rook|raven)s?', 'crow' ),
-    // Plants
-    array ( 'rose', 'roses?', 'plant' ),
-    array ( 'thistle', 'thistles?', 'plant' ),
-    array ( 'trefoil', 'trefoils?', 'plant' ),
-    array ( 'cinquefoil', '(cinquefoil|fraise)s?', 'plant' ),
-    array ( 'reed', 'reeds?', 'plant' ),
-    array ( 'columbine', 'columbines?', 'plant' ),
-    // Long crosses
-    array ( 'crosslet', '?plain crosslets?',           'cross' ),
-    array ( 'long', '(latin|long|passion) cross(es)?', 'cross' ),
-    array ( 'calvary', 'calvary cross' ,               'cross' ),
-    array ( 'patriarchal', 'patriarchal cross' ,       'cross' ),
-    // Geometric
-    array ( 'lozenge', 'lozenges?' ,'geometric' ),
-    array ( 'escutcheon', 'escut?cheons?' ,'geometric' ),
-    array ( 'billet', 'billets?' ,'geometric' ),
-    array ( 'mascle', 'mascles?' ,'geometric' ),
-    array ( 'roundel', 'roundels?|roundles?' ,'geometric' ),
-    array ( 'annulet', 'annulets?' ,'geometric' ),
-    array ( 'crescent', 'crescents?' ,'geometric' ),
-    array ( 'fusil', 'fusils?' ,'geometric' ),
-    array ( 'rustre', 'rustres?' ,'geometric' ),
-    array ( 'cartouche', 'cartouches?' ,'geometric' ),
-    array ( 'delf', 'delfs?','geometric' ),
-    array ( 'fountain', 'fountains?', 'geometric', false ),
-    array ( 'saltorel', 'saltorels?' ,'geometric' ),
-    array ( 'goutte', 'go?uttes?' ,'geometric' ),
-    array ( 'plate', 'plates?' ,'roundel', false ),
-    array ( 'hurt', 'hurts?' ,'roundel', false ),
-    array ( 'torteau', 'torteaux?'  ,'roundel', false ),
-    array ( 'bezant', 'bezants?' ,'roundel', false ),
-    array ( 'golpe', 'golpes?' ,'roundel', false ),
-    array ( 'pellet', 'pellets?/gunstones?/ogress(es)?' ,'roundel', false ),
-    array ( 'pomme', 'pommes?' ,'roundel', false ),
-    array ( 'orange', 'oranges?' ,'roundel', false ),
-    array ( 'guze', 'guzes?' ,'roundel', false ),
-    array ( 'triangle', 'triangles?', 'geometric' ),
-    array ( 'mullet', 'm(o|u)ll?ets?', 'mullet' ),
-    // Weapons  and armour
-    array ( 'sword', 'swords?', 'weapon' ),
-    array ( 'arrow', 'arrows?', 'weapon' ),
-    array ( 'pheon', '(f|ph)eons? ?heads?','weapon' ),
-    array ( 'pheon', 'arrow heads?','weapon' ),
-    array ( 'broad-arrow', 'broad arrow ?heads?','weapon' ),
-    array ( 'helm', 'helm(et)?s?', 'clothes' ),
-    array ( 'gauntlet', 'gauntlets?', 'clothes' ),
-    // Symbols
-    array ( 'fleurdelys', 'fleurs? de l(y|i)s' ,'symbol' ),
-    array ( 'orb', '?royal (orb|mound)', 'symbol' ),
-    array ( 'ermine-spot', 'ermine spots?', 'symbol', 'sable' ),
-    // Tools
-    array ( 'pick-axe', 'pick axes?/hews?/miners axes?', 'axe' ),
-    array ( 'addice', 'addices?/carpenters? axes?', 'axe' ),
-    array ( 'battle-axe', 'battle axes?/battleaxes?', 'axe' ),
-    array ( 'turner-axe', 'turners? axes?', 'axe' ),
-    array ( 'common-axe', '?common axes?/hatchets?', 'axe' ),
-    array ( 'scythe', 'scythes?', 'tools' ),
-    array ( 'water-bouget', '?water bougets?' ,'tools' ),
-    array ( 'anvil', '?smiths anvil', 'tools' ),
-    // Crockery
-    array ( 'cauldron', 'cauldrons?', 'crockery' ),
-    array ( 'chalice', '?standing (chalice|cup)s?', 'crockery' ),
-    array ( 'covered-cup', '?standing (chalice|cup)s? covered', 'crockery' ),
-    array ( 'covered-cup', 'covered (chalice|cup)s?', 'crockery' ),
-    array ( 'mug', 'mugs?', 'crockery' ),
-    // Musical Instruments
-    array ( 'clarion', 'clarions?', 'music' ),
-    array ( 'harp', 'harps?', 'music' ),
-    array ( 'horn', '?hunting horns?', 'music' ),
-    // Clothing
-    array ( 'maunche', 'maunches?', 'clothes' ),
-    array ( 'buckle', 'buckles?', 'clothes' ),
-    // Furniture
-    array ( 'table', 'tables?', 'furniture' ),
-    // Crowns
-    array ( 'antique', '?antique crowns?' ,'crown' ),
-    // Architecture
-    array ( 'tower', 'towers?', 'architecture' ),
-    array ( 'arch', 'arch(es)?', 'architecture' ),
-    array ( 'altar', 'altars?', 'architecture' ),
-    // Text
-    array ( 'letter', 'letters?', 'letter' ),
-    array ( 'digit', 'digits?', 'letter' ),
-    array ( 'digit', 'numerals?', 'letter' ),
-    array ( 'word', 'numbers?', 'letter' ),
-    array ( 'word', 'words?', 'letter' ),
-    // Misc
-    array ( 'flames', 'flames ?of ?fire', 'misc' ),
-    array ( 'rainbow', 'rainbows?', 'misc' ),
-    // Collective nouns
-    array ( 'dummy', '(sheaf|sheave|bundle|tuft)s? ?of', 'collect' ),
-  );
-  if ($makelist) { // only used for construction of documentation
-    return make_list ($charges);
-  }
-  $features = null;
+  static $charges = null;
+  static $subtype_features = null;
+  static $type_features = null;
+  
+  $features = array();
   $mods = array();
-
+  
+  if ( $charges == null ) {
+    $charges = unserialize(file_get_contents('parser/charge_data.dat'));
+  }
+  if ( $subtype_features == null ) {
+    $subtype_features = unserialize(file_get_contents('parser/subtype_features.dat'));
+  }
+  if ( $type_features == null ) {
+    $type_features = unserialize(file_get_contents('parser/type_features.dat'));
+  }
+  
   $state = save();
   
   // Look for a number
@@ -247,21 +153,24 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false, $makelist =
     return null;
   }
   // We have a charge
+  $type = $match[2];
+  $subtype = $match[0];
   $node = $dom->create_element('charge');
-  $node->set_attribute('type', $match[2]);
-  $node->set_attribute('subtype', $match[0]);
+  $node->set_attribute('type', $type);
+  $node->set_attribute('subtype', $subtype);
   $node->set_attribute('tokNum',$tokNum);
   $node->set_attribute('number',"$num");
-  // Prepare the charge function (if it exists)
-  if ( file_exists('parser/charges/' . $match[2] . '.inc') ) {
-    $chg_func = 'charge_' . $match[2];
-    if ( ! function_exists($chg_func) ) {
-      require_once ( 'parser/charges/' . $match[2] . '.inc' );
-    }
-    $features = $chg_func($match[0]);
+  // Get the set of features, (if any)
+  if ( array_key_exists($type, $type_features ))
+    $features = $type_features[$type];
+  if ( array_key_exists ($subtype, $subtype_features)) {
+    // We allow one level of indirection
+    if ( !is_array($subtype_features[$subtype])) $subtype = $subtype_features[$subtype];
+    $features = array_merge($features,$subtype_features[$subtype]);
   }
+  
   // Special (awkward!) cases
-  switch ( $match[2] ) {
+  switch ( $type ) {
     case 'collect': 
       get_collection($node, $mods);
       break;
@@ -272,7 +181,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false, $makelist =
       break;
   }
   comma();
-  get_features ( $features, $node, $mods );
+  get_features ( $features, $node, $mods, $subtype_features );
   comma();
   postfix($mods);
   orientation($mods);
@@ -300,7 +209,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false, $makelist =
   if ( $tinc ) $node->insert_before($tinc,$node->first_child());
   comma();
 
-  get_features ( $features, $node, $mods );
+  get_features ( $features, $node, $mods, $subtype_features );
   
   foreach($mods as $mod) $node->append_child($mod);
   

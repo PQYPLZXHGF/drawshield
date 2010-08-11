@@ -215,9 +215,9 @@ function search_match ( $terms ) {
 
   $max_match = 0;
   $match = null;
+  $max_number = null;
+  $max_word = null;
   foreach ($terms as $term) {
-     $max_number = null;
-     $max_word = null;
      if ( !is_array($term) or count($term) < 2 ) {
        raise_error ( 'AARRGH! ' . $term[0] );
        return null;

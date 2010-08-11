@@ -69,8 +69,8 @@
           <xsl:when test="$ordtype='chief'"><xsl:value-of select="php:function('calcPlace','h',string($number),string($conjoin),'100,50,800,200')" /></xsl:when>
           <xsl:when test="$ordtype='fess'"><xsl:value-of select="php:function('calcPlace','h',string($number),string($conjoin),'100,400,800,200')" /></xsl:when>
           <xsl:when test="$ordsubtype='gore'">130,700,160,160/130,600,140,140:130,800/x/x/x/x</xsl:when>
-          <xsl:when test="$ordtype='pale' and $chief='false'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'350,100,200,1000')" /></xsl:when>
-          <xsl:when test="$ordtype='pale' and $chief='true'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'350,350,200,750')" /></xsl:when>
+          <xsl:when test="$ordtype='pale' and $chief='false'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'400,100,200,1000')" /></xsl:when>
+          <xsl:when test="$ordtype='pale' and $chief='true'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'400,350,200,750')" /></xsl:when>
           <xsl:when test="$ordtype='tierce' and $chief='false'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'75,100,200,800')" /></xsl:when>
           <xsl:when test="$ordtype='tierce' and $chief='true'"><xsl:value-of select="php:function('calcPlace','v',string($number),string($conjoin),'75,350,200,650')" /></xsl:when>
           <xsl:when test="$ordtype='chevron' and $chief='false'">500,400,100,100/250,625,100,100,45:750,625,,,-45/250,625,100,100,45:500,400,,,0:750,625,,,-45/200,675,100,100,45:400,475:600,475,,,-45:800,675/200,675,100,100,45:350,525:500,400,,,0:650,525,,,-45:800,675/150,725,100,100,45:250,625:350,525:650,525,,,-45:750,625:850,725</xsl:when>

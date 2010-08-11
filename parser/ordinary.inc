@@ -161,10 +161,12 @@ function ordinary() {
     restore($state); // Not found anything, backtrack and exit
     return null;
   } // else
+  $ord_name = $match[2];
   $ord_type = $match[0];
+  $ord_type = preg_replace ( '/\.inc/', '', $ord_type );
   $node = $dom->create_element('ordinary');
-  $node->set_attribute('type',$match[2]);
-  $node->set_attribute('subtype',$match[0]);
+  $node->set_attribute('type',$ord_name);
+  $node->set_attribute('subtype',$ord_type);
   $node->set_attribute('number',$ord_num);
   $node->set_attribute('tokNum',$tokNum);
   $node->append_child($dom->create_element('tincture'));
@@ -178,10 +180,10 @@ function ordinary() {
   }
 
   // Prepare the ordinary function (if it exists)
-  if ( file_exists('parser/ordinaries/' . $match[2] . '.inc') ) {
-    $ord_func = 'ordinary_' . $match[2];
+  if ( file_exists('parser/ordinaries/' . $ord_name . '.inc') ) {
+    $ord_func = 'ordinary_' . $ord_name;
     if ( ! function_exists($ord_func) ) {
-      require_once ( 'parser/ordinaries/' . $match[2] . '.inc' );
+      require_once ( 'parser/ordinaries/' . $ord_name . '.inc' );
     }
     $node = $ord_func($node, $mods);
   }

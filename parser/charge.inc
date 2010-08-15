@@ -118,23 +118,19 @@ function get_next_word ( &$node, &$mods ) {
 function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   global $dom;
   
-  static $charges = null;
-  static $subtype_features = null;
-  static $type_features = null;
+  static $charge_list = null;
+  static $modifier_list = null;
   
-  $features = array();
   $mods = array();
   
-  if ( $charges == null ) {
-    $charges = unserialize(file_get_contents('parser/charge_data.dat'));
+  if ( $charge_list == null ) {
+    $charge_list = unserialize(file_get_contents('parser/charge_list.dat'));
   }
-  if ( $subtype_features == null ) {
-    $subtype_features = unserialize(file_get_contents('parser/subtype_features.dat'));
-  }
-  if ( $type_features == null ) {
-    $type_features = unserialize(file_get_contents('parser/type_features.dat'));
+  if ( $modifier_list == null ) {
+    $modifier_list = unserialize(file_get_contents('parser/modifier_list.dat'));
   }
   
+  $features = array();
   $state = save();
   
   // Look for a number
@@ -148,7 +144,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   }
   
   $tokNum = tokNum();
-  if ( (($match = either('charge')) == null) and (($match = search_match($charges)) == null ) ) {
+  if ( (($match = either('charge')) == null) and (($match = search_match($charge_list)) == null ) ) {
     restore($state);
     return null;
   }
@@ -161,13 +157,8 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   $node->set_attribute('tokNum',$tokNum);
   $node->set_attribute('number',"$num");
   // Get the set of features, (if any)
-  if ( array_key_exists($type, $type_features ))
-    $features = $type_features[$type];
-  if ( array_key_exists ($subtype, $subtype_features)) {
-    // We allow one level of indirection
-    if ( !is_array($subtype_features[$subtype])) $subtype = $subtype_features[$subtype];
-    $features = array_merge($features,$subtype_features[$subtype]);
-  }
+  if ( array_key_exists($subtype, $modifier_list ))
+    $features = $modifier_list[$subtype];
   
   // Special (awkward!) cases
   switch ( $type ) {

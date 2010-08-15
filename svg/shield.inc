@@ -81,6 +81,8 @@ function makeOrdChgs( $node ) {
 function draw() {
   global $dom;
   global $size, $tagline1, $tagline2;
+  
+  define ( 'OUTPUT_SVG', true );
 
   if ( $new = preprocess ( $dom ) ) {
     $dom->free();

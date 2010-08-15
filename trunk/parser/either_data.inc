@@ -1,7 +1,7 @@
 <?php
   $either = array (
     // Long crosses
-//    array ( 'tau',                'tau ?cross(es)?',               'cross', 'charge' ),
+    array ( 'tau',                'tau ?cross(es)?',               'cross', 'charge' ),
 //    array ( 'tau',                'cross(es)? ?of (saint|st) anthony', 'cross', 'charge' ),
     array ( 'cross-formy',        'cross formy throughout',           'cross2', 'ordinary' ),
     array ( 'fillet-cross',       'cross fillet',                       'cross2', 'ordinary' ),
@@ -23,18 +23,18 @@
     array ( 'cross-fourche',      'cross(let|lets|es)? fourche', 'quadrate', 'charge' ),
     array ( 'cross-moline',       'cross(let|lets|es)? (molines?|ancre|anchory)','quadrate', 'charge' ),
     array ( 'maltese-cross',      'maltese cross(let|lets|es)?',   'quadrate', 'charge' ),
-    array ( 'maltese-cross',      'cross(let|lets|es)? of (8|eight|huit) points','quadrate', 'charge' ),
+//    array ( 'maltese-cross',      'cross(let|lets|es)? of (8|eight|huit) points','quadrate', 'charge' ),
     array ( 'cross-cercele',      'cross(let|lets|es)? (re)?cercelee?s?','quadrate', 'charge' ),
     array ( 'cross-patonce',      'cross(let|lets|es)? patonces?', 'quadrate', 'charge' ),
-    array ( 'cross-formy',        'cross(let|lets|es)? (formy|patt?y)', 'quadrate',   'charge' ),
+//    array ( 'cross-formy',        'cross(let|lets|es)? (formy|patt?y)', 'quadrate',   'charge' ),
     array ( 'cross-formy',        'cross(let|lets|es)? (formee|pattee)', 'quadrate',   'charge' ),
     array ( 'cross-cleche',       'cross(let|lets|es)? (cleche|urde)', 'quadrate',   'charge' ),
     array ( 'cross-crosslet',     'cross(es)? crosslets?',         'quadrate', 'charge' ),
     array ( 'fylfot',             'cross(es)? potent rebated',        'quadrate', 'charge' ),
-    array ( 'fylfot',             'cross(es)? gammadions?',                'quadrate', 'charge' ),
-    array ( 'fylfot',             'fylfots?',                                         'quadrate', 'charge' ),
+//    array ( 'fylfot',             'cross(es)? gammadions?',                'quadrate', 'charge' ),
+//    array ( 'fylfot',             'fylfots?',                                         'quadrate', 'charge' ),
     // Chevrons
-//    array ( 'chevron',            'chevron(el)?s?', 'chevron:geometric', 'either' ),
+    array ( 'chevron',            'chevron(el)?s?', 'chevron:geometric', 'either' ),
     // Subordinaries
     array ( 'fret', 'frets?',     'subordinary:geometric', 'either' ),
     array ( 'fret-couped',        'frets? couped' , 'common', 'ordinary' ),

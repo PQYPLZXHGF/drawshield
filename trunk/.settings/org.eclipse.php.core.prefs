@@ -1,5 +1,5 @@
-#Sun Apr 11 19:11:40 BST 2010
+#Sat Aug 14 23:59:18 BST 2010
 eclipse.preferences.version=1
 include_path=0;/shield
-phpVersion=php4
+phpVersion=php5.3
 use_asp_tags_as_php=false

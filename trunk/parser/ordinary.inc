@@ -157,7 +157,7 @@ function ordinary() {
   
   $mods = position_mods();     // Sometimes you get "sinister bend ...."
 
-  if ( (($match = search_match($ordinaries)) == null) and (($match = either('ordinary')) == null) ) {
+  if ( (($match = either('ordinary')) == null) and (($match = search_match($ordinaries)) == null)  ) {
     restore($state); // Not found anything, backtrack and exit
     return null;
   } // else

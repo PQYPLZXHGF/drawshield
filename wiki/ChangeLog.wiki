@@ -8,6 +8,20 @@ Versions are numbered in four levels, as follows:
   # The sub-version (a letter), changes when the actual program code is altered in some minor way
   # The sub-sub-version, changes when the program data is modified or added to, for example when a new charge is added or a placement corrected.
   
+=Version 2.2c1=
+
+==Corrections==
+
+Fixed positions for charges *on a pale* (issue 44)
+
+==New Features==
+
+Add synonyms for crosses mounted on steps (issue 44)
+
+==Internal Changes==
+
+Consolidated all the parsing information for charges into 4 arrays, which are cached on the server for improved performance.
+
 =Version 2.2b1=
 
 ==Corrections==

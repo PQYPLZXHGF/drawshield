@@ -12,18 +12,21 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// cross-crosslet
+// roundel
 
 $charge = array (
 
   'patterns' => array (
-  'cross(es)? crosslets?',
+	  'golpes?' ,
   ),
-  'either' => array ( 'quadrate', ),
 
   'doc' => 'Stuff...',
+
+  'default_colour' => false,
+  
+  // SVG IMPLEMENTATION
+  // Replaced by roundel of appropriate colour in substitution.xslt
+
 );
 
-include ('charges/quadrate/_quadrate.inc');
-  
 ?>

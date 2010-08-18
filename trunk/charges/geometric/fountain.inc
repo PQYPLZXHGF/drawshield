@@ -22,9 +22,12 @@ $charge = array (
   'modifiers' => array (
     array ( NULL, 'barry wavy of # argent ?and azure', 'ignore',    ),
   ),
+  'default_colour' => false,
 
   'doc' => 'Stuff...',
-
+  
+  // SVG IMPLEMENTATION
+  // Replaced with roundel barry wavy of 8 argent and azure by substitution 
 
 )
 

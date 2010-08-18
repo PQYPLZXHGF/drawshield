@@ -32,25 +32,30 @@ $node = null;
       if ( $subdir{0} != '.' and is_dir('../charges/' . $subdir) ) {
         $ddir = opendir('../charges/' . $subdir );
         while ( ($file = readdir($ddir)) != false ) {
-          if ( ($file{0} != '_') and substr( '../charges/' . $subdir . '/' . $file,-4) == '.inc' ) {
+          if ( ($file{0} != '_') and substr($file,-4) == '.inc' ) {
+          	$type = $subdir;
+          	$subtype = substr($file,0,strlen($file)-4);
             $charge = include_charge ( '../charges/' . $subdir . '/' . $file );
             $either_type = array_key_exists ( 'either', $charge ) ? $charge['either'] : array();
             if ( count($either_type) > 0) {
               if ( isset($either_type[1]) ) {
-                $type_spec = $either_type[1] . ':' . $subdir;
+                $type = $either_type[1] . ':' . $subdir;
                 $category = 'either';
               } else {
-                $type_spec = $subdir;
                 $category = 'charge';
               }
               foreach ( $charge['patterns'] as $pattern ) 
-                $either[] = array ( $file, $pattern, $type_spec, $category );
+                $either[] = array ( $subtype, $pattern, $type, $category );
             } else {
-              foreach ( $charge['patterns'] as $pattern ) 
-                $charges[] = array ( $file, $pattern, $subdir );
+              foreach ( $charge['patterns'] as $pattern ) {
+              	if ( array_key_exists('default_colour', $charge ))
+                  $charges[] = array ( $subtype, $pattern, $type, $charge['default_colour'] );
+              else
+                  $charges[] = array ( $subtype, $pattern, $type );
+              }
             }
             if ( array_key_exists( 'modifiers' , $charge ) )
-              $modifiers[$file] = $charge['modifiers'];
+              $modifiers[$subtype] = $charge['modifiers'];
           }
         }
       }
@@ -68,4 +73,14 @@ $node = null;
   fclose($fp);
   unset ( $either );
   
+ /* Fudge if web server can't write to folder, open in web browser
+ header("Content-Transfer-Encoding: text");
+ header('Content-Type: text/plain');
+ echo "charge_list\n";
+ echo serialize($charges) . "\n";
+ echo "modifier_list\n";
+ echo serialize($modifiers) . "\n";
+ echo "either_list\n";
+ echo serialize($either) . "\n";   */
 ?>
+ 

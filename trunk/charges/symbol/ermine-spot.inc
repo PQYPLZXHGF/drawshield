@@ -28,7 +28,7 @@ $charge = array (
             <circle r="10" cx="36" cy="55"/>
             <circle r="10" cx="74" cy="55"/>
             <path d="M 53 60 A 50 210 0 0,1 10,180 A 60 40 0 0,0 45,170 A 30 40 0, 0,0 55 200 A 30 40 0, 0,0 62,170 A 60 40 0 0,0 101, 180 A 50 210 0 0,1 57 60 Z"/>',
-  'default' => '0x050505',
+  'default_colour' => 'sable',
   'orient_to_ordinary' => true,
 
 )

@@ -23,10 +23,8 @@ $charge = array (
 
   'doc' => 'Stuff...',
 
-  'body' => '<path d="M125,0v50h50v125h-125v-50h-50v150h50v-50h125v125h-50v50h150v-50h-50v-125h125v50h50v-150h-50v50h-125v-125h50v-50z" />',
-  'width' => 400,
-  'height' => 400,
+);
 
-)
-
+include ('charges/quadrate/_quadrate.inc');
+  
 ?>

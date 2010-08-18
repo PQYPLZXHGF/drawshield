@@ -46,7 +46,7 @@
     </charge>
   </xsl:template>
   <!-- Named Roundels -->
-  <xsl:template match="charge[@type='roundel']">
+  <xsl:template match="charge[@type='named-roundel']">
     <charge type="geometric" subtype="roundel" number="{@number}">
       <tincture>
         <colour>

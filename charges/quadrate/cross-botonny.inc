@@ -22,15 +22,8 @@ $charge = array (
   'either' => array ( 'quadrate', ),
 
   'doc' => 'Stuff...',
+);
 
-  'body' => '<polygon points="175,20 175,175 20,175 20,225 175,225 175,380 225,380 225,225 380,225 380,175 225,175 225,20" />
-      <circle cx="200" cy="35" r="35"/><circle cx="170" cy="80" r="35"/><circle cx="230" cy="80" r="35"/>
-      <circle cx="35" cy="200" r="35"/><circle cx="80" cy="170" r="35"/><circle cx="80" cy="230" r="35"/>
-      <circle cx="365" cy="200" r="35"/><circle cx="320" cy="170" r="35"/><circle cx="320" cy="230" r="35"/>
-      <circle cx="200" cy="365" r="35"/><circle cx="170" cy="320" r="35"/><circle cx="230" cy="320" r="35"/>',
-  'width' => 400,
-  'height' => 400,
-
-)
+include ('charges/quadrate/_quadrate.inc');
 
 ?>

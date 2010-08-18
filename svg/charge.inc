@@ -49,7 +49,7 @@ function makeCharge($charge, $mods = array() ) {
 
 function includeCharge( &$node ) {
   $charge = array ();
-  include ( 'charges/' . $node->get_attribute('type') . '/' . $node->get_attribute('subtype') );
+  include ( 'charges/' . $node->get_attribute('type') . '/' . $node->get_attribute('subtype') . '.inc' );
   return $charge;
 }
 

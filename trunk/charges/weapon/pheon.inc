@@ -18,6 +18,7 @@ $charge = array (
 
   'patterns' => array (
   'arrow heads?',
+  '(f|ph)eons? ?heads?',
   ),
   'modifiers' => array (
     array ( 'up', 'points? upwards?', 'mod', 'pointing',    ),
@@ -50,6 +51,10 @@ $charge = array (
       <path d="m 253,170 -22,40"  fill="none" stroke="#000000" stroke-width="2" />',
   'orient_to_ordinary' => true,
 
-)
+);
+
+if ( $node != null ) {
+  if ( get_mod($node,'pointing') == 'up' ) $node->append_child(make_mod('inverted'));
+}
 
 ?>

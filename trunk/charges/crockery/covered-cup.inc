@@ -18,6 +18,7 @@ $charge = array (
 
   'patterns' => array (
   'covered (chalice|cup)s?',
+  '?standing (chalice|cup)s? covered',
   ),
 
   'doc' => 'Stuff...',

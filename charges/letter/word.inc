@@ -19,6 +19,11 @@ $charge = array (
   'patterns' => array (
   'words?',
   ),
+  
+  'modifiers' => array (
+    array ( null, '*', 'mod', 'item' ),
+  ),
+  
 
   'doc' => 'Stuff...',
 );

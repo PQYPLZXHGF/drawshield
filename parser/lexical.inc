@@ -197,7 +197,7 @@ function check_match2 ( $match_string ) {
       $matched_word = $words[$t_word];
       $t_word += 1;
     // Note search is case insensitive
-    } elseif ( $regex == '*' or ( $regex == '#' and (($number = match_number( $count, $t_word )) != null) ) or ($res = preg_match ( '/^' . $regex . '$/i',  $words[$t_word] ))) {
+    } elseif ( ( $regex == '#' and (($number = match_number( $count, $t_word )) != null) ) or ($res = preg_match ( '/^' . $regex . '$/i',  $words[$t_word] ))) {
       $t_word += $count; // Got a match, move on
       if ( $number ) $matched_number = $number;
     } elseif ( ! ($optional)) {

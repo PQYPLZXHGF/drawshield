@@ -12,7 +12,6 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-
 function between(&$mods, $found_between = false) {
   global $dom;
     
@@ -33,51 +32,7 @@ function between(&$mods, $found_between = false) {
   }
 }
 
-
-// TODO can say e.g. reed bundles. How this handled?
-// TODO should generate bundles of n, not be fixed
-
-function get_collection ( &$node, &$mods ) {
-
-  $collect_words = array (
-    // subtype, tokens, type, default subnum
-    array ( 'sheaf-arrows', 'arrows?', 'weapon', 3 ),
-    array ( 'bundle-reeds', 'reeds?', 'plant', 3 ),
-  );
-  
-  $subnum = number();
-
-  if ( ($match = search_match($collect_words)) != null ) {
-    if ($subnum == null) $subnum = $match[3];
-    $node->set_attribute('subtype', $match[0]);
-    $node->set_attribute('type', $match[2]);
-    $mods[] = make_mod('subnum',$subnum);  
-    // Prepare the charge function (if it exists)
-    if ( file_exists('parser/charges/' . $match[2] . '.inc') ) {
-      $chg_func = 'charge_' . $match[2];
-      if ( ! function_exists($chg_func) ) {
-        require_once ( 'parser/charges/' . $match[2] . '.inc' );
-      }
-      $features = $chg_func($match[0]);
-  }
-    
-  } else {
-    raise_error ( 'unknown bundle item' );
-  }
-}
-
-function get_next_word ( &$node, &$mods ) {
-  global $words, $cur_word;
-  
-  if ($cur_word < sizeof($words)) {
-    $mods[] = make_mod('item',$words[$cur_word]);
-    $cur_word += 1;
-  } else {
-    raise_error ( 'Missing letter or digit' );
-  }
-}
-
-  function get_features ( &$features, &$node, &$mods, &$subtype_features ) {
+function get_features ( &$features, &$node, &$mods ) {
   global $dom;
   
 /*  if ( $features != null and !is_array($features) ) {
@@ -87,31 +42,40 @@ function get_next_word ( &$node, &$mods ) {
   
   // Get any feature colours
   while ( $features ) {
-    if ( ($match2 = search_match($features)) == null ) break;
-    switch ( $match2[2] ) {
+    if ( ($match = search_match($features)) == null ) break;
+    switch ( $match[2] ) {
       case 'feature':
         $feature = $dom->create_element('feature');
-        $feature->set_attribute('name', $match2[0]);
+        $feature->set_attribute('name', $match[0]);
         $feature->append_child(tincture(true));
         $node->append_child($feature);
         break;
       case 'mod':
-        $mods[] = make_mod ( $match2[3], $match2[0] );
-        break;
-      case 'subtype':
-        $subtype = $match[0];
-        $node->set_attribute('subtype',$subtype);
-        if ( array_key_exists ($subtype, $subtype_features)) {
-          // We allow one level of indirection
-          if ( !is_array($subtype_features[$subtype])) $subtype = $subtype_features[$subtype];
-          $features = array_merge($features,$subtype_features[$subtype]);
-        }
+        $mods[] = make_mod ( $match[3], $match[0] );
         break;
       case 'ignore':
         break;
     }
     comma();
     andd();
+    if ($match[1] == '*') break; // Only match wildcard once
+  }
+}
+
+function bundle ( &$mods ) {
+  static $bundle_words = array (
+    array ( 'bundle', '(sheaf|sheave|bundle|tuft)s?', 3 ),
+    array ( 'bundle', 'pair', 2), // just to demonstrate different defaults really....
+  );
+  static $of_words = array (
+    array ( true, 'of', ),
+  );
+  
+  if ( ($match = search_match($bundle_words)) != null ) {
+    $num = 0;
+    if ( search_match($of_words) != null ) $num = number();
+    if ( $num < 1) $num = $match[2];
+    $mods[] = make_mod ( $match[0], "$num" );
   }
 }
 
@@ -143,6 +107,9 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     }
   }
   
+  // Look for grouping words (bundle of etc.)
+  bundle( $mods );
+  
   $tokNum = tokNum();
   if ( (($match = either('charge')) == null) and (($match = search_match($charge_list)) == null ) ) {
     restore($state);
@@ -156,23 +123,14 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   $node->set_attribute('subtype', $subtype);
   $node->set_attribute('tokNum',$tokNum);
   $node->set_attribute('number',"$num");
+  // Look for grouping words again
+  bundle( $mods );
   // Get the set of features, (if any)
   if ( array_key_exists($subtype, $modifier_list ))
     $features = $modifier_list[$subtype];
   
-  // Special (awkward!) cases
-  switch ( $type ) {
-    case 'collect': 
-      get_collection($node, $mods);
-      break;
-    case 'letter':
-    case 'digit':
-    case 'word':
-      get_next_word($node, $mods);
-      break;
-  }
   comma();
-  get_features ( $features, $node, $mods, $subtype_features );
+  get_features ( $features, $node, $mods );
   comma();
   postfix($mods);
   orientation($mods);

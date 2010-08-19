@@ -21,7 +21,11 @@ $charge = array (
   ),
 
   'doc' => 'Stuff...',
-
+  
+  'modifiers' => array (
+    array ( null, '*', 'mod', 'item' ),
+  ),
+  
 );
 
 if ( $node != null ) {

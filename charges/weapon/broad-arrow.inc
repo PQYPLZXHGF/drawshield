@@ -34,6 +34,9 @@ $charge = array (
           <path d="M 22,57.8 94.4,152" fill="none" stroke="#000000" stroke-width="2" />',
   'orient_to_ordinary' => true,
 
-)
+);
 
+if ( $node != null ) {
+  if ( get_mod($node,'pointing') == 'up' ) $node->append_child(make_mod('inverted'));
+}
 ?>

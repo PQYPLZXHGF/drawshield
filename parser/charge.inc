@@ -158,7 +158,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   if ( $tinc ) $node->insert_before($tinc,$node->first_child());
   comma();
 
-  get_features ( $features, $node, $mods, $subtype_features );
+  get_features ( $features, $node, $mods );
   
   foreach($mods as $mod) $node->append_child($mod);
   

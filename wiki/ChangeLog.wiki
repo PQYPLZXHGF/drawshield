@@ -14,13 +14,18 @@ Versions are numbered in four levels, as follows:
 
 Fixed positions for charges *on a pale* (issue 44)
 
+You can now use *bundle* (*of number*) charges with any charge, although it is usually ignored (except for
+*arrows* and *reeds* at present), you can also say things *reed bundles*.
+
 ==New Features==
 
 Add synonyms for crosses mounted on steps (issue 44)
 
 ==Internal Changes==
 
-Consolidated all the parsing information for charges into 4 arrays, which are cached on the server for improved performance.
+All charge description code has been re-written to make it easier to add new charges. All the information about to a
+charge is now held in a single file. A script has been written to help convert inkscape drawings into the required
+form automatically. I am working on another script that will automatically generate wiki documentation about the charges.
 
 =Version 2.2b1=
 

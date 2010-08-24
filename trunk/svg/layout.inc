@@ -239,6 +239,11 @@ function PlaceCharge ( $node,  // images
           $temp = $Xflex; $Xflex = $Yflex; $Yflex = $temp;
         }
         break;
+      case 'erect':
+        $retval = "<g transform=\"translate($chargeY,0) rotate(90)\"><desc>erect charge</desc>$retval</g>\n";
+        $temp = $chargeX; $chargeX = $chargeY; $chargeY = $temp;
+        $temp = $Xflex; $Xflex = $Yflex; $Yflex = $temp;
+        break;
     }
   }
 

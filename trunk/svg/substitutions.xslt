@@ -26,10 +26,17 @@
     <modifier name="orientation" param="fesswise" />
   </xsl:template>
   <!-- We implement concentric annulets as a single charge of "number" rings -->
-  <xsl:template match="charge[@subtype='annulet']">
-    <charge type="annulet" subtype="annulet" number="1">
+  <xsl:template match="charge[@subtype='annulet' and modifier/@name='concentric']">
+    <charge type="geometric" subtype="annulet" number="1">
       <xsl:apply-templates select="node()[not(self::modifier/@name='concentric')]" />
       <modifier name="concentric" param="{@number}"/>
+    </charge>
+  </xsl:template>
+  <!-- icicles (are inverted gouttes) -->
+  <xsl:template match="charge[@subtype='icicle']">
+    <charge type="{@type}" subtype="goutte" number="{@number}">
+      <xsl:apply-templates select="*"/>
+      <modifier name="inverted" />
     </charge>
   </xsl:template>
   <!-- fountain -->
@@ -44,6 +51,39 @@
       </tincture>
       <xsl:apply-templates select="node()[not(self::tincture)]" />
     </charge>
+  </xsl:template>
+  <!-- ford -->
+  <xsl:template match="ordinary[@subtype='ford']">
+    <ordinary type="base" subtype="base" number="1" linetype="none">
+      <tincture>
+        <division type="bar" subtype="barry" linetype="wavy">
+          <tincture>
+            <colour name="azure"/>
+          </tincture>
+          <tincture>
+            <colour name="argent"/>
+          </tincture>
+          <modifier name="ofnum" param="4"/>
+        </division>
+      </tincture>
+    </ordinary>
+  </xsl:template>
+  <!-- humets (are bars couped) -->
+  <xsl:template match="ordinary[@subtype='humet' and @number>'1']">
+    <ordinary subtype="bars-couped" type="bar" linetype="{@linetype}" number="{@number}">
+      <xsl:apply-templates select="*"/>
+    </ordinary>
+  </xsl:template>
+  <xsl:template match="ordinary[@subtype='humet' and @number='1']">
+    <ordinary subtype="bar-couped" type="bar" linetype="{@linetype}" number="{@number}">
+      <xsl:apply-templates select="*"/>
+    </ordinary>
+  </xsl:template>
+  <!-- bar sinister (is really a bend sinister) -->
+  <xsl:template match="ordinary[@subtype='bar' and modifier/@name='sinister']">
+    <ordinary type="bend" subtype="bend" number="{@number}" linetype="{@linetype}">
+      <xsl:apply-templates select="*"/>
+    </ordinary>
   </xsl:template>
   <!-- Named Roundels -->
   <xsl:template match="charge[@type='named-roundel']">

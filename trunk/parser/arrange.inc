@@ -156,6 +156,7 @@ function orientation(&$mods) {
     array ( 'bendwise',      'bendw(ise|ays)', ),
     array ( 'fesswise',      'fessw(ise|ays)', ),
     array ( 'palewise',      'palew(ise|ays)', ),
+    array ( 'erect',         'erect(ed)?')
   );
 
   if ( ($match = search_match($orient_words) ) != null )

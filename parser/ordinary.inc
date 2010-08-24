@@ -70,26 +70,22 @@ function ordinary() {
   static $ordinaries = array (
     // Common
     array ( 'grid',         'grid',                         'common' ),
-  //  array ( 'diamond',      'diamond',                      'common' ),
-  //  array ( 'square',       'square',                      'common' ),
-  //  array ( 'octogon',      'octogon',                      'common' ),
     array ( 'another',		'another',                      'common' ),
     array ( 'saltire',      'saltire',                      'common' ),
     array ( 'base',         'base',                         'base' ),
-    array ( 'ford',         'ford',                         'base' ),
+    array ( 'ford',         'ford',                         'base', false ),
     array ( 'pale',         'pale',                         'pale' ),
     array ( 'fess',         'fesse?',                       'fess' ),
   //  array ( 'pile',         'pile',                         'common' ),
     array ( 'quarter',      'quarter',                      'common'  ),
     array ( 'gore',         'gore',                         'common'  ),
     array ( 'bend',         'bend',                         'bend' ),
-    array ( 'bend',         'bar sinister',                 'bend', 'sinister' ),
     array ( 'tierce',       'tierce',                       'tierce' ),
     array ( 'label',        'label',                        'cadency' ),
     array ( 'chief',        'chief',                         'chief' ),
     array ( 'chief-triangular', 'chief-triangular',          'chief' ),
     // Diminutives
-    array ( 'bar',          'humets?',                        'bar', 'couped' ),
+    array ( 'humet',          'humets?',                        'bar', ),
     array ( 'palet',        'pall?et',                        'bar' ),
     array ( 'palets',        'pall?ets',                        'bar' ),
     array ( 'bendlet',      'bendlet',                      'bar' ),
@@ -131,18 +127,22 @@ function ordinary() {
   );
   // TODO Allow escutcheon to be followed by whole shield if overall?
   static $common_variants = array (
-  array ( 'couped', '(couped|humetty)' ),
-  array ( 'couped-base', 'couped ?in base'  ),
-  array ( 'couped-chief', 'couped ?in chief' ),
-  array ( 'couped-dexter', 'couped ?in dexter' ),
-  array ( 'couped-sinister', 'couped ?in sinister' ),
+  array ( 'couped', '(couped|humetty|alese)' ),
+  array ( 'couped-base', '(couped|humetty|alese) ?in base'  ),
+  array ( 'couped-chief', '(couped|humetty|alese) ?in chief' ),
+  array ( 'couped-dexter', '(couped|humetty|alese) ?in dexter' ),
+  array ( 'couped-sinister', '(couped|humetty|alese) ?in sinister' ),
   array ( 'lozengy', 'lozengy' ),
   array ( 'compony', '(compony|gobone|gobonated)' ),
   array ( 'counter-compony', 'counter (compony|gobone|gobonated)'),
   );
   static $between = array ( array ( true, '(between|inter)' ),);
   static $on_word = array ( array ( true, 'on'), );
-  static $charge_with = array ( array ( true, 'charged with'  ), );
+  static $charge_with = array ( 
+    array ( 'on', 'charged with'  ),
+    array ( 'onfirst', 'on each ?of ?the first'  ),
+    array ( 'onlast', 'on each ?of ?the last'  ),
+  );
   static $within = array ( array ( true, '(within|inside)' ), );
   static $dep_with = array ( array ( 'depressed', '(debruised|depressed) (with|by|of)', ), );
   
@@ -169,9 +169,7 @@ function ordinary() {
   $node->set_attribute('subtype',$ord_type);
   $node->set_attribute('number',$ord_num);
   $node->set_attribute('tokNum',$tokNum);
-  $node->append_child($dom->create_element('tincture'));
-  if ( isset($match[3]) ) $node->append_child(make_mod($match[3]));
-  if ( $depressed ) $node->append_child(make_mod('depressed'));
+  if ( $depressed ) $mods[] = make_mod('depressed');
 
   $mods = array_merge($mods, position_mods()); // for "bend sinister (angled).."
   if ( ($variant = search_match($common_variants)) != null ) {
@@ -193,25 +191,22 @@ function ordinary() {
   
   // Now look for colours, linetype and shape modifiers
   if ( $ord_linetype == 'none' ) $ord_linetype = linetype();
-  // Get as many tinctures as there are empty tincture elements
-  foreach ( $node->child_nodes() as $child ) {
-    if ( $child->tagname() == 'tincture' and !$child->has_child_nodes() ) {
-      $node->replace_child(tincture(true),$child);
-    }
-  }
+  $node->set_attribute('linetype', $ord_linetype);
+  if ( isset($match[3]) and $match[3] === false )
+    proper();
+  else
+    $node->append_child(tincture(true));
 
   $mods = array_merge($mods,shape_mods());
-
-  // Add things to the node so far
-  $node->set_attribute('linetype', $ord_linetype);
 
   // Does this ordinary go "between" some charges?
   if ( $inside or search_match($between) != null )
     between($mods,true); // have already found between word
       
   // Now look for extras
-  if ( $found_on or search_match($charge_with) != null ) {
-    $on_ord = make_mod('on');
+  $on_type = 'on';
+  if ( $found_on or ($on_type = search_match($charge_with)) != null ) {
+    $on_ord = make_mod($on_type[0]);
     if ( $ord_type == 'chief' or $ord_type == 'canton' ) {
       $items = ordinary();
       if ( $items == null ) $items = charge(false);

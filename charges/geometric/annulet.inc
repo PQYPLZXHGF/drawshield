@@ -25,7 +25,27 @@ $charge = array (
 
   'doc' => 'Stuff...',
 
+);
 
-)
+if ($node != null) {
+  $num = get_mod($node, 'concentric');
+  if ( $num == 0 ) $num = 1;
+  $space = min (40, (225 / $num));
+  $width = $space * 0.7;
+  $gap = $space * 0.3;
+  $body = '';
+  for ( $i = 0; $i < $num; $i++ ) {
+    $outer = $i * ($width + $gap);
+    $inner = $outer + $width;
+    $out_diam = 500 - ($i * ($width + $gap) * 2);
+    $out_rad = $out_diam / 2;
+    $in_diam = $out_diam - $width - $width;
+    $in_rad = $in_diam / 2;
+    $body .= "<path d=\"M $outer,250 a $out_rad,$out_rad 0,0,1 $out_diam,0 a $out_rad,$out_rad 0,0,1 -$out_diam,0 z M $inner,250 a $in_rad,$in_rad 0,0,1 $in_diam,0 a $in_rad,$in_rad 0,0,1 -$in_diam,0 z\" fill-rule=\"evenodd\" />";
+  }
+  $charge['body'] = $body;
+  $charge['width'] = 500;
+  $charge['height'] = 500;
+}
 
 ?>

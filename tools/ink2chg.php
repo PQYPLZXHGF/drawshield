@@ -62,16 +62,16 @@ foreach ( $xml->g as $group ) {
 	  }
 	  $body .= "      ',\n";
 	} else {
-	  $temp = "      '" . $group['id'] . "' => '\n";
+	  $temp = "      '" . $group['id'] . "' => array (\n        'body' => '\n";
 	  foreach ( $group->path as $path ) {
 	    $temp .= "        " . get_path($path);
 	  }
-	  $temp .= "      ',\n";
+	  $temp .= "      '),\n";
 	  $features[] = $temp;
 	  $modifiers[] = $group['id'];
 	}
 }
-$f = fopen('charge.php','w');
+$f = fopen('charge.inc','w');
 fwrite($f, $header . "\n\n");
 fwrite($f, "\$charge = array ( \n" );
 fwrite($f, "  'patterns' => array (\n  'PATTERN',\n  ),\n" );
@@ -87,7 +87,7 @@ fwrite ($f, $body );
 if ( count($features) > 0 ) {
   fwrite ( $f, "    'features' => array (\n" );
   foreach ($features as $feature) {
-    fwrite ($f, $feature);
+    fwrite ($f, "      $feature" );
   }
   fwrite($f, "      ),\n" );
 }

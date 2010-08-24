@@ -63,6 +63,13 @@ function division( $depth = 1 ) {
     array ( 'barry-bendy-sinister','barry bendy sinister ?lozengy' , 'pattern' ),
     array ( 'barry-indented-oio', 'barry indented ?the (one|1) in the other', 'pattern' ),
   );
+  
+  static $charges_on = array ( 
+    array ( 'oneach', 'charged with'  ),
+    array ( 'oneach', 'on each'  ),
+    array ( 'onfirst', 'on each ?of ?the first'  ),
+    array ( 'onlast', 'on each ?of ?the last'  ),
+  );
 
   $node = null;
   $tokNum = toknum();
@@ -111,8 +118,17 @@ function division( $depth = 1 ) {
         }
       }
     }
-    // See if there is a second division
-    //if ( ($depth == 1) and (($div2 = division(2)) != null) ) $node->append_child($div2);
+    if ( ($on_type = search_match($charges_on)) != null ) {
+      $on_div = make_mod('on');
+      if ( ($items = charge(false)) == null ) {
+        $items = $dom->create_element('missing');
+        raise_error('Nothing to go "on" the division (' . $match[0] .')' );
+      }
+      $pos = make_mod('position', $on_type[0]);
+      $items->append_child($pos);
+      $on_div->append_child($items);
+      $node->append_child($on_div);
+    }
   }
   return $node;
 }

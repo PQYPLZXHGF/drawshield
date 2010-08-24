@@ -55,10 +55,13 @@ function makeDivision( $node, $counter = false ) {
   }
   $retval = "$div1\n$div2\n$div3\n";
   if ( !$counter ) {
-    $secondDiv = $node->last_child(); // TODO Do not rely on node position here?
-    if ( $secondDiv->node_name() == 'division' ) {
-      $secondData = makeDivision( $secondDiv );
-      $retval .= $secondData[2];
+    foreach ( $node->children() as $child ) {
+      if ( $child->node_name() == 'division' ) {
+        $secondData = makeDivision( $secondDiv );
+        $retval .= $secondData[2];
+      }
+      elseif ( $child->node_name() == 'modifier' and substr( $child->get_attribute('name'), 0, 2 ) == 'on' )
+        $retval .= makeCharge( $child->first_child() );
     }
   }
   return $retval;

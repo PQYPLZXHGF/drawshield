@@ -21,7 +21,7 @@ $charge = array (
   'locks? ?of hair',
   ),
 
-  'doc' => 'Stuff...',
+  'doc' => 'An inverted goutte.',
 );
 
 ?>

@@ -12,122 +12,191 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-function format ( $regex ) {
-  $retvals = array();
-  $retvals[] = '';
-  
-  $words = explode(' ', $regex );
+
+function get_mod($node,$what) { return null; }
+
+function get_main_name($patterns) {
+  $pattern = $patterns[0];
+  $words = explode(' ',$pattern);
+  $retval = '';
   foreach ( $words as $word ) {
-    $t_words = array();
-    $t_words[] = '';
-    if ( $word{0} == '?' ) { // optional word
-      $retcount = count($retvals);
-      for ( $i = 0; $i < $retcount; $i++ ) {
-        $retvals[] = $retvals[$i] . substr($word,1) . ' ';
-      }
-    } else {
-        $len = strlen($word);
-        for ( $i = 0; $i < $len; $i++ ) {
-          if ( $word{$i} != '(' and $i <= ($len - 2) and $word{$i+1} == '?' ) {
-            for ( $j = 0; $j < count($t_words); $j += 1 ) 
-              $t_words[$j] .= '(' . $word{$i} . ')';
-            $i += 1;
-          } elseif ( $word{$i} == '(' ) {
-            $i += 1;
-            $temp_a = array();
-            $temp = '';
-            while ( $i < $len ) {
-              if ( $word{$i} == '|' ) {
-                $temp_a[] = $temp;
-                $temp = '';
-              } elseif ( $word{$i} == ')' ) {
-                $temp_a[] = $temp;
-                break;
-              } else 
-                $temp .= $word{$i};
-              $i += 1;
-            }
-            $retcount = count($t_words);
-            for ( $k = 1; $k < count($temp_a); $k += 1 )
-              for ( $l = 0; $l < $retcount; $l += 1 )
-                $t_words[] = $t_words[$l] .= $temp_a[$k];
-            for ( $l = 0; $l < $retcount; $l += 1 )
-              $t_words[$l] .= $temp_a[0];
-          } else {
-            for ( $j = 0; $j < count($t_words); $j += 1 ) 
-             $t_words[$j] .= $word{$i};
-          }
-        }
-      }
-      $retcount = count($retvals);
-      for ( $j = 1; $j < count($t_words); $j += 1 ) 
-        for ( $i = 0; $i < $retcount; $i++ )
-          $retvals[] = $retvals[$i] .= ' ' . $t_words[$j];     
-      for ( $i = 0; $i < $retcount; $i++ ) {
-        $retvals[$i] .= ' ' . $t_words[0];
-    }
-    $retcount = count($retvals);
-    for ( $i = 0; $i < $retcount; $i++ ) {
-      $retvals[$i] .= ' ';
-    }
+    if ( $word{0} == '?' ) continue;
+    $word = preg_replace('/\?/','',$word);
+    $word = preg_replace('/\|.*?\)/',')',$word);
+    $word = preg_replace('/\((.*?)\)/','\1',$word);
+    $retval .= $word . ' ';
   }
-  return $retvals;
+  $retval = trim($retval);
+  return $retval;
 }
 
-  define('CHARGE_DATA', 'parser/charge_data' );
-  define('SUBTYPE_FEATURES', 'parser/subtype_features' );
-  define('TYPE_FEATURES', 'parser/type_features' );
-
-  $charges = null;
-  $subtype_features = null;
-  $type_features = null;
-  
-  $table = array();
-  $output = '';
-
-  if ( $charges == null ) {
-    if ( !file_exists (CHARGE_DATA . '.dat') || filemtime(CHARGE_DATA . '.inc') >= filemtime(CHARGE_DATA . '.dat') ) {
-      require_once CHARGE_DATA . '.inc';
+function get_alt_names($patterns, $main = '') {
+  $names = array();
+  foreach ($patterns as $pattern) {
+    $cur_names = array ( '' );
+    $words = explode ( ' ', $pattern );
+    foreach ( $words as $word ) {
+      $word = preg_replace('/\?/','',$word);
+      $cur_words = array ( '' );
+      $in_brackets = false;
+      $temp = '';
+      for ( $i = 0; $i < strlen($word); $i++ ) {
+        if ( $word{$i} == '(' ) {
+          $in_brackets = true;
+          $i++;
+        }
+        elseif ( $word{$i} == ')' ) {
+          $alts = explode('|',$temp);
+          $orig_num_words = count($cur_words);
+          for ( $k = 1; $k < count($alts); $k++ ) {
+            for ( $j = 0; $j < $orig_num_words; $j++ )
+              $cur_words[] .= $cur_words[0] .  $alts[$k];
+          }
+          for ( $j = 0; $j < $orig_num_words; $j++ )
+            $cur_words[$j] .= $alts[0];
+          $temp = '';
+          $in_brackets = false;
+          $i++;
+        }
+        if ( $in_brackets )
+          $temp .= $word{$i};
+        elseif ( $i < strlen($word))
+          for ( $j = 0; $j < count($cur_words); $j++ )
+            $cur_words[$j] .= $word{$i};
+      }
+      $orig_num_names = count($cur_names);
+      for ( $i = 1; $i < count($cur_words); $i++ )
+       for ( $j = 0; $j < $orig_num_names; $j++ )
+         $cur_names[] = $cur_names[0] . ' ' . $cur_words[$i];
+      for ( $i = 0; $i < $orig_num_names; $i++ )
+        $cur_names[$i] .= ' ' . $cur_words[0];
     }
-    $charges = unserialize(file_get_contents('parser/charge_data.dat'));
+    $names = array_merge($names, $cur_names);
   }
-  if ( $subtype_features == null ) {
-    if ( !file_exists (SUBTYPE_FEATURES . '.dat') || filemtime(SUBTYPE_FEATURES . '.inc') >= filemtime(SUBTYPE_FEATURES . '.dat') ) {
-      require_once SUBTYPE_FEATURES . '.inc';
+  for ( $i = 0; $i < count($names); $i++ ) {
+    $names[$i] = trim($names[$i]);
+    if ( $names[$i] == $main ) {
+      $names[$i] = '';
+      continue;
     }
-    $subtype_features = unserialize(file_get_contents(SUBTYPE_FEATURES.'.dat'));
   }
-  if ( $type_features == null ) {
-    if ( !file_exists (TYPE_FEATURES . '.dat') || filemtime(TYPE_FEATURES . '.inc') >= filemtime(TYPE_FEATURES . '.dat') ) {
-      require_once TYPE_FEATURES . '.inc';
-    }
-    $type_features = unserialize(file_get_contents(TYPE_FEATURES.'.dat'));
-  }
-  foreach ( $charges as $charge ) {
-    $table[$charge[0]] = array ( $charge[1], $charge[2] );
-  }
-  ksort($table);
-  $cur_letter = ' ';
-  foreach($table as $key => $item) {
-    $this_letter = strtoupper($key{0});
-    if ( $this_letter != $cur_letter ) {
-      $output .= "\n==" . $this_letter . "==\n\n";
-      $cur_letter = $this_letter;
-    }
-    $output .= $key . "\n";
-    $variants = array();
-    $regexs = explode ('/',$item[0]);
-    foreach ( $regexs as $regex ) 
-      $variants += format($regex);
-    foreach ($variants as $variant )
-      $output .= "         $variant \n";
-    $output .= "\n";
-  }
+  return $names;
+}
 
+$node = null;
+$output = '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head><title>Docs</title></head>
+<body>
+';
 
-header("Content-Transfer-Encoding: text");
-header('Content-Type: text/plain');
-echo 'hello world';
-echo $output;
+$rows = array();
+$charges = array();
+// Read in the parsing code
+$dir = opendir('../charges');
+while ( ($subdir = readdir($dir)) != false ) {
+  if ( $subdir{0} != '.' and is_dir('../charges/' . $subdir) ) {
+    $ddir = opendir('../charges/' . $subdir );
+    while ( ($file = readdir($ddir)) != false ) {
+      if ( ($file{0} != '_') and substr($file,-4) == '.inc' ) {
+        $this_row = '<tr>';
+        $type = $subdir;
+        $subtype = substr($file,0,strlen($file)-4);
+        $charge = array();
+        include '../charges/' . $subdir . '/' . $file;
+        $main_name = get_main_name($charge['patterns']);
+        $id = preg_replace ( '/ /', '_', $main_name );
+        $features = array();
+        $others = array();
+        if ( array_key_exists( 'modifiers' , $charge ) ) {
+          foreach ( $charge['modifiers'] as $mod ) {
+            $mod_pattern =  $mod[1];//preg_replace('/\?/', '', $mod[1] );
+            // $mod_pattern = preg_replace('/\|/', ' / ', $mod_pattern );
+            if ( $mod[2] == 'feature' )
+              $features[] = $mod_pattern;
+            else
+              $others[] = $mod_pattern;
+          }
+        }
+        // Column 1 - Charge name
+        $this_row .= "<td><p><a id=\"$id\">$main_name</a></p></td>";
+        // Column 2 - Colour features and information
+        $this_row .= '<td>';
+        if ( count($features) ) {
+          $feat_names = get_alt_names($features);
+          foreach ( $feat_names as $feat_name )
+            $this_row .= "<p>$feat_name</p>";
+        }
+        if ( array_key_exists('default_colour',$charge) ) {
+          if ( $charge['default_colour'] == false )
+            $this_row .= '<p>(Charge tincture is fixed)</p>';
+          else
+            $this_row .= '<p>(If no tincture given, charge will be ' . $charge['default_colour'] . ')</p>';
+        }
+        if ( array_key_exists('proper',$charge) )
+          $this_row .= '<p>(Charge tincture may be "proper")</p>';
+        $this_row .= '</td>';
+        // Column 3 - Other modifiers
+        $this_row .= '<td>';
+        if ( count($others) ) {
+          $other_names = get_alt_names($others);
+          foreach ( $other_names as $other_name )
+            $this_row .= "<p>$other_name</p>";
+        } else
+          $this_row .= "<p>&nbsp;</p>";
+        $this_row .= '</td>';
+        // Column 4 - Notes
+        $this_row .= '<td>';
+        if ( array_key_exists('doc',$charge) and $charge['doc'] != 'Stuff...' ) 
+          $this_row .= '<p>' . $charge['doc'] . '</p>';
+        else
+          $this_row .= "<p>&nbsp;</p>";
+        $this_row .= '</td>';
+        // Column 5 - example image
+        if ( array_key_exists('body',$charge) ) {
+          $filename = 'charges/' . $subdir . '/' . substr($file,0,(strlen($file)-4)) . '.svg';
+          $svg = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+          $svg .= '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" baseProfile="full" preserveAspectRatio="xMidYMid meet" height="100px" width="100px" viewBox="0 0 ' . $charge['width'] . ' ' . $charge['height'] . '" >';
+          $svg .= '<g fill="#3F3F3F">';
+          $svg .= $charge['body'];
+          if ( array_key_exists('features', $charge))
+            foreach($charge['features'] as $extra)
+              $svg .= $extra['body'];
+          $svg .= '</g>';
+          $svg .= '</svg>' . "\n";
+          $this_row .= '<td><object type="image/svg+xml" data="data:image/svg+xml;base64,' . base64_encode($svg) . '" height="100" width="100"/></td>';
+        } else
+          $this_row .= "<td><p>&nbsp;</p></td>";
+        $this_row .= "</tr>\n";
+        // Add current row
+        $rows[$main_name] = $this_row;
+        // Add all alternate names
+        $alts = get_alt_names($charge['patterns'],$main_name);
+        foreach ( $alts as $alt )
+          if ( $alt != '' )
+            $rows[$alt] = "<tr><td><p>$alt</p></td><td colspan=\"4\"><p>See <a href=\"#$id\">$main_name</a></p></td></tr>";
+      }
+    }
+  }
+}
+
+ksort($rows);
+$prev = ' ';
+foreach ( $rows as $key => $row ) {
+  if ( $key{0} != $prev ) {
+    if ( $prev != ' ' ) 
+      $output .= "</table>\n";
+    $output .= '<h1>' . strtoupper($key{0}) . "</h1>\n";
+    $output .= "<table border=\"1\">\n";
+    $output .= "<tr><th width=\"120\">Name</th><th width=\"150\">Features</th><th width=\"150\">Other</th><th width=\"110\">Notes</th><th width=\"160\">Example</th></tr>\n";
+  }
+  $prev = $key{0};
+  $output .= $row;
+}
+$output .= "</table>\n";
+$output .= "</body>\n</html>\n";
+file_put_contents('docs.html',$output);
 
 ?>

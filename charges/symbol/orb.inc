@@ -20,8 +20,9 @@ $charge = array (
   '?royal (orb|mound)',
   ),
   'modifiers' => array (
-    array ( 'banded', 'banded|encircled', 'feature',    ),
-    array ( 'crossed', 'crossed/ensigned with a cross', 'feature',    ),
+    array ( 'banded', '(banded|encircled)', 'feature',    ),
+    array ( 'crossed', 'ensigned with a cross', 'feature',    ),
+    array ( 'crossed', 'crossed', 'feature',    ),
   ),
 
   'doc' => 'Stuff...',

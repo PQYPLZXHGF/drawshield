@@ -20,7 +20,7 @@ $charge = array (
 	  'bezants?' ,
   ),
 
-  'doc' => 'Stuff...',
+  'doc' => 'A roundel or',
 
   'default_colour' => false,
   

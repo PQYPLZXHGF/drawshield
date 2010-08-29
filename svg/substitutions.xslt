@@ -17,14 +17,17 @@
 <xsl:strip-space elements="*"/>
   <!-- discard all text nodes -->
   <xsl:template match="text()"/>
-  <!-- ========================= -->
-  <!-- some simple substitutions -->
-  <!-- ========================= -->
+  <!-- ============================================ -->
+  <!-- Orientations that are combinations of others -->
+  <!-- ============================================ -->
   <!-- inbar -->
   <xsl:template match="modifier[@name='arrangement' and @param='inbar']" >
     <modifier name="arrangement" param="inpale" />
     <modifier name="orientation" param="fesswise" />
   </xsl:template>
+  <!-- ============================= -->
+  <!-- Charges drawn as other things -->
+  <!-- ============================= -->
   <!-- We implement concentric annulets as a single charge of "number" rings -->
   <xsl:template match="charge[@subtype='annulet' and modifier/@name='concentric']">
     <charge type="geometric" subtype="annulet" number="1">
@@ -39,7 +42,7 @@
       <modifier name="inverted" />
     </charge>
   </xsl:template>
-  <!-- fountain -->
+  <!-- fountain (is a roundel with wavy bars) -->
   <xsl:template match="charge[@subtype='fountain']" >
     <charge type="geometric" subtype="roundel" number="{@number}">
       <tincture>
@@ -52,7 +55,33 @@
       <xsl:apply-templates select="node()[not(self::tincture)]" />
     </charge>
   </xsl:template>
-  <!-- ford -->
+  <!-- Named Roundels (are roundels of a given colour) -->
+  <xsl:template match="charge[@type='named-roundel']">
+    <charge type="geometric" subtype="roundel" number="{@number}">
+      <tincture>
+        <colour>
+          <xsl:attribute name="name">
+            <xsl:choose>
+              <xsl:when test="@subtype='bezant'">or</xsl:when>
+              <xsl:when test="@subtype='plate'">argent</xsl:when>
+              <xsl:when test="@subtype='hurt'">azure</xsl:when>
+              <xsl:when test="@subtype='torteau'">gules</xsl:when>
+              <xsl:when test="@subtype='pellet'">sable</xsl:when>
+              <xsl:when test="@subtype='pomme'">vert</xsl:when>
+              <xsl:when test="@subtype='golpe'">purpure</xsl:when>
+              <xsl:when test="@subtype='orange'">tenne</xsl:when>
+              <xsl:when test="@subtype='guze'">sanguine</xsl:when>
+            </xsl:choose>
+          </xsl:attribute>
+        </colour>
+      </tincture>
+      <xsl:apply-templates select="node()[not(self::tincture)]" />
+    </charge> 
+  </xsl:template>
+  <!-- ================================ -->
+  <!-- Ordinaries drawn as other things -->
+  <!-- ================================ -->
+  <!-- ford (a base with wavy bars) -->
   <xsl:template match="ordinary[@subtype='ford']">
     <ordinary type="base" subtype="base" number="1" linetype="none">
       <tincture>
@@ -85,36 +114,57 @@
       <xsl:apply-templates select="*"/>
     </ordinary>
   </xsl:template>
-  <!-- Named Roundels -->
-  <xsl:template match="charge[@type='named-roundel']">
-    <charge type="geometric" subtype="roundel" number="{@number}">
-      <tincture>
-        <colour>
-          <xsl:attribute name="name">
-            <xsl:choose>
-              <xsl:when test="@subtype='bezant'">or</xsl:when>
-              <xsl:when test="@subtype='plate'">argent</xsl:when>
-              <xsl:when test="@subtype='hurt'">azure</xsl:when>
-              <xsl:when test="@subtype='torteau'">gules</xsl:when>
-              <xsl:when test="@subtype='pellet'">sable</xsl:when>
-              <xsl:when test="@subtype='pomme'">vert</xsl:when>
-              <xsl:when test="@subtype='golpe'">purpure</xsl:when>
-              <xsl:when test="@subtype='orange'">tenne</xsl:when>
-              <xsl:when test="@subtype='guze'">sanguine</xsl:when>
-            </xsl:choose>
-          </xsl:attribute>
-        </colour>
-      </tincture>
-      <xsl:apply-templates select="node()[not(self::tincture)]" />
-    </charge> 
-  </xsl:template>
   <!-- on ordinary another of the first => voided -->
   <xsl:template match="ordinary/modifier[@name='on' and child::ordinary/@subtype='another']">
   	<modifier name="voided">
   	  <xsl:copy-of select="ordinary/*"/>
   	</modifier>
   </xsl:template>
+  <!-- an orle ermine (is implemented as 12 ermine spots on said orle) -->
+  <xsl:template match="ordinary[@subtype='orle' and tincture/fur/@name='ermine']">
+    <ordinary type="{@type}" linetype="{@linetype}" number="{@number}" subtype="orle">
+      <tincture><colour name="argent"/></tincture>
+      <xsl:apply-templates select="node()[not(self::tincture)]" />
+      <modifier name="on">
+        <charge type="symbol" subtype="ermine-spot" number="12">
+          <tincture>
+            <colour name="sable"/>
+          </tincture>
+        </charge>
+      </modifier>
+    </ordinary>
+  </xsl:template>
+  <!-- Similarly for other ermine type furs on an orle.., -->
+  <xsl:template match="ordinary[@subtype='orle' and tincture/fur/@name='erminois']">
+    <ordinary type="{@type}" linetype="{@linetype}" number="{@number}" subtype="orle">
+      <tincture><colour name="or"/></tincture>
+      <xsl:apply-templates select="node()[not(self::tincture)]" />
+      <modifier name="on"><charge type="symbol" subtype="ermine-spot" number="12">
+          <tincture><colour name="sable"/></tincture></charge>
+      </modifier>
+    </ordinary>
+  </xsl:template>
+  <xsl:template match="ordinary[@subtype='orle' and tincture/fur/@name='ermines']">
+    <ordinary type="{@type}" linetype="{@linetype}" number="{@number}" subtype="orle">
+      <tincture><colour name="sable"/></tincture>
+      <xsl:apply-templates select="node()[not(self::tincture)]" />
+      <modifier name="on"><charge type="symbol" subtype="ermine-spot" number="12">
+          <tincture><colour name="argent"/></tincture></charge>
+      </modifier>
+    </ordinary>
+  </xsl:template>
+  <xsl:template match="ordinary[@subtype='orle' and tincture/fur/@name='pean']">
+    <ordinary type="{@type}" linetype="{@linetype}" number="{@number}" subtype="orle">
+      <tincture><colour name="sable"/></tincture>
+      <xsl:apply-templates select="node()[not(self::tincture)]" />
+      <modifier name="on"><charge type="symbol" subtype="ermine-spot" number="12">
+          <tincture><colour name="or"/></tincture></charge>
+      </modifier>
+    </ordinary>
+  </xsl:template>
+  <!-- ================= -->
   <!-- the default match -->
+  <!-- ================= -->
   <xsl:template match="@*|*" priority="-2" >
     <xsl:copy>
       <xsl:apply-templates select="*|@*" />

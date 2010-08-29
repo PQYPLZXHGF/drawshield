@@ -17,7 +17,7 @@
 $charge = array (
 
   'patterns' => array (
-  'martletts?',
+  'martlett?s?',
   ),
 
   'doc' => 'Stuff...',

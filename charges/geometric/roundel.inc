@@ -17,7 +17,8 @@
 $charge = array (
 
   'patterns' => array (
-  'roundels?|roundles?',
+  'roundels?',
+  'roundles?',
   ),
 
   'doc' => 'Stuff...',

@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function ordinary_chevron($node, &$mods) {
+function ordinary_chevron(&$node, &$mods) {
   $chev_types = array (
     array ( '-rompu', 'rompu' ),
     array ( '-throughout', 'throughout' ),

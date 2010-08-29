@@ -41,7 +41,9 @@ function overall() {
   global $dom;
 
   $overall = array (
-    array ( true, 'overall/over all' ),
+    array ( true, 'overall' ),
+    array ( true, 'over all' ),
+    array ( true, 'all with(in)?' ),
   );
 
   $node = null;

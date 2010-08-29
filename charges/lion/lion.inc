@@ -17,7 +17,8 @@
 $charge = array (
 
   'patterns' => array (
-  'lion(cel)?s?',
+  'lions?',
+  'lioncels?',
   ),
   
   'modifiers' => array (

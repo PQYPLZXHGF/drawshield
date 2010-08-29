@@ -22,6 +22,15 @@ function position_mods() {
     array ( 'inverted', 'inverted', ),
     array ( 'enhanced', 'enhanced', ),
     array ( 'abased', '(abased|abaisse)', ),
+    array ( 'couped', '(couped|humetty|alese)' ),
+    array ( 'couped-base', '(couped|humetty|alese) ?in base'  ),
+    array ( 'couped-chief', '(couped|humetty|alese) ?in chief' ),
+    array ( 'couped-dexter', '(couped|humetty|alese) ?in dexter' ),
+    array ( 'couped-sinister', '(couped|humetty|alese) ?in sinister' ),
+    array ( 'lozengy', 'lozengy' ),
+    array ( 'gemel', 'gemm?ell?(s|ed)?' ),
+    array ( 'gemel', 'gymile(s|d)?' ),
+    array ( 'gemel', 'gimyle(s|d)?' ),
   );
 
   $nodes = array();
@@ -47,6 +56,8 @@ function shape_mods() {
   array ( 'cotised', 'between (2|two) cott?ices',  ),
   array ( 'double-cotised', 'double (cotised|cotticed)',  ),
   array ( 'triple-cotised', '(triple|treble) (cotised|cotticed)',  ),
+  array ( 'compony', '(compony|gobone|gobonated)' ),
+  array ( 'counter-compony', 'counter (compony|gobone|gobonated)'),
   );
 
   $nodes = array();
@@ -88,16 +99,22 @@ function ordinary() {
     array ( 'humet',          'humets?',                        'bar', ),
     array ( 'palet',        'pall?et',                        'bar' ),
     array ( 'palets',        'pall?ets',                        'bar' ),
+    array ( 'endorse',       'endorse',                        'bar' ),
+    array ( 'endorses',      'endorses',                        'bar' ),
     array ( 'bendlet',      'bendlet',                      'bar' ),
     array ( 'bendlet',      'e?scarpe',                     'bar' ),
     array ( 'bendlets',      'bendlets',                      'bar' ),
     array ( 'bendlets',      'e?scarpes',                     'bar' ),
     array ( 'chevronel-braced', 'chevronel (braced|interlaced)' ,    'diminutive' ),
     array ( 'chevronel-braceds', 'chevronels (braced|interlaced)' ,    'diminutive' ),
-    array ( 'bar',          '(bar|barrulet)',                          'bar' ),
-    array ( 'bars',         '(bars|barrulets)',                          'bar' ),
-    array ( 'bar-gemel',    '(bar|barrulet) (gemm?ell?(s|ed)?|voided)' ,  'bar' ),
-    array ( 'bar-gemels',    '(bars|barrulets) (gemm?ell?(s|ed)?|voided)' ,  'bar' ),
+    array ( 'bar',          'bar',                          'bar' ),
+    array ( 'bars',         'bars',                          'bar' ),
+    array ( 'closet',       'closet',                          'bar' ),
+    array ( 'closets',      'closets',                          'bar' ),
+    array ( 'barrulet',          'barrulet',                          'bar' ),
+    array ( 'barrulets',         'barrulets',                          'bar' ),
+    array ( 'bar-gemel',    'bar (gemm?ell?(s|ed)?|voided)' ,  'bar' ),
+    array ( 'bar-gemels',    'bar (gemm?ell?(s|ed)?|voided)' ,  'bar' ),
     array ( 'chevronel',    'chevronel',                    'diminutive' ),
     array ( 'chevronels',    'chevronels?',                    'diminutive' ),
     array ( 'pile',        'pile',                          'diminutive' ),
@@ -117,6 +134,7 @@ function ordinary() {
     array ( 'baton-dexter', 'dexter (bas?ton|battoon|batune) ?couped' ,    'subordinary' ),
     array ( 'baton-dexter', '(bas?ton|battoon|batune) dexter ?couped',    'subordinary' ),
     array ( 'shakefork',    'shakefork',                    'subordinary' ),
+    array ( 'shakefork',    'pale furche',                    'subordinary' ),
     array ( 'pall',         'pall',                         'subordinary' ),
     array ( 'tressure',     'trea?s?sure',                       'subordinary' ),
     array ( 'tressure2', 'double trea?s?sure','subordinary' ),
@@ -126,22 +144,10 @@ function ordinary() {
     array ( 'square-flaunch', 'square (flanks?|flanques?|flasques?)',  'subordinary' ),
   );
   // TODO Allow escutcheon to be followed by whole shield if overall?
-  static $common_variants = array (
-  array ( 'couped', '(couped|humetty|alese)' ),
-  array ( 'couped-base', '(couped|humetty|alese) ?in base'  ),
-  array ( 'couped-chief', '(couped|humetty|alese) ?in chief' ),
-  array ( 'couped-dexter', '(couped|humetty|alese) ?in dexter' ),
-  array ( 'couped-sinister', '(couped|humetty|alese) ?in sinister' ),
-  array ( 'lozengy', 'lozengy' ),
-  array ( 'compony', '(compony|gobone|gobonated)' ),
-  array ( 'counter-compony', 'counter (compony|gobone|gobonated)'),
-  );
   static $between = array ( array ( true, '(between|inter)' ),);
   static $on_word = array ( array ( true, 'on'), );
   static $charge_with = array ( 
     array ( 'on', 'charged with'  ),
-    array ( 'onfirst', 'on each ?of ?the first'  ),
-    array ( 'onlast', 'on each ?of ?the last'  ),
   );
   static $within = array ( array ( true, '(within|inside)' ), );
   static $dep_with = array ( array ( 'depressed', '(debruised|depressed) (with|by|of)', ), );
@@ -172,10 +178,11 @@ function ordinary() {
   if ( $depressed ) $mods[] = make_mod('depressed');
 
   $mods = array_merge($mods, position_mods()); // for "bend sinister (angled).."
-  if ( ($variant = search_match($common_variants)) != null ) {
+  
+/*  if ( ($variant = search_match($common_variants)) != null ) {
     if ( substr( $variant[0], -7) == 'compony') $node->append_child($dom->create_element('tincture'));
     $node->set_attribute('subtype', $node->get_attribute('subtype') . '-' . $variant[0] );
-  }
+  } */
 
   // Prepare the ordinary function (if it exists)
   if ( file_exists('parser/ordinaries/' . $ord_name . '.inc') ) {
@@ -204,9 +211,8 @@ function ordinary() {
     between($mods,true); // have already found between word
       
   // Now look for extras
-  $on_type = 'on';
-  if ( $found_on or ($on_type = search_match($charge_with)) != null ) {
-    $on_ord = make_mod($on_type[0]);
+  if ( $found_on or search_match($charge_with) != null ) {
+    $on_ord = make_mod('on');
     if ( $ord_type == 'chief' or $ord_type == 'canton' ) {
       $items = ordinary();
       if ( $items == null ) $items = charge(false);

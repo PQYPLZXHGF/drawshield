@@ -14,8 +14,8 @@
 
 $charge = array ( 
   'patterns' => array (
-  'griffin',
-  'gryphon',
+  'griffins?',
+  'gryphons?',
   ),
 
   'modifiers' => array (

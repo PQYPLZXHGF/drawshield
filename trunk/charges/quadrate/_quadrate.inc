@@ -86,6 +86,6 @@ if ( $node != null ) {
       $body = $quadrate_data[$type];
       break;
     }
-    $charge['body'] = $body;
+  $charge['body'] = $body;
 }
 ?>

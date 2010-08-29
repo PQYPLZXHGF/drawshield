@@ -17,10 +17,11 @@
 $charge = array (
 
   'patterns' => array (
-  'boars? heads? ?couped',
+  'boars? heads?',
   ),
   'modifiers' => array (
     array ( 'armed', 'armed', 'feature',    ),
+    array ( null, 'couped', 'ignore',    ),
   ),
 
   'doc' => 'Stuff...',

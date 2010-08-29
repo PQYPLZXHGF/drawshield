@@ -20,8 +20,8 @@ $charge = array (
   'swords?',
   ),
   'modifiers' => array (
-    array ( 'hilt', 'hilts?|hilted', 'feature',    ),
-    array ( 'pommell', 'pom?mell?s?|pomm?ell?ed', 'feature',    ),
+    array ( 'hilt', '(hilts?|hilted)', 'feature',    ),
+    array ( 'pommell', '(pom?mell?s?|pomm?ell?ed)', 'feature',    ),
   ),
 
   'doc' => 'Stuff...',

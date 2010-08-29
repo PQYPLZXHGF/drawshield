@@ -17,7 +17,9 @@ function makeDiv_common( $node, $div_num ) {
   $div_data = array (
     'per-fess' => 'X-100Y600A1200c700e1200g700', 
     'per-bend' => array ( 'div2' => array ( 'NC' => 'X0Y0B1414c200e1000g1200', 'CH' => 'X0Y300B1414e1000g900')), 
+    'per-bend-fracted' => array ( 'div2' => array ( 'NC' => 'X200Y0B717e500B1131c100e1010g1410', 'CH' => 'X200Y300B717e500B717e1010g1310' )),
     'per-bend-sinister' => array ( 'div2' => array ( 'NC' => 'X1000Y0c1200e1000g200H1414', 'CH' => 'X1000Y300c1000e1000H1414' )),
+    'per-bend-sinister-fracted' => array ( 'div2' => array ( 'NC' => 'X800Y0a200c1300e1000H1131e500H717', 'CH' => 'X800Y300a200c1000e800H717e500H717' )),
     'per-pale' => array ( 'div2' => array ( 'NC' => 'X500Y0a500c1200e500G1200', 'CH' => 'X500Y200a500c1100e500G1100' )),
     'chape' => array ( 'div2' => array ( 'NC' => 'X0Y0a1000c500F708D707g500', 'CH' => 'X0Y300a1000c500F708D707g500' )),
     'chausse' => 'X500Y1200J1154c1000e1154g1000K1154',

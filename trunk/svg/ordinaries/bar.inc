@@ -22,8 +22,13 @@ function makeOrd_bar($node) {
     'outer' => array (   'x', 'x', 'x',   '1,3',   '1,4',     '1,5',       '1,2,5,6',     '1,2,6,7',       '1,2,7,8' ),
   );
 
-  $name = $node->get_attribute('subtype');
+  $subtype = $node->get_attribute('subtype');
   $num = $node->get_attribute('number');
+  $bar_start = '-100';
+  $bar_length = '1200';
+  $palet_start = '-100';
+  $palet_length = '1400';
+  $linetype_size = 30;
 
   $mods = array_pad(array(), $num, $node->get_attribute('linetype') );
   $couped = 'none';
@@ -38,106 +43,93 @@ function makeOrd_bar($node) {
           $locs = $bar_locs[$mod][$num];
           if ( $locs != 'x' ) foreach ( explode(',',$locs) as $pos ) $mods[$pos-1] = $linetype;
           break;
+        case 'couped': 
+          $bar_start = '100';
+          $bar_length = '800';
+          $palet_start = '100';
+          $palet_length = '900';
+          break;
+        case 'couped-base':
+          $palet_start = '-100';
+          $palet_length = '1000';
+          break;
+        case 'couped-chief':
+          $palet_start = '100';
+          $palet_length = '1200';
+          break;
+        case 'couped-dexter':
+          $bar_start = '100';
+          $bar_length = '1000';
+          break;
+        case 'couped-sinister':
+          $bar_start = '-100';
+          $bar_length = '1000';
+          break;
+        case 'gemel':
+          if ( $subtype == 'bar' or $subtype == 'palet' ) $subtype .= '-gemel';
+          break;
       }
     }
+  }
+  switch ($subtype) {
+    case 'endorse':
+    case 'barrulet': 
+      $bar_width = 200; 
+      $linetype_size = 25;
+      break;
+    case 'closet': 
+      $bar_width = 100; 
+      $linetype_size = 20;
+      break;
+    case 'bar-gemel':
+    case 'palet-gemel':
+      $linetype_size = 20;
+      $bar_width = 400;
+      break;
+    case 'bar':
+    default:
+      $bar_width = 400;
+      break;
   }
   if ( $num < 1 ) { $num = 1; }
   if ( $num > 8 ) { $num = 8; }
   $body = '';
   $spacing = 1000/($num+1);
-  $H1 = min ( 200, (400 / $num) );
+  $H1 = min ( 200, ($bar_width / $num) );
   $H2 = $H1 / 2;
   for ( $i = 0; $i < $num; $i++ ) {
-    switch ( $name ) {
+    switch ( $subtype ) {
+      case 'barrulet':
+      case 'closet':
       case 'bar':
-      case 'bars':
         $Y1 = (($i+1) * $spacing) - $H2;
-        $spec = "X-100Y{$Y1}A1200c{$H1}E1200g{$H1}";
-        $size = 30;
-        break;
-      case 'bar-couped':
-      case 'bars-couped':
-        $Y1 = (($i+1) * $spacing) - $H2;
-        $spec = "X100Y{$Y1}A800c{$H1}E800g{$H1}";
-        $size = 30;
-        break;
-      case 'bar-couped-dexter': 
-      case 'bars-couped-dexter': 
-        $spec = "X100Y{$Y1}A1000c{$H1}E1000g{$H1}";
-        $size = 30;
-            break;
-      case 'bar-couped-sinister':
-      case 'bars-couped-sinister':
-        $spec = "X-100Y{$Y1}A1000c{$H1}E1000g{$H1}";
-        $size = 30;
-        break;
+        $spec = "X{$bar_start}Y{$Y1}A{$bar_length}c{$H1}E{$bar_length}g{$H1}";
         break;
       case 'bar-gemel':
-      case 'bar-gemels':
         $Y1 = (($i+1) * $spacing) - $H2;
         $Y2 = $Y1 + ($H1 * 0.75);
         $H4 = $H1 / 4;
-        $size = 20;
-        $spec = "X-100Y{$Y1}A1200c{$H4}E1200g{$H4}   X-100Y{$Y2}A1200c{$H4}E1200g{$H4}";
+        $spec = "X{$bar_start}Y{$Y1}A{$bar_length}c{$H4}E{$bar_length}g{$H4}   X{$bar_start}Y{$Y2}A{$bar_length}c{$H4}E{$bar_length}g{$H4}";
         break;
-      case 'bar-gemel-couped':
-      case 'bar-gemels-couped':
-        $Y1 = (($i+1) * $spacing) - $H2;
-        $Y2 = $Y1 + ($H1 * 0.75);
+      case 'palet-gemel':
+        $X1 = (($i+1) * $spacing) - $H2;
+        $X2 = $X1 + ($H1 * 0.75);
         $H4 = $H1 / 4;
-        $size = 20;
-        $spec = "X100Y{$Y1}A800c{$H4}E800g{$H4}   X100Y{$Y2}A800c{$H4}E800g{$H4}";
-        break;
-      case 'bar-gemel-couped-dexter':
-      case 'bar-gemels-couped-dexter':
-        $Y1 = (($i+1) * $spacing) - $H2;
-        $Y2 = $Y1 + ($H1 * 0.75);
-        $H4 = $H1 / 4;
-        $size = 20;
-        $spec = "X100Y{$Y1}A1000c{$H4}E1000g{$H4}   X100Y{$Y2}A1000c{$H4}E1000g{$H4}";
-        break;
-      case 'bar-gemel-couped-sinister':
-      case 'bar-gemels-couped-sinister':
-        $Y1 = (($i+1) * $spacing) - $H2;
-        $Y2 = $Y1 + ($H1 * 0.75);
-        $H4 = $H1 / 4;
-        $size = 20;
-        $spec = "X-100Y{$Y1}A1000c{$H4}E1000g{$H4}   X-100Y{$Y2}A1000c{$H4}E1000g{$H4}";
+        $spec = "X{$X1}Y{$palet_start}a{$H4}C{$palet_length}e{$H4}G{$palet_length}    X{$X2}Y{$palet_start}a{$H4}C{$palet_length}e{$H4}G{$palet_length}";
         break;
       case 'palet':
-      case 'palets':
+      case 'endorse':
         $X1 = (($i+1) * $spacing) - $H2;
-        $spec = "X{$X1}Y-100a{$H1}C1400e{$H1}G1400";
-        $size = 30;
-        break;
-      case 'palet-couped':
-      case 'palets-couped':
-        $X1 = (($i+1) * $spacing) - $H2;
-        $size = 30;
-        $spec = "X{$X1}Y100a{$H1}C1000e{$H1}G1000";
-        break;
-      case 'palet-couped-chief':
-      case 'palets-couped-chief':
-        $X1 = (($i+1) * $spacing) - $H2;
-        $size = 30;
-        $spec = "X{$X1}Y100a{$H1}C1200e{$H1}G1200";
-        break;
-      case 'palet-couped-base':
-      case 'palets-couped-base':
-        $X1 = (($i+1) * $spacing) - $H2;
-        $size = 30;
-        $spec = "X{$X1}Y-100a{$H1}C1100e{$H1}G1100";
+        $spec = "X{$X1}Y{$palet_start}a{$H1}C{$palet_length}e{$H1}G{$palet_length}";
         break;
       case 'bendlet':
-      case 'bendlets':
         $W2 = ($H1/0.707) / 2;
         $X1 = (($i+1) * $spacing) - 500 - $W2;
         $Y1 = 500 - (($i+1) * $spacing);
         $spec = "X{$X1}Y{$Y1}h{$H1}B1600d{$H1}F1600";
-        $size = 30;
         break;
     }
-    $body .= createBody( $spec, $mods[$i], $size );
+    $body .= createBody( $spec, $mods[$i], $linetype_size );
   }
   $retval['body'] = $body;
   return $retval;

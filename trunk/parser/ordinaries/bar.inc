@@ -13,7 +13,7 @@
    limitations under the License. */
 
 
-function ordinary_bar($node, &$mods) {
+function ordinary_bar(&$node, &$mods) {
   global $dom;
 
   $bar_ids = array (
@@ -22,8 +22,11 @@ function ordinary_bar($node, &$mods) {
     array ( 'inner',    'the (inner|inside) ?ones?'  ),
     array ( 'outer',    'the (outer|outside) ?ones?'  ),
   );
-  if ( (substr($node->get_attribute('subtype'),-1) == 's') and ($node->get_attribute('number') == '1') ) {
-    $node->set_attribute('number','4');
+  $subtype = $node->get_attribute('subtype');
+  if ( (substr($subtype,-1) == 's') ) {
+    if ($node->get_attribute('number') == '1')
+      $node->set_attribute('number','4');
+    $node->set_attribute('subtype',rtrim($subtype,'s'));
   }
  
   while ( ($match = search_match($bar_ids)) != null ) $mods[] = make_mod($match[0], linetype());

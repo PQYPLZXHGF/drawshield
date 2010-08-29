@@ -87,6 +87,8 @@
           <xsl:when test="$ordsubtype='cross-formy' and $chief='true'">x///100,700,120,120:900,700:500,400:500,1100/s/s</xsl:when>
           <xsl:when test="$ordsubtype='quarter' and $chief='false'">250,250,350,350/150,150,150,150:350,350/150,150,150,150:350,150:250,250/166,166,120,120:334,166:166,334,334,334:100,100,100,100:400,100:250,250:400,100:400,400</xsl:when>
           <xsl:when test="$ordsubtype='quarter' and $chief='true'">t</xsl:when>
+          <xsl:when test="$ordsubtype='orle' and $chief='false'">x///////////130,300,80,80:870,300:500,510:500,1070:130,700:870,700:250,510:750,510:250,970:750,970:130,500:870,500</xsl:when>
+          <xsl:when test="$ordsubtype='orle' and $chief='true'">x///////////130,800,80,80:870,800:500,420:500,1070:130,800:870,800:250,420:750,420:250,970:750,970:130,600:870,600</xsl:when>
           <xsl:otherwise>n</xsl:otherwise>
         </xsl:choose>
       </xsl:when>

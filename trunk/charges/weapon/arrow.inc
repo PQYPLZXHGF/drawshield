@@ -20,7 +20,7 @@ $charge = array (
   'arrows?',
   ),
   'modifiers' => array (
-    array ( 'barbed', 'barbed|armed', 'feature',    ),
+    array ( 'barbed', '(barbed|armed)', 'feature',    ),
     array ( 'feathered', '(flighted|feathered)', 'feature',    ),
     array ( 'up', 'points? upwards?', 'mod', 'pointing',    ),
     array ( 'down', 'points? downwards?', 'mod', 'pointing',    ),

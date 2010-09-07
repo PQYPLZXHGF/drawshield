@@ -17,7 +17,7 @@
 $charge = array (
 
   'patterns' => array (
-  'broad arrow ?heads?',
+  'broad arrows? ?heads?',
   ),
   'modifiers' => array (
     array ( 'up', 'points? upwards?', 'mod', 'pointing',    ),

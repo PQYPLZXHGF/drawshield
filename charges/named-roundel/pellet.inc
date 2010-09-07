@@ -22,7 +22,7 @@ $charge = array (
     'ogress(es)?' ,
   ),
 
-  'doc' => 'Stuff...',
+  'doc' => 'A Roundel Sable',
 
   'default_colour' => false,
   

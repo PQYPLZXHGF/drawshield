@@ -20,7 +20,7 @@ $charge = array (
 	  'hurts?' ,
   ),
 
-  'doc' => 'Stuff...',
+  'doc' => 'A Roundel Azure',
 
   'default_colour' => false,
   

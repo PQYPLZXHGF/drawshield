@@ -20,7 +20,7 @@ $charge = array (
 	  'oranges?' ,
   ),
 
-  'doc' => 'Stuff...',
+  'doc' => 'A Roundel Tenne',
 
   'default_colour' => false,
   

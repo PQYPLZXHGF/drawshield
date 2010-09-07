@@ -20,7 +20,7 @@ $charge = array (
 	  'plates?' ,
   ),
 
-  'doc' => 'Stuff...',
+  'doc' => 'A Roundel Argent',
 
   // SVG IMPLEMENTATION
   // Replaced by roundel of appropriate colour in substitution.xslt

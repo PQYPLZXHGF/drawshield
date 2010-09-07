@@ -12,21 +12,15 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// roundel
-
-$charge = array (
-
+$ordinary = array (
   'patterns' => array (
-	  'pommes?' ,
+     'humets?', 
   ),
-
-  'doc' => 'A Roundel Vert',
-
-  'default_colour' => false,
   
-  // SVG IMPLEMENTATION
-  // Replaced by roundel of appropriate colour in substitution.xslt
+  'doc' => 'Half the width of a bar',
 
 );
+
+include 'shield/ordinaries/common/_bar.inc';
 
 ?>

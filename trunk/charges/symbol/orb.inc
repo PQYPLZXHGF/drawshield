@@ -17,7 +17,7 @@
 $charge = array (
 
   'patterns' => array (
-  '?royal (orb|mound)',
+  '?royal (orbs?|mounds?)',
   ),
   'modifiers' => array (
     array ( 'banded', '(banded|encircled)', 'feature',    ),

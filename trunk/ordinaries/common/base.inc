@@ -23,10 +23,6 @@ $ordinary = array(
       'shape_spec' => 'X-100,Y800A1200c500e1200g500',
       'bounding_box' => '1000,400',
       
-      'on_placement' => array (
-        '*' => '500,950,500,240/333.33,950,300,200:666.67,950/333.33,900,160,160:666.67,900:500,1050/x/x/x',
-        //encoded string key points to spec
-      ),
 );
 
 ?>

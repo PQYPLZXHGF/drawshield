@@ -1,12 +1,32 @@
 #summary This is the change log history
 =Shield Release Notes=
 
-Versions are numbered in four levels, as follows:
+Versions are numbered in three levels, as follows:
 
-  # The major version number, changes very infrequently
-  # The minor version number, changes on a significant rewrite of a major part of the code
-  # The sub-version (a letter), changes when the actual program code is altered in some minor way
-  # The sub-sub-version, changes when the program data is modified or added to, for example when a new charge is added or a placement corrected.
+  # The major version number, only changed on a ground-up re-write.
+  # The minor version number, changed on a significant rewrite of a major section of the code
+  # The sub-version, usually a letter, changed when a new feature is added or a correction is made.
+
+=Version 2.3pre=
+
+==Internal Changes==
+
+This version is functionally largely identical to 2.2c1 however it has been ported to PHP5. It has been rewritten to use PHP5 DOM and removed the need for external XSLT processing. Additionally, all ordinaries are now defined in separate files that are combined into a parse table in a separate "build" stage. (The same way charges are handled).
+
+==New Features==
+
+The ordinary *tierce* may now be *couped (in base / chief)* and *lozengy*.
+
+There is better handling of charges that can be recognised but not yet drawn (the name of the charge is shown in the correct colour and location on the shield). This allows me to add lots of charges so at least the parser will recognise them, even if the renderer cannot yet draw them.
+
+=Prior Versions=
+
+Prior Versions were numbered in four levels, as follows:
+
+  # The major version number, changed very infrequently
+  # The minor version number, changed on a significant rewrite of a major part of the code
+  # The sub-version (a letter), changed when the actual program code is altered in some minor way
+  # The sub-sub-version, changed when the program data is modified or added to, for example when a new charge is added or a placement corrected.
   
 =Version 2.2c1=
 

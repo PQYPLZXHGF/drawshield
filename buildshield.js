@@ -164,11 +164,13 @@ document.forms['myform'].finishbutton.onclick = function () {
   document.forms['myform'].prevbutton.onclick = update;
   document.getElementById('caption').firstChild.nodeValue = "Draw new shield";
   questions = document.getElementById('questions');
-  para = document.createTextNode('Congratulations! You can now modify your ' +
+  para = document.createElement('p');
+  words = document.createTextNode('Congratulations! You can now modify your ' +
     'blazon in the text box and press Update! to change it, or copy the blazon to the clipboard. ' +
     'This program only has a small subset of blazonry terms, but I hope it has helped you understand ' +
     'how blazons are constructed. Take a look at the quick reference page, ' +
     'or the suggested reading to find out more of what can be done.');
+  para.appendChild(words);
   questions.replaceChild(para,questions.firstChild);
 }
 
@@ -244,10 +246,10 @@ function nextQuestion( blazon ) {
     img.setAttribute('width','150');
     img.setAttribute('height','150');
     if ( sData[i+2] != '' ) {
-//      retval += '<img class="img-c" src="/pages/shield/img/' + sData[i+2] + '" alt="choice" width="150" height="150" />\n';
+//      retval += '<img class="img-c" src="/images/buildshield/' + sData[i+2] + '" alt="choice" width="150" height="150" />\n';
       img.setAttribute('src','/pages/shield/img/' + sData[i+2]);
     } else {
-//      retval += '<img class="img-c" src="/pages/shield/img/none.png" alt="choice" width="150" height="150" />\n';
+//      retval += '<img class="img-c" src="/images/buildshield/none.png" alt="choice" width="150" height="150" />\n';
       img.setAttribute('src','/pages/shield/img/none.png');
     }
     td.appendChild(img);

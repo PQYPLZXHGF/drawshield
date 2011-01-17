@@ -12,10 +12,10 @@ In the pages of this section the following conventions have been used:
   * Items in round brackets are synonyms for the preceding word.
     * Common variations in spelling are also accepted (e.g. fleur-de-lys, fleur-de-lis) but not all are shown here.
     * Plurals are also accepted where appropriate.
-    * Use of a synonym does not change anything on the shield
+    * Use of a synonym does not (usually) change anything on the shield
   * Items in curly brackets are additional, optional terms
     * These terms appear _in addition to_ the preceeding word
-    * They will cause a different appearnce on the shield if they are present
+    * They will cause a different appearance on the shield if they are present
 
 Examples of actual blazonry are shown like this:
 
@@ -23,8 +23,7 @@ Examples of actual blazonry are shown like this:
 Azure - Example of a very simple shield
 }}}
 
-Where there are restrictions or issues they are discussed at the end of each page in the
-section titled _Points to Note_.
+Where there are restrictions or issues they are discussed at the end of each page in the section titled _Points to Note_.
 
 For the precise meaning of each term look them up in
 [http://www.heraldsnet.org/saitou/parker/ www.heraldsnet.org/saitou/parker/]. Where there is a difference between 

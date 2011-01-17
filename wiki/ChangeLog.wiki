@@ -7,6 +7,13 @@ Versions are numbered in three levels, as follows:
   # The minor version number, changed on a significant rewrite of a major section of the code
   # The sub-version, usually a letter, changed when a new feature is added or a correction is made.
 
+=Version 2.3a=
+
+==Internal Changes==
+
+Modified the intermediate XML (blazonML) so that the matched tokens are
+included as attributes in the appropriate element. This gives the renderer more information to work from, for example determining plurals or variant terms.
+
 =Version 2.3pre=
 
 ==Internal Changes==

@@ -9,6 +9,10 @@ Versions are numbered in three levels, as follows:
 
 =Version 2.3a=
 
+==New Features==
+
+Charges placed directly on the field may be blazoned *entire*, in which case they will occupy the whole width and height of the field.
+
 ==Internal Changes==
 
 Modified the intermediate XML (blazonML) so that the matched tokens are

@@ -14,6 +14,8 @@ Versions are numbered in three levels, as follows:
 Modified the intermediate XML (blazonML) so that the matched tokens are
 included as attributes in the appropriate element. This gives the renderer more information to work from, for example determining plurals or variant terms.
 
+In general, I am also moving as much heraldic knowledge out of the parser and into the "rewriter" so it is all gathered in one place. For example, in this release the conversion of some treatments to "semy de (some charge)" has been moved into the rewriter.
+
 =Version 2.3pre=
 
 ==Internal Changes==

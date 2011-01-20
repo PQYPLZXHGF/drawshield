@@ -7,6 +7,10 @@ Versions are numbered in three levels, as follows:
   # The minor version number, changed on a significant rewrite of a major section of the code
   # The sub-version, usually a letter, changed when a new feature is added or a correction is made.
 
+==Updates==
+
+To receive updates on all the Drawshield suite of programs please subscribe to [http://www.karlwilcox.com/blog/rss].
+
 =Version 2.3a=
 
 ==New Features==

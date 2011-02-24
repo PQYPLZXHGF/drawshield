@@ -11,6 +11,34 @@ Versions are numbered in three levels, as follows:
 
 To receive updates on all the Drawshield suite of programs please subscribe to [http://www.karlwilcox.com/blog/rss].
 
+=Version 2.3c=
+
+==New Features==
+
+Added charges *chess rook*, *castle*, *ox*, *ram {armed,unguled}*, *horse {unguled}*, *Virgin and Child*, *fir tree*, *salmon (trout)*, *boar {armed}*, *mill wheel*, *cog wheel*, *water wheel* and *paschal lamb*. Most of these charges have been adapted from Wikimedia Commons, appropriate attributions have been placed in title elements of these charges.
+
+==Bug Fixes==
+
+All charges are now drawn a bit bigger. The lion rampant had incorrect dimensions internally.
+
+=Version 2.3b=
+
+==New Features==
+
+The charges *estoile*, *church bell*, *bomb {fired}*, *spear {hafted, pointed}*, *saxon crown* and *hawk bell* have been added
+
+Also added the *gorge* or *whirlpool*. Although this is actually a charge I have implemented it as an ordinary since you can only have one of them and it occupies the whole field.
+
+Better sizing of charges placed on a bend, e.g. the spear. You can also place 2 charges (like spears) either in saltire or on a saltire. These charges may be of different kinds, for example argent a sword and spear in saltire gules.
+
+I am experimenting with stroke colours on charges, instead of black I am setting them to a mid gray. Comments on this are welcome! It would be possible to set the stroke on a per charge basis to some "opposite" colour from the fill if this would be better….?
+
+Some browsers (e.g. Google Chrome) display the "title" of SVG elements in a box when you hover your mouse over them. I have used this facility to show some simple information, like the name of the ordinary or charge.I am hoping to integrate this more closely with Parker’s Heraldic Dictionary shortly.
+
+==Bugs==
+
+Charges placed on a bend sinister are the wrong way up.
+
 =Version 2.3a=
 
 ==New Features==

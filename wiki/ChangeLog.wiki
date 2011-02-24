@@ -43,16 +43,19 @@ Charges placed on a bend sinister are the wrong way up.
 
 ==New Features==
 
-Charges placed directly on the field may be blazoned *entire*, in which case they will occupy the whole width and height of the field.
+Charges placed directly on the field may be blazoned entire, in which case they will occupy the whole width and height of the field.
 
-Added charge *caltrap*.
+Any number of charges may be blazoned as en soleil in which case they will shown surrounded by the rays of the sun
+
+Added charges *caltrap*, *sun {in his splendor}*, *full moon*, *and moon {incresent|decresent|crescent}*.
+
+Exactly 4 four charges may be arranged on the field *in quadrangle*.
 
 ==Internal Changes==
 
-Modified the intermediate XML (blazonML) so that the matched tokens are
-included as attributes in the appropriate element. This gives the renderer more information to work from, for example determining plurals or variant terms.
+Modified the intermediate XML (blazonML) so that the matched tokens are included as attributes in the appropriate element. This gives the renderer more information to work from, for example determining plurals or variant terms.
 
-In general, I am also moving as much heraldic knowledge out of the parser and into the "rewriter" so it is all gathered in one place. For example, in this release the conversion of some treatments to "semy de (some charge)" has been moved into the rewriter.
+In general, I am also moving as much heraldic knowledge out of the parser and into the “rewriter” so it is all gathered in one place. For example, in this release the conversion of some treatments to “semy de (some charge)” has been moved into the rewriter.
 
 =Version 2.3pre=
 

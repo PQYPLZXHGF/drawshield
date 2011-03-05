@@ -28,6 +28,8 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
       * Ordinary Modifiers
    * [LineTypes]
    * [Charge Charges]
+      * [ChargeFeatures Charge Features]
+      * [ChargeArrangements Charge Arrangements]
  * The Drawshield Program
    * [ProgramOverview Program Overview]
       * [Requirements]

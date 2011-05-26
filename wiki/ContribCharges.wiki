@@ -44,9 +44,13 @@ An example SVG file is shown below.
 ==Notes==
 
 (1) The images are scaled as required so in theory they can be any size. In practice, and to save space, I round all SVG data to 2 decimal places, so if your image uses a very small range of units (e.g. between 0.0 and 1.0) it is likely that detail will be lost.
+
 (2) Scaling and placement of images is done based on its bounding box, this is assumed to start at 0,0 and extend in the positive direction to the furthest points. This bounding box is only used for calculation, it is not clipped so anything outside the box (or large empty areas at the left, top or bottom) will cause positioning errors, e.g. when a charge is drawn "entire".
+
 (3) Two reasons here, as the final SVG output is assembled from many fragments of SVG from different sources it is difficult to ensure that all "use" ID attributes are unique. Secondly, SVG applies fill *before* moving and scaling "use" elements. Consider a quadrate cross, in theory we could just draw the upper "arm" and then "use" rotated and moved copies for the other three arms. This works fine for flat fills but if the cross were filled with a division or a fur then each of the copies has its fill applied first, *then* is rotated, so furs etc. on the copied arms will point the wrong way.
+
 (4) Fill colours are supplied by an enclosing "g" element.
+
 (5) For example a lion might have a "body" group and other groups called "langued" and "armed"
 
 =Converting From Other Formats=
@@ -71,8 +75,7 @@ Variants: Columbian Flower
 Extra words: pendent / slips crossed / drooping (all can be ignored)
 Features: slipped / stalked / leaved
                 barbed
-                flowers / flowered / buds
-Proper: body, flowers and barbs #006DFF, slipped #00FB00
+Proper: body and barbs #006DFF, slipped #00FB00
 Turn if on Ordinary: True
 Demi: treat as object
 Stretching: 150% height, 150% width

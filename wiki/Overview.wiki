@@ -60,5 +60,7 @@ This page is an outline of the proposed organisation for the Drawshield Wiki.
      * Release Notes
    * Blazonry Quiz
      * [QuizNotes Release Notes]
+  * Developer Notes
+     * [ReleaseProc Release Procedures]
 
 In time, each of the items above will turn into a page!

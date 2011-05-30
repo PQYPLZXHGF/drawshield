@@ -1,0 +1,27 @@
+#summary Actions on releasing a new version
+
+= Introduction =
+
+This page documents the steps to be take when a new release of
+Drawshield is ready, and should be regarded as a mandatory checklist.
+
+
+= Procedures =
+
+  # Run the "build data" process
+  # Run localhost/include/shield/regress.php & confirm results
+  # (When complete) run the "build docs" process
+  # Commit all changed files to SVN, note as "release version"
+  # Set an SVN "tag" on all files as per the release no. e.g. "2.3e"
+  # Upload all files to shield-2-3e (match release number)
+  # Rename existing folder shield to shield-2-3d (previous release)
+  # Rename shield-2-3e (release number) to shield
+  # Using drawhshield example page confirm operation and release number
+  # (If required, previous versions can be deleted)
+  # Publish release notes on blog, Title Drawshield 2.3e Release Notes
+    # New Features
+    # Bug Fixes
+    # Internal Changes
+  # Edit drawshield.php to next version number
+  # Run localhost/include/shield/regress.php?rebuild
+  # Code new version!

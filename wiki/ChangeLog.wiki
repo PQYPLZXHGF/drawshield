@@ -11,6 +11,47 @@ Versions are numbered in three levels, as follows:
 
 To receive updates on all the Drawshield suite of programs please subscribe to [http://www.karlwilcox.com/blog/rss].
 
+=Version 2.3e=
+
+==New Features==
+
+Added field division per chevron inverted. The division parsing code has been generally tidied up and the various options and modifiers can now appear in any order.
+
+Added charge question mark. Not actually a heraldic charge but used to mark missing tinctures. May however be useful if developing arms for Batman’s arch-rival, The Riddler.
+
+You can now say on chargeA chargeB, which means the same thing as chargeA charged with chargeB.
+
+==Bug Fixes==
+
+The pall inverted was not in the correct place, it is now. Further variant spellings have been added.
+
+The not-understood words had disappeared from error messages. They are back.
+
+==Internal Changes==
+
+BlazonML has been modified to give tinctures an "index" attribute, instead of relying on its position within the parse tree. Tincture and modifier elements can now be freely mixed in any order.
+
+=Version 2.3d=
+
+==New Features==
+
+Improved text letters, now work much more as described in Parker – e.g. a text ‘K’ gules . Can also use roman instead of text to get a nice serif font. If no tincture is given, sable is used
+
+Added charges characters of the plant x, where x is one of Earth, Moon, Sun, Mercury, etc.
+
+The sun in his splendour has become more splendid.
+
+The demopage provided with the source code has been updated
+
+==Bug Fixes==
+
+Resolved issue 148
+
+==Internal Changes==
+
+Pattern fills are required for colouring an ordinary or a charge by a division, but all browsers seem to have problems with this, and each browser has different problems! I have updated the various workarounds to give the best results I can. Firefox is probably the least buggy!
+
+
 =Version 2.3c=
 
 ==New Features==

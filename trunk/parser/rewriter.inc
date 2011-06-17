@@ -2,16 +2,16 @@
 
 function rewrite() {
   global $dom;
-  
+
   $xpath = new DOMXPath($dom);
-  
+
   // orientation: "inbar" becomes "inpale fesswise"
   foreach ( $xpath->query("//modifier[@name='arrangement' and @param='inbar']") as $item ) {
     $item->setAttribute('param','inpale');
     $mod = make_mod('orientation', 'fesswise');
     $item->insertBefore($mod);
   }
-  
+
   // We implement concentric annulets as a single charge of "number" rings
   foreach ( $xpath->query("//charge[@subtype='annulet' and modifier/@name='concentric']") as $item ) {
     $number = $item->getAttribute('number');
@@ -19,14 +19,14 @@ function rewrite() {
     $mod = make_mod('concentric',"$number");
     $item->appendChild($mod);
   }
-  
+
   // icicles (are inverted gouttes)
   foreach ( $xpath->query("charge[@subtype='icicle']") as $item ) {
     $item->setAttribute('subtype','goutte');
     $mod = make_mod('inverted');
     $item->appendChild($mod);
   }
-  
+
   // fountain (is a roundel with wavy bars)
   foreach ( $xpath->query("//charge[@subtype='fountain']") as $item ) {
     $item->setAttribute('subtype','roundel');
@@ -45,7 +45,7 @@ function rewrite() {
     $item->appendChild($tinc);
   }
 
-  // ford (a base with wavy bars) 
+  // ford (a base with wavy bars)
   foreach ( $xpath->query("//ordinary[@subtype='ford']") as $item ) {
     $item->setAttribute('subtype','base');
     $tinc1 = make_colour('azure');
@@ -74,7 +74,7 @@ function rewrite() {
     $item->setAttribute('type','bend');
     $item->setAttribute('subtype','bend');
   }
-  
+
   // A charge en soleil means placed on the sun
   foreach ( $xpath->query("//charge[modifier/@name='ensoleil']") as $item ) {
     $sun = $dom->createElement('charge');
@@ -142,12 +142,13 @@ function rewrite() {
     }
   }
 
-  // Some treatments are actually (colour) semy de (object) 
+  // Some treatments are actually (colour) semy de (object)
   foreach ( $xpath->query("//treatment") as $item ) {
     $type = null;
     $subtype = null;
     $mod = null; $modval = null;
-    switch ( $item->getAttribute('name') ) {
+    $name = $item->getAttribute('name');
+    switch ( $name ) {
       case 'annuletty':
         $type = 'geometric';
         $subtype = 'annulet';
@@ -203,10 +204,11 @@ function rewrite() {
         $tinc2->appendChild($proper);
       }
       $charge->appendChild($tinc2);
-      if ( $mod != null ) $charge->appendChild(makemod($mod,$modval));
+      if ( $mod != null ) $charge->appendChild(make_mod($mod,$modval));
       $charge->appendChild(make_mod('wflex','1'));
       $charge->appendChild(make_mod('hflex','1'));
       $semyde = $dom->createElement('semyde');
+      $semyde->setAttribute('name', $name);
       $semyde->appendChild($kids->item(0));
       $semyde->appendChild($charge);
       $item->parentNode->replaceChild($semyde,$item);
@@ -227,14 +229,65 @@ function rewrite() {
       $prev->appendChild($inbend);
     }
   }
-  
+
+
+  // Another fudge, we can't just flip a pall if it is inverted, need a different shape to match up with per pall inverted
+  foreach ( $xpath->query("//ordinary[@subtype='pall' and modifier/@name='inverted']") as $item ) {
+    $item->setAttribute('subtype','pall-inv');
+    foreach ( $item->childNodes as $child )
+      if ( $child->nodeName == 'modifier' and $child->getAttribute('name') == 'inverted')
+        $item->removeChild($child);
+  }
+
+  // Help with error visualisation
+
+  // Replace missing textures
+  $counter = 1;
+  foreach ( $xpath->query("//tincture/missing") as $item ) {
+    switch ( $counter ) {
+      case 1:
+        $counter = 2;
+        $back = 'argent';
+        $fore = 'sable';
+        break;
+      case 2:
+        $counter = 3;
+        $back = 'gray';
+        $fore = 'black';
+        break;
+      case 3:
+        $counter = 1;
+        $back = 'sable';
+        $fore = 'argent';
+        break;
+    }
+    $semyde = $dom->createElement('semyde');
+    $semyde->setAttribute('name', 'semyde');
+    $tinc = $dom->createElement('tincture');
+    $col = $dom->createElement('colour');
+    $col->setAttribute('name', $back);
+    $tinc->appendChild($col);
+    $semyde->appendChild($tinc);
+    $charge = $dom->createElement('charge');
+    $charge->setAttribute('type', 'symbol');
+    $charge->setAttribute('subtype', 'question-mark');
+    $charge->setAttribute('number', '1');
+    $tinc = $dom->createElement('tincture');
+    $col = $dom->createElement('colour');
+    $col->setAttribute('name', $fore);
+    $tinc->appendChild($col);
+    $charge->appendChild($tinc);
+    $semyde->appendChild($charge);
+    $item->parentNode->replaceChild($semyde,$item);
+  }
+
   /*
 
   //
   foreach ( $xpath->query("//") as $item ) {
     ;
   }
-*/  
+*/
 }
 
 ?>

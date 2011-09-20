@@ -1,4 +1,4 @@
-/* Copyright 2010 Karl R. Wilcox 
+/* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -28,11 +28,6 @@ var testTemplates = new Array (
   "[divisions2] {ucolour} and {fur}",
   "{ucolour} {1} {ccharge} [position]"
 );
-
-function getTestVersion() {
-  return testVersion;
-}
-
 
 function getBlazons(maxChoice) {
   var brac1 = new RegExp("\\[","g");
@@ -65,3 +60,29 @@ function getBlazons(maxChoice) {
 
   return choices;
 }
+
+var right = 0;
+function init_quiz() {
+  form = document.forms['myform'];
+  questions = document.getElementById('questions');
+  choices = getBlazons(3);
+  right = parseInt(Math.random()*3);
+  document.getElementById('Q0').firstChild.nodeValue = choices[0];
+  document.getElementById('Q1').firstChild.nodeValue= choices[1];
+  document.getElementById('Q2').firstChild.nodeValue= choices[2];
+  requestSVG('/include/shield/drawshield.php?nolog=1&size=300&blazon=' + encodeURIComponent(choices[right]),'shieldimg');
+}
+
+function newquestion() {
+  document.getElementById('I0').src = "/include/shield/thumbs/question.png";
+  document.getElementById('I1').src = "/include/shield/thumbs/question.png";
+  document.getElementById('I2').src = "/include/shield/thumbs/question.png";
+  init_quiz();
+};
+
+function checkanswer(answer) {
+  document.getElementById('I' + answer).src = (answer == right ) ? "/include/shield/thumbs/right.png" : "/include/shield/thumbs/wrong.png";
+};
+
+
+window.onload=init_quiz();

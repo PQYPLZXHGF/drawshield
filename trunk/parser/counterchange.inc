@@ -22,7 +22,7 @@ function counterchange() {
   $node = null;
 
   if ( search_match($counter) != null ) {
-    $node = $dom->create_element('counterchanged');
+    $node = $dom->createElement('counterchanged');
   }
   return $node;
 }

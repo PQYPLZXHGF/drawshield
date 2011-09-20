@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,27 +16,27 @@
 function makeCharge($charge, $mods = array() ) {
   $placements = array(0 => 'x/x/x/x/x/x');
   $locations = array(0 => 'default');
-  $counts = array(0 => $charge->get_attribute('number'));
+  $counts = array(0 => $charge->getAttribute('number'));
   $pcount = $lcount = $ccount = 0;
   $retval = '';
-  foreach ( $charge->child_nodes() as $child ){
-    if ( $child->node_name() == 'modifier' ) {
-      switch ( $child->get_attribute('name')) { 
+  foreach ( $charge->childNodes as $child ){
+    if ( $child->nodeName == 'modifier' ) {
+      switch ( $child->getAttribute('name')) {
         case 'location':
-          $locations[$lcount++] = $child->get_attribute('param');
+          $locations[$lcount++] = $child->getAttribute('param');
           break;
         case 'placement':
-          $placements[$pcount++] = $child->get_attribute('param');
+          $placements[$pcount++] = $child->getAttribute('param');
           break;
         case 'count':
-          $counts[$ccount++] = $child->get_attribute('param');
+          $counts[$ccount++] = $child->getAttribute('param');
           break;
       }
     }
   }
   for ( $i = 0; $i < count($placements); $i++ ) {
     // If more than one location, use location counts, otherwise use given number
-    if ( $lcount > 1 ) $charge->set_attribute('number', $counts[$i]);
+    if ( $lcount > 1 ) $charge->setAttribute( 'number', $counts[$i]);
     $retval .= place_charges ( $charge, $placements[$i], $mods );
     if ( $locations[$i] != 'default' ) {
       $in_data = explode(',',$locations[$i]);
@@ -49,36 +49,42 @@ function makeCharge($charge, $mods = array() ) {
 
 function includeCharge( &$node ) {
   $charge = array ();
-  include ( 'charges/' . $node->get_attribute('type') . '/' . $node->get_attribute('subtype') . '.inc' );
+  include ( 'charges/' . $node->getAttribute('type') . '/' . $node->getAttribute('subtype') . '.inc' );
   return $charge;
 }
 
 function getCharge( $node ) {
 
   $chg_data = null;
-  if ( $node->node_name() == 'missing' ) {
+  if ( $node->nodeName == 'missing' ) {
     $subtype = 'missing';
     $chg_data = array ( 'width' => 100, 'height' => 100,
-        'body' => '<path fill-rule="evenodd" d="M0,0h100v100h-100zM15,15h70v70h-70z" />
-              <text x="50" y="65" font-size="30" text-anchor="middle">Msng</text>', 'wflex' => 2, 'hflex' => 2 );
+        'body' => '<g stroke="none"><path fill-rule="evenodd" d="M0,0h100v100h-100zM15,15h70v70h-70z" />
+              <text x="50" y="65" font-size="30" text-anchor="middle">Msng</text></g>', 'wflex' => 2, 'hflex' => 2 );
   } else {
-    $subtype = $node->get_attribute('subtype');
+    $subtype = $node->getAttribute('subtype');
     $charge = includeCharge( $node );
     if ( count($charge) < 1 ) {
-      my_trigger_error("Cannot draw $sub_type", E_SVG, __FILE__, __LINE__);
+      draw_message('internal',"Cannot draw $sub_type", __FILE__, __LINE__);
     } else {
       $chg_data = $charge;
     }
   }
-  if ( $chg_data == null ) {
-    $subtype = 'missing';
+  if ( $chg_data == null or !array_key_exists('body', $chg_data) ) {
+    if ( ($name = $node->getAttribute('tokens')) == null ) $name = $subtype;
     $chg_data = array ( 'width' => 100, 'height' => 100,
-        'body' => '<path fill-rule="evenodd" d="M0,0h100v100h-100zM15,15h70v70h-70z" />
-              <text x="50" y="65" font-size="30" text-anchor="middle">Sorry</text>', 'wflex' => 2, 'hflex' => 2 );
+        'body' => '<g stroke="none"><path fill-rule="evenodd" d="M0,0h100v100h-100zM10,10h80v80h-80z" />' .
+               '<text x="50" y="55" font-size="15" text-anchor="middle">' . $name . '</text></g>',
+               'wflex' => 2, 'hflex' => 2 );
+    $subtype = 'missing';
   }
   $features = (array_key_exists('features', $chg_data)) ? $chg_data['features'] : null;
-  if ( !array_key_exists('title', $chg_data)) $chg_data['title'] = 'Charge';
-  if ( !array_key_exists('desc', $chg_data)) $chg_data['desc'] = $subtype;
+  if ( ($title = $node->getAttribute('tokens')) == null ) $title = $subtype;
+  if ( array_key_exists('licence', $charge) ) {
+    $title .= ': ' . $charge['licence'];
+    draw_message('licence', $title);
+  }
+  $chg_data['title'] = $title;
   $body = $chg_data['body'];
 
   // Process charge features and modifiers
@@ -87,34 +93,34 @@ function getCharge( $node ) {
   $charge_col = null;
   $demi = null;
   $charge_is_proper = false;
-  foreach ( $node->child_nodes() as $child ) {
-    switch ( $child->node_name() ) {
+  foreach ( $node->childNodes as $child ) {
+    switch ( $child->nodeName ) {
       case 'feature':
-        $feat_cols[$child->get_attribute('name')] = $child->first_child();
+        $feat_cols[$child->getAttribute('name')] = $child->firstChild;
         break;
-      case 'tincture': 
+      case 'tincture':
         $charge_col = $child;
         break;
       case 'modifier':
-        switch ($child->get_attribute('name')) {
+        switch ($child->getAttribute('name')) {
           case 'demi':
             $demi = true;
             break;
           case 'on':
-            $charges_on = $child->first_child();
+            $charges_on = $child->firstChild;
             break;
         }
         break;
     }
   }
-  $col_type = $charge_col->first_child();
-  if ( $col_type->node_name() == 'default' and array_key_exists('default', $chg_data) ) {
-    $col_type->set_attribute('spec', $chg_data['default']);
+  $col_type = $charge_col->firstChild;
+  if ( $col_type->nodeName == 'default' and array_key_exists('default', $chg_data) ) {
+    $col_type->setAttribute('spec', $chg_data['default']);
   }
   // Apply proper colour (if there is one)
-  if ( $col_type->node_name() == 'proper' and array_key_exists('proper', $chg_data) ) 
+  if ( $col_type->nodeName == 'proper' and array_key_exists('proper', $chg_data) )
   {
-    $col_type->set_attribute('spec', $chg_data['proper']);
+    $col_type->setAttribute('spec', $chg_data['proper']);
     $charge_is_proper = true;
   }
 
@@ -122,32 +128,35 @@ function getCharge( $node ) {
   if ( $features ) {
     foreach ( $features as $key => $data ) {
       // Find if there is a proper colour
-      if ( array_key_exists('proper', $data) ) 
+      if ( array_key_exists('proper', $data) )
         $proper_spec = $data['proper'];
       elseif ( array_key_exists('proper', $chg_data) )
         $proper_spec = $chg_data['proper'];
       // if ( ! array_key_exists('body', $data) ) continue; // No body, so no colour to apply
       if ( array_key_exists($key, $feat_cols) and ($feat_col = $feat_cols[$key]) != null ) { // we have an explicitly coloured feature
-        $col_type = $feat_col->first_child();
-        if ( $col_type->node_name() == 'proper' ) $col_type->set_attribute('spec', $proper_spec);
-        $body .= apply_tincture( $feat_col, $data['body'] );
+        $col_type = $feat_col->firstChild;
+        if ( $col_type->nodeName == 'proper' ) $col_type->setAttribute('spec', $proper_spec);
+        $feature = apply_tincture( $feat_col, $data['body'] );
       } else { // colour not given in blazon
         if ( array_key_exists('notpresent', $data) and !array_key_exists($key,$feat_cols) ) {
-          $body .= $data['notpresent']; // Use the notpresent data
+          $feature= $data['notpresent']; // Use the notpresent data
         } elseif ( array_key_exists('colour', $data )) {
           // if given, use a default colour
-          $body .= '<g fill="' . $data['colour'] . '">' . $data['body'] . '</g>';
+          $feature= '<g fill="' . $data['colour'] . '">' . $data['body'] . '</g>';
         } elseif ( $charge_is_proper and array_key_exists('proper', $data )) {
           // if given, use a proper colour
-          $body .= '<g fill="' . $data['proper'] . '">' . $data['body'] . '</g>';
+          $feature= '<g fill="' . $data['proper'] . '">' . $data['body'] . '</g>';
         } else {
           // else just add the feature to the main body
-          $body .= $data['body'];
+          $feature= $data['body'];
         }
-      } 
+      }
+      if ( array_key_exists('behind', $data ))
+        $body = $feature . $body;
+      else
+        $body .= $feature;
     }
   }
-  if ( array_key_exists('tail', $chg_data) ) $body .= $chg_data['tail'];
   if ( $demi!= null ) {
     if ( array_key_exists('demi', $chg_data) and $chg_data['demi'] == 'top' ) {
       $half = $chg_data['height'] / 2;
@@ -171,7 +180,8 @@ function getCharge( $node ) {
                         $scale, $charges);
     $body .= $charges;
   }
-  $chg_data['body'] = $body;
+  // Set the stroke colour for all charges
+  $chg_data['body'] = '<g stroke="#696969">' . $body . '</g>';
   return $chg_data;
 }
 ?>

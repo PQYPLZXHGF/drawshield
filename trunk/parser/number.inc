@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ function number( $layout_only = false ) {
       }
     } elseif ( $number == 'asmany' ) {
       if ($p_globals['asmany'] == null ) {
-        my_trigger_error('No previous number', E_PARSER);
+        parser_message('blazon', 'No previous number');
         $number = 2;
       } else {
         $number = $p_globals['asmany'];

@@ -239,6 +239,19 @@ function rewrite() {
         $item->removeChild($child);
   }
 
+  // A charge/within/ordinary becomes ordinary/between/charge
+  foreach ( $xpath->query("//charge/modifier[@name='within']/ordinary") as $ordinary ) {
+    $charge = $ordinary->parentNode->parentNode;
+    $parent = $charge->parentNode;
+    $new_mod = make_mod('between');
+    $new_charge = deep_copy($charge);
+    foreach ( $new_charge->childNodes as $child )
+      if ( $child->nodeName == 'modifier' and $child->getAttribute('name') == 'within' )
+        $new_charge->removeChild($child);
+    $new_mod->appendChild($new_charge);
+    $ordinary->appendChild($new_mod);
+    $parent->replaceChild($ordinary,$charge);
+  }
   // Help with error visualisation
 
   // Replace missing textures

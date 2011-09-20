@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -99,7 +99,7 @@ function makeFur ( $name ) {
 
   if ( ! array_key_exists($name, $fur_data) ) {
    $name = 'pean';
-   my_trigger_error("Cannot draw fur $name", E_SVG );
+   draw_message( 'internal', "Cannot draw fur $name" );
   }
   return $fur_data[$name];
 }

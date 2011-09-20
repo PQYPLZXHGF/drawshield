@@ -1,4 +1,4 @@
-/* Copyright 2010 Karl R. Wilcox 
+/* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,7 +12,8 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-var version = "0.9a"
+var version = "0.9a";
+var size=280;
 
 var shieldData = {};
 shieldData["~field~"] = [ "Choose the type of field",
@@ -65,6 +66,18 @@ shieldData["~ordchg~"] = [ "Do you want to add something else?",
       '~ordinary~', "An Ordinary", 'ordinary.png',
       '~diminutives~', "Some Smaller Ordinaries", 'diminutive.png',
       '~numcharges~', "Some Charges", 'charge.png',
+      'on ~ordinary~ ~numcharges~', "Some charges on an ordinary", 'chgonord.png',
+      'A ~charge~ ~chargeinposition~', "One charge in a set position", 'indexterchief.png',
+      ];
+shieldData["~chargeinposition~"] = [ "Where do you want to place the charge?",
+      'in dexter chief', "In dexter chief", 'indexterchief.png',
+      'in middle chief', "In middle chief", 'inmiddlechief.png',
+      'in sinister chief', "In sinister chief", 'insinisterchief.png',
+      'in dexter base', "In dexter base", 'indexterbase.png',
+      'in middle base', "In middle base", 'inmiddlebase.png',
+      'in sinister base', "In sinister base", 'insinisterbase.png',
+      'in fess point', "In fess point", 'infesspoint.png',
+      'in nombril', "In nombril", 'innombril.png',
       ];
 shieldData["~divided~"] = [ "How do you want to divide the shield? (You will colour the black area first)",
       'per pale ~linemod~ ~plain~ and ~plain~', "Per Pale", 'perpale.png',
@@ -134,7 +147,7 @@ shieldData["~charge~"] = [ "Which charge would you like to add? (These are just 
       'mullet ~colour~', "Mullet", 'mullet.png',
       'bezant', "Bezant", 'bezant.png',
       'gauntlet ~colour~', "Gauntlet", 'gauntlet.png',
-      'maltese cross', "Maltese Cross", 'maltese-cross.png',
+      'maltese cross ~colour~', "Maltese Cross", 'maltese-cross.png',
       'rose ~colour~ seeded argent barbed gules', "Rose", "rose.png",
       'antique crown ~colour~', "Crown", 'crown.png',
       'cornish chough proper', "Cornish Chough", 'chough.png',
@@ -147,22 +160,22 @@ function testVersion() {
 var bStack;
 var qStack;
 
-function init() {
+function init_build() {
   form = document.forms['myform'];
   form.blazon.value="~field~";
   questions = document.getElementById("questions");
   questions.replaceChild( nextQuestion ( form.blazon.value ), questions.firstChild );
-  document.getElementById('caption').firstChild.nodeValue = "Go back one step";
+//  document.getElementById('caption').firstChild.nodeValue = "Go back one step";
   bStack = [];
   qStack = [];
-  requestSVG('/include/shield/drawshield.php?blazon=Argent%20the%20word%20shield;%20in%20chief%20the%20word%20Your;%20in%20base%20the%20word%20here%20sable','shieldimg');
+  requestSVG('/include/shield/drawshield.php?nolog=1&size=' + size+ '&blazon=Argent%20the%20word%20shield;%20in%20chief%20the%20word%20Your;%20in%20base%20the%20word%20here%20sable','shieldimg');
 }
 
-document.forms['myform'].finishbutton.onclick = function () {
+function finished() {
   document.getElementById('blazon').removeAttribute('disabled');
-  document.forms['myform'].prevbutton.value="Update!";
-  document.forms['myform'].prevbutton.onclick = update;
-  document.getElementById('caption').firstChild.nodeValue = "Draw new shield";
+//  document.forms['myform'].prevbutton.value="Update!";
+//  document.forms['myform'].prevbutton.onclick = update;
+//  document.getElementById('caption').firstChild.nodeValue = "Draw new shield";
   questions = document.getElementById('questions');
   para = document.createElement('p');
   words = document.createTextNode('Congratulations! You can now modify your ' +
@@ -183,16 +196,15 @@ function goback() {
 }
 
 function update() {
-  document.forms['myform'].prevbutton.value="Back";
-  document.forms['myform'].prevbutton.onclick = goback;
+//  document.forms['myform'].prevbutton.value="Back";
+//  document.forms['myform'].prevbutton.onclick = goback;
   form = document.forms['myform'];
-  requestSVG('/include/shield/drawshield.php?blazon=' + encodeURIComponent(form.blazon.value),'shieldimg');  
+  requestSVG('/include/shield/drawshield.php?nolog=1&size=' + size+ '&blazon=' + encodeURIComponent(form.blazon.value),'shieldimg');
 }
 
-document.forms['myform'].clearbutton.onclick = function () {
+function do_reset() {
   document.getElementById('blazon').disabled='disabled';
-  
-  init();
+  init_build();
 }
 
 function do_replace(answer) {
@@ -209,7 +221,7 @@ function do_replace(answer) {
   }
   questions.replaceChild(nextQuestion ( form.blazon.value ), questions.firstChild);
   if ( form.blazon.value.indexOf("~") == -1 ) {
-    requestSVG('/include/shield/drawshield.php?blazon=' + encodeURIComponent(form.blazon.value),'shieldimg');
+    requestSVG('/include/shield/drawshield.php?nolog=1&size=' + size+ '&blazon=' + encodeURIComponent(form.blazon.value),'shieldimg');
     window.location = "#top";
   }
 }
@@ -222,45 +234,41 @@ function nextQuestion( blazon ) {
     } else {
     sData = shieldData[target];
   }
-  // retval = "<p>" + sData[0] + '</p>\n<table border="2">';
   retDOM = document.createElement('div');
-  temp = document.createElement('p');
+  temp = document.createElement('h2');
   temp.appendChild(document.createTextNode(sData[0]));
   retDOM.appendChild(temp);
   tr = 0;
   table = document.createElement('table');
   table.setAttribute('border','2');
+  table.setAttribute('style','z-index:100;position:relative;top:0px;');
   trow = null;
   for (var i = 1; i < sData.length; i +=3 ) {
-    if ( tr == 0 ) { 
+    if ( tr == 0 ) {
       if ( trow != null ) { table.appendChild(trow); }
       trow = document.createElement('tr');
     }
     tr += 1;
-    //retval += '<td onclick="do_replace(\'' + sData[i] + '\')">';
     td = document.createElement('td');
     td.setAttribute('onclick','do_replace("' + sData[i] + '")');
+    td.setAttribute('style','background:#EBEBE4;');
     img = document.createElement('img');
-    img.setAttribute('class','img-c');
+    img.setAttribute('class','align-center');
     img.setAttribute('alt','choice');
-    img.setAttribute('width','150');
-    img.setAttribute('height','150');
+    img.setAttribute('width','120');
+    img.setAttribute('height','120');
     if ( sData[i+2] != '' ) {
-//      retval += '<img class="img-c" src="/images/buildshield/' + sData[i+2] + '" alt="choice" width="150" height="150" />\n';
-      img.setAttribute('src','/pages/shield/img/' + sData[i+2]);
+      img.setAttribute('src','/include/shield/thumbs/' + sData[i+2]);
     } else {
-//      retval += '<img class="img-c" src="/images/buildshield/none.png" alt="choice" width="150" height="150" />\n';
-      img.setAttribute('src','/pages/shield/img/none.png');
+      img.setAttribute('src','/include/shield/thumbs/none.png');
     }
     td.appendChild(img);
     temp = document.createElement('p');
-    temp.setAttribute('class','img-c');
+    temp.setAttribute('class','align-center');
     temp.appendChild(document.createTextNode(sData[i+1]));
-//    retval += '<p class="img-c" >' + sData[i+1] + '</p></td>\n';
     td.appendChild(temp);
     trow.appendChild(td);
     if ( tr == 4 ) {
-//      retval += '</tr>\n';
       tr = 0;
     }
   }
@@ -268,3 +276,4 @@ function nextQuestion( blazon ) {
   retDOM.appendChild(table);
   return retDOM;
 }
+window.onload=init_build();

@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -77,48 +77,62 @@ function makeTreatment ( $node ) {
         <polygon points="0,240 68,280 68,440 125,480 -125,480 -59,440 -59,280" />' ),
   );
 
-  $name = $node->get_attribute('name');
-  $parent = $node->parent_node();
+  $name = $node->getAttribute('name');
+  $parent = $node->parentNode;
   // Some treatments are rotated if on some ordinaries
-  if ( $parent->node_name() == 'ordinary' ) {
-    $ord_type = $parent->get_attribute('subtype');
+  if ( $parent->nodeName == 'ordinary' ) {
+    $ord_type = $parent->getAttribute('subtype');
     if ( $ord_type == 'saltire' or substr($ord_type,0,6) == 'chevron' ) {
       if ( array_key_exists($name . '45', $treatment_data) ) $name .= '45';
     }
   }
 
-  $children = $node->child_nodes();
+  $children = $node->childNodes;
+  $tinctures = array();
+  foreach ( $children as $child ) {
+    if ( $child->nodeName == 'tincture' )
+      $tinctures[$child->getAttribute('index')] = $child;
+  }
   if ( array_key_exists($name, $treatment_data) ) {
     $treatment = $treatment_data[$name][2];
     $size_x = $treatment_data[$name][0];
     $size_y = $treatment_data[$name][1];
-    $base = apply_tincture ( $children[0], '<rect x="0" y="0" width="' .
+    $base = apply_tincture ( $tinctures[1], '<rect x="0" y="0" width="' .
                   $size_x . '" height="' . $size_y . '" />', "$size_x,$size_y" );
-    $pattern = apply_tincture ( $children[1], $treatment, "$size_x,$size_y" );
+    $pattern = apply_tincture ( $tinctures[2], $treatment, "$size_x,$size_y" );
     return array ( $size_x, $size_y, $base . $pattern );
   } else {
-    my_trigger_error("Cannot draw treatment $name", E_SVG);
+    draw_message('internal', "Cannot draw treatment $name", __FILE__, __LINE__);
     return array ( 100, 100, '<rect x="0" y="0" width="100" height="100" fill="#888888" />' );
   }
 }
 
 function makeSemy( $node ) {
-  $name = $node->get_attribute('name');
-  $children = $node->child_nodes();
-  if ( strpos ( $name, 'counter-' ) === 0 ) {
+  $name = $node->getAttribute('name');
+  $children = $node->childNodes;
+  $background = $charge = null;
+  foreach ( $children as $child ) {
+    if ( $child->nodeName == 'tincture' )
+      $background = $child;
+   elseif ( $child->nodeName == 'charge' )
+     $charge = $child;
+  }
+  if ( $background == null or $charge == null )
+    draw_message('internal', 'Bad semyde element', __FILE__, __LINE__ );
+ if ( strpos ( $name, 'counter-' ) === 0 ) { // See rewriter.inc, some treatments are rewritten as semyde
     // special layout
-    $semy = PlaceCharge($children[1], 100, 100, 50, 50, 90);
-    $semy .= PlaceCharge($children[1], 100, 100, 200, 50, 90);
-    $semy .= PlaceCharge($children[1], 100, 100, 25, 175);
-    $semy .= PlaceCharge($children[1], 100, 100, 125, 175);
-    $semy .= PlaceCharge($children[1], 100, 100, 225, 175);
-    $base = apply_tincture ( $children[0], '<rect x="0" y="0" width="300" height="250" />', '300,250' );
+    $semy = PlaceCharge($charge, 100, 100, 50, 50, 90);
+    $semy .= PlaceCharge($charge, 100, 100, 200, 50, 90);
+    $semy .= PlaceCharge($charge, 100, 100, 25, 175);
+    $semy .= PlaceCharge($charge, 100, 100, 125, 175);
+    $semy .= PlaceCharge($charge, 100, 100, 225, 175);
+    $base = apply_tincture ( $background, '<rect x="0" y="0" width="300" height="250" />', '300,250' );
     return array ( 300, 250, $base . $semy );
   } else {
-    $semy = PlaceCharge($children[1], 100, 100, 50, 50);
-    $semy .= PlaceCharge($children[1], 100, 100, 150, 150);
-    $base = apply_tincture ( $children[0], '<rect x="0" y="0" width="200" height="200" />', '200,200' );
+    $semy = PlaceCharge($charge, 100, 100, 50, 50);
+    $semy .= PlaceCharge($charge, 100, 100, 150, 150);
+    $base = apply_tincture ( $background, '<rect x="0" y="0" width="200" height="200" />', '200,200' );
     return array ( 200, 200, $base . $semy );
-  }
+ }
 }
 ?>

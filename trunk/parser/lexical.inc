@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ function fill_words($blazon_in) {
   global $words;
   $ignore_words = array ( 'also',  );
   $blazon = iconv("UTF-8", "ASCII//TRANSLIT", $blazon_in);
-  // raise_error('hello ' . $blazon);
 
   $i = 0;
   $comment = false;
@@ -110,7 +109,7 @@ function fill_words($blazon_in) {
 function match_number ( &$count, $t_word ) {
   global $p_globals;
   global $words, $cur_word;
-  
+
   $numbers = array (
   array (0, '(0|zero)' ) ,// just for completeness...
   array (1, '(1|one)' ),
@@ -138,7 +137,7 @@ function match_number ( &$count, $t_word ) {
   if ( preg_match ( '/^(as|so)$/i',  $words[$t_word] ) and ($tword+1 < sizeof($words)) and preg_match ( '/^many$/i',  $words[$t_word+1] ) ) {
     $count = 2;
     if ($p_globals['asmany'] == null ) {
-      my_trigger_error('No previous number', E_PARSER);
+      parser_message('blazon', 'No previous number');
       $number = 2;
     } else {
       $number = $p_globals['asmany'];
@@ -166,7 +165,7 @@ function check_match ( $match_string ) {
 
 // Try to match each of the regular expressions in the array
 // with words in the input. Return 0 on fail, number of input
-// words matched on success 
+// words matched on success
 // An initial '?' indicates match is optional
 function check_match2 ( $match_string ) {
   global $words, $cur_word, $matched_number, $matched_word;
@@ -183,14 +182,14 @@ function check_match2 ( $match_string ) {
     if ( $regex{0} == '?' ) {
       $optional = true;
       $regex = substr($regex, 1);
-    }  
+    }
     if ( $t_word >= sizeof(($words) ) ) { // no more input
       if ( $optional ) {
         continue;
       } else {
         return 0;
       }
-    } 
+    }
     $number = null;
     $count = 1;
     if ( $regex == '*' ) {
@@ -201,7 +200,7 @@ function check_match2 ( $match_string ) {
       $t_word += $count; // Got a match, move on
       if ( $number ) $matched_number = $number;
     } elseif ( ! ($optional)) {
-      if ( $res === false ) raise_error('(INTERNAL) bad regex - ' . $regex );
+      if ( $res === false ) parser_message( 'internal', 'Bad regex - ' . $regex );
       return 0;
     }
   }
@@ -211,15 +210,16 @@ function check_match2 ( $match_string ) {
 
 
 function search_match ( $terms ) {
-  global $cur_word, $matched_number, $matched_word;
+  global $words, $cur_word, $matched_number, $matched_word, $matched_tokens;
 
+  $first_token = $cur_word;
   $max_match = 0;
   $match = null;
   $max_number = null;
   $max_word = null;
   foreach ($terms as $term) {
      if ( !is_array($term) or count($term) < 2 ) {
-       raise_error ( 'AARRGH! ' . $term[0] );
+       parser_message ( 'internal', 'Bad search term ' . $term[0] );
        return null;
      }
      if ( ( $count = check_match($term[1])) ) {
@@ -235,6 +235,8 @@ function search_match ( $terms ) {
     $cur_word = $max_match;
     if ( $max_number != null ) $match[0] = $max_number;
     if ( $max_word != null ) $match[0] = $max_word;
+    $num_tokens = $cur_word - $first_token;
+    $matched_tokens = implode(' ', array_slice($words, $first_token, $num_tokens));
   }
   return $match;
 }

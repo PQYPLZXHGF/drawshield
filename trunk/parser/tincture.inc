@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ function colour_or_fur() {
   return $temp;
 }
 
-function tincture( $lookahead = false ) {
+function tincture( $lookahead = false, $required = false ) {
   global $dom;
 
   $tinc = tincture2();
@@ -56,18 +56,19 @@ function tincture( $lookahead = false ) {
     }
     restore($state);
   }
-  if ($tinc == null and $lookahead ) {
-    $tinc = $dom->create_element('tincture');
-    $tinc->append_child($dom->create_element('missing'));
-    raise_error('Tincture missing');
+  if ($tinc == null and $required ) {
+    $tinc = $dom->createElement('tincture');
+    $tinc->setAttribute('index', 1); // Default value, overwritten later if required.
+    $tinc->appendChild ( $dom->createElement('missing'));
+    parser_message('blazon', 'Tincture missing');
   }
   return $tinc;
 }
 
 function tincture2() {
   global $dom, $p_globals;
-  
-  $backrefs = array (
+
+  static $backrefs = array (
     array ( 'ofsame', '(like|of|as) the same' ,),
     array ( 'oflast', '(like|of|as) the last' ,),
     array ( 'offield', '(like|of|as) the field' ,),
@@ -77,75 +78,121 @@ function tincture2() {
     array ( 'offourth', '(like|of|as) the (fourth|4th)' ,),
   );
 
-  $semyde = array (
+  static $treatments = array(
+    // Field treatments
+    // 'plumetty', how to draw this one?
+    // array ( 'lozengy',      'lozengy',  ), made this back into a division
+    array ( 'checky',       '(checky|cheque?y)' ),
+    array ( 'papelonny',    'pap(e|i)l?lonn(y|e)',    ),
+    array ( 'scaly',        'scaly',        ),
+    array ( 'compony',      '(compony|gobone|gobonated)',        ),
+    array ( 'compony',      'counter (compony|gobone|gobonated)',  ),
+    array ( 'fretty',       'fretty',       ),
+    array ( 'grillage',     'grillage',     ),
+    array ( 'honeycombed',  'honeycombed',  ),
+    array ( 'maily',        'maily',        ),
+    array ( 'masoned',      'masoned',      ),
+    array ( 'crusilly',     'crusilly',     ),
+    array ( 'vairy',        'vair(e|y)',    ),
+    array ( 'annuletty',    'annuletty',    ),
+    array ( 'billetty',     'billetty',     ),
+    array ( 'counter-billetty',     'billetty counter billetty', ),
+    array ( 'estoilly',     'estoilly',    ),
+    array ( 'fleury',       '(fleury|floretty)',  ),
+    array ( 'fleury',       'sem(e|y) de l(i|y)s',  ),
+    array ( 'goutty',       'go?utty',     ),
+    array ( 'bezanty',      'bezant(y|e)', true ),
+    array ( 'platy',        'platy',       true ),
+    array ( 'hurty',        'hurty',       true ),
+    array ( 'mullety',      'mullett?y',   ),
+   // array ( 'estoile',      'estoil(e|y)', ), TODO Different from mullet of six?
+   );
+
+   $groupings = array (
+     array ( true, 'both'),
+     array ( true, 'all'),
+   );
+
+   $semyde = array (
     array ( true, 'sem(e|y)|strewn de|with|of' ),
   );
-  
-  $node = $dom->create_element('tincture');
-  $node->set_attribute('tokNum',tokNum());
+
+  $node = $dom->createElement('tincture');
+  $node->setAttribute('index', 1);
+
+  // zeroth, discard grouping words
+  search_match($groupings);
 
   // First look for a back reference
   if ( ($match = search_match($backrefs)) != null ) {
     if ( $p_globals[$match[0]] == null ) {
-      raise_error("No previous tincture");
-      $child = $dom->create_element('missing');
+      parser_message('blazon', 'No previous tincture');
+      $child = $dom->createElement('missing');
     } else {
       $child = deep_copy($p_globals[$match[0]]);
     }
   } elseif ( proper() ) {
-    $child = $dom->create_element('proper');  
+    $child = $dom->createElement('proper');
   // Look for a colour or a fur
   } elseif ( ($child = colour_or_fur()) != null ) {
     // This could be [colour] [treatment] [colour],
     // unless it is followed by a comma
     comma();
     if ( !semicolon() ) {
-      if (($treat = treatment()) != null ) {
-        $newNode = $dom->create_element('tincture');
-        $newNode->append_child($child);
-        $treat->append_child($newNode);
-        $treat->append_child(tincture());
+      if (($match = search_match($treatments)) != null ) {
+        $treat = $dom->createElement('treatment');
+        $treat->setAttribute( 'name', $match[0]);
+        $treat->setAttribute( 'tokens',tokens());
+        $tinc1 = $dom->createElement('tincture');
+        $tinc1->setAttribute('index', '1');
+        $tinc1->appendChild($child);
+        $treat->appendChild($tinc1);
+        if ( !isset($match[2]) ) {
+          $tinc2 = tincture(false,true);
+          $tinc2->setAttribute('index', '2');
+          $treat->appendChild($tinc2);
+        }
         $child = $treat;
-      // could be annuletty or friends
-      } elseif ( ($object = object_treatment($child)) != null ) {
-        $child = $object;
       // Could also be [colour] [semyde] [charge]
       } elseif ( search_match($semyde) != null ) {
-        $mods = array();
-        $semyde = $dom->create_element('semyde');
-        $semyde->set_attribute('name','semyde');
-        $newNode = $dom->create_element('tincture');
-        $newNode->append_child($child);
-        $semyde->append_child($newNode);
+        $semyde = $dom->createElement('semyde');
+//        $semyde->setAttribute('name','semyde');
+        $newNode = $dom->createElement('tincture');
+        $newNode->setAttribute('index', 1);
+        $newNode->appendChild($child);
+        $semyde->appendChild($newNode);
         $charge = simple_charge( true ); // Do not worry if no number given
-        $charge->append_child( make_mod('hflex','1') );  //TODO are flex modifiers used?
-        $charge->append_child( make_mod('wflex','1') );
-        $semyde->append_child($charge);
+        $charge->appendChild( make_mod('hflex','1') );  //TODO are flex modifiers used?
+        $charge->appendChild( make_mod('wflex','1') );
+        $semyde->appendChild($charge);
         $child = $semyde;
       }
     }
-  // Look for annulletty and friends
-  } elseif ( ($child = object_treatment()) != null ) {
-    comma();
   // Look for [treatment] [colour] [colour]
-  } elseif ( ($child = treatment()) != null ) {
+  } elseif (($match = search_match($treatments)) != null ) {
+    $treat = $dom->createElement('treatment');
+    $treat->setAttribute( 'name', $match[0]);
+    $treat->setAttribute( 'tokens',tokens());
     comma();
-    $child->append_child(tincture());
+    $treat->appendChild(tincture(false,true));
     comma();
     andd();
-    $child->append_child(tincture());
+    $tinc2 = tincture(false,true);
+    $tinc2->setAttribute('index',2);
+    $treat->appendChild($tinc2);
+    $child = $treat;
   // Look for counterchange
   } elseif ( ($child = counterchange()) != null ) {
     // Do nothing
   // Look for division
   } elseif ( ($child = division()) != null ) {
     // Look for a second (normally counterchanged) division
-  //  if ( ( $div2 = division() ) != null ) $child->append_child($div2);
+  //  if ( ( $div2 = division() ) != null ) $child->appendChild($div2);
   } else {
     // Not found any, backtrack and exit
     return null;
   }
-  $node->append_child($child);
+  $node->appendChild($child);
   $p_globals['ofsame'] = $child;
   return $node;
 }

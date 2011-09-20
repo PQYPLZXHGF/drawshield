@@ -32,9 +32,9 @@ function makeDiv_gyronny( $node, $div_num ) {
   $allowed = array ( '6', '8', '10', '12', '16' );
 
   $num_of = '0';
-  foreach ( $node->child_nodes() as $child ) {
-    if ( $child->node_name() == 'modifier' and $child->get_attribute('name') == 'ofnum' ) {
-      $num_of = $child->get_attribute('param');
+  foreach ( $node->childNodes as $child ) {
+    if ( $child->nodeName == 'modifier' and $child->getAttribute('name') == 'ofnum' ) {
+      $num_of = $child->getAttribute('param');
       break;
     }
   }

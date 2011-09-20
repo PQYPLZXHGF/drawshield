@@ -22,7 +22,7 @@ function makeDiv_quarterly( $node, $div_num ) {
     'quarterly-per-fess' => array ( 'NC' => 'X500Y-100a600c600E>600g600    X-100Y500A>600c800e600g800',  'CH' => 'X500Y200a500c500E>500g500    X0Y700A>500c500e500g500' ),
     'quarterly-per-pale' => array ( 'NC' => 'X500Y-100a600c600e600G<600    X-100Y500a600C<800e600g800',  'CH' => 'X500Y200a500c500e500G<500    X0Y700a500C<500e500g500' ),
   );
-  $name = $node->get_attribute('subtype');
+  $name = $node->getAttribute('subtype');
 
   return $q_data[$name];
 }

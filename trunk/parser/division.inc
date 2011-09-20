@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,58 +17,53 @@ function division( $depth = 1 ) {
   global $dom;
 
   static $divisions = array (
-    //       filename           regexs
+    //       filename           regexs         needs 3 colours?
     array ( 'pily',               'pily', 'common', ),
     array ( 'quarterly',          'quarterly/?party per cross', 'quarterly',  ),
     array ( 'quarterly-per-fess', 'quarterly per fess', 'quarterly',  ),
     array ( 'quarterly-per-pale', 'quarterly per pale', 'quarterly',  ),
     array ( 'paly-bendy',         'paly bendy', 'common', ),
+    array ( 'paly-bendy',         'bendy paly', 'common', ),
     array ( 'pily-bendy',         'pily bendy', 'common', ),
-    array ( 'pily-bendy-sinister','pily bendy sinister' , 'common', ),
+    array ( 'pily-bendy',         'bendy pily', 'common', ),
     array ( 'barry',              '(barry|barruly)', 'bar',  ),
     array ( 'paly',               'paly', 'bar',  ),
     array ( 'chape',              'chape', 'common',  ),
     array ( 'chevronny',          'chevronn?(ell)?y', 'chevronny',  ),
     array ( 'chausse',            'chausse', 'common',  ),
-    array ( 'quarterly-quartered','quarterly quartered', 'gyronny',  ),
+    array ( 'gyronny',			'quarterly quartered', 'gyronny',  ),
     array ( 'gyronny',            'g(i|y)ronny', 'gyronny',  ),
     array ( 'bendy',              'bendy', 'bar',  ),
-    array ( 'bendy-sinister',     'bendy sinister' , 'bar',  ),
     array ( 'per-fess',           '?party per fesse?' , 'common', ),
     array ( 'per-fess',           'parted fesswise' , 'common', ),
     array ( 'per-pale',           '?party per pale' , 'common', ),
     array ( 'per-pale',           'parted palewise' , 'common', ),
-    array ( 'per-pile',           '?party per pile' , 'common', ),
-    array ( 'per-pile',           'parted pilewise' , 'common', ),
-    array ( 'per-pall',           '?party per pall' , 'common', ),
-    array ( 'per-pall',           'tierced in pairle' , 'common', ),
-    array ( 'per-pall-reversed',  '?party per pall reversed' , 'common', ),
-    array ( 'per-pall-reversed',  'tierced in pairle reversed' , 'common', ),
+    array ( 'per-pile',           '?party per pile' , 'common', true, ),
+    array ( 'per-pile',           'parted pilewise' , 'common', true, ),
+    array ( 'per-pall',           '?party per pall' , 'common',  true,),
+    array ( 'per-pall',           'tierced in pairle' , 'common', true, ),
     array ( 'per-chevron',        '?party per chevron' , 'common', ),
     array ( 'per-chevron',        'parted chevronwise' , 'common', ),
     array ( 'per-bend',           '?party per bend', 'common', ),
     array ( 'per-bend',           'parted bendwise', 'common', ),
-    array ( 'per-bend-sinister',  '?party per bend sinister'   , 'common', ),
-    array ( 'per-bend-sinister',  'parted bendwise sinister'  , 'common', ),
-    array ( 'per-bend-fracted',   '?party per bend fracted', 'common', ),
-    array ( 'per-bend-fracted',   'parted bendwise fracted', 'common', ),
-    array ( 'per-bend-sinister-fracted',  '?party per bend sinister fracted'   , 'common', ),
-    array ( 'per-bend-sinister-fracted',  'parted bendwise sinister fracted'  , 'common', ),
     array ( 'per-saltire',        '?party per saltire/parted saltirewise' , 'common',),
-    array ( 'tierced-in-pale',    'tierced in pale' , 'common',),
-    array ( 'tierced-in-fess',    'tierced in fess' , 'common',),
+    array ( 'tierced-in-pale',    'tierced in pale' , 'common', true,),
+    array ( 'tierced-in-fess',    'tierced in fess' , 'common', true,),
+    array ( 'tierced-in-bend',    'tierced in bend' , 'common', true,),
+    array ( 'tierced-in-chevron',    'tierced in chevron' , 'common', true,),
     array ( 'fusily',             'fusill?y', 'pattern', ),
     array ( 'fusily-bendy',       'fusill?y bendy ?dexter/fusill?y in bend', 'pattern', ),
-    array ( 'fusily-bendy-sinister',    'fusill?y bendy sinister/fusill?y in bend sinister', 'pattern', ),
     array ( 'lozengy',            '(lozengy|masculy)', 'pattern' ),
     array ( 'barry-bendy',        'barry bendy ?lozengy' , 'pattern' ),
     array ( 'barry-pily',         'barry pily' , 'bar' ),
-    array ( 'barry-pily-sinister','barry pily sinister' , 'bar' ),
-    array ( 'barry-bendy-sinister','barry bendy sinister ?lozengy' , 'pattern' ),
     array ( 'barry-indented-oio', 'barry indented ?the (one|1) in the other', 'pattern' ),
   );
-  
-  static $charges_on = array ( 
+
+  static $of_pieces = array (
+     array ( null, 'of # ?pieces', 'mod', 'ofnum' ),
+   );
+
+  static $charges_on = array (
     array ( 'oneach', 'charged with'  ),
     array ( 'oneach', 'on each'  ),
     array ( 'onfirst', 'on each ?of ?the first'  ),
@@ -76,62 +71,47 @@ function division( $depth = 1 ) {
   );
 
   $node = null;
-  $tokNum = toknum();
   if ( ($match = search_match ( $divisions )) != null ) {
-    $node = $dom->create_element('division');
-    $node->set_attribute('tokNum',$tokNum);
-    $node->set_attribute('type', $match[2]);
-    $node->set_attribute('subtype', $match[0]);
-    $node->set_attribute('linetype', 'none');
-    $node->append_child($dom->create_element('tincture'));
-    $node->append_child($dom->create_element('tincture'));
+    $node = $dom->createElement('division');
+    $node->setAttribute( 'tokens',tokens());
+    $node->setAttribute( 'type', $match[2]);
+    $node->setAttribute( 'subtype', $match[0]);
     comma();
-    // Prepare the division function
-    if ( file_exists('parser/divisions/' . $match[2] . '.inc' )) {
-      $div_func = 'division_' . $match[2];
-      if ( ! function_exists($div_func) ) {
-        require_once ( 'parser/divisions/' . $match[2] . '.inc' );
-      }
-      // See if this division has a third colour or any type-specific modifiers
-      $node = $div_func($node);
-    }
     // generic modifiers
-    if ( $node->get_attribute('linetype') == 'none' ) {
-      $node->set_attribute('linetype', linetype());
-    }
-    comma();
-    if ( $depth == 1 ) { // look for all tinctures
-      foreach ( $node->child_nodes() as $child ) {
-        if ( $child->tagname() == 'tincture' ) {
-          $node->replace_child( tincture(true), $child );
-          andd();
-          comma();
-        }
+    get_features(array('linetype', 'position', $of_pieces), $node);
+    // always look for first tincture
+    $node->appendChild(tincture(false,true));
+    if ( $depth == 1 ) {
+      // Always look for second tincture
+      andd();
+      comma();
+      $tinc2 = tincture(false,true);
+      $tinc2->setAttribute('index', 2);
+      $node->appendChild($tinc2);
+      // Do we need a third also?
+      if ( isset($match[3]) and $match[3] === true ) {
+        andd();
+        comma();
+        $tinc3 = tincture(false,true);
+        $tinc3->setAttribute('index', 3);
+        $node->appendChild($tinc3);
       }
-    } else { // look for only 1 tincture
-      $count = 0;
-      foreach ( $node->child_nodes() as $child ) {
-        if ( $child->tagname() == 'tincture' ) {
-          if ( $count == 0 ) {
-            $node->replace_child( tincture(true), $child );
-            comma();
-            $count = 1;
-          } else {
-            $child->append_child( $dom->create_element('implied') );
-          }
-        }
-      }
+    } else { // second tincture is implied
+      $tinc = $dom->createElement('tincture');
+      $tinc->appendChild($dom->createElement('implied'));
+      $tinc->setAttribute('index', 2);
+      $node->appendChild($tinc);
     }
     if ( ($on_type = search_match($charges_on)) != null ) {
       $on_div = make_mod('on');
       if ( ($items = charge(false)) == null ) {
-        $items = $dom->create_element('missing');
-        raise_error('Nothing to go "on" the division (' . $match[0] .')' );
+        $items = $dom->createElement('missing');
+        parser_message('blazon','Nothing to go "on" the division (' . $match[0] .')' );
       }
       $pos = make_mod('position', $on_type[0]);
-      $items->append_child($pos);
-      $on_div->append_child($items);
-      $node->append_child($on_div);
+      $items->appendChild($pos);
+      $on_div->appendChild($items);
+      $node->appendChild($on_div);
     }
   }
   return $node;

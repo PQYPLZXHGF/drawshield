@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,25 +13,14 @@
    limitations under the License. */
 
 
-$error_list = array();
+$message_list = array();
 
-function error_handler($error_num, $error_string, $filename, $line, $symbols = null) {
-  global $error_list;
-  foreach ( $error_list as $error_item ) {
-    if ( $error_item['error_string'] == $error_string ) return;
-  } // This is a new error
-  $error_list[] = compact ( 'error_num', 'error_string', 'filename', 'line' );
-  switch ( $error_num ) {
-    case E_SVG:
-    case E_PARSER:
-    case E_USER_NOTICE:
-    case E_USER_WARNING: // These are safe(ish), just continue
-      break;
-    default:
-      fatal_error();
-      restore_error_handler();
-      die();
-  } 
+function draw_message( $category, $message, $filename = null, $line = null ) {
+  global $message_list;
+
+  if (! array_key_exists($category, $message_list)) $message_list[$category] = array();
+
+  $message_list[$category][] = compact ( 'message', 'filename', 'line');
 }
 
 function format($string) {
@@ -55,64 +44,68 @@ function format($string) {
 }
 
 function get_error_messages() {
-  global $error_list, $dom;
-  $yCount = 30;
+  global $message_list, $dom, $time_start;
+  $yCount = 0;
   $retval = '';
 
-  $blazonNode = $dom->document_element();
-  $parse_errors = $blazonNode->last_child();
-  if ( $parse_errors->node_name() == 'errors' ) {
-    $tokens = explode(' ', $blazonNode->get_attribute('blazonTokens'));
-    foreach ( $parse_errors->child_nodes() as $parse_error )  {
-      $tokNum = $parse_error->get_attribute('tokNum');
-      $tok_string = ' - ';
-      for ( $i = $tokNum; $i < $tokNum + 5 and $i < count($tokens); $i++ )
-        $tok_string .= $tokens[$i] . ' ';
-      if ( $i < count($tokens) ) $tok_string .= '...';
-      my_trigger_error($parse_error->get_content() . $tok_string, E_PARSER);
+  // First, gather any parser messages
+  $parser_messages = $dom->documentElement->lastChild;
+  if ( $parser_messages->nodeName == 'messages' ) {
+    foreach ( $parser_messages->childNodes as $message )  {
+      draw_message($message->getAttribute('category'), $message->firstChild->wholeText);
     }
   }
+  draw_message('information', 'Blazon - ' . $dom->documentElement->getAttribute('blazonText'));
 
-  if ( count($error_list) < 1 ) return '';
-  foreach ( $error_list as $error_item ) {
-    $this_error = '';
-    switch ( $error_item['error_num'] ) {
-      case E_SVG:
-        $this_error .= 'SVG PROBLEM - ' . $error_item['error_string'];
+/*  $time_end = microtime(true);
+  $time = $time_end - $time_start;
+  draw_message('information', sprintf ( "Elapsed time %.4f seconds", $time) ); */
+
+
+//  if ( count($message_list) < 1 ) return null;
+  $notify = false;
+  foreach ( $message_list as $key => $messages ) {
+    switch ( $key ) {
+      case 'warning':
+        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="yellow" >Warnings:' . "</text>\n";
+        $notify = true;
         break;
-      case E_PARSER:
-        $this_error .= 'Problem in Blazon - ' . $error_item['error_string'];
+      case 'blazon':
+        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="red" >Blazon Problems:' . "</text>\n";
+        $notify = true;
         break;
-      case E_USER_WARNING:
-        $this_error .= 'INTERNAL ERROR - ' . $error_item['error_string'];
+      case 'internal':
+        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="red" >Internal Errors:' . "</text>\n";
+        $notify = true;
         break;
-      case E_USER_NOTICE:
-        $this_error .= 'Problem in Blazon - ' . $error_item['error_string'];
+      case 'licence':
+        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="black" >Image Credits:' . "</text>\n";
+        break;
+      case 'information':
+        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="black" >Drawshield Information:' . "</text>\n";
         break;
       default:
-        $this_error .= $error_item['error_string'] . ' ' . $error_item['filename'] . '(' . $error_item['line'] . ') ';
+        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="black" >' . $key . "</text>\n";
         break;
     }
-    $formatted = format($this_error);
-    foreach($formatted as $line) {
-      $retval .= '<text x="10" y="' . ($yCount += 30) . '" font-size="30" fill="black" >' . $line . "</text>\n";
+    foreach ( $messages as $message_item ) {
+      $text = $message_item['message'];
+      if ( $message_item['filename'] != null ) {
+        $text .= " (${message_item['filename']}";
+        if ( $message_item['line'] != null )
+          $text .= ":${message_item['line']}";
+        $text .= ')';
+      }
+      $formatted = format($text);
+      foreach($formatted as $line) {
+        $retval .= '<text x="10" y="' . ($yCount += 30) . '" font-size="30" fill="black" >' . $line . "</text>\n";
+      }
     }
   }
   $retval = '<g id="errorbox" visibility="hidden"><rect x="0" y="0" height="' . ($yCount+30) . '" width="1000" fill="rgb(255,255,255)" />' . $retval . '</g>';
-  $retval .= '<text onclick="showerrors(evt)" fill="red" text-anchor="end" x="990" y="1160" font-size="30">Error reported</text>';
-  $retval .= '<text onclick="showerrors(evt)" fill="red" text-anchor="end" x="990" y="1190" font-size="30">Click here for details</text>';
+  if ( $notify) $retval .= '<text onclick="showerrors(evt)" fill="red" text-anchor="end" x="990" y="1160" font-size="30">Error reported</text>';
+  $retval .= '<text onclick="showerrors(evt)" fill="black" text-anchor="end" x="990" y="1190" font-size="30">Click for information</text>';
   return $retval;
 }
 
-function fatal_error() {
-  global $error_list;
-  foreach ( $error_list as $error_item ) {
-    echo 'PROGRAM ERROR - ' . $error_item['error_string'] . ' in ' . $error_item['filename'] . ' at line: ' . $error_item['line'];
-  }
-  exit;
-}
-
-function my_trigger_error( $message, $number = E_USER_WARNING, $file = '(no file)', $line = '(no line)' ) {
-  error_handler( $number, $message, $file, $line );
-}
 ?>

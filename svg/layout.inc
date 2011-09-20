@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -47,25 +47,25 @@ function place_charges ( $node, $placement, $mods = array() ) {
   switch ($placement) {
     case '':
     case 'i':
-      my_trigger_error('Internal (no placement)', E_SVG );
+      draw_message('Internal (no placement)' );
       return '';
     case 'n':
-      my_trigger_error('Not meaningful placement', E_SVG );
+      my_trigger_error('Not meaningful placement' );
       return '';
   }
-  $num_of = $node->get_attribute('number');
+  $num_of = $node->getAttribute('number');
   $addorsed = false;
   $facing = null;
   $between = null;
-  foreach ( $node->child_nodes() as $child ) {
-    if ( $child->node_name() == 'modifier' ) {
-      switch ( $child->get_attribute('name' )) {
+  foreach ( $node->childNodes as $child ) {
+    if ( $child->nodeName == 'modifier' ) {
+      switch ( $child->getAttribute('name' )) {
         case 'facing':
-          $facing = $child->get_attribute('param');
+          $facing = $child->getAttribute('param');
           break;
         case 'between':
-          $between = $child->first_child();
-          $num_of += $between->get_attribute('number');
+          $between = $child->firstChild;
+          $num_of += $between->getAttribute('number');
           break;
       }
     }
@@ -93,26 +93,26 @@ function place_charges ( $node, $placement, $mods = array() ) {
   }
   switch($place_list{0}) {
     case '':
-      my_trigger_error('Internal (bad placement)', E_SVG );
+      draw_message('internal', 'Bad placement', __FILE__, __LINE__ );
       return '';
     case 's':
-      my_trigger_error('Not enough space for charges', E_SVG );
+      draw_message( 'warning', 'Not enough space for charges' );
       return '';
     case 't':
-      my_trigger_error('Not done charge placement yet (sorry)', E_SVG );
+      draw_message( 'internal', 'Not done charge placement yet (sorry)' );
       return '';
     case 'x':
-      my_trigger_error('Wrong number of charges to place', E_SVG );
+      draw_message( 'warning', 'Wrong number of charges to place', __FILE__, __LINE__ );
       return '';
   }
   $place_list = explode(':', $place_list);
   if ( count($place_list) < $num_of ) {
-    my_trigger_error('Internal (bad place list)', E_SVG );
+    draw_message('internal', 'Bad placement list', __FILE__, __LINE__ );
     return '';
   }
   for ( $count = 0; $count < $num_of; $count++ ) {
     if ( $place_list[$count] == '' ) {
-      my_trigger_error('internal (bad place item)', E_SVG );
+      draw_message('internal', 'Bad place item', __FILE__, __LINE__ );
       continue;
     }
     $items = explode(',', $place_list[$count]);
@@ -121,7 +121,6 @@ function place_charges ( $node, $placement, $mods = array() ) {
       if ( in_array( 'sinister', $mods ))$cx = 1000 - $cx;
     }
     if ( isset($items[1]) and $items[1] != '' ) {
-     // my_trigger_error('x ' . implode(' ',$mods), E_SVG );
       $cy = $items[1];
       if ( in_array( 'inverted', $mods )) $cy = 1200 - $cy;
       if ( in_array( 'enhanced', $mods )) $cy -= 200;
@@ -156,10 +155,10 @@ function PlaceCharge ( $node,  // images
   $charge = getCharge( $node );
   $orientation = null;
   $tincture = null;
-//  $parent = $node->parent_node();
-  foreach ( $node->child_nodes() as $child ) {
-    if ( $child->node_name() == 'modifier' ) {
-      switch ( $child->get_attribute('name') ) {
+//  $parent = $node->parentNode;
+  foreach ( $node->childNodes as $child ) {
+    if ( $child->nodeName == 'modifier' ) {
+      switch ( $child->getAttribute('name') ) {
         case 'inverted':
           $inverted = true;
           break;
@@ -167,18 +166,18 @@ function PlaceCharge ( $node,  // images
           $reversed = true;
           break;
         case 'orientation':
-          $orientation = $child->get_attribute('param');
+          $orientation = $child->getAttribute('param');
           break;
       }
-    } elseif ( $child->node_name() == 'tincture' ) {
+    } elseif ( $child->nodeName == 'tincture' ) {
       $tincture = $child;
     }
   }
   if ( $tincture == null ) {
-    $col = $dom->create_element('colour');
-    $col->set_attribute('name', 'gules');
-    $tincture = $dom->create_element('tincture');
-    $tincture->append_child($col);
+    $col = $dom->createElement('colour');
+    $col->setAttribute( 'name', 'gules');
+    $tincture = $dom->createElement('tincture');
+    $tincture->appendChild ( $col);
   }
   // If there are multiple charges, choose the one with the best match to the bounding box
   $BoundAR = $boundX / $boundY;
@@ -197,8 +196,8 @@ function PlaceCharge ( $node,  // images
   $retval = $charge['body'];
   $chargeX = $charge['width'];
   $chargeY = $charge['height'];
-    $Xflex = array_key_exists('wflex', $charge) ? $charge['wflex'] : 1;
-    $Yflex = array_key_exists('hflex', $charge) ? $charge['hflex'] : 1;
+  $Xflex = array_key_exists('wflex', $charge) ? $charge['wflex'] : 1;
+  $Yflex = array_key_exists('hflex', $charge) ? $charge['hflex'] : 1;
 
   if ( $inverted ) {
     $retval = "<g transform=\"translate(0,$chargeY) scale(1,-1)\"><desc>inverted charge</desc>$retval</g>\n";
@@ -246,6 +245,27 @@ function PlaceCharge ( $node,  // images
         break;
     }
   }
+  // Fix some older charges that had orient_to_ordinary as a boolean
+  if ( array_key_exists('orient_to_ordinary', $charge) ) {
+    if ( $charge['orient_to_ordinary'] === false )
+      unset( $charge['orient_to_ordinary'] );
+    elseif ( $charge['orient_to_ordinary'] === true )
+      $charge['orient_to_ordinary'] = 1;
+  }
+
+  // If rotation is set this is becuase we need to turn to fit onto an ordinary
+  // If we CANNOT turn then assume that the bounding box is square. This makes sure we fit even if not turned
+  if ( $rotation != 0 ) {
+    if ( ! array_key_exists('orient_to_ordinary', $charge) ) {
+      $boundX = min( $boundX, $boundY );
+      $boundY = $boundX;
+      $rotation = 0 ;
+    }
+    // If we CAN turn then set the appropriate direction (depends on charge)
+    else  { // Set to 1 for normal, -1 if needs to turn other way
+      $rotation *= $charge['orient_to_ordinary'];
+    }
+  }
 
   // Calculate the size of the image to fit into the bounding box,
   $Xscale = $boundX / $chargeX;
@@ -277,19 +297,18 @@ function PlaceCharge ( $node,  // images
   $posX = $centreX - ($sizeX / 2);
   $posY = $centreY - ($sizeY / 2);
   $transform = '';
-  if ( ! array_key_exists('orient_to_ordinary', $charge)) { $rotation = 0 ;}
   if ( $rotation != 0 ) {
     $transform .= 'rotate(' . $rotation . ',' . $centreX . ',' . $centreY . ') ';
   }
   $transform .= " translate($posX,$posY) scale($Xscale, $Yscale) ";
-  $retval = "<g transform=\"$transform\" >\n<title>" . $charge['title'] . '</title><desc>' . $charge['desc'] . "</desc>$retval</g>\n";
+  $retval = "<g transform=\"$transform\" >\n<title>" . $charge['title'] . '</title>' . $retval . "</g>\n";
 
   $retval = apply_tincture( $tincture, $retval, "$chargeX,$chargeY", $rotation, $reversed, $inverted,
              1000-$posX, 1200-$posY, $Xscale, $Yscale  );
   return $retval;
 }
 
-function calcPlace( $type, $number, $conjoined = 'false', $bb = '100,200,800,800'  ) {
+function calcPlace( $type, $number, $conjoined = 'false', $bb = '100,100,800,900'  ) {
   $wide_rows = array (
     '0',          // 0
     '1',          // 1
@@ -355,7 +374,7 @@ function calcPlace( $type, $number, $conjoined = 'false', $bb = '100,200,800,800
       $row_list = explode(',',$narrow_rows[$number]);
       break;
   }
-  
+
   $placement = str_repeat('x/', $number-1);
   $space_pct = 0.2;
   $max_row = max($row_list);
@@ -396,4 +415,5 @@ function calcPlace( $type, $number, $conjoined = 'false', $bb = '100,200,800,800
     }
   }
   return $placement;
-}?>
+}
+?>

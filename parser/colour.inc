@@ -192,8 +192,9 @@ $colours = array (
 );
   $node = null;
   if ( ($match = search_match($colours)) != null ) {
-    $node = $dom->create_element('colour');
-    $node->set_attribute('name', (isset($match[2]) ? $match[2] : $match[1]) );
+    $node = $dom->createElement('colour');
+    $node->setAttribute( 'name', (isset($match[2]) ? $match[2] : $match[1]) );
+    $node->setAttribute( 'tokens',tokens());
   }
   return $node;
 }

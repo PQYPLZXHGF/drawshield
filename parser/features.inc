@@ -18,6 +18,8 @@ function get_features ( $feature_sets, &$node ) {
 
     static $position_mods = array (
     array ( null, 'sinister', 'mod', 'sinister' ),
+    array ( null, 'reversed', 'mod', 'reversed' ),
+    array ( null, 'fracted', 'mod', 'fracted' ), // Not really a position, but syntactically it fits in here
     array ( null, 'dexter', 'mod', 'dexter', ),
     array ( null, 'inverted', 'mod', 'inverted', ),
     array ( null, 'enhanced', 'mod', 'enhanced', ),
@@ -27,10 +29,10 @@ function get_features ( $feature_sets, &$node ) {
   static $shape_mods = array (
     array ( null, 'voided', 'shape', 'voided' ),
     array ( null, '(fimbriated|edged)', 'shape', 'fimbriated',  ),
-    array ( null, '(cotised|cotticed|endorsed)', 'shape', 'cotised',  ),
-    array ( null, 'between # cott?ices', 'shape', 'cotised',  ),
-    array ( null, 'double (cotised|cotticed)', 'shape', 'double-cotised',  ),
-    array ( null, '(triple|treble) (cotised|cotticed)', 'shape', 'triple_cotised',  ),
+    array ( '1', '(cotised|cotticed|endorsed)', 'shape', 'cotised',  ),
+    array ( '1', 'between # cott?ices', 'shape', 'cotised',  ),
+    array ( '2', 'double (cotised|cotticed)', 'shape', 'cotised',  ),
+    array ( '3', '(triple|treble) (cotised|cotticed)', 'shape', 'cotised',  ),
   );
 
 
@@ -75,7 +77,7 @@ function get_features ( $feature_sets, &$node ) {
           $features = array_merge($features, $linetype_mods);
           break;
         default:
-          raise_error("Unknown feature group - $feature_set");
+          parser_message('internal', "Unknown feature group - $feature_set");
           break;
       }
     }
@@ -86,20 +88,41 @@ function get_features ( $feature_sets, &$node ) {
     if ( ($match = search_match($features)) == null ) break;
     switch ( $match[2] ) {
       case 'shape':
-        $shape_mod = make_mod($match[3], $match[0]);
+        $shape_mod = make_mod($match[3], $match[0], tokens());
         get_features(array('linetype'), $shape_mod);
         if ( ($tinc = tincture()) != null ) $shape_mod->appendChild($tinc);
-        $node->appencChild($shape_mod);
+        $node->appendChild($shape_mod);
+        break;
+      case 'addlinetype':
+        $linemod = make_mod( $match[3], $match[0], tokens() );
+        get_features(array('linetype'), $linemod);
+        $node->appendChild($linemod);
         break;
       case 'feature':
         $feature = $dom->createElement('feature');
         $feature->setAttribute( 'name', $match[0]);
         $feature->setAttribute('tokens',tokens());
-        $feature->appendChild(tincture(true));
+        $feature->appendChild(tincture(true, true));
         $node->appendChild($feature);
         break;
       case 'mod':
-        $node->appendChild(make_mod ( $match[3], $match[0] ));
+        $node->appendChild(make_mod ( $match[3], $match[0], tokens() ));
+        break;
+      case 'mod+charge':
+        $mod = make_mod ( $match[3], $match[0], tokens() );
+        if ( ($charge = charge(true)) == null ) {
+          $charge = $dom->createElement('missing');
+          parser_message('blazon', 'expected charge in modifier');
+        } else {
+          if ( $match[0] )
+            $charge->setAttribute('number', $match[0] );
+        }
+        $mod->appendChild($charge);
+        $node->appendChild($mod);
+        break;
+      case 'warn':
+        parser_message('warning', 'Can\'t draw feature - ' . tokens());
+        $node->appendChild(make_mod ( $match[3], $match[0], tokens() ));
         break;
       case 'ignore':
         break;

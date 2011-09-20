@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@ function makeDiv_bar( $node, $div_num ) {
 
   if ( $div_num == 3 ) return '';
 
-  $name = $node->get_attribute('subtype');
+  $name = $node->getAttribute('subtype');
+  if ( ($name == 'barry-pily' or $name == 'bendy' ) and get_mod($node, 'sinister')) $name .= '-sinister';
   if ( ($num_of = get_mod($node, 'ofnum')) == null ) $num_of = 8;
 
   $svg = '';

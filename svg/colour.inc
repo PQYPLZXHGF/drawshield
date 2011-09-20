@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -41,8 +41,8 @@ function rgb($name) {
    'de-larmes' =>  '#1E7FCB',
    'de-sangue' => '#E21313',
    'de-vin' => '#965578',
-   'de-poix' =>  '#050505', 
-   'd-huile' => '#149414', 
+   'de-poix' =>  '#050505',
+   'd-huile' => '#149414',
   // Special value used in masks
    'mask' => '#FFFFFF' ,
   // Named web colors
@@ -188,7 +188,7 @@ function rgb($name) {
    'yellow green' => '#9acd32',
   );
   if ( array_key_exists($name,$colours) ) return $colours[$name];
-  my_trigger_error("unknown colour - $name", E_SVG );
+  draw_message('internal', "unknown colour - $name" );
   return '#888888';
 }
 ?>

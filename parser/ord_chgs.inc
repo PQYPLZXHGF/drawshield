@@ -16,7 +16,7 @@ function assign_layer ( $node ) {
   // Sorts the ordinaries and charges out so that if drawn in the order give, layering is correct
   $layerNums = array (
     // If not specified, use layer 0
-    array ( 'type', 'chief', 1 ),
+    array ( 'subtype', 'chief', 1 ),
     // all charges are layer 2
     array ( 'subtype', 'canton', 3 ),
     array ( 'subtype', 'gyron', 4 ),
@@ -28,43 +28,36 @@ function assign_layer ( $node ) {
   if ( get_mod ( $node, 'depressed' )) return 2; 
   $layer = 0;
   foreach ( $layerNums as $layerNum ) 
-    if ( $node->get_attribute($layerNum[0]) == $layerNum[1] ) $layer = $layerNum[2];
+    if ( $node->getAttribute($layerNum[0]) == $layerNum[1] ) $layer = $layerNum[2];
   return $layer;
 }
 
 function ord_chgs(){
   global $dom;
 
-  $mirror_if_2 = array ( 'canton', 'gyron', 'gusset', 'graft', 'flaunch', 'square-flaunch', 'gore' );
-
   $node = null;
   $items = array();
   $itemLayer = array();
   $numItems = 0;
+  $assume_num = false;
 
-  while (( ($item = ordinary()) != null ) or ( ($item = charge()) != null )) {
-    if ( $item->tagname() == 'charge' ) {
+  while (( ($item = ordinary()) != null ) or ( ($item = charge($assume_num)) != null )) {
+    $assume_num = false;
+    if ( $item->tagName == 'charge' ) {
       $items[] = $item;
       $itemLayer[] = 2;
     } else { // item is an ordinary
-      if ( $item->get_attribute('number') == 2
-                   and in_array($item->get_attribute('subtype'), $mirror_if_2) ) {
-        $item2 = deep_copy($item);
-        $item2->append_child(make_mod('sinister'));
-        $items[] = $item2; 
-        $itemLayer = assign_layer($item2);
-      }
       $items[] = $item; 
       $itemLayer[] = assign_layer($item);
     }
     comma();
-    andd();
+    if ( andd() ) $assume_num = true;
   }
   if ( ($numItems = count($items)) ) {
-    $node = $dom->create_element('ord_chgs');
+    $node = $dom->createElement('ord_chgs');
     for ( $i = 0; $i <= 6; $i++ ) { // count through layers CHANGE HERE
       for ( $j = 0; $j < $numItems; $j++ ) // match items on that layer
-        if ( $itemLayer[$j] == $i ) $node->append_child($items[$j]); // append in order
+        if ( $itemLayer[$j] == $i ) $node->appendChild($items[$j]); // append in order
     }
   }
   return $node;

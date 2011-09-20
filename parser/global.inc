@@ -11,15 +11,28 @@ $p_globals = array (
   'asmany' => null,
 );
 
+function parser_message($category, $string, $file = '', $line = '' ) {
+  global $dom, $parser_messages;
+
+  $message = $dom->createElement('message');
+  $message->setAttribute( 'tokens',tokens());
+  $message->setAttribute( 'category',$category);
+  if ( $file ) $message->setAttribute('filename', $file);
+  if ( $line ) $message->setAttribute('line', $line);
+  $text = $dom->createTextNode($string);
+  $message->appendChild($text);
+  $parser_messages->appendChild($message);
+}
+
 function deep_copy($node) {
   global $dom;
 
-  $newnode = $dom->create_element($node->tagname());
-  foreach ($node->attributes() as $attribute) {
-    $newnode->set_attribute($attribute->name,$attribute->value);
+  $newnode = $dom->createElement($node->tagName);
+  foreach ($node->attributes as $attribute) {
+    $newnode->setAttribute($attribute->name,$attribute->value);
   }
-  foreach ($node->child_nodes() as $child) {
-    $newnode->append_child(deep_copy($child));
+  foreach ($node->childNodes as $child) {
+    $newnode->appendChild(deep_copy($child));
   }
   return $newnode;
 }
@@ -41,6 +54,15 @@ function next_word() { // return next token (or null)
 
   if ( $cur_word > count($words) ) return null;
   return $words[$cur_word++];
+}
+
+function get_tokens($num) {
+  global $cur_word, $words;
+
+  $retval = '';
+  for ( $i = 0; $i < $num; $i++ )
+    if ( ($token = next_word()) != null ) $retval .= $token . ' ';
+  return (rtrim($retval));
 }
 
 function lookahead($inc = 1) {
@@ -88,10 +110,12 @@ function comma() {
   return false;
 }
 
-function tokNum() {
-  global $cur_word;
+function tokens() {
+  global $matched_tokens;
 
-  return $cur_word;
+  $retval = $matched_tokens;
+  $matched_tokens = '';
+  return $retval;
 }
 
 function unique($prefix = 'item') {
@@ -101,20 +125,31 @@ function unique($prefix = 'item') {
   return "$prefix$uni_num";
 }
 
-function make_mod($name, $param = null) {
+function make_mod($name, $param = null, $tokens = null ) {
   global $dom;
 
-  $mod = $dom->create_element('modifier');
-  $mod->set_attribute('name', $name);
-  if ( $param ) $mod->set_attribute('param', $param);
-  $mod->set_attribute('tokNum',tokNum());
+  $mod = $dom->createElement('modifier');
+  $mod->setAttribute('name', $name);
+  if ( $param ) $mod->setAttribute('param', $param);
+  if ( $tokens ) $mod->setAttribute('tokens', $tokens);
+  $mod->setAttribute('tokens',tokens());
   return $mod;
 }
 
+function make_colour($colour) {
+  global $dom;
+
+  $tinc = $dom->createElement('tincture');
+  $col = $dom->createElement('colour');
+  $col->setAttribute('name',$colour);
+  $tinc->appendChild($col);
+  return $tinc;
+}
+
 function get_mod($node, $name) {
-  foreach ( $node->child_nodes() as $child ) {
-    if ( $child->tagname() == 'modifier' and $child->get_attribute('name') == $name ) {
-      $retval = $child->get_attribute('param');
+  foreach ( $node->childNodes as $child ) {
+    if ( $child->tagName == 'modifier' and $child->getAttribute('name') == $name ) {
+      $retval = $child->getAttribute('param');
       if ( $retval == null ) $retval = true; // Just say the modifier exists
       return $retval;
     }
@@ -124,8 +159,8 @@ function get_mod($node, $name) {
 
 function get_child($node,$tagname) {
   $retval = null;
-  foreach ( $node->child_nodes() as $child ) {
-    if ( $child->tagname() == $tagname ) {
+  foreach ( $node->childNodes as $child ) {
+    if ( $child->tagName == $tagname ) {
       $retval = $child;
       break;
     }

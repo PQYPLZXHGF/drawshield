@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ function ImagePosition ( $svg_data, $height, $width, $mods ) {
 function add_def($element = '', $content = '', $name = '', $title = '', $desc = ''){
   static $defs;
 
-  if ( $element == '' ) { 
+  if ( $element == '' ) {
     $retval = '<defs>' . $defs . '</defs>';
     $defs = '';
     return $retval;
@@ -68,24 +68,24 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
   global $_SERVER;
 
   $bb = choose_fit($bb);
-  $tinc = $tincture->first_child();
-  switch ( $tinc->node_name() ) {
+  $tinc = $tincture->firstChild;
+  switch ( $tinc->nodeName ) {
     case 'implied':
       return $object;
       break;
     case 'colour':
     case 'default':
     case 'proper':
-      if ( $tinc->has_attribute('name') ) $spec = rgb($tinc->get_attribute('name'));
-      elseif ( $tinc->has_attribute('spec') ) $spec = $tinc->get_attribute('spec');
+      if ( $tinc->hasAttribute('name') ) $spec = rgb($tinc->getAttribute('name'));
+      elseif ( $tinc->hasAttribute('spec') ) $spec = $tinc->getAttribute('spec');
       else {
         $spec = '#F0F0F0'; // raise error
-        my_trigger_error('Colour not known', E_SVG);
+        draw_message('internal', 'Colour not known', __FILE__, __LINE__);
       }
-      return '<g fill="' . $spec . '"><title>Colour</title><desc>' . $tinc->get_attribute('name') . '</desc>' . $object . '</g>';
+      return '<g fill="' . $spec . '">' . $object . '</g>';
       break;
     case 'fur':
-      $fur_name = $tinc->get_attribute('name');
+      $fur_name = $tinc->getAttribute('name');
       $fur_data = makeFur( $fur_name );
       // If what we are placing is inverted, we also invert the fill so it appears the "right way up"
       // Don't need to do reversed as all furs are symmetrical
@@ -96,14 +96,13 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       $scale = max ( $bb_width / 1000, $bb_height / 1200 );
       $patt_id = add_def ( 'pattern patternTransform="scale(' . $scale .  ')' . $pat_rot . '"' .
          ' patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" y="0" width="' .
-         $fur_data[0] . '" height="' . $fur_data[1] . '"', 
-         '<title>Fur</title><desc>' . $fur_name . '</desc>' .  $fur_data[2] );
-      $retval = '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
-      $retval .= add_def();
+         $fur_data[0] . '" height="' . $fur_data[1] . '"',
+         $fur_data[2] );
+      $retval = add_def();
+      $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
       return $retval;
       break;
     case 'treatment':
-      $treat_name = $tinc->get_attribute('name');
       $treat_data = makeTreatment( $tinc );
       // If what we are placing is inverted, we also invert the fill so it appears the "right way up"
       // Don't need to do reversed as all furs are symmetrical
@@ -114,14 +113,13 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       $scale = max ( $bb_width / 1000, $bb_height / 1200 );
       $patt_id = add_def ( 'pattern patternTransform="scale(' . $scale .  ')' . $pat_rot . '"' .
          ' patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" y="0" width="' .
-         $treat_data[0] . '" height="' . $treat_data[1] . '"', 
-         '<title>Treatment</title><desc>' . $treat_name . '</desc>' .  $treat_data[2] );
-      $retval = '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
-      $retval .= add_def();
+         $treat_data[0] . '" height="' . $treat_data[1] . '"',
+         $treat_data[2] );
+      $retval = add_def();
+      $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
       return $retval;
       break;
     case 'semyde':
-      $treat_name = $tinc->get_attribute('name');
       $treat_data = makeSemy( $tinc );
       // If what we are placing is inverted, we also invert the fill so it appears the "right way up"
       // Don't need to do reversed as all furs are symmetrical
@@ -137,10 +135,10 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       $scale = max ( $bb_width / 1000, $bb_height / 1200 );
       $patt_id = add_def ( 'pattern patternTransform="scale(' . $scale .  ')' . $pat_rot . '"' .
          ' patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" y="0" width="' .
-         $treat_data[0] . '" height="' . $treat_data[1] . '"', 
-         '<title>Treatment</title><desc>' . $treat_name . '</desc>' .  $treat_data[2] );
-      $retval = '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
-      $retval .= add_def();
+         $treat_data[0] . '" height="' . $treat_data[1] . '"',
+         $treat_data[2] );
+      $retval = add_def();
+      $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
       return $retval;
       break;
     case 'division': // scale to bounding box
@@ -152,27 +150,29 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       } else {
         $div_data = makeDivision( $tinc );
       }
-      $parent = $tincture->parent_node();
-      if ( $parent->node_name() == 'plain' ) return $div_data;
+      $parent = $tincture->parentNode;
+      if ( $parent->nodeName == 'plain' ) return '<g><title>' . $tinc->getAttribute('subtype') . '</title>' . $div_data . '</g>';
       list($bb_width,$bb_height,$bbX,$bbY) = explode(',', $bb . ',0,0');
-      $type = $tinc->get_attribute('subtype');
+      $type = $tinc->getAttribute('subtype');
       $height = ($type == 'per-bend' || $type == 'per-bend-sinister' || $type == 'quarterly') ? 1000 : 1200;
-      if ( preg_match ( '/Firefox/' , $_SERVER['HTTP_USER_AGENT'] ) != 0 ) {
+      if ( (preg_match ( '/Chrome/' , $_SERVER['HTTP_USER_AGENT'] ) != 0) and $parent->nodeName == 'charge' ) {
+        $patt_id = add_def ( 'pattern width="100%" height="100%"',
+          '<title>Division</title><desc>' . $tinc->getAttribute('subtype') . '</desc>' .
+           '<svg  preserveAspectRatio="none" viewBox="0 0 1000 ' . $height . '" height="' . $bb_height .
+           '" width="' . $bb_width . '">' . $div_data . '</svg>' );
+      } else {
         $xScale = $bb_width / 1000; $yScale = $bb_height / $height;
         $patt_id = add_def ( 'pattern patternTransform="scale(' . $xScale . ',' . $yScale .
             ')" patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse"
-            x="' . (($bbX % $bb_width)/$xScale) . '" y="' . (($bbY % $bb_height)/$yScale) . '" width="' . $width . '" height="' . $height . '"',
-            '<title>Division</title><desc>' . $tinc->get_attribute('subtype') . '</desc>' . $div_data );
-      } else {
-        $patt_id = add_def ( 'pattern width="100%" height="100%"', 
-          '<title>Division</title><desc>' . $tinc->get_attribute('subtype') . '</desc>' .
-           '<svg  preserveAspectRatio="none" viewBox="0 0 1000 ' . $height . '" height="' . $bb_height . 
-           '" width="' . $bb_width . '">' . $div_data . '</svg>' );
+            x="' . (($bbX % $bb_width)/$xScale) . '" y="' . (($bbY % $bb_height)/$yScale) . '" width="1000" height="' . $height . '"',
+             $div_data );
+//        $patt_id = add_def ( 'pattern patternUnits="objectBoundingBox" patternContentUnits="objectBoundingBox" x="0" y="0" width="1" height="' . $height . '"',
+//             $div_data );
       }
-      $retval = '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
-      $retval .= add_def();
+      $retval = add_def();
+      $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
       return $retval;
-      
+
       /*
        * // Only take account of chief if filling an ordinary that does so
       if ( $bb != '1000,1200' ) { // If we are given a bounding box, ignore chief
@@ -188,17 +188,17 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       $patt_id = add_def ( 'pattern patternTransform="scale(' . $xScale . ',' . $yScale .
           ')" patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse"
           x="' . (($bbX % $bb_width)/$xScale) . '" y="' . (($bbY % $bb_height)/$yScale) . '" width="' . $width . '" height="' . $height . '"',
-          '<title>Division</title><desc>' . $tinc->get_attribute('subtype') . '</desc>' . $data );
+          '<title>Division</title><desc>' . $tinc->getAttribute('subtype') . '</desc>' . $data );
       $retval = '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
       $retval .= add_def();
       return $retval;
       list($bb_width,$bb_height,$bbX,$bbY) = explode(',', $bb . ',0,0');
-      $type = $tinc->get_attribute('subtype');
+      $type = $tinc->getAttribute('subtype');
       $height = 1200;
       if ( $bb_height != 1200 and ($type == 'per-bend' || $type == 'per-bend-sinister')) $height = 1000;
-      $patt_id = add_def ( 'pattern width="100%" height="100%"', 
-          '<title>Division</title><desc>' . $tinc->get_attribute('subtype') . '</desc>' .
-           '<svg  preserveAspectRatio="none" viewBox="0 0 1000 ' . $height . '" height="' . $bb_height . 
+      $patt_id = add_def ( 'pattern width="100%" height="100%"',
+          '<title>Division</title><desc>' . $tinc->getAttribute('subtype') . '</desc>' .
+           '<svg  preserveAspectRatio="none" viewBox="0 0 1000 ' . $height . '" height="' . $bb_height .
            '" width="' . $bb_width . '">' . $div_data . '</svg>' );
       $retval = '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
       $retval .= add_def();
@@ -206,30 +206,30 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       break;
     case 'counterchanged': // Never change anything, just fill with this pattern
       // First we have to locate the field
-      $parent = $tincture->parent_node();
-      while ( $parent->node_name() != 'plain' ) { // TODO what about if overall?
-        $parent = $parent->parent_node();
+      $parent = $tincture->parentNode;
+      while ( $parent->nodeName != 'plain' ) { // TODO what about if overall?
+        $parent = $parent->parentNode;
       }
-      $field = $parent->first_child();
+      $field = $parent->firstChild;
       // Then confirm that the field is a division
-      $field_tinc = $field->first_child();
-      if ( $field_tinc->node_name() != 'division' ) return '<g fill="#050505"><title>Counterchange</title><desc>Not possible</desc>' . $object . '</g>';
+      $field_tinc = $field->firstChild;
+      if ( $field_tinc->nodeName != 'division' ) return '<g fill="#050505"><title>Counterchange</title><desc>Not possible</desc>' . $object . '</g>';
       $div_data = makeDivision( $field_tinc, true );
       $pattTrans = '';
       if ( $xscale or $yscale ) {
         $pattTrans = 'patternTransform="scale(' . ( 1 / $xscale) . ',' . (1/ $yscale) . ')"';
       }
       $patt_id = add_def ( 'pattern ' . $pattTrans . ' patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="' .
-          $offsetX . '" y="' . $offsetY . '" width="' . '1000" height="1200"', '<title>Colour</title><desc>counterchanged</desc>' . $div_data );
-      $retval = '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
-      $retval .= add_def();
+          $offsetX . '" y="' . $offsetY . '" width="' . '1000" height="1200"', '<title>Counterchanged</title>' . $div_data );
+      $retval = add_def();
+      $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
       return $retval;
       break;
   }
 }
 
-function createBody($spec, $pathLine, $feature_size) {
-  return '<path fill-rule="evenodd" d="' . makePath ( $spec, $pathLine, $feature_size ) . '" />';
+function createBody($spec, $lineType, $feature_size) {
+  return '<path fill-rule="evenodd" d="' . makePath ( $spec, $lineType, $feature_size ) . '" />';
 }
 
 function choose_fit( $choices ) {
@@ -244,7 +244,7 @@ function choose_fit( $choices ) {
   $combo = $svg_region . $svg_chief;
   if ( array_key_exists($combo, $choices) ) return $choices[$combo];
   // raise error
-  my_trigger_error('Cannot find placement for region', E_SVG);
+  draw_message('internal', 'Cannot find placement for region', __FILE__, __LINE__);
   return null;
 }
 ?>

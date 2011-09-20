@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -212,16 +212,16 @@ $lineSpecs = array (
   'angled' => 'A:0:100:i:o:h50v-{S}h50   B:0:100:i:o:l35.4,35.4 {S*0.707},-{S*0.707} l35.4,35.4   C:0:100:i:o:v50h{S}v50   D:0:100:o:i:l-35.4,35.4 -{S*0.707},-{S*0.707} l-35.4,35.4   E:0:100:i:o:h-50v{S}h-50   F:0:100:i:o:l-35.4,-35.4 -{S*0.707},{S*0.707} l-35.4,-35.4   G:0:100:i:o:v-50h-{S}v-50   H:0:100:o:i:l35.4,-35.4 {S*0.707},{S*0.707} l35.4,-35.4',
   'bevilled' => 'A:0:100:i:o:h75l-50,-{S}h75   B:0:100:i:o:l35.4,35.4l{S*0.353},{S*0.353}v-{S*1.414}l{S*0.353},{S*0.353}l35.4,35.4   C:0:100:i:o:v75l{S},-50v75   D:0:100:o:i:l-35.3,35.3l-{S*0.353},{S*0.353}v{S*1.414}l-{S*0.353},{S*0.353}l-35.3,35.3   E:0:100:i:o:h-75l50,{S}h-75   F:0:100:i:o:l-35.3,-35.3l-{S*0.353},-{S*0.353}v-{S*1.414}l-{S*0.353},-{S*0.353}l-35.3,-35.3   G:0:100:i:o:v-75l-{S},50v-75   H:0:100:o:i:l35.4,-35.4l{S*0.353},-{S*0.353}v{S*1.414}l{S*0.353},-{S*0.353}l35.4,-35.4',
   'escartelly' => 'A:0:100:i:i:v-{S}h100v{S}   B:0:100:i:i:l{S*0.707},-{S*0.707} 70.7,70.7 -{S*0.707},{S*0.707}   C:0:100:i:i:h{S}v100h-{S}   D:0:100:o:o:l-{S*0.707},-{S*0.707} -70.7,70.7 {S*0.707},{S*0.707}   E:0:100:o:o:v-{S}h-100v{S}   F:0:100:o:o:l{S*0.707},-{S*0.707} -70.7,-70.7 -{S*0.707},{S*0.707}   G:0:100:o:o:h{S}v-100h-{S}   H:0:100:o:o:l-{S*0.707},-{S*0.707} 70.7,-70.7 {S*0.707},{S*0.707}',
-  'nowy' => 'A:0:100:i:i:a50,{S},0,0,1,100,0   B:0:100:i:i:a50,{S},45,0,1,70.7,70.7   C:0:100:i:i:a{S},50,0,0,1,0,100   D:0:100:o:o:a50,{S},-45,0,0,-70.7,70.7   E:0:100:o:o:a50,{S},0,0,0,-100,0   F:0:100:o:o:a50,{S},45,0,0,-70.7,-70.7   G:0:100:o:o:a{S},50,0,0,0,0,-100   H:0:100:i:i:a50,{S},-45,0,1,70.7,-70.7', 
+  'nowy' => 'A:0:100:i:i:a50,{S},0,0,1,100,0   B:0:100:i:i:a50,{S},45,0,1,70.7,70.7   C:0:100:i:i:a{S},50,0,0,1,0,100   D:0:100:o:o:a50,{S},-45,0,0,-70.7,70.7   E:0:100:o:o:a50,{S},0,0,0,-100,0   F:0:100:o:o:a50,{S},45,0,0,-70.7,-70.7   G:0:100:o:o:a{S},50,0,0,0,0,-100   H:0:100:i:i:a50,{S},-45,0,1,70.7,-70.7',
   'arched' => 'A:1:{D}:i:i:a{D},{S*4} 0,0,1,{D},0   B:1:{D}:i:i:a{D},{S*4} 45,0,1,{D*0.707},{D*0.707}   C:1:{D}:i:i:a{S*4},{D} 0,0,1,0,{D}   D:1:{D}:o:o:a{D},{S*4} -45,0,0 -{D*0.707},{D*0.707}   E:1:{D}:o:o:a{D},{S*4} 0,0,0,-{D},0   F:1:{D}:o:o:a{D},{S*4} 45,0,0 -{D*0.707},-{D*0.707}   G:1:{D}:o:o:a{S*4},{D} 0,0,0 0,-{D}   H:1:{D}:i:i:a{D},{S*4} -45,0,1,{D*0.707},-{D*0.707}',
-  'double-arched' => 'A:2:{D/2}:i:i:a{D/2},{S*4} 0,0,1,{D/2},0   B:2:{D/2}:i:i:a{D/2},{S*4} 45,0,1 {D*0.354},{D*0.354}   C:2:{D/2}:i:i:a{S*4},{D/2} 0,0,1 0,{D/2}   D:2:{D/2}:o:o:a{D/2},{S*4} -45,0,0 -{D*0.354},{D*0.354}   E:2:{D/2}:o:o:a{D/2},{S*4} 0,0,0,-{D/2},0   F:2:{D/2}:o:o:a{D/2},{S*4} 45,0,0 -{D*0.354},-{D*0.354}   G:2:{D/2}:o:o:a{S*4},{D/2} 0,0,0 0,-{D/2}   H:2:{D/2}:o:o:a{D/2},{S*4} -45,0,1 {D*0.354},-{D*0.354}', 
-  'none' => 'A:*:99999:-:-:   B:*:99999:-:-:   C:*:99999:-:-:   D:*:99999:-:-:   E:*:99999:-:-:   F:*:99999:-:-:   G:*:99999:-:-:   H:*:99999:-:-:   J:*:99999:-:-:   K:*:99999:-:-:   L:*:99999:-:-:   M:*:99999:-:-:',  
+  'double-arched' => 'A:2:{D/2}:i:i:a{D/2},{S*4} 0,0,1,{D/2},0   B:2:{D/2}:i:i:a{D/2},{S*4} 45,0,1 {D*0.354},{D*0.354}   C:2:{D/2}:i:i:a{S*4},{D/2} 0,0,1 0,{D/2}   D:2:{D/2}:o:o:a{D/2},{S*4} -45,0,0 -{D*0.354},{D*0.354}   E:2:{D/2}:o:o:a{D/2},{S*4} 0,0,0,-{D/2},0   F:2:{D/2}:o:o:a{D/2},{S*4} 45,0,0 -{D*0.354},-{D*0.354}   G:2:{D/2}:o:o:a{S*4},{D/2} 0,0,0 0,-{D/2}   H:2:{D/2}:o:o:a{D/2},{S*4} -45,0,1 {D*0.354},-{D*0.354}',
+  'none' => 'A:*:99999:-:-:   B:*:99999:-:-:   C:*:99999:-:-:   D:*:99999:-:-:   E:*:99999:-:-:   F:*:99999:-:-:   G:*:99999:-:-:   H:*:99999:-:-:   J:*:99999:-:-:   K:*:99999:-:-:   L:*:99999:-:-:   M:*:99999:-:-:',
   'urdy' => 'A:*:{S}:i:i:l{S/4},-{S/4} 0,-{S/2} {S/4},-{S/4} {S/4},{S/4} 0,{S/2} {S/4},{S/4}   C:*:{S}:i:i:l{S/4},{S/4} {S/2},0 {S/4},{S/4} -{S/4},{S/4} -{S/2},0 -{S/4},{S/4}   E:*:{S}:i:i:l-{S/4},{S/4} 0,{S/2} -{S/4},{S/4} -{S/4},-{S/4} 0,-{S/2} -{S/4},-{S/4}   G:*:{S}:i:i:l-{S/4},-{S/4} -{S/2},0 -{S/4},-{S/4} {S/4},-{S/4} {S/2},0 {S/4},-{S/4}',
   'invected' => 'A:*:{S*2}:i:i:a{S*2},{S*5},0,0,1,{S*2},0   B:*:{S*2}:i:i:a{S*2},{S*5} 45,0,1 {S*1.414},{S*1.414}   C:*:{S*2}:i:i:a{S*5},{S*2} 0,0,1 0,{S*2}    D:*:{S*2}:i:i:a{S*2},{S*5} -45,0,1 -{S*1.414},{S*1.414}   E:*:{S*2}:i:i:a{S*2},{S*5},0,0,1,-{S*2},0    F:*:{S*2}:i:i:a{S*2},{S*5} 45,0,1 -{S*1.414},-{S*1.414}    G:*:{S*2}:i:i:a{S*5},{S*2} 0,0,1 0,-{S*2}    H:*:{S*2}:i:i:a{S*2},{S*5} -45,0,1 {S*1.414},-{S*1.414}',
   'wavy' => 'A:*:200:i:i:a100,{S*5},0,0,1,100,0a100,{S*5},0,0,0,100,0   B:*:200:i:i:a100,{S*5} 45,0,1 70.7,70.7a100,{S*5} 45,0,0 70.7,70.7   C:*:200:i:i:a{S*5},100 0,0,1 0,100a{S*5},100 0,0,0 0,100    D:*:200:i:i:a100,{S*5} -45,0,1 -70.7,70.7a100,{S*5} -45,0,0 -70.7,70.7   ' .
             'E:*:200:i:i:a100,{S*5},0,0,1,-100,0a100,{S*5},0,0,0,-100,0    F:*:200:i:i:a100,{S*5} 45,0,1 -70.7,-70.7a100,{S*5} 45,0,0 -70.7,-70.7    G:*:200:i:i:a{S*5},100 0,0,1 0,-100a{S*5},100 0,0,0 0,-100    H:*:200:i:i:a100,{S*5} -45,0,1 70.7,-70.7a100,{S*5} -45,0,0 70.7,-70.7',
   'engrailed' => 'A:*:{S*2}:o:o:a{S*2},{S*5},0,0,0 {S*2},0   B:*:{S*2}:o:o:a{S*2},{S*5} 45,0,0 {S*1.414},{S*1.414}   C:*:{S*2}:o:o:a{S*5},{S*2} 0,0,0 0,{S*2}    D:*:{S*2}:o:o:a{S*2},{S*5} -45,0,0 -{S*1.414},{S*1.414}   E:*:{S*2}:o:o:a{S*2},{S*5},0,0,0 -{S*2},0    F:*:{S*2}:o:o:a{S*2},{S*5} 45,0,0 -{S*1.414},-{S*1.414}    G:*:{S*2}:o:o:a{S*5},{S*2} 0,0,0 0,-{S*2}    H:*:{S*2}:o:o:a{S*2},{S*5} -45,0,0 {S*1.414},-{S*1.414}',
-'indented' => 
+'indented' =>
   'A:*:{S*2}:-:-:l{S/2},-{S/2} l{S},{S} l{S/2},-{S/2}     ' .
   'B:*:{S*2}:-:-:h{S*0.707} v{S*1.414} h{S*0.707}     ' .
   'C:*:{S*2}:-:-:l{S/2},{S/2} l-{S},{S} l{S/2},{S/2}     ' .
@@ -235,7 +235,7 @@ $lineSpecs = array (
   'R:*:{S*2}:-:-:l-{S/2},-{S/2} l{S},-{S} l-{S/2},-{S/2}     ' .
   'S:*:{S*2}:-:-:v-{S*0.707} h{S*1.414} v-{S*0.707}     ' .
   '',
-'embattled' => 
+'embattled' =>
   'A:*:{S*2}:-:-:v-{S/2}h{S} v{S} h{S} v-{S/2}    ' .
   'B:*:{S*2}:-:-:l{S*0.353},-{S*0.353}l{S*0.707},{S*0.707} l-{S*0.707},{S*0.707} l{S*0.707},{S*0.707} l{S*0.353},-{S*0.353}    ' .
   'C:*:{S*2}:-:-:h{S/2}v{S} h-{S} v{S} h{S/2}    ' .
@@ -282,12 +282,12 @@ $lineSpecs = array (
    'dancetty' => 'A:*:{S*3}:i:i:l{S*1.5},-{S} {S*1.5},{S}     C:*:{S*3}:i:i:l{S},{S*1.5} -{S},{S*1.5}     ' .
                  'B:*:{S*2.828}:i:i:l{S*1.707},{S*0.293} {S*0.293},{S*1.707}    F:*:{S*2.828}:o:o:l -{S*0.293},-{S*1.707} -{S*1.707},-{S*0.293}    ' .
                  'E:*:{S*3}:o:o:l-{S*1.5},-{S} -{S*1.5},{S}     G:*:{S*3}:o:o:l{S},-{S*1.5} -{S},-{S*1.5}     ' .
-                 'D:*:{S*2.828}:i:i:l-{S*0.293},{S*1.707} -{S*1.707},{S*0.293}    H:*:{S*2.828}:o:o:l{S*1.707},-{S*0.293} {S*0.293},-{S*1.707}    ', 
+                 'D:*:{S*2.828}:i:i:l-{S*0.293},{S*1.707} -{S*1.707},{S*0.293}    H:*:{S*2.828}:o:o:l{S*1.707},-{S*0.293} {S*0.293},-{S*1.707}    ',
    'battled-embattled' =>
            'A:*:{S*2}:i:i:l{S/6},0 0,-{S/3} {S/3},0 0,-{S/3} {S/3},0 0,-{S/3} {S/3},0 0,{S/3} {S/3},0 0,{S/3} {S/3},0 0,{S/3} {S/6},0    ' .
            'B:*:{S*2}:i:i:l{S*0.118},{S*0.118} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} -{S*0.235},{S*0.235} {S*0.235},{S*0.235} -{S*0.235},{S*0.235} {S*0.235},{S*0.235} -{S*0.235},{S*0.235} {S*0.118},{S*0.118}    ' .
            'C:*:{S*2}:i:i:l0,{S/6} -{S/3},0 0,{S/3} -{S/3},0 0,{S/3} -{S/3},0 0,{S/3} {S/3},0 0,{S/3} {S/3},0 0,{S/3} {S/3},0 0,{S/6}    ' .
-           'H:*:{S*2}:i:i:l{S*0.118},-{S*0.118} -{S*0.235},-{S*0.235} {S*0.235},-{S*0.235} -{S*0.235},-{S*0.235} {S*0.235},-{S*0.235} -{S*0.235},-{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.118},-{S*0.118}    ', 
+           'H:*:{S*2}:i:i:l{S*0.118},-{S*0.118} -{S*0.235},-{S*0.235} {S*0.235},-{S*0.235} -{S*0.235},-{S*0.235} {S*0.235},-{S*0.235} -{S*0.235},-{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.118},-{S*0.118}    ',
    'raguly' => 'A:*:{S*2}:i:i:l{S},0 -{S*0.2},-{S} {S},0 {S*0.2},{S}    ' .
                'B:*:{S*2}:i:i:l{S*0.707},{S*0.707} {S*0.629},-{S*0.777} {S*0.707},{S*0.707} -{S*0.629},{S*0.777}    ' .
                'C:*:{S*2}:i:i:l0,{S} -{S},-{S*0.2} 0,{S} {S},{S*0.2}    ' .
@@ -327,7 +327,7 @@ function makePath2 ( $shapeSpec, $lineType, $size = 60 ) {
   $matches = array();
   $retval = '';
   // Get the line specification
-  if ( ! array_key_exists($lineType, $lineSpecs) ) $lineType = 'none';
+  if ($lineType == null or  ! (array_key_exists($lineType, $lineSpecs)) ) $lineType = 'none';
   $lineSpec = $lineSpecs[$lineType];
   $subArg = $size;
   // Replace any references to size (as this is fixed for this path)
@@ -337,7 +337,7 @@ function makePath2 ( $shapeSpec, $lineType, $size = 60 ) {
     if ( $match != '') $lineData[$match{0}] = substr($match, 2);
   }
   // Check we have something for each direction
-  foreach ( range('A', 'S') as $letter ) { 
+  foreach ( range('A', 'S') as $letter ) {
     if ( ! array_key_exists($letter, $lineData) ) {
       if ( $letter == 'P' and array_key_exists('E',$lineData) ) $lineData['P'] = $lineData['E'];
       elseif( $letter == 'Q' and array_key_exists('F',$lineData) ) $lineData['Q'] = $lineData['F'];
@@ -410,7 +410,7 @@ function makePath2 ( $shapeSpec, $lineType, $size = 60 ) {
   // Calculate the offset for the first segment
   $offs = makeOffset ( $shape[0]['dir'], $adjust[1], $shape[0]['start'], $size );
   if ( $offs[0] != 0 or $offs[1] != 0 ) $retval .= 'm' . $offs[0] . ',' . $offs[1];
-    
+
   for ( $i = 0; $i < $numSegments; $i++ ) {
     extract($shape[$i]); // creates $dir and $dist etc.
     // Special handling for curves
@@ -466,8 +466,8 @@ function makePath2 ( $shapeSpec, $lineType, $size = 60 ) {
 // This maps lines and curves to their opposite directions, for spec reversal
 $toReverse = array ( 'A' => 'E', 'B' => 'F', 'C' => 'G', 'D' => 'H', 'E' => 'A', 'F' => 'B', 'G' => 'C', 'H' => 'D', 'I' => 'O', 'O' => 'I',
                                                                      'P' => 'A', 'Q' => 'B', 'R' => 'C', 'S' => 'D',
-                     'a' => 'e', 'b' => 'f', 'c' => 'g', 'd' => 'h', 'p' => 'a', 'q' => 'b', 'r' => 'c', 's' => 'd', 
-                                                                     'e' => 'a', 'f' => 'b', 'g' => 'c', 'h' => 'd', 'i' => 'o', 'o' => 'i' ); 
+                     'a' => 'e', 'b' => 'f', 'c' => 'g', 'd' => 'h', 'p' => 'a', 'q' => 'b', 'r' => 'c', 's' => 'd',
+                                                                     'e' => 'a', 'f' => 'b', 'g' => 'c', 'h' => 'd', 'i' => 'o', 'o' => 'i' );
 
 Function reverseSpec ( $shapeSpec ) {
   global $toReverse;
@@ -487,7 +487,7 @@ Function reverseSpec ( $shapeSpec ) {
       $a = explode(',',$dist);
       // swap directions to end point
       $a[3] *= -1;
-      $a[4] *= -1; 
+      $a[4] *= -1;
       $dist = implode(',',$a);
       $retval .= $toReverse[$dir] . $dist;
     } elseif ( $dir == 'X' or $dir == 'Y') {
@@ -499,10 +499,10 @@ Function reverseSpec ( $shapeSpec ) {
   return $retval;
 }
 
-// The inner and outer curves notionally turn through 90 degrees. This array maps the direction 
+// The inner and outer curves notionally turn through 90 degrees. This array maps the direction
 // at the start of the curve onto its notional direction at the end of the curve, for offset
 // matching purposes
-$iCurveTo = array ( 'A' => 'C', 'B' => 'D', 'C' => 'E', 'D' => 'F', 'E' => 'G', 'F' => 'H', 'G' => 'A', 'H' => 'B', 
+$iCurveTo = array ( 'A' => 'C', 'B' => 'D', 'C' => 'E', 'D' => 'F', 'E' => 'G', 'F' => 'H', 'G' => 'A', 'H' => 'B',
                                                                     'P' => 'G', 'Q' => 'H', 'R' => 'A', 'S' => 'B', 'I' => 'I', 'O' => 'O' );
 $oCurveTo = array ( 'A' => 'G', 'B' => 'H', 'C' => 'A', 'D' => 'B', 'E' => 'C', 'F' => 'D', 'G' => 'E', 'H' => 'F',
                                                                     'P' => 'C', 'Q' => 'D', 'R' => 'E', 'S' => 'F', 'I' => 'I', 'O' => 'O' );
@@ -546,7 +546,7 @@ global $oCurveTo;
   // Adjust interior edges to meet
   $prevDir = strtoupper($shape[($numSegments-1)]['dir']);
   for ( $i = 0; $i < $numSegments; $i++ ) {
-    extract($shape[$i]); // creates $dir and $dist 
+    extract($shape[$i]); // creates $dir and $dist
     $next = ($i+1)%$numSegments;
     $nextDir = $shape[$next]['dir'];
     // Deal with curves
@@ -584,10 +584,10 @@ global $oCurveTo;
   // Calculate the offset for the first segment
   $offs = makeOffset ( $shape[0]['dir'], $adjust[1], $io, $size*2 );
   $retval .= 'X' . ($Xoff + $offs[0]) . 'Y' . ($Yoff + $offs[1]);
-    
+
   // Create the inner edge
   for ( $i = 0; $i < $numSegments; $i++ ) {
-    extract($shape[$i]); // creates $dir and $dist 
+    extract($shape[$i]); // creates $dir and $dist
     $retval .= $dir . $dist;
   }
   return $retval;

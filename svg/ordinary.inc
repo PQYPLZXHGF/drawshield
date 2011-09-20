@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -23,28 +23,34 @@ function makeVoid ( $shapeSpec, $lineType = 'none', $featureSize = 50, $offsetSi
   return $retval;
 }
 
-function makeCotise ( $shapeSpec, $cotnum, $line_type, $cotiseSize = 40 ) {
+function makeCotise ( $shapeSpec, $cotnum, $lineType, $cotiseSize = 40 ) {
   $retval = '';
   $outerSize = $cotiseSize*($cotnum*2);
   $innerSize = $cotiseSize*(($cotnum*2)-1);
   $outerSpec = parallelSpec ( $shapeSpec, 'o', $outerSize );
   $innerSpec = parallelSpec ( $shapeSpec, 'o', $innerSize );
   $innerSpec = reverseSpec ( $innerSpec );
-  $retval .= makePath ( $outerSpec, $line_type, 18 );
-  $retval .= ' ' . makePath ( $innerSpec, $line_type, 18 );
+  $retval .= makePath ( $outerSpec, $lineType, 18 );
+  $retval .= ' ' . makePath ( $innerSpec, $lineType, 18 );
 
   return $retval;
 }
 
 
-function createVoid($spec, $pathLine, $feature_size) {
-  $retval = '<path fill-rule="evenodd" d="' . makeVoid ( $spec, $pathLine, $feature_size ) . '" />';
+function createVoid($spec, $lineType, $feature_size) {
+  $retval = '<path fill-rule="evenodd" d="' . makeVoid ( $spec, $lineType, $feature_size ) . '" />';
   return $retval;
 }
 
-function createCotise($spec, $num, $line_type) {
-  $retval = '<path fill-rule="evenodd" d="' . makeCotise ( choose_fit($spec), $num, $line_type ) . '" />';
+function createCotise($spec, $num, $lineType) {
+  $retval = '<path fill-rule="evenodd" d="' . makeCotise ( choose_fit($spec), $num, $lineType ) . '" />';
   return $retval;
+}
+
+function includeOrdinary( &$node ) {
+  $ordinary = array ();
+  include ( 'ordinaries/' . $node->getAttribute('type') . '/' . $node->getAttribute('subtype') . '.inc' );
+  return $ordinary;
 }
 
 function makeOrdinary( $node ) {
@@ -66,42 +72,42 @@ function makeOrdinary( $node ) {
   $ord_between = null;
 
   $cot_linetype = 'none'; // Set to the type of cotice (same as bars)
-  $cot_col = '';      // Set to a colour if cotice present
+  $cot_col = null;      // Set to a colour if cotice present
   $cot_num = 0;       // Number of cottices
   $mods = array();
 
   // Get information about this ordinary
-  $type = $node->get_attribute('type');
-  $subtype = $node->get_attribute('subtype');
-  $ord_linetype = $node->get_attribute('linetype');
+  $type = $node->getAttribute('type');
+  $subtype = $node->getAttribute('subtype');
+  $ord_linetype = get_mod($node, 'linetype');
   // Process sub-elements
-  foreach ( $node->child_nodes() as $child ) {
-    switch ( $child->node_name() ) {
+  foreach ( $node->childNodes as $child ) {
+    switch ( $child->nodeName ) {
       case 'modifier':
-        $mods[] = $child->get_attribute('name');
-        switch ( $child->get_attribute('name') ) {
+        $mods[] = $child->getAttribute('name');
+        switch ( $child->getAttribute('name') ) {
           case 'sinister':
             $rev = !$rev;
             break;
-          case 'inverted':
+         case 'inverted':
             $inv = !$inv;
             break;
           case 'voided':
             $voided = true;
-            $void_col = $child->first_child(); // May be null
+            $void_col = $child->firstChild; // May be null
             break;
-          case 'triple-cotised': $cot_num++;
-          case 'double-cotised': $cot_num++;
-          case 'cotised': $cot_num++;
-            $cot_col = $child->first_child(); // May be null
-            $cot_linetype = $child->get_attribute('param');
+          case 'cotised': $cot_num = $child->getAttribute('param');
+            foreach ( $child->childNodes as $grandchild )
+              if ( $grandchild->nodeName == 'tincture' )
+                $cot_col = $grandchild;
+            $cot_linetype = get_mod($child,'linetype');
             if ( $cot_linetype == null ) $cot_linetype = 'none';
             break;
           case 'fimbriated':
-            if ( $fim_col = $child->first_child() ) { ; // May be null
-              $fim_col = $fim_col->first_child();
-              if ( $fim_col->node_name() == 'colour' ) {
-                $fim_col = $fim_col->get_attribute('name');
+            if ( $fim_col = $child->firstChild ) { ; // May be null
+              $fim_col = $fim_col->firstChild;
+              if ( $fim_col->nodeName == 'colour' ) {
+                $fim_col = $fim_col->getAttribute('name');
               } else {
                 $fim_col = null;
               }
@@ -109,14 +115,14 @@ function makeOrdinary( $node ) {
             break;
            case 'on':
             $on_ord = $child;
-            break; 
+            break;
           case 'between':
-            $ord_between = $child->first_child();
+            $ord_between = $child->firstChild;
             break;
         }
         break;
       case 'tincture':
-        if ( $ord_body_col == null ) {
+        if ( $child->getAttribute('index') == 1 ) {
           $ord_body_col = $child;
         } else {
           $body2_col = $child;
@@ -125,17 +131,9 @@ function makeOrdinary( $node ) {
     }
   }
   if ( $type == 'bend') $rot = 45;
-  
+
   // Get the svg data of the shapes to be drawn
-  $ord_func = 'makeOrd_' . $type;
-  if ( ! function_exists($ord_func) ) {
-    require_once ( 'svg/ordinaries/' . $type . '.inc' );
-  }
-  if ( ! function_exists($ord_func) ) {
-    my_trigger_error("cannot draw ordinary $type", E_SVG);
-    return '';
-  }
-  $ord_data = $ord_func($node);
+  $ord_data = includeOrdinary( $node );
 
   // Check out what we have found about drawing...
   if ( array_key_exists('shape_spec', $ord_data) ) $shape_spec = choose_fit($ord_data['shape_spec']);
@@ -168,11 +166,11 @@ function makeOrdinary( $node ) {
   if ( count($mods) > 0 ) {
     $body = ImagePosition ( $body, 1200, 1000, $mods );
     $cotise = ImagePosition ( $cotise, 1200, 1000, $mods );
-  } 
-  
+  }
+
   // Create a mask, in case there is another ordinary "on" this one
   $prev_ord_map = $body . $cotise;
-  
+
     // If we don't already have a counterchange, and only two colours create one
 /*    if ( ! array_key_exists('shape', $counterchange) and $ord_body_col == $ord_cot_col ) {
       $shape = ImagePosition ( $body . $cotise, 1200, 1000, $pos_mod );
@@ -186,15 +184,16 @@ function makeOrdinary( $node ) {
   $retval .= apply_tincture ( $ord_body_col, $body, $bb, $rot, $rev, $inv );
   if ( $fim_col != '' ) $retval = '<g stroke="' . rgb($fim_col) . '" stroke-width="15">' . "$retval</g>";
   if ( get_mod($node,'depressed') ) $retval = '<g stroke="#000000" stroke-width="7">' . "$retval</g>";
-  if ( $body2_col != '' ) {
+  if ( $body2_col != '' and array_key_exists('body2', $ord_data) ) {
     $retval .= apply_tincture ( $body2_col, choose_fit($ord_data['body2']), $bb, $rot, $rev, $inv);
   }
+  $retval = '<g><title>' . $subtype . '</title>' . $retval . '</g>';
   // Does this ordinary go "between" some charges?
   if ( $ord_between ) $retval .= makeCharge($ord_between, $mods);
   // If there is something "ON" this ordinary, go find it
   if ( $on_ord ) {
-    $what_on = $on_ord->first_child();
-    switch ( $what_on->node_name() ) {
+    $what_on = $on_ord->firstChild;
+    switch ( $what_on->nodeName ) {
       case 'ordinary':
         $new_ord = makeOrdinary($what_on);
         switch ( $subtype ) {
@@ -224,7 +223,7 @@ function makeOrdinary( $node ) {
         $retval .= makeCharge( $what_on, $mods );
         break;
     }
-  } 
+  }
 
   return $retval;
 }

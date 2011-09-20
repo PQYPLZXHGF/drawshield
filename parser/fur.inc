@@ -33,8 +33,9 @@ $furs = array (
 
   $node = null;
   if ( ($match = search_match($furs)) != null ) {
-    $node = $dom->create_element('fur');
-    $dummy = $node->set_attribute('name', $match[0] );
+    $node = $dom->createElement('fur');
+    $node->setAttribute( 'name', $match[0] );
+    $node->setAttribute( 'tokens',tokens());
   }
   return $node;
 }

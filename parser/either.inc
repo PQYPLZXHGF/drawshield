@@ -14,27 +14,17 @@
 
 function either( $type ) {
   global $dom;
+  global $either_list;
 
-  static $either = null;
-
-  if ( $either == null ) {
-    $either = array (
-      // Long crosses
-      array ( 'cross-formy',        'cross formy throughout',           'cross2', 'ordinary' ),
-      array ( 'fillet-cross',       'cross fillet',                       'cross2', 'ordinary' ),
-      array ( 'fillet-cross',       'fillet cross',                       'cross2', 'ordinary' ),
-      array ( 'cross-pierced',      'cross quarter pierced',            'cross2', 'ordinary' ),
-      array ( 'cross-2fretty',      'cross ?double parted ?and fretty', 'cross2', 'ordinary' ),
-      array ( 'cross-3fretty',      'cross tripartite ?and fretty',  'cross2', 'ordinary' ),
-      // Subordinaries
-      array ( 'fret-couped',        'frets? couped' , 'common', 'ordinary' ),
-    );
-    $either = array_merge ( $either, unserialize(file_get_contents('parser/either_list.dat')));
-  }
-  
-  if ( ($match = search_match($either)) == null ) return null;
+  if ( ($match = search_match($either_list)) == null ) return null;
   if ( $match[3] == 'either' ) { // we have a match
-    list($ordinary,$charge) = explode(':',$match[2]);
+    list($charge,$ordinary) = explode(':',$match[0]);
+    if ( $type == 'ordinary' ) {
+      $match[0] = $ordinary;
+    } else {
+      $match[0] = $charge;
+    }
+    list($charge,$ordinary) = explode(':',$match[2]);
     if ( $type == 'ordinary' ) {
       $match[2] = $ordinary;
     } else {

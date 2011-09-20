@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,146 +12,25 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-
-function position_mods() {
-  global $dom;
-
-  $position_mods = array (
-    array ( 'sinister', 'sinister', ),
-    array ( 'dexter', 'dexter', ),
-    array ( 'inverted', 'inverted', ),
-    array ( 'enhanced', 'enhanced', ),
-    array ( 'abased', '(abased|abaisse)', ),
-    array ( 'couped', '(couped|humetty|alese)' ),
-    array ( 'couped-base', '(couped|humetty|alese) ?in base'  ),
-    array ( 'couped-chief', '(couped|humetty|alese) ?in chief' ),
-    array ( 'couped-dexter', '(couped|humetty|alese) ?in dexter' ),
-    array ( 'couped-sinister', '(couped|humetty|alese) ?in sinister' ),
-    array ( 'lozengy', 'lozengy' ),
-    array ( 'gemel', 'gemm?ell?(s|ed)?' ),
-    array ( 'gemel', 'gymile(s|d)?' ),
-    array ( 'gemel', 'gimyle(s|d)?' ),
-  );
-
-  $nodes = array();
-  $tokNum = tokNum();
-  while( ($match = search_match($position_mods)) != null ) {
-    $node = make_mod($match[0]);
-    $node->set_attribute('tokNum',$tokNum);
-    $nodes[] = $node;
-    $tokNum = tokNum();
-  }
-  return $nodes;
-
-}
-
-function shape_mods() {
-  global $dom;
-
-  $shape_mods = array (
-  //       modifier,     regexes
-  array ( 'fimbriated', '(fimbriated|edged)',  ),
-  array ( 'voided', 'voided',  ),
-  array ( 'cotised', '(cotised|cotticed|endorsed)',  ),
-  array ( 'cotised', 'between (2|two) cott?ices',  ),
-  array ( 'double-cotised', 'double (cotised|cotticed)',  ),
-  array ( 'triple-cotised', '(triple|treble) (cotised|cotticed)',  ),
-  array ( 'compony', '(compony|gobone|gobonated)' ),
-  array ( 'counter-compony', 'counter (compony|gobone|gobonated)'),
-  );
-
-  $nodes = array();
-  $tokNum = tokNum();
-  while( ($match = search_match($shape_mods)) != null ) {
-    $node = make_mod($match[0]);
-    $node->set_attribute('tokNum',$tokNum);
-    if ( ($linetype = linetype()) != 'none' ) $node->set_attribute('param',$linetype);
-    if (($tinc = tincture()) != null ) {
-      $node->append_child($tinc);
-    }
-    $nodes[] = $node;
-  }
-  $tokNum = tokNum();
-  return $nodes;
-}
-
 function ordinary() {
   global $dom;
+  global $ordinary_list;
+  global $modifier_list;
+  global $flag_list;
 
-  static $ordinaries = array (
-    // Common
-    array ( 'grid',         'grid',                         'common' ),
-    array ( 'another',		'another',                      'common' ),
-    array ( 'saltire',      'saltire',                      'common' ),
-    array ( 'base',         'base',                         'base' ),
-    array ( 'ford',         'ford',                         'base', false ),
-    array ( 'pale',         'pale',                         'pale' ),
-    array ( 'fess',         'fesse?',                       'fess' ),
-  //  array ( 'pile',         'pile',                         'common' ),
-    array ( 'quarter',      'quarter',                      'common'  ),
-    array ( 'gore',         'gore',                         'common'  ),
-    array ( 'bend',         'bend',                         'bend' ),
-    array ( 'tierce',       'tierce',                       'tierce' ),
-    array ( 'label',        'label',                        'cadency' ),
-    array ( 'chief',        'chief',                         'chief' ),
-    array ( 'chief-triangular', 'chief-triangular',          'chief' ),
-    // Diminutives
-    array ( 'humet',          'humets?',                        'bar', ),
-    array ( 'palet',        'pall?et',                        'bar' ),
-    array ( 'palets',        'pall?ets',                        'bar' ),
-    array ( 'endorse',       'endorse',                        'bar' ),
-    array ( 'endorses',      'endorses',                        'bar' ),
-    array ( 'bendlet',      'bendlet',                      'bar' ),
-    array ( 'bendlet',      'e?scarpe',                     'bar' ),
-    array ( 'bendlets',      'bendlets',                      'bar' ),
-    array ( 'bendlets',      'e?scarpes',                     'bar' ),
-    array ( 'chevronel-braced', 'chevronel (braced|interlaced)' ,    'diminutive' ),
-    array ( 'chevronel-braceds', 'chevronels (braced|interlaced)' ,    'diminutive' ),
-    array ( 'bar',          'bar',                          'bar' ),
-    array ( 'bars',         'bars',                          'bar' ),
-    array ( 'closet',       'closet',                          'bar' ),
-    array ( 'closets',      'closets',                          'bar' ),
-    array ( 'barrulet',          'barrulet',                          'bar' ),
-    array ( 'barrulets',         'barrulets',                          'bar' ),
-    array ( 'bar-gemel',    'bar (gemm?ell?(s|ed)?|voided)' ,  'bar' ),
-    array ( 'bar-gemels',    'bar (gemm?ell?(s|ed)?|voided)' ,  'bar' ),
-    array ( 'chevronel',    'chevronel',                    'diminutive' ),
-    array ( 'chevronels',    'chevronels?',                    'diminutive' ),
-    array ( 'pile',        'pile',                          'diminutive' ),
-    array ( 'piles',        'piles',                          'diminutive' ),
-    // Sub-ordinaries
-    array ( 'orle',         'orle',                         'subordinary'  ),
-    array ( 'fillet',        'fillet',                          'subordinary' ),
-    array ( 'inescutcheon', 'inescut?cheon',                 'subordinary'  ),
-    array ( 'bordure',      'bordure',                      'subordinary'  ),
-    array ( 'canton',       'cantons?',                     'subordinary'  ),
-    array ( 'gyron',        'gyrons?',                      'subordinary' ),
-    array ( 'gyron',        '?based e?s?quie?r?res?',           'subordinary' ),
-    array ( 'gusset',       'gussets?',                     'subordinary' ),
-    array ( 'graft',        'grafts?',                      'subordinary' ),
-    array ( 'graft',         'gussets? in base' , 'subordinary' ),
-    array ( 'baton',        '(bas?ton|battoon|batune) ?sinister ?couped' ,    'subordinary' ),
-    array ( 'baton-dexter', 'dexter (bas?ton|battoon|batune) ?couped' ,    'subordinary' ),
-    array ( 'baton-dexter', '(bas?ton|battoon|batune) dexter ?couped',    'subordinary' ),
-    array ( 'shakefork',    'shakefork',                    'subordinary' ),
-    array ( 'shakefork',    'pale furche',                    'subordinary' ),
-    array ( 'pall',         'pall',                         'subordinary' ),
-    array ( 'tressure',     'trea?s?sure',                       'subordinary' ),
-    array ( 'tressure2', 'double trea?s?sure','subordinary' ),
-    array ( 'flaunch',      'flau?nche?s?',                'subordinary' ),
-    array ( 'flaunch',      '(flanks?|flanques?|flasques?)',  'subordinary' ),
-    array ( 'square-flaunch', 'square flau?nche?s?',                'subordinary' ),
-    array ( 'square-flaunch', 'square (flanks?|flanques?|flasques?)',  'subordinary' ),
-  );
   // TODO Allow escutcheon to be followed by whole shield if overall?
   static $between = array ( array ( true, '(between|inter)' ),);
   static $on_word = array ( array ( true, 'on'), );
-  static $charge_with = array ( 
+  static $charge_with = array (
     array ( 'on', 'charged with'  ),
+    array ( 'on', 'thereon'  ),
   );
   static $within = array ( array ( true, '(within|inside)' ), );
   static $dep_with = array ( array ( 'depressed', '(debruised|depressed) (with|by|of)', ), );
-  
+
+  $node = $dom->createElement('ordinary');
+  $mods = array();
+
   $state = save();
 
   // Look for "prefixes" to ordinary, then a number
@@ -159,57 +38,48 @@ function ordinary() {
   $inside = (search_match($within) != null);
   $depressed = (search_match($dep_with) != null);
   if ( ($ord_num = number()) == null ) $ord_num = 1;
-  $tokNum = tokNum();
-  
-  $mods = position_mods();     // Sometimes you get "sinister bend ...."
 
-  if ( (($match = either('ordinary')) == null) and (($match = search_match($ordinaries)) == null)  ) {
+  get_features ( array('position'), $node ); // Sometimes you get "sinister bend ...."
+
+  if ( (($match = either('ordinary')) == null) and (($match = search_match($ordinary_list)) == null)  ) {
     restore($state); // Not found anything, backtrack and exit
     return null;
   } // else
   $ord_name = $match[2];
   $ord_type = $match[0];
   $ord_type = preg_replace ( '/\.inc/', '', $ord_type );
-  $node = $dom->create_element('ordinary');
-  $node->set_attribute('type',$ord_name);
-  $node->set_attribute('subtype',$ord_type);
-  $node->set_attribute('number',$ord_num);
-  $node->set_attribute('tokNum',$tokNum);
-  if ( $depressed ) $mods[] = make_mod('depressed');
+  $node->setAttribute('type',$ord_name);
+  $node->setAttribute('subtype',$ord_type);
+  $node->setAttribute('number',$ord_num);
+  $node->setAttribute('tokens',tokens());
+  if ( $depressed ) $node->appendChild( make_mod('depressed'));
+  $a_key = 'o:' . $ord_type;
+  // get features for this ordinary
+  $specific_features = null;
+  $flags = array();
+  if ( array_key_exists($a_key, $modifier_list ))
+    $specific_features = $modifier_list[$a_key];
+  if ( array_key_exists($a_key, $flag_list ))
+    $flags = $flag_list[$a_key];
 
-  $mods = array_merge($mods, position_mods()); // for "bend sinister (angled).."
-  
-/*  if ( ($variant = search_match($common_variants)) != null ) {
-    if ( substr( $variant[0], -7) == 'compony') $node->append_child($dom->create_element('tincture'));
-    $node->set_attribute('subtype', $node->get_attribute('subtype') . '-' . $variant[0] );
-  } */
+  get_features ( array('position', 'linetype', $specific_features), $node ); // for "bend sinister (angled).."
 
-  // Prepare the ordinary function (if it exists)
-  if ( file_exists('parser/ordinaries/' . $ord_name . '.inc') ) {
-    $ord_func = 'ordinary_' . $ord_name;
-    if ( ! function_exists($ord_func) ) {
-      require_once ( 'parser/ordinaries/' . $ord_name . '.inc' );
-    }
-    $node = $ord_func($node, $mods);
-  }
-
-  $ord_linetype = linetype();
-  $mods = array_merge($mods, position_mods()); // for "bend (angled) sinister.."
-  
-  // Now look for colours, linetype and shape modifiers
-  if ( $ord_linetype == 'none' ) $ord_linetype = linetype();
-  $node->set_attribute('linetype', $ord_linetype);
-  if ( isset($match[3]) and $match[3] === false )
+  if ( array_key_exists('always_proper', $flags) ) {
+    $tinc = $dom->createElement('tincture');
+    $proper = $dom->createElement('proper');
+    $tinc->appendChild($proper);
     proper();
-  else
-    $node->append_child(tincture(true));
+  } else {
+    $tinc = tincture(true, true);
+  }
+  $node->appendChild($tinc);
 
-  $mods = array_merge($mods,shape_mods());
+  get_features ( array('shape',$specific_features), $node );
 
   // Does this ordinary go "between" some charges?
   if ( $inside or search_match($between) != null )
-    between($mods,true); // have already found between word
-      
+    adjacent($mods,true); // have already found between word
+
   // Now look for extras
   if ( $found_on or search_match($charge_with) != null ) {
     $on_ord = make_mod('on');
@@ -217,23 +87,23 @@ function ordinary() {
       $items = ordinary();
       if ( $items == null ) $items = charge(false);
       if ( $items == null ) {
-        $items = $dom->create_element('missing');
-        raise_error('Nothing to go "on" the ordinary (' . $ord_type .')' );
+        $items = $dom->createElement('missing');
+        parser_message('blazon', 'Nothing to go "on" the ordinary (' . $ord_type .')' );
       }
     } else {
       $items = charge(false);
       if ( $items == null ) $items = ordinary();
       if ( $items == null ) {
-        $items = $dom->create_element('missing');
-        raise_error('Nothing to go "on" the ordinary (' . $ord_type .')' );
+        $items = $dom->createElement('missing');
+        parser_message('blazon', 'Nothing to go "on" the ordinary (' . $ord_type .')' );
       }
     }
-    $on_ord->append_child($items);
+    $on_ord->appendChild($items);
     $mods[] = $on_ord;
   }
-  
-  foreach ( $mods as $mod ) $node->append_child($mod);
-  
+  foreach ( $mods as $mod ) $node->appendChild($mod);
+
+
   return $node;
 }
 

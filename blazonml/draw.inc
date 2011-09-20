@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,7 +15,8 @@
 function draw() {
   global $dom;
 
-  return $dom->dump_mem(true);
-//  return '<pre>' . htmlentities($dom->dump_mem(true)) . '</pre>';
+  $dom->formatOutput = true;
+  return $dom->saveXML();
+  //return '<pre>' . htmlentities($dom->saveXML()) . '</pre>';
 }
 ?>

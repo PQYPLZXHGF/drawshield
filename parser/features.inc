@@ -15,6 +15,7 @@
 
 function get_features ( $feature_sets, &$node ) {
   global $dom;
+  global $pending_items;
 
     static $position_mods = array (
     array ( null, 'sinister', 'mod', 'sinister' ),
@@ -35,6 +36,23 @@ function get_features ( $feature_sets, &$node ) {
     array ( '3', '(triple|treble) (cotised|cotticed)', 'shape', 'cotised',  ),
   );
 
+  static $simple_charge = array (
+    array ( null, 'con?joined', 'mod', 'conjoin' ),
+    array ( null, 'inverted', 'mod',  'inverted' ),
+    array ( null, 'reversed', 'mod',  'reversed' ),
+    array ( null, '(entire|firme)', 'mod',  'entire' ),
+    array ( null, 'en soleil', 'mod',  'ensoleil'),
+    array ( 'in', 'respecting each other', 'mod', 'facing'  ),
+    array ( 'in', 'counter rampant', 'mod', 'facing'  ),
+    array ( 'in', '(confronting|affrontant|combatant)', 'mod', 'facing'  ),
+    array ( 'out','addorsed', 'mod', 'facing' ),
+    array ( 'bendsinwise',   'bendw(ise|ays) sinister' , 'mod', 'orientation' ),
+    array ( 'bendwise',      'bendw(ise|ays)', 'mod', 'orientation' ),
+    array ( 'fesswise',      'fessw(ise|ays)', 'mod', 'orientation' ),
+    array ( 'palewise',      'palew(ise|ays)', 'mod', 'orientation' ),
+    array ( null,            'arranged', 'ignore' ),
+    array ( null,            '(lying|laying)', 'ignore' ),
+  );
 
   static $linetype_mods = array (
     //
@@ -62,11 +80,49 @@ function get_features ( $feature_sets, &$node ) {
      array ( 'wavy',      '(wavy|undy)',      'mod', 'linetype',                      ),
   );
 
+  static $arr_pos_mods = array (
+    array ( 'inpale',        'in ?the pale' , 'mod', 'arrangement'    ,3              ),
+    array ( 'inpalethrough', 'in ?the pale throughout' , 'mod', 'arrangement' ,3        ),
+    array ( 'inpall',        'in ?the pall' , 'mod', 'arrangement'   ,3                 ),
+    array ( 'infess',        'in ?the fesse?' , 'mod', 'arrangement',3                    ),
+    array ( 'infessthrough', 'in ?the fesse? throughout' , 'mod', 'arrangement'  ,3       ),
+    array ( 'inbendsin',     'in ?the bend sinister' , 'mod', 'arrangement',3 ),
+    array ( 'inbend',        'in ?the bend ?dexter' , 'mod', 'arrangement',3 ),
+    array ( 'inchevron',     'in ?the chevron', 'mod', 'arrangement',3  ),
+    array ( 'inpile',        'in ?the pile' , 'mod', 'arrangement',3 ),
+    array ( 'inorle',        'in ?an orle' , 'mod', 'arrangement', 12 ),
+    array ( 'inorle',        'in ?the orle' , 'mod', 'arrangement', 12 ),
+    array ( 'insaltire',     'in ?the saltire' , 'mod', 'arrangement',3 ),
+    array ( 'incross',       'in ?the cross' , 'mod', 'arrangement', 5),
+    array ( 'counter-passant', '?in counter passant' , 'mod', 'arrangement', 4),
+    array ( 'pilewise',      'pilewise', 'mod', 'arrangement', 3),
+    array ( 'inbar',         '?in (bar|barwise)', 'mod',  'arrangement'),
+    array ( 'inflank',       'in ?the (flanks?|flaunche?s?)', 'mod', 'arrangement position',3   ),
+    array ( 'inchief',       'in ?the chief' , 'mod', 'arrangement position',3   ),
+    array ( 'inchiefthrough','in ?the chief throughout' , 'mod', 'arrangement position',3   ),
+    array ( 'inbase',        'in ?the base' , 'mod', 'arrangement position',3  ),
+    array ( 'indexside',     'in ?the dexter side' , 'mod', 'position', 1 ),
+    array ( 'insinside',     'in ?the sinister side' , 'mod', 'position', 1  ),
+    array ( 'indexchief',    'in ?the dexter chief' , 'mod', 'position', 1  ),
+    array ( 'insinchief',    'in ?the sinister chief' , 'mod', 'position', 1  ),
+    array ( 'inmidchief',    'in ?the middle chief' , 'mod', 'position', 1  ),
+    array ( 'inhonpoint',    'in ?the honour point' , 'mod', 'position', 1  ),
+    array ( 'infesspoint',   'in ?the fesse? point' , 'mod', 'position', 1  ),
+    array ( 'indexbase',     'in ?the dexter base' , 'mod', 'position', 1  ),
+    array ( 'insinbase',     'in ?the sinister base' , 'mod', 'position', 1  ),
+    array ( 'inmidbase',     'in ?the middle base' , 'mod', 'position', 1  ),
+    array ( 'innombril',     'in ?the nombril' , 'mod', 'position', 1  ),
+    array ( 'innombril',     'in ?the navel point' , 'mod', 'position', 1  ),
+    array ( 'quadrangle',    'in ?a quadrangle', 'mod', 'arrangement', 4 ),
+  );
+
+  $retval = null;
+
   $features = array();
   foreach ( $feature_sets as $feature_set ) {
     if (is_array($feature_set)) $features = array_merge($features, $feature_set);
     elseif (is_string($feature_set)) {
-      switch ($feature_set) {
+      switch ($feature_set) { // replace this with string -> varname conversion
         case 'position':
           $features = array_merge($features, $position_mods);
           break;
@@ -76,6 +132,12 @@ function get_features ( $feature_sets, &$node ) {
         case 'linetype':
           $features = array_merge($features, $linetype_mods);
           break;
+        case 'simple_charge':
+          $features = array_merge($features, $simple_charge);
+          break;
+        case 'arr_pos':
+          $features = array_merge($features, $arr_pos_mods);
+          break;
         default:
           parser_message('internal', "Unknown feature group - $feature_set");
           break;
@@ -83,53 +145,64 @@ function get_features ( $feature_sets, &$node ) {
     }
   }
 
+  $tinc_index = 1;
   // Get any additional features
-  while ( $features ) {
-    if ( ($match = search_match($features)) == null ) break;
-    switch ( $match[2] ) {
-      case 'shape':
-        $shape_mod = make_mod($match[3], $match[0], tokens());
-        get_features(array('linetype'), $shape_mod);
-        if ( ($tinc = tincture()) != null ) $shape_mod->appendChild($tinc);
-        $node->appendChild($shape_mod);
-        break;
-      case 'addlinetype':
-        $linemod = make_mod( $match[3], $match[0], tokens() );
-        get_features(array('linetype'), $linemod);
-        $node->appendChild($linemod);
-        break;
-      case 'feature':
-        $feature = $dom->createElement('feature');
-        $feature->setAttribute( 'name', $match[0]);
-        $feature->setAttribute('tokens',tokens());
-        $feature->appendChild(tincture(true, true));
-        $node->appendChild($feature);
-        break;
-      case 'mod':
-        $node->appendChild(make_mod ( $match[3], $match[0], tokens() ));
-        break;
-      case 'mod+charge':
-        $mod = make_mod ( $match[3], $match[0], tokens() );
-        if ( ($charge = charge(true)) == null ) {
-          $charge = $dom->createElement('missing');
-          parser_message('blazon', 'expected charge in modifier');
-        } else {
-          if ( $match[0] )
-            $charge->setAttribute('number', $match[0] );
-        }
-        $mod->appendChild($charge);
-        $node->appendChild($mod);
-        break;
-      case 'warn':
-        parser_message('warning', 'Can\'t draw feature - ' . tokens());
-        $node->appendChild(make_mod ( $match[3], $match[0], tokens() ));
-        break;
-      case 'ignore':
-        break;
+  while ( true ) {
+    if ( $features and ($match = search_match($features)) != null) {
+      switch ( $match[2] ) {
+        case 'shape':
+          $shape_mod = make_mod($match[3], $match[0], tokens());
+          get_features(array('linetype'), $shape_mod);
+          if ( ($tinc = tincture()) != null ) $shape_mod->appendChild($tinc);
+          $node->appendChild($shape_mod);
+          break;
+        case 'addlinetype':
+          $linemod = make_mod( $match[3], $match[0], tokens() );
+          get_features(array('linetype'), $linemod);
+          $node->appendChild($linemod);
+          break;
+        case 'feature':
+          $feature = $dom->createElement('feature');
+          $feature->setAttribute( 'name', $match[0]);
+          $feature->setAttribute('tokens',tokens());
+          $feature->appendChild($tincture(true));
+          $node->appendChild($feature);
+          break;
+        case 'mod':
+          foreach ( explode ( ' ', $match[3] ) as $match3 )
+            $node->appendChild(make_mod ( $match3, $match[0], tokens() ));
+          if ( isset ( $match[4] ) ) $retval = $match[4];
+          break;
+        case 'mod+charge':
+          $mod = make_mod ( $match[3], $match[0], tokens() );
+          if ( ($charge = charge(true)) == null ) {
+            $charge = $dom->createElement('missing');
+            parser_message('blazon', 'expected charge in modifier');
+          } else {
+            if ( $match[0] )
+              $charge->setAttribute('number', $match[0] );
+          }
+          $mod->appendChild($charge);
+          $node->appendChild($mod);
+          break;
+        case 'warn':
+          parser_message('warning', 'Can\'t draw feature - ' . tokens());
+          $node->appendChild(make_mod ( $match[3], $match[0], tokens() ));
+          break;
+        case 'ignore':
+          break;
+      }
+    } elseif (($tinc = tincture(false)) != null ) {
+      $tinc->setAttribute('index',"$tinc_index" );
+      $tinc_index++;
+      $node->appendChild($tinc);
+    } else {
+      break;
     }
     comma();
     andd();
   }
+  return $retval; // usually ignored, but see arr_pos above
 }
 
 

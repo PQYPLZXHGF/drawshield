@@ -12,7 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-
+/*
 function arr_pos(&$mods) {
 
   // Look for a specific position or arrangement.
@@ -98,7 +98,7 @@ function arr_pos(&$mods) {
   }
   restore($state);
   return false;
-}
+} */
 
 function inquarter(&$mods) {
 
@@ -126,7 +126,7 @@ function inquarter(&$mods) {
   return $found;
 }
 
-
+/*
 function postfix(&$mods) {
   $postfix_words = array (
     array ( 'inverted', 'inverted' ),
@@ -138,7 +138,7 @@ function postfix(&$mods) {
     $mods[] = make_mod($match[0]);
   }
   return ($match != null);
-}
+} */
 
 function prefix(&$mods) {
   $prefix_words = array (
@@ -149,19 +149,7 @@ function prefix(&$mods) {
   return ($match != null);
 }
 
-function facing(&$mods) {
-  $facing_words = array (
-    array ( 'in',            'respecting each other',  ),
-    array ( 'in',            'counter rampant',  ),
-    array ( 'in',            '(confronting|affrontant|combatant)',  ),
-    array ( 'out',           'addorsed',  ),
-  );
-
-  if ( ($match = search_match($facing_words) ) != null )
-    $mods[] = make_mod ( 'facing', $match[0] );
-  return ($match != null);
-}
-
+/*
 function orientation(&$mods) {
   $orient_words = array (
     array ( 'bendsinwise',   'bendw(ise|ays) sinister' , ),
@@ -193,7 +181,7 @@ function laying(&$mods) {
     array ( true,            '(lying|laying)', '' ),
   );
   return (search_match($lay_words) != null);
-}
+} */
 
 function rows(&$mods) {
 

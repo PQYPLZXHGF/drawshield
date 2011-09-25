@@ -256,7 +256,7 @@ function rewrite() {
 
   // Replace missing textures
   $counter = 1;
-  foreach ( $xpath->query("//tincture/missing") as $item ) {
+  foreach ( $xpath->query("//tincture[@origin='missing']") as $item ) {
     switch ( $counter ) {
       case 1:
         $counter = 2;
@@ -291,7 +291,7 @@ function rewrite() {
     $tinc->appendChild($col);
     $charge->appendChild($tinc);
     $semyde->appendChild($charge);
-    $item->parentNode->replaceChild($semyde,$item);
+    $item->appendChild($semyde);
   }
 
   /*

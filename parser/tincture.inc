@@ -45,28 +45,52 @@ function colour_or_fur() {
   return $temp;
 }
 
-function tincture( $lookahead = false, $required = false ) {
+function is_descendant( $item, $parent ) {
+  if ( $parent->isSameNode($item) ) return true;
+  foreach ( $parent->childNodes as $child )
+    if ( is_descendant( $item, $child ) )
+      return true;
+  return false;
+}
+
+function replace_pending( $tinc ) {
+  global $pending_items;
+
+  $temp_items = array();
+
+  foreach ( $pending_items as $item ) {
+    if ( !is_descendant ( $item, $tinc ) )
+      $item->appendChild(deep_copy($tinc->firstChild));
+    else
+      $temp_items[] = $item; // don't replace, leave for later
+  }
+  $pending_items = $temp_items;
+}
+
+// Look for a tincture, return a pending tincture if not found
+function tincture($required=false)  {
   global $dom;
+  global $pending_items;
 
   $tinc = tincture2();
-  if ( $tinc == null and $lookahead ) {
-    $state = save();
-    while($tinc == null and lookahead(1)) {
-      $tinc = tincture2();
-    }
-    restore($state);
+  if ( $tinc != null ) {
+    replace_pending($tinc);
+//    foreach ( $pending_items as $item )
+//      $item->appendChild(deep_copy($tinc->firstChild));
+//    $pending_items = array();
   }
-  if ($tinc == null and $required ) {
+  if ( $tinc == null and $required ) {
     $tinc = $dom->createElement('tincture');
     $tinc->setAttribute('index', 1); // Default value, overwritten later if required.
-    $tinc->appendChild ( $dom->createElement('missing'));
-    parser_message('blazon', 'Tincture missing');
+    $tinc->setAttribute('origin', 'pending'); // Default value, overwritten later if required.
+    $pending_items[] = $tinc;
   }
   return $tinc;
 }
 
 function tincture2() {
   global $dom, $p_globals;
+  global $pending_items;
 
   static $backrefs = array (
     array ( 'ofsame', '(like|of|as) the same' ,),
@@ -119,6 +143,7 @@ function tincture2() {
 
   $node = $dom->createElement('tincture');
   $node->setAttribute('index', 1);
+  $child = null;
 
   // zeroth, discard grouping words
   search_match($groupings);
@@ -126,8 +151,8 @@ function tincture2() {
   // First look for a back reference
   if ( ($match = search_match($backrefs)) != null ) {
     if ( $p_globals[$match[0]] == null ) {
+      $node->setAttribute('origin', 'missing');
       parser_message('blazon', 'No previous tincture');
-      $child = $dom->createElement('missing');
     } else {
       $child = deep_copy($p_globals[$match[0]]);
     }
@@ -174,10 +199,10 @@ function tincture2() {
     $treat->setAttribute( 'name', $match[0]);
     $treat->setAttribute( 'tokens',tokens());
     comma();
-    $treat->appendChild(tincture(false,true));
+    $treat->appendChild(tincture2(true));
     comma();
     andd();
-    $tinc2 = tincture(false,true);
+    $tinc2 = tincture2(true);
     $tinc2->setAttribute('index',2);
     $treat->appendChild($tinc2);
     $child = $treat;
@@ -189,11 +214,12 @@ function tincture2() {
     // Look for a second (normally counterchanged) division
   //  if ( ( $div2 = division() ) != null ) $child->appendChild($div2);
   } else {
-    // Not found any, backtrack and exit
     return null;
   }
-  $node->appendChild($child);
-  $p_globals['ofsame'] = $child;
+  if ( $child != null ) {
+    $node->appendChild($child);
+    $p_globals['ofsame'] = $child;
+  }
   return $node;
 }
 ?>

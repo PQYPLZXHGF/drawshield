@@ -54,7 +54,6 @@ function place_charges ( $node, $placement, $mods = array() ) {
       return '';
   }
   $num_of = $node->getAttribute('number');
-  $addorsed = false;
   $facing = null;
   $between = null;
   foreach ( $node->childNodes as $child ) {
@@ -155,6 +154,8 @@ function PlaceCharge ( $node,  // images
   $charge = getCharge( $node );
   $orientation = null;
   $tincture = null;
+  $Xflex = array_key_exists('wflex', $charge) ? $charge['wflex'] : 1;
+  $Yflex = array_key_exists('hflex', $charge) ? $charge['hflex'] : 1;
 //  $parent = $node->parentNode;
   foreach ( $node->childNodes as $child ) {
     if ( $child->nodeName == 'modifier' ) {
@@ -167,6 +168,12 @@ function PlaceCharge ( $node,  // images
           break;
         case 'orientation':
           $orientation = $child->getAttribute('param');
+          break;
+        case 'wflex': // these take priority over any default value
+          $Xflex = $child->getAttribute('value');
+          break;
+        case 'hflex':
+          $Yflex = $child->getAttribute('value');
           break;
       }
     } elseif ( $child->nodeName == 'tincture' ) {
@@ -196,8 +203,6 @@ function PlaceCharge ( $node,  // images
   $retval = $charge['body'];
   $chargeX = $charge['width'];
   $chargeY = $charge['height'];
-  $Xflex = array_key_exists('wflex', $charge) ? $charge['wflex'] : 1;
-  $Yflex = array_key_exists('hflex', $charge) ? $charge['hflex'] : 1;
 
   if ( $inverted ) {
     $retval = "<g transform=\"translate(0,$chargeY) scale(1,-1)\"><desc>inverted charge</desc>$retval</g>\n";

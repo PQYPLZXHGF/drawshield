@@ -130,6 +130,7 @@ function halved() {
 
 function shield() {
   global $dom;
+  global $pending_items;
 
   $quartered = false;
 
@@ -152,6 +153,10 @@ function shield() {
   $node->appendChild($child);
   if ( ($quartered or !semicolon()) and ($overall = overall() ) != null ) {
     $node->appendChild($overall);
+  }
+  foreach ( $pending_items as $item ) {
+    $item->setAttribute('origin','missing');
+    parser_message('blazon', 'Tincture missing');
   }
   return $node;
 }

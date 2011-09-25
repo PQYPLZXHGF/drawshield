@@ -23,10 +23,10 @@
                         <xs:documentation>For future expansion</xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element minOccurs="0" name="errors">
+                <xs:element minOccurs="0" name="messages">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="error">
+                            <xs:element maxOccurs="unbounded" name="message">
                                 <xs:annotation>
                                     <xs:documentation>Content is free form error message</xs:documentation>
                                 </xs:annotation>
@@ -34,10 +34,10 @@
                                     <xs:sequence>
                                         <xs:any namespace="##any"/>
                                     </xs:sequence>
-                                    <xs:attribute name="code"/>
+                                    <xs:attribute name="category"/>
                                     <xs:attribute name="filename"/>
                                     <xs:attribute name="line"/>
-                                    <xs:attribute ref="tokNum"/>
+                                    <xs:attribute ref="tokens"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
@@ -51,7 +51,7 @@
             </xs:attribute>
             <xs:attribute name="blazonTokens" use="required">
                 <xs:annotation>
-                    <xs:documentation>This is a blank separated list of tokens created by the lexical analyser. The "tokNum" attributes of other elements are zero based references to this list.</xs:documentation>
+                    <xs:documentation>This is a blank separated list of tokens created by the lexical analyser. The "tokens" attributes of other elements are zero based references to this list.</xs:documentation>
                 </xs:annotation>
             </xs:attribute>
             <xs:attribute name="schemaVersion"/>
@@ -154,14 +154,40 @@
                 </xs:element>
                 <xs:element name="counterChanged"/>
                 <xs:element ref="division"/>
-                <xs:element name="implied">
-                    <xs:annotation>
-                        <xs:documentation>Indicates that the tincture is implied by the object to which it is applied, for example a fountain is always white and blue.</xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element ref="missing"/>
             </xs:choice>
-            <xs:attribute ref="tokNum"/>
+            <xs:attribute ref="tokens"/>
+            <xs:attribute default="1" name="index" type="xs:nonNegativeInteger" use="optional"/>
+            <xs:attribute name="origin">
+                <xs:annotation>
+                    <xs:documentation>This is the "origin" of the tincture, i.e. where it came from. See the enumerations for details of each. It is possible that in future the elements "proper" and "implied" may be replaced by this attribute.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="given">
+                            <xs:annotation>
+                                <xs:documentation>This tincture was explicitly supplied in the blazon, in the expected place.</xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="default">
+                            <xs:annotation>
+                                <xs:documentation>No explicit tincture was given but the charge has a default tincture, for example an ermine tail is sable unless otherwise given.</xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="pending">
+                            <xs:annotation>
+                                <xs:documentation>This tincture was explicitly given but later in the blazon, possibly shared with another charge for example.</xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="proper">
+                            <xs:annotation>
+                                <xs:documentation>This charge is always the same tincture, and may only be given the explicit tincture "proper".</xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="implied"/>
+                        <xs:enumeration value="missing"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="division">
@@ -179,8 +205,7 @@
             </xs:sequence>
             <xs:attribute name="type" use="required"/>
             <xs:attribute name="subType" use="required"/>
-            <xs:attribute name="lineType"/>
-            <xs:attribute ref="tokNum"/>
+            <xs:attribute ref="tokens"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="charge">
@@ -205,7 +230,7 @@
             <xs:attribute name="type" use="required"/>
             <xs:attribute name="subType" use="required"/>
             <xs:attribute name="number" use="required"/>
-            <xs:attribute ref="tokNum"/>
+            <xs:attribute ref="tokens"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="ordinary">
@@ -217,9 +242,8 @@
             </xs:sequence>
             <xs:attribute name="type" use="required"/>
             <xs:attribute name="subType" use="required"/>
-            <xs:attribute name="lineType" use="required"/>
             <xs:attribute name="number" type="xs:positiveInteger"/>
-            <xs:attribute ref="tokNum"/>
+            <xs:attribute ref="tokens"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="ords_chgs">
@@ -245,10 +269,11 @@
                 <xs:element ref="missing"/>
                 <xs:element ref="shield"/>
                 <xs:element ref="ordinary"/>
+                <xs:element ref="modifier"/>
             </xs:choice>
             <xs:attribute name="name" use="required"/>
             <xs:attribute name="param"/>
-            <xs:attribute ref="tokNum"/>
+            <xs:attribute ref="tokens"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="missing">
@@ -257,9 +282,9 @@
         </xs:annotation>
         <xs:complexType/>
     </xs:element>
-    <xs:attribute name="tokNum" type="xs:nonNegativeInteger">
+    <xs:attribute name="tokens" type="xs:string">
         <xs:annotation>
-            <xs:documentation>This is a zero based reference to the list of tokens in the top level attribute blazonTokens</xs:documentation>
+            <xs:documentation>This is the sequence of tokens that were "consumed" by the parsing process in reading this tincture. It may be empty if the tincture is implied, or is part of a larger structure.</xs:documentation>
         </xs:annotation>
     </xs:attribute>
     <xs:attribute name="IDREF" type="xs:IDREF">

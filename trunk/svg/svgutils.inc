@@ -65,16 +65,14 @@ function add_def($element = '', $content = '', $name = '', $title = '', $desc = 
 function apply_tincture ( $tincture, $object, $bb = '1000,1200',
         $rot = '0', $rev = false, $inv = false, $offsetX = 0, $offsetY = 0,
         $xscale = 0, $yscale = 0  ) {
-  global $_SERVER;
+  global $_SERVER; // REMOVE THESE CHECKS - which to leave?
 
   $bb = choose_fit($bb);
+  if ( $tincture->getAttribute('origin') == 'implied' ) return $object; // Nothing to do
   $tinc = $tincture->firstChild;
   switch ( $tinc->nodeName ) {
-    case 'implied':
-      return $object;
-      break;
     case 'colour':
-    case 'default':
+    case 'default': // don't think these two ever occur
     case 'proper':
       if ( $tinc->hasAttribute('name') ) $spec = rgb($tinc->getAttribute('name'));
       elseif ( $tinc->hasAttribute('spec') ) $spec = $tinc->getAttribute('spec');

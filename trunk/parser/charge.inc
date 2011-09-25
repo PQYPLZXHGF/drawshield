@@ -52,7 +52,7 @@ function adjacent(&$mods, $found_between = false) {
   }
 }
 
-function bundle ( &$mods ) {
+function bundle ( &$node ) {
   static $bundle_words = array (
     array ( 'bundle', '(sheaf|sheave|bundle|tuft)s?', 3 ),
     array ( 'bundle', 'pair', 2), // just to demonstrate different defaults really....
@@ -65,7 +65,7 @@ function bundle ( &$mods ) {
     $num = 0;
     if ( search_match($of_words) != null ) $num = number();
     if ( $num < 1) $num = $match[2];
-    $mods[] = make_mod ( $match[0], "$num" );
+    $node->appendChild( make_mod ( $match[0], "$num" ));
   }
 }
 
@@ -74,8 +74,8 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   global $flag_list;
   global $charge_list;
   global $modifier_list;
+  global $pending_items;
 
-  $mods = array();
   $specific_features = null;
   $flags = array();
   $state = save();
@@ -93,8 +93,10 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     }
   }
 
+  $node = $dom->createElement('charge');
+
   // Look for grouping words (bundle of etc.)
-  bundle( $mods );
+  bundle( $node );
 
   if ( (($match = either('charge')) == null) and (($match = search_match($charge_list)) == null ) ) {
     restore($state);
@@ -103,7 +105,6 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   // We have a charge
   $type = $match[2];
   $subtype = $match[0];
-  $node = $dom->createElement('charge');
   $node->setAttribute('type', $type);
   $node->setAttribute('subtype', $subtype);
   $node->setAttribute('tokens',tokens());
@@ -117,39 +118,36 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
 
   // Sometimes we want to just get the next word as a string
   if ( array_key_exists('get_item', $flags))
-    $mods[] = make_mod('item',get_tokens($flags['get_item']));
+    $node->appendChild( make_mod('item',get_tokens($flags['get_item'])));
 
   // Look for grouping words again
-  bundle( $mods );
+  bundle( $node );
 
-  comma();
-  $tinc = tincture(true, false); // Look for a tincture immediately following charge
-  get_features ( array($specific_features), $node );
-  comma();
-  postfix($mods);
-  orientation($mods);
-  conjoined($mods);
-  if ( $allow_arr_pos ) arr_pos($mods);
+  $mod_set = array ('simple_charge', $specific_features);
+  if ( $allow_arr_pos ) $mod_set[] = 'arr_pos';
 
+  get_features ( $mod_set, $node );
 
-  if ( array_key_exists('always_proper', $flags) ) {
+  // Have we found a tincture yet?
+  if ( ($tinc = get_child($node, 'tincture')) == null ) {
     $tinc = $dom->createElement('tincture');
-    $proper = $dom->createElement('proper');
-    $tinc->appendChild($proper);
-    proper();
-  } elseif ( array_key_exists('default_colour', $flags)) {
-      if ( ($tinc = tincture(false)) == null )
+    if ( array_key_exists('always_proper', $flags) ) {
+      $proper = $dom->createElement('proper');
+      $tinc->setAttribute('origin','proper');
+      $tinc->appendChild($proper);
+    } elseif ( array_key_exists('default_colour', $flags)) {
+      if ( ($tinc = tincture()) == null ) {
+        $tinc->setAttribute('origin','default');
         $tinc = make_colour($flags['default_colour']);
-  } elseif ( $tinc == null ) { // if not found a tincture yet, go get one
-    $tinc = tincture(true, true);
+      }
+    } else { // Not proper, and no default
+      $tinc->setAttribute('origin','pending');
+      $pending_items[] = $tinc;
+    }
+    $node->appendChild($tinc);
+  } else {
+    $tinc->setAttribute('origin','given');
   }
-  $node->appendChild($tinc);
-
-  comma();
-
-  get_features ( array($specific_features), $node );
-
-  foreach($mods as $mod) $node->appendChild($mod);
 
   return $node;
 }
@@ -173,7 +171,10 @@ function charge( $assume_num = false ) {
   $state = save();
 
   // In case of "in chief, three whatever...
-  $arr_pos = arr_pos($mods);
+  $temp = $dom->createElement('charge');
+  $arr_pos = get_features( array ( 'arr_pos'), $temp );
+  foreach ($temp->childNodes as $child )
+    $mods[] = $child;
   if ( is_int($arr_pos) ) $assume_num = $arr_pos;
   inquarter($mods);
   comma();
@@ -199,15 +200,15 @@ function charge( $assume_num = false ) {
   }
   if ( !semicolon() ) {
 
-    adjacent($mods);
+    adjacent($mods);   // TODO Fix all this below....
 
     // In case of three whatever in chief...
-    postfix($mods);
-    laying($mods);
-    conjoined($mods);
+//    postfix($mods);
+//    laying($mods);
+//    conjoined($mods);
     rows($mods);
-    orientation($mods);
-    if ( !$arr_pos ) arr_pos($mods);
+//    orientation($mods);
+//    if ( !$arr_pos ) arr_pos($mods);
     // If there is an explicit position, a following "between" is redundant (e.g. issue 173)
     search_match( array ( array ( null, 'between' )));
   }

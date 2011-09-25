@@ -15,6 +15,7 @@
 
 function division( $depth = 1 ) {
   global $dom;
+  global $pending_items;
 
   static $divisions = array (
     //       filename           regexs         needs 3 colours?
@@ -71,34 +72,45 @@ function division( $depth = 1 ) {
   );
 
   $node = null;
+  $tinc_count = 0;
   if ( ($match = search_match ( $divisions )) != null ) {
     $node = $dom->createElement('division');
     $node->setAttribute( 'tokens',tokens());
     $node->setAttribute( 'type', $match[2]);
     $node->setAttribute( 'subtype', $match[0]);
     comma();
-    // generic modifiers
+    // generic modifiers, including tinctures
     get_features(array('linetype', 'position', $of_pieces), $node);
-    // always look for first tincture
-    $node->appendChild(tincture(false,true));
+    // How many tinctures did we find?
+    foreach ($node->childNodes as $child )
+      if ( $child->tagName == 'tincture' ) $tinc_count++;
+    if ( $tinc_count < 1 ) {
+      $tinc = $dom->createElement('tincture');
+      $tinc->setAttribute('index', 1);
+      $tinc->setAttribute('origin', 'missing');
+//        $pending_items[] = $tinc;
+      $node->appendChild($tinc);
+    }
     if ( $depth == 1 ) {
-      // Always look for second tincture
-      andd();
-      comma();
-      $tinc2 = tincture(false,true);
-      $tinc2->setAttribute('index', 2);
-      $node->appendChild($tinc2);
+      // Always need second tincture
+      if ( $tinc_count < 2 ) {
+        $tinc = $dom->createElement('tincture');
+        $tinc->setAttribute('index', 2);
+        $tinc->setAttribute('origin', 'missing');
+//        $pending_items[] = $tinc;
+        $node->appendChild($tinc);
+      }
       // Do we need a third also?
-      if ( isset($match[3]) and $match[3] === true ) {
-        andd();
-        comma();
-        $tinc3 = tincture(false,true);
-        $tinc3->setAttribute('index', 3);
-        $node->appendChild($tinc3);
+      if ( isset($match[3]) and $match[3] === true and $tinc_count < 3) {
+        $tinc = $dom->createElement('tincture');
+        $tinc->setAttribute('index', 3);
+        $tinc->setAttribute('origin', 'missing');
+//        $pending_items[] = $tinc;
+        $node->appendChild($tinc);
       }
     } else { // second tincture is implied
       $tinc = $dom->createElement('tincture');
-      $tinc->appendChild($dom->createElement('implied'));
+      $tinc->setAttribute('origin', 'implied');
       $tinc->setAttribute('index', 2);
       $node->appendChild($tinc);
     }

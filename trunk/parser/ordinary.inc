@@ -12,6 +12,16 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
+function get_cotise_tinc($node) {
+  foreach ( $node->childNodes as $child ) {
+    if ( $child->tagName == 'modifier' and $child->getAttribute('name') == 'cotised' ) {
+      if ( ($tinc = get_child($child, 'tincture')) != null )
+        return deep_copy($tinc);
+    }
+  }
+  return null;
+}
+
 function ordinary() {
   global $dom;
   global $ordinary_list;
@@ -62,19 +72,25 @@ function ordinary() {
   if ( array_key_exists($a_key, $flag_list ))
     $flags = $flag_list[$a_key];
 
-  get_features ( array('position', 'linetype', $specific_features), $node ); // for "bend sinister (angled).."
+  get_features ( array('shape', 'position', 'linetype', $specific_features), $node ); // for "bend sinister (angled).."
 
-  if ( array_key_exists('always_proper', $flags) ) {
+  // Have we found a tincture yet?
+  if ( ($tinc = get_child($node, 'tincture')) == null ) {
     $tinc = $dom->createElement('tincture');
-    $proper = $dom->createElement('proper');
-    $tinc->appendChild($proper);
-    proper();
+    // It could be becuase this ordinary is always proper
+    if ( array_key_exists('always_proper', $flags) ) {
+      $proper = $dom->createElement('proper');
+      $tinc->appendChild($proper);
+    } elseif ( ($tinc = get_cotise_tinc($node)) != null ) { // or it could be because the tincture was concsumed by a cotised modifier
+    // Don't need to do anything else
+    } else { // otherwise, wait for another tincture to come along
+      $tinc->setAttribute('origin','pending');
+      $pending_items[] = $tinc;
+    }
+    $node->appendChild($tinc);
   } else {
-    $tinc = tincture(true, true);
+    $tinc->setAttribute('origin','given');
   }
-  $node->appendChild($tinc);
-
-  get_features ( array('shape',$specific_features), $node );
 
   // Does this ordinary go "between" some charges?
   if ( $inside or search_match($between) != null )

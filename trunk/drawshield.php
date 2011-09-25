@@ -40,7 +40,7 @@ if ( $format == 'svgtext' ) $format = 'svg';
 // Global Variables
 //
 
-$tagline1 = "drawshield 2.3g";   // Advertising lines at bottom left
+$tagline1 = "drawshield 2.3h";   // Advertising lines at bottom left
 $tagline2 = "shield.karlwilcox.com";
 
 // Quick response for empty blazon
@@ -63,6 +63,8 @@ $ordinary_list = unserialize(file_get_contents('parser/data/ordinary_list.dat'))
 $words = array();
 $cur_word = 0;
 $matched_tokens = '';
+// This is a list of charges or ordinaries awaiting a tincture
+$pending_items = array();
 
 // This is our XML generator and top level item for the parse tree
 $dom = new DOMDocument('1.0');

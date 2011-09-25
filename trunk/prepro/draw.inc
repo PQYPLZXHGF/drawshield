@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,12 +12,11 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-include 'svg/preprocess.inc';
-include 'svg/layout.inc';
-
 function draw() {
   global $dom;
 
-  return (preprocess ( $dom ));
+  rewrite();
+  $dom->formatOutput = true;
+  return $dom->saveXML();
 }
 ?>

@@ -36,6 +36,14 @@ function get_features ( $feature_sets, &$node ) {
     array ( '3', '(triple|treble) (cotised|cotticed)', 'shape', 'cotised',  ),
   );
 
+  static $charge_prefix = array (
+    array ( 'inquarter1',    'in ?the (first|1st|i) ?quarter', 'mod', 'position' ),
+    array ( 'inquarter2',    'in ?the (second|2nd|ii) ?quarter', 'mod', 'position' ),
+    array ( 'inquarter3',    'in ?the (third|3rd|iii) ?quarter', 'mod', 'position' ),
+    array ( 'inquarter4',    'in ?the (fourth|4th|iv) ?quarter', 'mod', 'position' ),
+    array ( null, 'demi|half', 'mod', 'demi' ),
+  );
+
   static $simple_charge = array (
     array ( null, 'con?joined', 'mod', 'conjoin' ),
     array ( null, 'inverted', 'mod',  'inverted' ),
@@ -117,6 +125,7 @@ function get_features ( $feature_sets, &$node ) {
   );
 
   $retval = null;
+  $look_for_rows = false;
 
   $features = array();
   foreach ( $feature_sets as $feature_set ) {
@@ -135,8 +144,14 @@ function get_features ( $feature_sets, &$node ) {
         case 'simple_charge':
           $features = array_merge($features, $simple_charge);
           break;
+        case 'charge_prefix':
+          $features = array_merge($features, $charge_prefix);
+          break;
         case 'arr_pos':
           $features = array_merge($features, $arr_pos_mods);
+          break;
+        case 'rows':
+          $look_for_rows = true;
           break;
         default:
           parser_message('internal', "Unknown feature group - $feature_set");
@@ -149,6 +164,7 @@ function get_features ( $feature_sets, &$node ) {
   // Get any additional features
   while ( true ) {
     if ( $features and ($match = search_match($features)) != null) {
+      $state = save();
       switch ( $match[2] ) {
         case 'shape':
           $shape_mod = make_mod($match[3], $match[0], tokens());
@@ -165,7 +181,7 @@ function get_features ( $feature_sets, &$node ) {
           $feature = $dom->createElement('feature');
           $feature->setAttribute( 'name', $match[0]);
           $feature->setAttribute('tokens',tokens());
-          $feature->appendChild($tincture(true));
+          $feature->appendChild(tincture(true));
           $node->appendChild($feature);
           break;
         case 'mod':
@@ -196,6 +212,24 @@ function get_features ( $feature_sets, &$node ) {
       $tinc->setAttribute('index',"$tinc_index" );
       $tinc_index++;
       $node->appendChild($tinc);
+    } elseif ( $look_for_rows and (($num = number( true )) != null ) ) {
+      comma();
+      andd();
+      $rows = array($num);
+      $count = 1;
+      while ( ($num = number( true )) != null ) {
+      	$count += 1;
+        $rows[] = $num;
+        if ( semicolon()) break;
+        comma();
+        andd();
+      }
+      if ( $count == 1 ) {
+        restore($state);
+        break;
+      } elseif ( $count > 1 ) {
+        $node->appendChild(make_mod ( 'rows', implode(',',$rows) ));
+      }
     } else {
       break;
     }

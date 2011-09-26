@@ -156,6 +156,10 @@ function match_number ( &$count, $t_word ) {
 
 function check_match ( $match_string ) {
 
+  if ( !$match_string ) {
+    parser_message('internal','null match string');
+    return false;
+  }
   $phrases = explode('/', $match_string);
   foreach ( $phrases as $phrase ) {
     if ( ($retval = check_match2($phrase)) != 0 ) break;

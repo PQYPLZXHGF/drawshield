@@ -56,8 +56,10 @@ function next_word() { // return next token (or null)
   return $words[$cur_word++];
 }
 
-function get_tokens($num) {
+function get_tokens($num = 1) {
   global $cur_word, $words;
+
+  if ( $num < 0 ) $num = 1;
 
   $retval = '';
   for ( $i = 0; $i < $num; $i++ )

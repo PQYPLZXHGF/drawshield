@@ -70,14 +70,14 @@
         </tr>
       </table>
     </form>
-
+    <script type="text/javascript" src="XMLHttpRequest.js"></script>
     <script type="text/javascript">
       //<![CDATA[
-      var xmlhttp;
+      var xmlhttp = new XMLHttpRequest();
       var incDir = '/include/';
       var asText;
       var useId;
-     function showerrors(evt) {
+      function showerrors(evt) {
        var errorbox = document.getElementById("errorbox");
        if ( errorbox.getAttribute("visibility") == "hidden" ) {
          errorbox.setAttribute("visibility","visible");
@@ -97,15 +97,14 @@
             errorPara.appendChild(errorText);
             shieldImg.insertBefore(errorPara,null);
           } else {
-            newNode = document.importNode(xmlhttp.responseXML.firstChild, true);
-            shieldImg.appendChild(newNode);
+            //newNode = document.importNode(xmlhttp.responseXML.firstChild, true);
+            shieldImg.innerHTML = xmlhttp.responseText;
+            //shieldImg.appendChild(newNode);
           }
           asText = xmlhttp.responseText;
         }
       }
       function requestSVG(url,id) {
-        if (!xmlhttp) xmlhttp = new XMLHttpRequest();
-        if (!xmlhttp) return;
         useId = id;
         xmlhttp.open('GET', url, true);
         xmlhttp.onreadystatechange = updateSVG;
@@ -123,7 +122,7 @@
         window.location.replace( incDir + 'shield/drawshield.php?asfile=1&blazon=' + encodeURIComponent(document.forms['myform'].blazon.value));
       };
       // Run automatically
-      window.onload=requestSVG( incDir + 'shield/drawshield.php?nolog=1&blazon=Argent%20the%20word%20shield;%20in%20chief%20the%20word%20Your;%20in%20base%20the%20word%20here%20sable','shieldimg');
+      window.onload=requestSVG( incDir + 'shield/drawshield.php?nolog=1&blazon=' + encodeURIComponent( 'Argent the word shield; in chief the word Your; in base the word here sable'),'shieldimg');
  //]]>
 </script>
 </body>

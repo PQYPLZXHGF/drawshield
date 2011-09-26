@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -21,6 +21,11 @@ $charge = array (
   ),
 
   'doc' => 'Stuff...',
+  'flags' => array (
+    'default_colour' => 'sable',
+  ),
+
+  'proper' => rgb('sable'),
 
   'height' => 200,
   'width' => 111,
@@ -28,7 +33,6 @@ $charge = array (
             <circle r="10" cx="36" cy="55"/>
             <circle r="10" cx="74" cy="55"/>
             <path d="M 53 60 A 50 210 0 0,1 10,180 A 60 40 0 0,0 45,170 A 30 40 0, 0,0 55 200 A 30 40 0, 0,0 62,170 A 60 40 0 0,0 101, 180 A 50 210 0 0,1 57 60 Z"/>',
-  'default_colour' => 'sable',
   'orient_to_ordinary' => true,
 
 )

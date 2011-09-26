@@ -12,7 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-function adjacent(&$mods, $found_between = false) {
+function adjacent(&$node, $found_between = false) {
   global $dom;
 
   static $adjacent_charge = array (
@@ -48,7 +48,7 @@ function adjacent(&$mods, $found_between = false) {
   while ( !semicolon() and andd() and (($adj_charge = charge()) != null ) ) {
     $adj_mod = make_mod($position);
     $adj_mod->appendChild($adj_charge);
-    $mods[] = $adj_mod;
+    $node->appendChild($adj_mod);
   }
 }
 
@@ -68,6 +68,24 @@ function bundle ( &$node ) {
     $node->appendChild( make_mod ( $match[0], "$num" ));
   }
 }
+
+function demi() {
+  $prefix_words = array (
+    array ( null, 'demi|half' ),
+  );
+  return search_match($prefix_words);
+}
+
+function get_feature_tinc($node) {
+  foreach ( $node->childNodes as $child ) {
+    if ( $child->tagName == 'feature' ) {
+      if ( ($tinc = get_child($child, 'tincture')) != null )
+        return deep_copy($tinc);
+    }
+  }
+  return null;
+}
+
 
 function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   global $dom;
@@ -97,6 +115,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
 
   // Look for grouping words (bundle of etc.)
   bundle( $node );
+  if ( demi() ) $node->appendChild(make_mod('demi'));
 
   if ( (($match = either('charge')) == null) and (($match = search_match($charge_list)) == null ) ) {
     restore($state);
@@ -123,24 +142,25 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   // Look for grouping words again
   bundle( $node );
 
-  $mod_set = array ('simple_charge', $specific_features);
+  $mod_set = array ('simple_charge', 'rows', $specific_features);
   if ( $allow_arr_pos ) $mod_set[] = 'arr_pos';
 
   get_features ( $mod_set, $node );
 
   // Have we found a tincture yet?
   if ( ($tinc = get_child($node, 'tincture')) == null ) {
-    $tinc = $dom->createElement('tincture');
     if ( array_key_exists('always_proper', $flags) ) {
+      $tinc = $dom->createElement('tincture');
       $proper = $dom->createElement('proper');
       $tinc->setAttribute('origin','proper');
       $tinc->appendChild($proper);
     } elseif ( array_key_exists('default_colour', $flags)) {
-      if ( ($tinc = tincture()) == null ) {
-        $tinc->setAttribute('origin','default');
         $tinc = make_colour($flags['default_colour']);
-      }
+        $tinc->setAttribute('origin','default');
+    } elseif ( ($tinc = get_feature_tinc($node)) != null ) { // or it could be because the tincture was consumed by a feature
+    // Don't need to do anything else
     } else { // Not proper, and no default
+      $tinc = $dom->createElement('tincture');
       $tinc->setAttribute('origin','pending');
       $pending_items[] = $tinc;
     }
@@ -165,21 +185,12 @@ function charge( $assume_num = false ) {
     array ( true, 'on' ),
   );
 
-  $mods = array();
-  $features = false;
-
   $state = save();
 
   // In case of "in chief, three whatever...
   $temp = $dom->createElement('charge');
-  $arr_pos = get_features( array ( 'arr_pos'), $temp );
-  foreach ($temp->childNodes as $child )
-    $mods[] = $child;
+  $arr_pos = get_features( array ( 'arr_pos', 'charge_prefix'), $temp );
   if ( is_int($arr_pos) ) $assume_num = $arr_pos;
-  inquarter($mods);
-  comma();
-  prefix($mods);
-  comma();
 
   $found_on = search_match($on_prefix);
 
@@ -188,6 +199,10 @@ function charge( $assume_num = false ) {
     restore($state);
     return null;
   }
+  // Copy over anything found earlier
+  foreach ($temp->childNodes as $child )
+    $node->appendChild($child);
+
   // Is there anything else "on" this charge?
   if ( $found_on or search_match($on_charge) != null ) {
     $on_mod = make_mod('on');
@@ -196,24 +211,16 @@ function charge( $assume_num = false ) {
       parser_message('blazon', 'Nothing for charge to go on');
     }
     $on_mod->appendChild($on_charge);
-    $mods[] = $on_mod;
+    $node->appendChild($on_mod);
   }
   if ( !semicolon() ) {
 
-    adjacent($mods);   // TODO Fix all this below....
+    adjacent($node);
 
-    // In case of three whatever in chief...
-//    postfix($mods);
-//    laying($mods);
-//    conjoined($mods);
-    rows($mods);
-//    orientation($mods);
-//    if ( !$arr_pos ) arr_pos($mods);
     // If there is an explicit position, a following "between" is redundant (e.g. issue 173)
     search_match( array ( array ( null, 'between' )));
   }
 
-  foreach( $mods as $mod) $node->appendChild($mod);
   return $node;
 }
 ?>

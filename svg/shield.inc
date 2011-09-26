@@ -16,8 +16,6 @@
 $svg_region = 'PL';
 $svg_chief = 'NC';
 $error_list = array();
-define( 'E_SVG',1088);
-define( 'E_PARSER',1256);
 
 function region ( $action, $region = null ) {
   global $svg_region;

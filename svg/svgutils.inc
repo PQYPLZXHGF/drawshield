@@ -153,12 +153,12 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       list($bb_width,$bb_height,$bbX,$bbY) = explode(',', $bb . ',0,0');
       $type = $tinc->getAttribute('subtype');
       $height = ($type == 'per-bend' || $type == 'per-bend-sinister' || $type == 'quarterly') ? 1000 : 1200;
-      if ( (preg_match ( '/Chrome/' , $_SERVER['HTTP_USER_AGENT'] ) != 0) and $parent->nodeName == 'charge' ) {
+/*      if ( (preg_match ( '/Chrome/' , $_SERVER['HTTP_USER_AGENT'] ) != 0) and $parent->nodeName == 'charge' ) {
         $patt_id = add_def ( 'pattern width="100%" height="100%"',
           '<title>Division</title><desc>' . $tinc->getAttribute('subtype') . '</desc>' .
            '<svg  preserveAspectRatio="none" viewBox="0 0 1000 ' . $height . '" height="' . $bb_height .
            '" width="' . $bb_width . '">' . $div_data . '</svg>' );
-      } else {
+      } else { */
         $xScale = $bb_width / 1000; $yScale = $bb_height / $height;
         $patt_id = add_def ( 'pattern patternTransform="scale(' . $xScale . ',' . $yScale .
             ')" patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse"
@@ -166,7 +166,7 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
              $div_data );
 //        $patt_id = add_def ( 'pattern patternUnits="objectBoundingBox" patternContentUnits="objectBoundingBox" x="0" y="0" width="1" height="' . $height . '"',
 //             $div_data );
-      }
+/*      } */
       $retval = add_def();
       $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
       return $retval;

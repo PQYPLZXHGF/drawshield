@@ -39,7 +39,6 @@ function ordinary() {
   static $dep_with = array ( array ( 'depressed', '(debruised|depressed) (with|by|of)', ), );
 
   $node = $dom->createElement('ordinary');
-  $mods = array();
 
   $state = save();
 
@@ -94,7 +93,7 @@ function ordinary() {
 
   // Does this ordinary go "between" some charges?
   if ( $inside or search_match($between) != null )
-    adjacent($mods,true); // have already found between word
+    adjacent($node,true); // have already found between word
 
   // Now look for extras
   if ( $found_on or search_match($charge_with) != null ) {
@@ -115,10 +114,8 @@ function ordinary() {
       }
     }
     $on_ord->appendChild($items);
-    $mods[] = $on_ord;
+    $node->appendChild($on_ord);
   }
-  foreach ( $mods as $mod ) $node->appendChild($mod);
-
 
   return $node;
 }

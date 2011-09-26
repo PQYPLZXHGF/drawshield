@@ -35,6 +35,7 @@ function rgb($name) {
    'celestial-azure' => '#96C8F9' ,
    'senois' => '#8D4024' ,
    'tanned' => '#A75502' ,
+   'tenne' => '#A75502' ,
    'orange' => '#FAA401' ,
   // "de" names (for gouttes particularly
    'd-eau' =>  '#F0F0F0',

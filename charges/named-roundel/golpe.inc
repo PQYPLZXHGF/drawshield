@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -22,10 +22,14 @@ $charge = array (
 
   'doc' => 'A Roundel Purpure',
 
-  'default_colour' => false,
-  
-  // SVG IMPLEMENTATION
-  // Replaced by roundel of appropriate colour in substitution.xslt
+  'flags' => array (
+    'always_proper' => true,
+  ),
+
+  'proper' => rgb('purpure'),
+  'width' => 500,
+  'height' => 500,
+  'body' => '<circle cx="250" cy="250" r="250" />',
 
 );
 

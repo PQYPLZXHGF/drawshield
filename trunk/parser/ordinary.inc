@@ -50,7 +50,12 @@ function ordinary() {
 
   get_features ( array('position'), $node ); // Sometimes you get "sinister bend ...."
 
-  if ( (($match = either('ordinary')) == null) and (($match = search_match($ordinary_list)) == null)  ) {
+  if ( ($match = either('ordinary')) != null) {
+    if ($match[3] == 'either' and $ord_num > 1) {
+      restore($state);
+      return null;
+    }
+  } elseif ( ($match = search_match($ordinary_list)) == null) {
     restore($state); // Not found anything, backtrack and exit
     return null;
   } // else

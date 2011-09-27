@@ -13,6 +13,8 @@
    limitations under the License. */
 
 // Javascript shield common bits
+
+
 var xmlhttp;
 var asText;
 var useId;
@@ -57,13 +59,15 @@ function updateSVG() {
 
         svgweb.appendChild(obj, shieldImg);
       } else {
-	    newNode = document.importNode(xmlhttp.responseXML.firstChild, true);
-        shieldImg.appendChild(newNode);
+	   // newNode = document.importNode(xmlhttp.responseXML.firstChild, true);
+            shieldImg.innerHTML = xmlhttp.responseText;
+       // shieldImg.appendChild(newNode);
 	  }
     }
     asText = xmlhttp.responseText;
   }
 }
+
 function requestSVG(url,id) {
   if (!xmlhttp) xmlhttp = new XMLHttpRequest();
   if (!xmlhttp) return;
@@ -97,9 +101,6 @@ function drawshield() {
    else { eol = Math.min(eol1, eol2); }
    if ( eol != -1 ) { shieldCaption.firstChild.nodeValue = blazonText.slice(0,eol);}
    else { shieldCaption.firstChild.nodeValue= blazonText; }
-//   choice = document.forms['myform'].format.options.selectedIndex;
-//   format = document.forms['myform'].format.options[choice].value;
-//   requestSVG('/include/shield/drawshield.php?format=' + format + argsize + '&blazon=' + encodeURIComponent(document.forms['myform'].blazon.value),target);
    requestSVG('/include/shield/drawshield.php?&size=' + shieldsize + '&blazon=' + encodeURIComponent(blazonText),shieldtarget);
 };
 
@@ -118,12 +119,6 @@ function setupshield(target,size,initial,caption) {
   else
     initial = "Your shield here";
   if ( typeof(size) !== 'undefined' && size > 0 ) shieldsize = size;
-//	document.forms['myform'].textbutton.onclick = function () {
-//	  window.location.replace( '/include/shield/drawshield.php?asfile=1&blazon=' + encodeURIComponent(document.forms['myform'].blazon.value + argsize ));
-//	};
-//	document.forms['myform'].createbutton.ondblclick = function () {
-//	  window.alert(asText);
-//	};
   shieldCaption = document.getElementById(captiontarget);
   shieldCaption.firstChild.nodeValue = initial;
 	requestSVG('/include/shield/drawshield.php?nolog=1&size=' + shieldsize + initBlazon, shieldtarget);

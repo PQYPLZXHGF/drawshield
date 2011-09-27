@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ function either( $type ) {
   } elseif ( $match[3] != $type ) { // no match
     return null;
   }
-  unset ($match[3]);
+//  unset ($match[3]);
   return $match; 
 }
 ?>

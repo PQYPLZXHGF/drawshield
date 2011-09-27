@@ -150,6 +150,8 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       }
       $parent = $tincture->parentNode;
       if ( $parent->nodeName == 'plain' ) return '<g><title>' . $tinc->getAttribute('subtype') . '</title>' . $div_data . '</g>';
+      if ( preg_match ( '/Chrome/i' , $_SERVER['HTTP_USER_AGENT'] ) != 0)
+        draw_message ('warning','Browser bug may not render division fill correctly, try IE9');
       list($bb_width,$bb_height,$bbX,$bbY) = explode(',', $bb . ',0,0');
       $type = $tinc->getAttribute('subtype');
       $height = ($type == 'per-bend' || $type == 'per-bend-sinister' || $type == 'quarterly') ? 1000 : 1200;
@@ -212,6 +214,8 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       // Then confirm that the field is a division
       $field_tinc = $field->firstChild;
       if ( $field_tinc->nodeName != 'division' ) return '<g fill="#050505"><title>Counterchange</title><desc>Not possible</desc>' . $object . '</g>';
+      if ( preg_match ( '/Chrome/i' , $_SERVER['HTTP_USER_AGENT'] ) != 0)
+        draw_message ('warning','Browser bug may not render counterchange correctly, try IE9');
       $div_data = makeDivision( $field_tinc, true );
       $pattTrans = '';
       if ( $xscale or $yscale ) {

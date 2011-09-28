@@ -1,0 +1,17 @@
+TODO
+
+Fix positions for in bend sinister, need to mirror bend positions in placement.inc
+
+Show missing charges as ?
+
+Show missing ordinaries as what???
+
+"an orle of" does not need tincture....
+
+DONE
+
+charge WITHIN ordinary (is same as WITHIN ordinary charge)
+
+Bug fix, treatments were reversed if colour treatment colour
+
+All "missing" elements need an error message - parser_message("missing whatever");

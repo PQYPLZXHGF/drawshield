@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,17 +12,17 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
- 
-$ordinary['plural'] = 4;
-  
-$ordinary['modifiers'] = array (
-    array ( 'first',    'the (dexter|first|1st|upper|higher) ?(one|1)', 'linetype' ),
-    array ( 'last',     'the (sinister|last|lower|lowest) ?(one|1)', 'linetype'  ),
-    array ( 'inner',    'the (inner|inside) ?ones?', 'linetype'  ),
-    array ( 'outer',    'the (outer|outside) ?ones?', 'linetype'  ),
-);
 
-include '/shield/ordinaries/common/_couped.inc';
+$ordinary['plural'] = 4;
+
+if ( !array_key_exists('modifiers', $ordinary)) $ordinary['modifiers'] = array();
+
+$ordinary['modifiers'][] = array ( 'first',    'the (dexter|first|1st|upper|higher) ?(one|1)', 'addlinetype', 'barmod' );
+$ordinary['modifiers'][] = array ( 'last',     'the (sinister|last|lower|lowest) ?(one|1)', 'addlinetype', 'barmod'   );
+$ordinary['modifiers'][] = array ( 'inner',    'the (inner|inside) ?ones?', 'addlinetype', 'barmod'   );
+$ordinary['modifiers'][] = array ( 'outer',    'the (outer|outside) ?ones?', 'addlinetype', 'barmod'   );
+
+include 'ordinaries/common/_couped.inc';
 
 if ( $node != null ) {
   $bar_locs = array ( //  0    1     2       3          4          5             6               7                  8
@@ -32,48 +32,54 @@ if ( $node != null ) {
     'inner' => array (   'x', 'x', 'x',   '2',     '2,3',     '2,3,4',     '3,4',         '3,4,5',         '3,4,5,6' ),
     'outer' => array (   'x', 'x', 'x',   '1,3',   '1,4',     '1,5',       '1,2,5,6',     '1,2,6,7',       '1,2,7,8' ),
   );
-  $subtype = $node->get_attribute('subtype');
-  $num = $node->get_attribute('number');
+  $subtype = $node->getAttribute('subtype');
+  $num = $node->getAttribute('number');
   $bar_start = '-100';
   $bar_length = '1200';
   $palet_start = '-100';
   $palet_length = '1400';
   $linetype_size = 30;
 
-  $mods = array_pad(array(), $num, $node->get_attribute('linetype') );
+  $main_linetype = get_mod($node, 'linetype');
+  if ( $main_linetype == null ) $main_linetype = 'none';
+
+  $mods = array_pad(array(), $num, $main_linetype );
   $couped = 'none';
-  foreach ( $node->child_nodes() as $child ) {
-    if ( $child->node_name() == 'modifier' ) {
-      switch ( ($mod = $child->get_attribute('name')) ) {
-        case 'first':
-        case 'last':
-        case 'inner':
-        case 'outer':
-          $linetype = $child->get_attribute('param');
-          $locs = $bar_locs[$mod][$num];
+  foreach ( $node->childNodes as $child ) {
+    if ( $child->nodeName == 'modifier' ) {
+      switch ( ($mod = $child->getAttribute('name')) ) {
+        case 'barmod':
+          $which = $child->getAttribute('param');
+          $linetype = get_mod($child,'linetype');
+          if ( $linetype == null ) $linetype = 'none';
+          $locs = $bar_locs[$which][$num];
           if ( $locs != 'x' ) foreach ( explode(',',$locs) as $pos ) $mods[$pos-1] = $linetype;
           break;
-        case 'couped': 
-          $bar_start = '100';
-          $bar_length = '800';
-          $palet_start = '100';
-          $palet_length = '900';
-          break;
-        case 'couped-base':
-          $palet_start = '-100';
-          $palet_length = '1000';
-          break;
-        case 'couped-chief':
-          $palet_start = '100';
-          $palet_length = '1200';
-          break;
-        case 'couped-dexter':
-          $bar_start = '100';
-          $bar_length = '1000';
-          break;
-        case 'couped-sinister':
-          $bar_start = '-100';
-          $bar_length = '1000';
+        case 'couped':
+          switch ( $child->getAttribute('param')) {
+            case 'both':
+              $bar_start = '100';
+              $bar_length = '800';
+              $palet_start = '100';
+              $palet_length = '900';
+              break;
+            case 'base':
+              $palet_start = '-100';
+              $palet_length = '1000';
+              break;
+            case 'chief':
+              $palet_start = '100';
+              $palet_length = '1200';
+              break;
+            case 'dexter':
+              $bar_start = '100';
+              $bar_length = '1000';
+              break;
+            case 'sinister':
+              $bar_start = '-100';
+              $bar_length = '1000';
+              break;
+          }
           break;
         case 'gemel':
           if ( $subtype == 'bar' or $subtype == 'palet' ) $subtype .= '-gemel';
@@ -83,12 +89,12 @@ if ( $node != null ) {
   }
   switch ($subtype) {
     case 'endorse':
-    case 'barrulet': 
-      $bar_width = 200; 
+    case 'barrulet':
+      $bar_width = 200;
       $linetype_size = 25;
       break;
-    case 'closet': 
-      $bar_width = 100; 
+    case 'closet':
+      $bar_width = 100;
       $linetype_size = 20;
       break;
     case 'bar-gemel':
@@ -139,8 +145,8 @@ if ( $node != null ) {
         $spec = "X{$X1}Y{$Y1}h{$H1}B1600d{$H1}F1600";
         break;
     }
+    $body .= createBody( $spec, $mods[$i], $linetype_size );
   }
-  $ordinary['shape_spec'] = $spec;
-  $ordinary['linetype_size'] = $linetype_size;
+  $ordinary['body'] = $body;
 }
 ?>

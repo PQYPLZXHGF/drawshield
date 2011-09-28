@@ -161,6 +161,9 @@ function get_features ( $feature_sets, &$node ) {
   }
 
   $tinc_index = 1;
+	comma();
+  andd();
+
   // Get any additional features
   while ( true ) {
     if ( $features and ($match = search_match($features)) != null) {

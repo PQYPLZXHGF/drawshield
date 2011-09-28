@@ -27,6 +27,7 @@ function ordinary() {
   global $ordinary_list;
   global $modifier_list;
   global $flag_list;
+	global $pending_items;
 
   // TODO Allow escutcheon to be followed by whole shield if overall?
   static $between = array ( array ( true, '(between|inter)' ),);
@@ -80,15 +81,18 @@ function ordinary() {
 
   // Have we found a tincture yet?
   if ( ($tinc = get_child($node, 'tincture')) == null ) {
-    $tinc = $dom->createElement('tincture');
     // It could be becuase this ordinary is always proper
     if ( array_key_exists('always_proper', $flags) ) {
+      $tinc = $dom->createElement('tincture');
+      $tinc->setAttribute('index','1');
       $proper = $dom->createElement('proper');
       $tinc->appendChild($proper);
     } elseif ( ($tinc = get_cotise_tinc($node)) != null ) { // or it could be because the tincture was concsumed by a cotised modifier
     // Don't need to do anything else
     } else { // otherwise, wait for another tincture to come along
+      $tinc = $dom->createElement('tincture');
       $tinc->setAttribute('origin','pending');
+      $tinc->setAttribute('index','1');
       $pending_items[] = $tinc;
     }
     $node->appendChild($tinc);

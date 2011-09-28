@@ -54,7 +54,7 @@ $charge = array (
 );
 
 if ( $node != null ) {
-  if ( get_mod($node,'pointing') == 'up' ) $node->append_child(make_mod('inverted'));
+  if ( get_mod($node,'pointing') == 'up' ) $node->appendChild(make_mod('inverted'));
 }
 
 ?>

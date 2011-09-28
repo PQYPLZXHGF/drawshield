@@ -60,7 +60,7 @@ $charge = array (
 );
 
 if ( $node != null ) {
-  if ( get_mod($node,'pointing') == 'up' ) $node->append_child(make_mod('inverted'));
+  if ( get_mod($node,'pointing') == 'up' ) $node->appendChild(make_mod('inverted'));
   if ( ($num = get_mod( $node, 'bundle')) > 0 ) {
     // At present, we ignore the number and just draw 3 of them...
     $charge ['width'] = 293;

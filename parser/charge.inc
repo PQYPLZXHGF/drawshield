@@ -43,7 +43,7 @@ function adjacent(&$node, $found_between = false) {
     }
   }
   $adj_mod->appendChild ( $adj_charge);
-  $mods[] = $adj_mod;
+  $node->appendChild($adj_mod);
   // keep looking for more of the same
   while ( !semicolon() and andd() and (($adj_charge = charge()) != null ) ) {
     $adj_mod = make_mod($position);
@@ -152,16 +152,19 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
     if ( array_key_exists('always_proper', $flags) ) {
       $tinc = $dom->createElement('tincture');
       $proper = $dom->createElement('proper');
+      $tinc->setAttribute('index','1');
       $tinc->setAttribute('origin','proper');
       $tinc->appendChild($proper);
     } elseif ( array_key_exists('default_colour', $flags)) {
         $tinc = make_colour($flags['default_colour']);
+        $tinc->setAttribute('index','1');
         $tinc->setAttribute('origin','default');
     } elseif ( ($tinc = get_feature_tinc($node)) != null ) { // or it could be because the tincture was consumed by a feature
     // Don't need to do anything else
     } else { // Not proper, and no default
       $tinc = $dom->createElement('tincture');
       $tinc->setAttribute('origin','pending');
+      $tinc->setAttribute('index','1');
       $pending_items[] = $tinc;
     }
     $node->appendChild($tinc);

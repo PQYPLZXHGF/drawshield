@@ -50,7 +50,11 @@ function overall() {
 
   if ( search_match($overall) != null ) {
     $node = $dom->createElement('overall');
-    $node->appendChild(ord_chgs());
+		if ( ($over = ord_chgs()) == null ) {
+			parser_message('blazon','Nothing to go "overall"');
+			return null;
+		}
+    $node->appendChild($over);
   }
   return $node;
 }
@@ -151,7 +155,7 @@ function shield() {
     $quartered = true;
   }
   $node->appendChild($child);
-  if ( ($quartered or !semicolon()) and ($overall = overall() ) != null ) {
+  if ( ($quartered or !semicolon()) and (($overall = overall() ) != null) ) {
     $node->appendChild($overall);
   }
   foreach ( $pending_items as $item ) {

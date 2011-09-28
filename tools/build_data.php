@@ -54,11 +54,9 @@ $node = null;
             // Add this to the either list, for disambiguation?
             if ( array_key_exists ( 'either', $charge ) ) {
               foreach ( $charge['patterns'] as $pattern )
-                if ( !$pattern ) echo $subtype;
                 $either[] = array ( $subtype, $pattern, $type, 'charge');
             } else {
               foreach ( $charge['patterns'] as $pattern ) {
-                if ( !$pattern ) echo $subtype;
                 $charges[] = array ( $subtype, $pattern, $type, 'charge');
               }
             }
@@ -86,7 +84,6 @@ $node = null;
             // Add this to the either list, for disambiguation?
             if ( array_key_exists ( 'either', $ordinary ) ) {
               foreach ( $ordinary['patterns'] as $pattern ) {
-                if ( !$pattern ) echo $subtype;
                 $found = false;
                 for ( $i = 0; $i < count($either); $i++ ) {
                   if ( strcmp($either[$i][1], $pattern) === 0 ) {
@@ -102,7 +99,6 @@ $node = null;
               }
             } else {
               foreach ( $ordinary['patterns'] as $pattern ) {
-                if ( !$pattern ) echo $subdir . '/'. $file; // var_dump($ordinary);
                 $ordinaries[] = array ( $subtype, $pattern, $type );
               }
             }

@@ -230,10 +230,6 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
   }
 }
 
-function createBody($spec, $lineType, $feature_size) {
-  return '<path fill-rule="evenodd" d="' . makePath ( $spec, $lineType, $feature_size ) . '" />';
-}
-
 function choose_fit( $choices ) {
   global $svg_region, $svg_chief;
 

@@ -31,6 +31,9 @@ $ordinary = array (
 
 );
 
+include 'ordinaries/common/_compony.inc';
+
+
 if ( $node != null ) {
   if ( get_mod($node,'throughout') )
     $body_data =  array ( 'shape_spec' => array ( 'NC' => 'X500Y0K1200l200M1000L1000m200J1200', 'CH' => 'X500Y300K1000l200M800L800m200J1000'));
@@ -49,11 +52,19 @@ if ( $node != null ) {
                   			<path fill-rule="evenodd" d="M-65.6,1065.6l-141.4,-141.4l707,-707l707,707l-141.4,141.4l-565.6,-565.6l-565.6,565.6Z" />', 
                   'CH' => '<path fill-rule="evenodd" d="m 720,1100 c 0,300 -100,500 -220,500 -120,0 -220,-200 -220,-500 0,-250 100,-460 220,-460 120,0 220,210 220,460 z m -80,-10 c 0,210 -60,310 -140,310 -80,0 -140,-100 -140,-310 0,-200 60,-350 140,-350 80,0 140,150 140,350 z" />
                            <path fill-rule="evenodd" d="M-65.6,1215.6l-141.4,-141.4l707,-707l707,707l-141.4,141.4l-565.6,-565.6l-565.6,565.6Z" />' ),); 
-  else               			 
+	else               			 
     $body_data = array ( 
         'bounding_box' => array ( 'NC' => '1000,800,0,200', 'CH' => '1000,800,0,400' ),
-        'shape_spec' => array ( "NC" => 'X-65.6Y1065.6f200H>1000B<1000d200F800D800', "CH" => 'X-65.6Y1215.6f200H1000B1000d200Q800D800') ,);
-      
+        'shape_spec' => array ( "NC" => 'X-65.6Y1065.6f200H>1000B<1000d200F800D800', "CH" => 'X-65.6Y1215.6f200H>1000B<1000d200Q800D800') ,);
+  
+	if (($comp = get_mod($node,'compony')) != null ) {
+		if ( $comp == 'single' ) {
+			$body_data['body2'] = ( '<path d="M500,500 l141,-141 -141,-141 -141,141 z" />' );
+		}
+	}  
+	if (($comp = get_mod($node,'quarterly')) != null ) {
+			$body_data['body2'] = ( '<path d="M500,500 l141,-141 -141,-141 -141,141 z" />' );
+	}  
   $ordinary = array_merge($ordinary, $body_data);
 }
 

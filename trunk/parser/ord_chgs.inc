@@ -43,7 +43,7 @@ function ord_chgs(){
 
   while (( ($item = ordinary()) != null ) or ( ($item = charge($assume_num)) != null )) {
     $assume_num = false;
-    if ( $item->tagName == 'charge' ) {
+    if ( $item->nodeName == 'charge' ) {
       $items[] = $item;
       $itemLayer[] = 2;
     } else { // item is an ordinary

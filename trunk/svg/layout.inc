@@ -258,7 +258,7 @@ function PlaceCharge ( $node,  // images
       $charge['orient_to_ordinary'] = 1;
   }
 
-  // If rotation is set this is becuase we need to turn to fit onto an ordinary
+  // If rotation is set this is because we need to turn to fit onto an ordinary
   // If we CANNOT turn then assume that the bounding box is square. This makes sure we fit even if not turned
   if ( $rotation != 0 ) {
     if ( ! array_key_exists('orient_to_ordinary', $charge) ) {
@@ -308,8 +308,7 @@ function PlaceCharge ( $node,  // images
   $transform .= " translate($posX,$posY) scale($Xscale, $Yscale) ";
   $retval = "<g transform=\"$transform\" >\n<title>" . $charge['title'] . '</title>' . $retval . "</g>\n";
 
-  $retval = apply_tincture( $tincture, $retval, "$chargeX,$chargeY", $rotation, $reversed, $inverted,
-             1000-$posX, 1200-$posY, $Xscale, $Yscale  );
+  $retval = apply_tincture( $tincture, $retval, "$chargeX,$chargeY", $rotation, $reversed, $inverted );
   return $retval;
 }
 

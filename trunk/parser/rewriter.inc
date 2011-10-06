@@ -21,7 +21,7 @@ function rewrite() {
   }
 
   // icicles (are inverted gouttes)
-  foreach ( $xpath->query("charge[@subtype='icicle']") as $item ) {
+  foreach ( $xpath->query("//charge[@subtype='icicle']") as $item ) {
     $item->setAttribute('subtype','goutte');
     $mod = make_mod('inverted');
     $item->appendChild($mod);
@@ -34,9 +34,9 @@ function rewrite() {
     $div = $dom->createElement('division');
     $div->setAttribute('type', 'bar');
     $div->setAttribute('subtype', 'barry');
-    $div->setAttribute('linetype', 'wavy');
-    $tinc1 = make_colour('azure');
-    $tinc2 = make_colour('argent');
+    $div->appendChild(make_mod('linetype', 'wavy'));
+    $tinc1 = make_colour('azure','1');
+    $tinc2 = make_colour('argent','2');
     $mod = make_mod('ofnum','6');
     $div->appendChild($tinc1);
     $div->appendChild($tinc2);
@@ -48,14 +48,14 @@ function rewrite() {
   // ford (a base with wavy bars)
   foreach ( $xpath->query("//ordinary[@subtype='ford']") as $item ) {
     $item->setAttribute('subtype','base');
-    $tinc1 = make_colour('azure');
-    $tinc2 = make_colour('argent');
+    $tinc1 = make_colour('azure','1');
+    $tinc2 = make_colour('argent','2');
     $mod = make_mod('ofnum','4');
     $div = $dom->createElement('division');
     $tinc = get_child($item,'tincture');
     $div->setAttribute('type', 'bar');
     $div->setAttribute('subtype', 'barry');
-    $div->setAttribute('linetype', 'wavy');
+    $div->appendChild(make_mod('linetype', 'wavy'));
     $div->appendChild($tinc1);
     $div->appendChild($tinc2);
     $div->appendChild($mod);
@@ -220,6 +220,16 @@ function rewrite() {
     $item->appendChild(make_mod('hflex','9999'));
     $item->appendChild(make_mod('wflex','9999'));
   }
+	
+	// A chevron quarterly needs a special quartering to line up with the chevron "arms" nicely
+/*	foreach ( $xpath->query("//ordinary[@subtype='chevron']/tincture/division[@type='quarterly']") as $item )
+	  $item->setAttribute('subtype','chevron-quarterly'); */
+
+ // All (Some?) ordinaries when "reversed", actually mean "inverted"
+  foreach ( $xpath->query("//ordinary/modifier[@name='reversed']") as $item ) {
+	//  if ( in_array($item->parentNode->getAttribute('subtype'), array ('chevron', 'pall', 'pile') ))
+		  $item->setAttribute('name','inverted');
+	}
 
   // Bit of a fudge, look for 2 single charges, the second "in saltire", make them
   // look like they are both in saltire
@@ -229,7 +239,6 @@ function rewrite() {
       $prev->appendChild($inbend);
     }
   }
-
 
   // Another fudge, we can't just flip a pall if it is inverted, need a different shape to match up with per pall inverted
   foreach ( $xpath->query("//ordinary[@subtype='pall' and modifier/@name='inverted']") as $item ) {

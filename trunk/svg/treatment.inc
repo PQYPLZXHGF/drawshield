@@ -72,9 +72,9 @@ function makeTreatment ( $node ) {
     'scaly' => array ( 100, 100, '<path d="M 0,0 A 50 30 0 0,0 100,0 A 50 50 0 0,1 0,0" />
         <path d="M -50,50 A 50,30 0 0 0 50,50 50,50 0 0 1 -50,50" />
         <path d="M 50,50 A 50,30 0 0 0 150,50 50,50 0 0 1 50,50" />' ),
-    'vairy' => array ( 250, 480, '<polygon points="125,0 193,40 193,200 250,240 0,240 66,200 66,40" />
-        <polygon points="250,240 318,280 318,440 375,480 125,480 191,440 191,280" />
-        <polygon points="0,240 68,280 68,440 125,480 -125,480 -59,440 -59,280" />' ),
+    'vairy' => array ( 125, 240, '<polygon points="62.5,0 96.5,20 96.5,100 125,120 0,120 33,100 33,20" />
+        <polygon points="125,120 159,140 159,220 187.5,240 62.5,240 95.5,220 95.5,140" />
+        <polygon points="0,120 34,140 34,220 62.5,240 -62.5,240 -29.5,220 -29.5,140" />' ),
   );
 
   $name = $node->getAttribute('name');
@@ -126,12 +126,12 @@ function makeSemy( $node ) {
     $semy .= PlaceCharge($charge, 100, 100, 25, 175);
     $semy .= PlaceCharge($charge, 100, 100, 125, 175);
     $semy .= PlaceCharge($charge, 100, 100, 225, 175);
-    $base = apply_tincture ( $background, '<rect x="0" y="0" width="300" height="250" />', '300,250' );
+    $base = apply_tincture ( $background, '<rect x="0" y="0" width="300" height="250" />' );
     return array ( 300, 250, $base . $semy );
   } else {
     $semy = PlaceCharge($charge, 100, 100, 50, 50);
     $semy .= PlaceCharge($charge, 100, 100, 150, 150);
-    $base = apply_tincture ( $background, '<rect x="0" y="0" width="200" height="200" />', '200,200' );
+    $base = apply_tincture ( $background, '<rect x="0" y="0" width="200" height="200" />' );
     return array ( 200, 200, $base . $semy );
  }
 }

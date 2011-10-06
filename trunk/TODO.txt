@@ -2,16 +2,49 @@ TODO
 
 Fix positions for in bend sinister, need to mirror bend positions in placement.inc
 
-Show missing charges as ?
-
-Show missing ordinaries as what???
-
 "an orle of" does not need tincture....
 
+Indirection for modifier data? (mods repeat for each synonym) No they don't! But maybe combine things like couped...?
+
+chevron quarterly - need to switch chevron quarterly x and y for chevron mod quarterly 
+(Can body 2 use shape_spec to ensure wibbly edges? would need to transfer linetype also... )
+
+Chevron - finish compony &counter comp for all variants (sob!)
+
+Move all specific knowledge into "flags" (like $put_in_chief), do NOT rely on the NAME of the charge or ordinary
+
+Re-implement "facing" mod
+
+Non symmetical ordinaries MUST not extend beyond shield boundaries!! Need to check all - see quarter.inc BUT 
+this breaks fimbriation if done by just using stroke-width. See issue 206 for possible solution - would this
+work for variant linetypes...?
+
+Need to check all COMPONY body2 overlap their ordinary so linetypes are correctly filled (see e.g. fess.inc)
+
+azure a cartouche bendwise ermine - is not in the right place?
+
+azure a cartouche in bend ermine - does not rotate fur properly
+
+In ordinary.inc / charge.inc can we combine the mods array and inv, rot, rev to just use existing modifier nodes?
+
+Properly document ordinary and charge
+
+TEST EVERYTHING!!!
+
 DONE
+
+Do not repeat error messages (e.g. once per charge)
 
 charge WITHIN ordinary (is same as WITHIN ordinary charge)
 
 Bug fix, treatments were reversed if colour treatment colour
 
-All "missing" elements need an error message - parser_message("missing whatever");
+fix for ordinary reversed => ordinary inverted
+
+Gules a Chevron Argent between in chief two Lozenges and in base a
+Lion passant guardant Or. - Now parses correctly.
+
+Better filling by division
+
+The vairy treatment was very large, it has been reduced
+

@@ -83,7 +83,7 @@ function division( $depth = 1 ) {
     get_features(array('linetype', 'position', $of_pieces), $node);
     // How many tinctures did we find?
     foreach ($node->childNodes as $child )
-      if ( $child->tagName == 'tincture' ) $tinc_count++;
+      if ( $child->nodeName == 'tincture' ) $tinc_count++;
     if ( $tinc_count < 1 ) {
       $tinc = $dom->createElement('tincture');
       $tinc->setAttribute('index', 1);

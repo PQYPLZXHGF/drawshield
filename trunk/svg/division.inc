@@ -42,8 +42,8 @@ function makeDivision( $node, $counter = false ) {
     return '<g />';
   }
   // set the main colours
-  $tinc2 = $children->item(1)->firstChild;
-  if ( $tinc2->tagName == 'implied' ) { // This is a 2nd division
+  $tinc2 = $children->item(1)->firstChild; // TODO is this still an element? (implied)
+  if ( $tinc2->nodeName == 'implied' ) { // This is a 2nd division
     $div1 = '';
     $div2 = apply_tincture( $tinctures[1], $div2 );
   } else {
@@ -52,7 +52,7 @@ function makeDivision( $node, $counter = false ) {
                                 '1000,1200' );
       $div2 = apply_tincture( $tinctures[1], $div2 );
     } else {
-      $div1 = apply_tincture ( $tinctures[1], '<rect x="0" y="0" width="1000" height="1200" />',
+      $div1 = apply_tincture ( $tinctures[1], '<rect x="-100" y="-100" width="1200" height="1400" />',
                                 '1000,1200' );
       $div2 = apply_tincture( $tinctures[2], $div2 );
       if ( $div3 != null ) $div3 = apply_tincture( $tinctures[3], $div3 );
@@ -61,11 +61,11 @@ function makeDivision( $node, $counter = false ) {
   $retval = "$div1\n$div2\n$div3\n";
   if ( !$counter ) {
     foreach ( $node->childNodes as $child ) {
-      if ( $child->tagName == 'division' ) {
+      if ( $child->nodeName == 'division' ) {
         $secondData = makeDivision( $secondDiv );
         $retval .= $secondData[2];
       }
-      elseif ( $child->tagName == 'modifier' and substr( $child->getAttribute('name'), 0, 2 ) == 'on' )
+      elseif ( $child->nodeName == 'modifier' and substr( $child->getAttribute('name'), 0, 2 ) == 'on' )
         $retval .= makeCharge( $child->firstChild );
     }
   }

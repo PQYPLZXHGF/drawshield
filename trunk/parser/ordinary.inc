@@ -14,7 +14,7 @@
 
 function get_cotise_tinc($node) {
   foreach ( $node->childNodes as $child ) {
-    if ( $child->tagName == 'modifier' and $child->getAttribute('name') == 'cotised' ) {
+    if ( $child->nodeName == 'modifier' and $child->getAttribute('name') == 'cotised' ) {
       if ( ($tinc = get_child($child, 'tincture')) != null )
         return deep_copy($tinc);
     }

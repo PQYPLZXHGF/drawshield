@@ -64,7 +64,6 @@ function makeOrdinary( $node ) {
 
   // Some default values (may be overwritten by the ord_func data...)
   $feature_size = 50;    // Size of edge mod features
-  $bb = '1000,1200';     // Default bounding box for scaling divisions & furs
   $shape_spec = null;    // If null, just use raw SVG
   $rev = false; $inv = false; $rot = 0;
   $fim_col = null;      // No fimbriation
@@ -134,22 +133,21 @@ function makeOrdinary( $node ) {
         break;
     }
   }
-  if ( $type == 'bend') $rot = 45;
 
   // Get the svg data of the shapes to be drawn
   $ord_data = includeOrdinary( $node );
 
   // Check out what we have found about drawing...
   if ( array_key_exists('shape_spec', $ord_data) ) $shape_spec = choose_fit($ord_data['shape_spec']);
-  if ( array_key_exists('bounding_box', $ord_data)) $bb = $ord_data['bounding_box'];
   if ( array_key_exists('feature_size', $ord_data) ) $feature_size = $ord_data['feature_size'];
+  if ( array_key_exists('rotate_pattern', $ord_data) ) $rot = $ord_data['rotate_pattern'];
 
   $cotise = '';
   $body = '';
   // Create ordinary, if shape_spec provided
   if ( $shape_spec ) {
     if ( $voided ) {
-      if ( $void_col ) $body .= apply_tincture ( $void_col, createBody($shape_spec, 'none', 0 ), $bb, $rot, $rev, $inv );
+      if ( $void_col ) $body .= apply_tincture ( $void_col, createBody($shape_spec, 'none', 0 ), '', $rot, $rev, $inv );
       $body .= createVoid($shape_spec, $ord_linetype, $feature_size);
     } else {
       $body .= createBody($shape_spec, $ord_linetype, $feature_size);
@@ -157,7 +155,7 @@ function makeOrdinary( $node ) {
     for ( $i = 1; $i <= $cot_num; $i++ ) $cotise .= createCotise( $shape_spec, $i, $cot_linetype );
   } else { // Create ordinary, if raw SVG given
     if ( $voided and array_key_exists('voided', $ord_data) ) {
-      if ( $void_col ) $body .= apply_tincture ( $void_col, choose_fit($ord_data['body']), $bb, $rot, $rev, $inv );
+      if ( $void_col ) $body .= apply_tincture ( $void_col, choose_fit($ord_data['body']), '', $rot, $rev, $inv );
       $body .= choose_fit($ord_data['voided']);
     } else {
       $body .= choose_fit($ord_data['body']);
@@ -173,23 +171,20 @@ function makeOrdinary( $node ) {
   }
 
   // Create a mask, in case there is another ordinary "on" this one
-  $prev_ord_map = $body . $cotise;
+  $prev_ord_map = '<g  >' . $body . $cotise . '</g>';
 
-    // If we don't already have a counterchange, and only two colours create one
-/*    if ( ! array_key_exists('shape', $counterchange) and $ord_body_col == $ord_cot_col ) {
-      $shape = ImagePosition ( $body . $cotise, 1200, 1000, $pos_mod );
-      $counterchange['background'] = $ord_body_col;
-      $counterchange['shape'] = $shape;
-    } */
-  if ( $cot_col ) $cotise = apply_tincture ( $cot_col, $cotise, $bb, $rot, $rev, $inv );
+  if ( $cot_col ) $cotise = apply_tincture ( $cot_col, $cotise, '', $rot, $rev, $inv );
 
   // Apply tinctures
   $body .= $cotise;
-  $retval .= apply_tincture ( $ord_body_col, $body, $bb, $rot, $rev, $inv );
+  $retval .= apply_tincture ( $ord_body_col, $body, '', $rot, $rev, $inv );
   if ( $fim_col != '' ) $retval = '<g stroke="' . rgb($fim_col) . '" stroke-width="15">' . "$retval</g>";
   if ( get_mod($node,'depressed') ) $retval = '<g stroke="#000000" stroke-width="7">' . "$retval</g>";
   if ( $body2_col != '' and array_key_exists('body2', $ord_data) ) {
-    $retval .= apply_tincture ( $body2_col, choose_fit($ord_data['body2']), $bb, $rot, $rev, $inv);
+    $body2 = apply_tincture ( $body2_col, choose_fit($ord_data['body2']), '', $rot, $rev, $inv);
+    $body2_fill = add_def( 'pattern patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" ' .
+                             'y="0" width="1000" height="1200"', $body2 );
+    $retval .= add_def() . '<g fill="url(#' . $body2_fill . ')">' . $body . '</g>';					
   }
   $retval = '<g><title>' . $subtype . '</title>' . $retval . '</g>';
   // Does this ordinary go "between" some charges?
@@ -199,29 +194,28 @@ function makeOrdinary( $node ) {
     $what_on = $on_ord->firstChild;
     switch ( $what_on->nodeName ) {
       case 'ordinary':
+			  // Make a normal ordinary, ignore any chief present
+        chief('push','NC');
         $new_ord = makeOrdinary($what_on);
-        switch ( $subtype ) {
-          // For canton and chief, the whole ordinary is scaled to fit within the canton or chief
-          case 'canton':
-            $clip = add_def('clipPath', '<path d="M0,0L300,0 300,300 0,300Z" />');
-            $temp = '<g clip-path="url(#' . $clip . ')" ><g transform="scale(0.30,0.3)">' . $new_ord . "</g></g>";
-            if ( $rev ) $temp = '<g transform="translate(300,0) scale(-1,1)">' . $temp . '</g>';
-            break;
-          case 'chief':
-          case 'chief-couped':
-          case 'chief-compony':
-          case 'chief-counter-compony':
-            $clip = add_def('clipPath', '<path d="M0,0L1000,0 1000,300 0,300Z" />');
-            $temp = '<g clip-path="url(#' . $clip . ')" ><g transform="scale(1,0.25)">' . $new_ord . "</g></g>";
-            break;
-          // for all other ordinaries the ordinary is superimposed onto the existing one
-          default:
-            $fill = add_def( 'pattern patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" ' .
-                                'y="0" width="1000" height="1200"', $new_ord );
-            $temp = '<g fill="url(#' . $fill . ')">' . $prev_ord_map . '</g>';
-            break;
-        }
-        $retval .= $temp . add_def();
+        chief('pop');
+				// Does the main ordinary want this handled specially (scaling and clipping to fit entirely)?
+			if ( array_key_exists('if_ord_on',$ord_data) and $ord_data['if_ord_on'] == 'scale' ) {
+        $type = $what_on->getAttribute('subtype'); // TODO can we find this out from a flag?
+			  $height = ($type == 'per-bend' || $type == 'per-bend-sinister' || $type == 'quarterly') ? 1000 : 1200;
+			  $patt_id = add_def ( 'pattern width="100%" height="100%" patternUnits="objectBoundingBox" preserveAspectRatio="none" viewBox="0 0 1000 ' .   $height . '"',
+              $title . "<desc>Ordinary on ordinary</desc>" .
+               $new_ord ); 
+          $temp = '<g fill="url(#' . $patt_id . ')"  >' . $prev_ord_map . '</g>';
+        if ( count($mods) > 0 ) // TODO - can we combine this with call above?
+          $temp = ImagePosition ( $temp, 1200, 1000, $mods );
+			  } else {
+          $fill = add_def( 'pattern patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" ' .
+                             'y="0" width="1000" height="1200"', $new_ord );
+					// TODO should this be a mask? Or a clip path?
+          $temp = '<g fill="url(#' . $fill . ')">' . $prev_ord_map . '</g>';					
+			  } 
+				
+        $retval .= add_def() . $temp;
         break;
       case 'charge':
         $retval .= makeCharge( $what_on, $mods );

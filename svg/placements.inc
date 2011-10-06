@@ -19,28 +19,24 @@ function on_division($xpath,$item,$chief) {
   $subtype = $division->item(0)->getAttribute('subtype');
   $sinister = get_mod($division->item(0),'sinister');
   $reversed = get_mod($division->item(0),'reversed');
-  if ($subtype='per-bend' and $number==2 and $chief == false) $placement = 'x/300,700,350,350:700,300/x/x/x/x';
-  elseif ($subtype='per-bend' and $sinister and $number==2 and $chief == false) $placement = 'x/300,300,350,350:700,700/x/x/x/x';
-  elseif ($subtype='per-bend' and $sinister and $number==2  and $chief == true) $placement = 'x/300,600,350,350:700,1000/x/x/x/x';
-  elseif ($subtype='per-bend' and $number==2  and $chief == true) $placement = 'x/300,900,250,250:600,600/x/x/x/x';
-  elseif ($subtype='quarterly' and $number==4  and $chief == false) $placement = 'x/x/x/250,250,300,300:750,250:250,750:750,750/x/x/';
-  elseif ($subtype='quarterly' and $number==4  and $chief == true) $placement = 'x/x/x/250,450,260,260:750,450:250,850:750,850/x/x/';
-  elseif ($subtype='gyronny' and $ofnum==8 and ($number==8 or $number==4)  and $chief == false) $placement = 'x/x/x/200,500,300,300:500,200:800,500:500,800/x/x/x/200,400,160,160:400,200:600,200:800,400:800,600:600,800:400,800:200,600';
-  elseif ($subtype='gyronny' and $ofnum==8 and ($number==8 or $number==4)  and $chief == true) $placement = 'x/x/x/200,700,250,250:500,400:800,700:500,1000/x/x/x/200,600,150,150:400,400:600,400:800,600:800,800:600,1000:400,1000:200,800';
-  elseif ($subtype='gyronny' and $ofnum==6 and ($number==6 or $number==3)  and $chief == false) $placement = 'x/200,500,300,600:800,500/x/x/x/350,200,200,200:650,200:150,500:850,500:350,800:650,800';
-  elseif ($subtype='gyronny' and $ofnum==6 and ($number==6 or $number==3)  and $chief == true) $placement = 'x/200,800,300,400:800,800/x/x/x/350,450,180,180:650,450:150,700:850,700:350,950:650,950';
-  elseif ($subtype='per-chevron' and $number==3  and $chief == false) $placement = 'x/x/250,200,240,240:500,750,300,300:750,200,240,240';
-  elseif ($subtype='per-chevron' and $number==3  and $chief == true) $placement = 'x/x/250,500,220,220:500,950,300,300:750,500,220,220';
-  elseif ($subtype='per-pall' and $reversed and $number==3  and $chief == false) $placement = 'x/x/250,300,300,300:500,900:750,300/x/x/x/';
-  elseif ($subtype='per-pall' and $reversed and $number==3  and $chief == true) $placement = 'x/x/250,500,260,260:500,950:750,500/x/x/x/';
-  elseif ($subtype='per-pall' and $number==3  and $chief == false) $placement = 'x/x/250,700,300,300:500,200,300,300:750,700,300,300:/x/x/x/';
-  elseif ($subtype='per-pall' and $number==3  and $chief == true) $placement = 'x/x/250,850,260,260:500,500:750,850:/x/x/x/';
-  elseif ($subtype='per-pall' and $number==3  and $chief == false) $placement = 'x/x/250,700,300,300:500,200,300,300:750,700,300,300:/x/x/x/';
-  elseif ($subtype='per-pall' and $number==3  and $chief == true) $placement = 'x/x/250,850,260,260:500,500:750,850:/x/x/x/';
-  elseif ($subtype='per-pall' and $number==3  and $chief == false) $placement = 'x/x/250,700,300,300:500,200,300,300:750,700,300,300:/x/x/x/';
-  elseif ($subtype='per-pall' and $number==3  and $chief == true) $placement = 'x/x/250,850,260,260:500,500:750,850:/x/x/x/';
-  elseif ($subtype='per-saltire' and $number==3  and $chief == false) $placement = 'x/200,500,240,240:800,500/200,500,240,240:500,850,300,300:800,500,240,240/200,500,240,240:500,850,300,300:800,500,240,240:500,200,240,240/x/x';
-  elseif ($subtype='per-saltire' and $number>=2 and $number<=4  and $chief == true) $placement = 'x/200,700,220,220:800,700/200,700,220,220:500,950,260,260:800,700,220,220/200,700,220,220:500,950,260,260:800,700,220,220:500,450,220,220/x/x';
+  if ($subtype=='per-bend' and $number==2 and $chief == false) $placement = 'x/300,700,350,350:700,300/x/x/x/x';
+  elseif ($subtype=='per-bend' and $sinister and $number==2 and $chief == false) $placement = 'x/300,300,350,350:700,700/x/x/x/x';
+  elseif ($subtype=='per-bend' and $sinister and $number==2  and $chief == true) $placement = 'x/300,600,350,350:700,1000/x/x/x/x';
+  elseif ($subtype=='per-bend' and $number==2  and $chief == true) $placement = 'x/300,900,250,250:600,600/x/x/x/x';
+  elseif ($subtype=='quarterly' and $number==4  and $chief == false) $placement = 'x/x/x/250,250,300,300:750,250:250,750:750,750/x/x/';
+  elseif ($subtype=='quarterly' and $number==4  and $chief == true) $placement = 'x/x/x/250,450,260,260:750,450:250,850:750,850/x/x/';
+  elseif ($subtype=='gyronny' and $ofnum==8 and ($number==8 or $number==4)  and $chief == false) $placement = 'x/x/x/200,500,300,300:500,200:800,500:500,800/x/x/x/200,400,160,160:400,200:600,200:800,400:800,600:600,800:400,800:200,600';
+  elseif ($subtype=='gyronny' and $ofnum==8 and ($number==8 or $number==4)  and $chief == true) $placement = 'x/x/x/200,700,250,250:500,400:800,700:500,1000/x/x/x/200,600,150,150:400,400:600,400:800,600:800,800:600,1000:400,1000:200,800';
+  elseif ($subtype=='gyronny' and $ofnum==6 and ($number==6 or $number==3)  and $chief == false) $placement = 'x/200,500,300,600:800,500/x/x/x/350,200,200,200:650,200:150,500:850,500:350,800:650,800';
+  elseif ($subtype=='gyronny' and $ofnum==6 and ($number==6 or $number==3)  and $chief == true) $placement = 'x/200,800,300,400:800,800/x/x/x/350,450,180,180:650,450:150,700:850,700:350,950:650,950';
+  elseif ($subtype=='per-chevron' and $number==3  and $chief == false) $placement = 'x/x/250,200,240,240:500,750,300,300:750,200,240,240';
+  elseif ($subtype=='per-chevron' and $number==3  and $chief == true) $placement = 'x/x/250,500,220,220:500,950,300,300:750,500,220,220';
+  elseif ($subtype=='per-pall' and $reversed and $number==3  and $chief == false) $placement = 'x/x/250,300,300,300:500,900:750,300/x/x/x/';
+  elseif ($subtype=='per-pall' and $reversed and $number==3  and $chief == true) $placement = 'x/x/250,500,260,260:500,950:750,500/x/x/x/';
+  elseif ($subtype=='per-pall' and $number==3  and $chief == false) $placement = 'x/x/250,700,300,300:500,200,300,300:750,700,300,300:/x/x/x/';
+  elseif ($subtype=='per-pall' and $number==3  and $chief == true) $placement = 'x/x/250,850,260,260:500,500:750,850:/x/x/x/';
+  elseif ($subtype=='per-saltire' and $number==3  and $chief == false) $placement = 'x/200,500,240,240:800,500/200,500,240,240:500,850,300,300:800,500,240,240/200,500,240,240:500,850,300,300:800,500,240,240:500,200,240,240/x/x';
+  elseif ($subtype=='per-saltire' and $number>=2 and $number<=4  and $chief == true) $placement = 'x/200,700,220,220:800,700/200,700,220,220:500,950,260,260:800,700,220,220/200,700,220,220:500,950,260,260:800,700,220,220:500,450,220,220/x/x';
   else $placement = null;
   return $placement;
 }
@@ -69,7 +65,7 @@ function placements() {
     // Try various placement regimes
 
     // strewn on a field (don't need any placement)
-    if ( $item->parentNode->tagName == 'semyde' )
+    if ( $item->parentNode->nodeName == 'semyde' )
       $placement = null;
     // around another charge (no placement) - placement is below
     elseif ( $xpath->evaluate("boolean(parent::modifier[@name='between']/parent::charge)",$item) )
@@ -93,7 +89,7 @@ function placements() {
       elseif ($ordsubtype=='bend' and $chief==true) $placement = '500,800,180,400,45/333.33,633.33,180,200,45:666.67,966.67/200,500,180,180,45:400,700:600,900/166.67,466.67,180,180,45:333.33,633.33:500,800:666.67,966.67/142.86,442.86,140,140,45:285.71,585.71:428.57,728.57:571.43,871.43:714.29,1014.29/s';
       elseif ($ordsubtype=='base') $placement = '500,950,500,240/333.33,950,300,200:666.67,950/333.33,900,160,160:666.67,900:500,1050/x/x/x';
       elseif ($ordsubtype=='chief' and get_mod($ordinary,'triangular')) $placement = '500,200,200,200/375,180,180,180:625,180/325,140,160,180:500,240:675,140/x/x/x';
-      elseif ($ordsubtype=='canton') $placement = '125,125,200,200/83.33,125,80,200:166.67,125/83.33,83.33,80,90:166.67,83.33:125,166.67/83.33,83.33,80,90:83.33,166.67:166.67,83.33:166.67,166.67/s/s';
+      elseif ($ordsubtype=='canton') $placement = calcPlace('w',$number,$conjoin,'20,20,260,260');
       elseif ($ordsubtype=='gyron') $placement = '80,200,100,100/s/s/s/s/s';
       elseif ($ordsubtype=='chief') $placement = calcPlace('h',$number,$conjoin,'100,50,800,200');
       elseif ($ordsubtype=='fess') $placement = calcPlace('h',$number,$conjoin,'100,400,800,200');
@@ -114,8 +110,8 @@ function placements() {
       elseif ($ordsubtype=='pile' and $chief==true) $placement = calcPlace('w',$number,$conjoin,'300,400,400,300');
       elseif ($ordsubtype=='cross-formy' and $chief==false) $placement = 'x///100,500,120,120:900,500:500,100:500,900/s/s';
       elseif ($ordsubtype=='cross-formy' and $chief==true) $placement = 'x///100,700,120,120:900,700:500,400:500,1100/s/s';
-      elseif ($ordsubtype=='quarter' and $chief==false) $placement = '250,250,350,350/150,150,150,150:350,350/150,150,150,150:350,150:250,250/166,166,120,120:334,166:166,334,334,334:100,100,100,100:400,100:250,250:400,100:400,400';
-      elseif ($ordsubtype=='quarter' and $chief==true) $placement = 't';
+      elseif ($ordsubtype=='quarter' and $chief==false) $placement = calcPlace('w',$number,$conjoin,'20,20,460,460');
+      elseif ($ordsubtype=='quarter' and $chief==true) $placement = calcPlace('w',$number,$conjoin,'20,320,460,360');
       elseif ($ordsubtype=='orle' and $chief==false) $placement = 'x///////////130,300,80,80:870,300:500,120:500,1070:130,700:870,700:250,120:750,120:250,970:750,970:130,500:870,500';
       elseif ($ordsubtype=='orle' and $chief==true) $placement = 'x///////////130,800,80,80:870,800:500,420:500,1070:130,800:870,800:250,420:750,420:250,970:750,970:130,600:870,600';
       else $placement = 'n';

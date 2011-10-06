@@ -190,8 +190,18 @@ function get_features ( $feature_sets, &$node ) {
         case 'mod':
           foreach ( explode ( ' ', $match[3] ) as $match3 )
             $node->appendChild(make_mod ( $match3, $match[0], tokens() ));
+				  // the presence of argument 4 tells 2 things SO BE CAREFUL
+					// 1. The default number of charges, if none is given
+					// 2. The fact that a position has been found and we should not look again.
           if ( isset ( $match[4] ) ) $retval = $match[4];
           break;
+				case 'mod+tinc':
+          $mod = make_mod ( $match[3], $match[0], tokens() );
+					$tinc = tincture(true);
+					$tinc->setAttribute('index','2'); // don't know of any ords that need 3 tincs...
+					$node->appendChild($tinc);
+					$node->appendChild($mod);
+					break;
         case 'mod+charge':
           $mod = make_mod ( $match[3], $match[0], tokens() );
           if ( ($charge = charge(true)) == null ) {

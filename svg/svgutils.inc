@@ -39,11 +39,15 @@ function ImagePosition ( $svg_data, $height, $width, $mods ) {
 function add_def($element = '', $content = '', $name = '', $title = '', $desc = ''){
   static $defs;
 
-  if ( $element == '' ) {
-    $retval = '<defs>' . $defs . '</defs>';
-    $defs = '';
+  if ( $element == '' ) { // If no arguments then return a complete <defs> section
+	  if ( $defs == '' ) { // Unless nothing has been defined yet
+			$retval = '';
+		} else {
+      $retval = '<defs>' . $defs . '</defs>';
+      $defs = ''; // Clear defs, ready for some more
+		}
     return $retval;
-  } // else
+  } // else if we given some arguments, then create an approprate defintion
   $element_words = explode(' ', $element);
   $type = $element_words[0];
   if ( $name == '' ) { $name = $type; }
@@ -59,151 +63,96 @@ function add_def($element = '', $content = '', $name = '', $title = '', $desc = 
   $def .= "\n</" . $type . ">\n";
 
   $defs .= $def;
-  return $myid;
+  return $myid; // and return an id unique to this SVG file
 }
 
-function apply_tincture ( $tincture, $object, $bb = '1000,1200',
-        $rot = '0', $rev = false, $inv = false, $offsetX = 0, $offsetY = 0,
-        $xscale = 0, $yscale = 0  ) {
-  global $_SERVER; // REMOVE THESE CHECKS - which to leave?
+function apply_tincture ( $tincture, $object, $chg_size = '',
+        $rot = '0', $rev = false, $inv = false ) {
+  global $_SERVER;
+	
+	$patTrans = '';
+	$object_type = $tincture->parentNode->nodeName;
+	if ( $object_type == 'charge' and $chg_size != '' ) // We make some things a wee bit smaller if on a charge, just for looks
+	{
+	  list($chgX,$chgY) = explode(',', $chg_size);
+		$scale = max ( $chgX / 1000, $chgY / 1200 ); // multiply here to adjust relative size of fur etc. on a charge
+	  $patTrans = ' scale(' . $scale . ') ';
+	}
+	if ( $rot != '0' ) // If the object is rotated, we rotate some of the tinctures to match_number()
+	  $patTrans .= ' rotate(' . ($rot * -1) . ') ';
+	if ( $patTrans != '' )
+	  $patTrans = ' patternTransform="' . $patTrans . '" ';
 
-  $bb = choose_fit($bb);
   if ( $tincture->getAttribute('origin') == 'implied' ) return $object; // Nothing to do
-  $tinc = $tincture->firstChild;
-  switch ( $tinc->nodeName ) {
+  $child = $tincture->firstChild;
+  switch ( $child->nodeName ) {
     case 'colour':
     case 'default': // don't think these two ever occur
     case 'proper':
-      if ( $tinc->hasAttribute('name') ) $spec = rgb($tinc->getAttribute('name'));
-      elseif ( $tinc->hasAttribute('spec') ) $spec = $tinc->getAttribute('spec');
+      if ( $child->hasAttribute('name') ) $spec = rgb($child->getAttribute('name'));
+      elseif ( $child->hasAttribute('spec') ) $spec = $child->getAttribute('spec');
       else {
         $spec = '#F0F0F0'; // raise error
         draw_message('internal', 'Colour not known', __FILE__, __LINE__);
       }
-      return '<g fill="' . $spec . '">' . $object . '</g>';
+      $retval = '<g fill="' . $spec . '">' . $object . '</g>';
       break;
     case 'fur':
-      $fur_name = $tinc->getAttribute('name');
+      $fur_name = $child->getAttribute('name');
       $fur_data = makeFur( $fur_name );
       // If what we are placing is inverted, we also invert the fill so it appears the "right way up"
       // Don't need to do reversed as all furs are symmetrical
       if ( $inv ) $fur_data[2] = "<g transform=\"translate(0,{$fur_data[1]}) scale(1,-1)\">{$fur_data[2]}</g>";
-      list($bb_width,$bb_height) = explode(',',$bb);
-      $pat_rot = '';
-      if ( $rot != 0 ) $pat_rot = ' rotate(' . ($rot * -1) . ') ';
-      $scale = max ( $bb_width / 1000, $bb_height / 1200 );
-      $patt_id = add_def ( 'pattern patternTransform="scale(' . $scale .  ')' . $pat_rot . '"' .
+      $patt_id = add_def ( 'pattern ' . $patTrans .
          ' patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" y="0" width="' .
          $fur_data[0] . '" height="' . $fur_data[1] . '"',
          $fur_data[2] );
       $retval = add_def();
       $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
-      return $retval;
       break;
     case 'treatment':
-      $treat_data = makeTreatment( $tinc );
+      $treat_data = makeTreatment( $child );
       // If what we are placing is inverted, we also invert the fill so it appears the "right way up"
-      // Don't need to do reversed as all furs are symmetrical
+      // Don't need to do reversed as all treatments are symmetrical
       if ( $inv ) $treat_data[2] = "<g transform=\"translate(0,{$treat_data[1]}) scale(1,-1)\">{$treat_data[2]}</g>";
-      list($bb_width,$bb_height) = explode(',',$bb);
-      $pat_rot = '';
-      if ( $rot != 0 ) $pat_rot = ' rotate(' . $rot . ') ';
-      $scale = max ( $bb_width / 1000, $bb_height / 1200 );
-      $patt_id = add_def ( 'pattern patternTransform="scale(' . $scale .  ')' . $pat_rot . '"' .
+      $patt_id = add_def ( 'pattern ' . $patTrans .
          ' patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" y="0" width="' .
          $treat_data[0] . '" height="' . $treat_data[1] . '"',
          $treat_data[2] );
       $retval = add_def();
       $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
-      return $retval;
       break;
     case 'semyde':
-      $treat_data = makeSemy( $tinc );
+      $treat_data = makeSemy( $child );
       // If what we are placing is inverted, we also invert the fill so it appears the "right way up"
-      // Don't need to do reversed as all furs are symmetrical
       if ( $inv ) $treat_data[2] = "<g transform=\"translate(0,{$treat_data[1]}) scale(1,-1)\">{$treat_data[2]}</g>";
       if ( $rev ) $treat_data[2] = "<g transform=\"translate({$treat_data[0]},0) scale(-1,1)\">{$treat_data[2]}</g>";
-      if ( is_array( $bb ) ) {
-        $keys = array_keys($bb); $key = $keys[0];
-        $bb = $bb[$key];
-      }
-      list($bb_width,$bb_height) = explode(',',$bb);
-      $pat_rot = '';
-      if ( $rot != 0 ) $pat_rot = ' rotate(' . $rot . ') ';
-      $scale = max ( $bb_width / 1000, $bb_height / 1200 );
-      $patt_id = add_def ( 'pattern patternTransform="scale(' . $scale .  ')' . $pat_rot . '"' .
+      $patt_id = add_def ( 'pattern ' . $patTrans .
          ' patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" y="0" width="' .
          $treat_data[0] . '" height="' . $treat_data[1] . '"',
          $treat_data[2] );
       $retval = add_def();
       $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
-      return $retval;
       break;
-    case 'division': // scale to bounding box
-      // Only take account of chief if filling an ordinary that does so
-      if ( $bb != '1000,1200' ) { // If we are given a bounding box, ignore chief
-        chief('push','NC');
-        $div_data = makeDivision( $tinc );
-        chief('pop');
-      } else {
-        $div_data = makeDivision( $tinc );
-      }
-      $parent = $tincture->parentNode;
-      if ( $parent->nodeName == 'plain' ) return '<g><title>' . $tinc->getAttribute('subtype') . '</title>' . $div_data . '</g>';
-      if ( preg_match ( '/Chrome/i' , $_SERVER['HTTP_USER_AGENT'] ) != 0)
-        draw_message ('warning','Browser bug may not render division fill correctly, try IE9');
-      list($bb_width,$bb_height,$bbX,$bbY) = explode(',', $bb . ',0,0');
-      $type = $tinc->getAttribute('subtype');
-      $height = ($type == 'per-bend' || $type == 'per-bend-sinister' || $type == 'quarterly') ? 1000 : 1200;
-/*      if ( (preg_match ( '/Chrome/' , $_SERVER['HTTP_USER_AGENT'] ) != 0) and $parent->nodeName == 'charge' ) {
-        $patt_id = add_def ( 'pattern width="100%" height="100%"',
-          '<title>Division</title><desc>' . $tinc->getAttribute('subtype') . '</desc>' .
-           '<svg  preserveAspectRatio="none" viewBox="0 0 1000 ' . $height . '" height="' . $bb_height .
-           '" width="' . $bb_width . '">' . $div_data . '</svg>' );
-      } else { */
-        $xScale = $bb_width / 1000; $yScale = $bb_height / $height;
-        $patt_id = add_def ( 'pattern patternTransform="scale(' . $xScale . ',' . $yScale .
-            ')" patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse"
-            x="' . (($bbX % $bb_width)/$xScale) . '" y="' . (($bbY % $bb_height)/$yScale) . '" width="1000" height="' . $height . '"',
-             $div_data );
-//        $patt_id = add_def ( 'pattern patternUnits="objectBoundingBox" patternContentUnits="objectBoundingBox" x="0" y="0" width="1" height="' . $height . '"',
-//             $div_data );
-/*      } */
-      $retval = add_def();
-      $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
-      return $retval;
-
-      /*
-       * // Only take account of chief if filling an ordinary that does so
-      if ( $bb != '1000,1200' ) { // If we are given a bounding box, ignore chief
-        chief('push','NC');
-        $div_data = makeDivision( $tinc );
-        chief('pop');
-      } else {
-        $div_data = makeDivision( $tinc );
-      }
-      list($width, $height, $data) = $div_data;
-      list($bb_width,$bb_height,$bbX,$bbY) = explode(',', $bb . ',0,0');
-      $xScale = $bb_width / 1000; $yScale = $bb_height / $height;
-      $patt_id = add_def ( 'pattern patternTransform="scale(' . $xScale . ',' . $yScale .
-          ')" patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse"
-          x="' . (($bbX % $bb_width)/$xScale) . '" y="' . (($bbY % $bb_height)/$yScale) . '" width="' . $width . '" height="' . $height . '"',
-          '<title>Division</title><desc>' . $tinc->getAttribute('subtype') . '</desc>' . $data );
-      $retval = '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
-      $retval .= add_def();
-      return $retval;
-      list($bb_width,$bb_height,$bbX,$bbY) = explode(',', $bb . ',0,0');
-      $type = $tinc->getAttribute('subtype');
-      $height = 1200;
-      if ( $bb_height != 1200 and ($type == 'per-bend' || $type == 'per-bend-sinister')) $height = 1000;
-      $patt_id = add_def ( 'pattern width="100%" height="100%"',
-          '<title>Division</title><desc>' . $tinc->getAttribute('subtype') . '</desc>' .
-           '<svg  preserveAspectRatio="none" viewBox="0 0 1000 ' . $height . '" height="' . $bb_height .
-           '" width="' . $bb_width . '">' . $div_data . '</svg>' );
-      $retval = '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
-      $retval .= add_def();
-      return $retval; */
-      break;
+    case 'division': 
+		  $title = '<title>' . $child->getAttribute('subtype') . '</title>';
+	    // What we do depends on what we are filling...
+      switch ($object_type) {
+				case 'plain': // just the field of the shield
+				  $retval = '<g>' . $title . '<desc>Division used to fill field</desc>' . makeDivision( $child ) . '</g>';
+			  	break;
+			  case 'ordinary':
+				case 'charge':
+          $type = $child->getAttribute('subtype'); // TODO can we find this out from a flag?
+					$height = ($type == 'per-bend' || $type == 'per-bend-sinister' || $type == 'quarterly') ? 1000 : 1200;
+          $patt_id = add_def ( 'pattern width="100%" height="100%" patternUnits="objectBoundingBox" preserveAspectRatio="none" viewBox="0 0 1000 ' .   $height . '"',
+              $title . "<desc>Division used to fill $object_type</desc>" .
+               makeDivision( $child ) ); 
+          $retval = add_def();
+          $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
+				  break;
+			}
+			break;	
     case 'counterchanged': // Never change anything, just fill with this pattern
       // First we have to locate the field
       $parent = $tincture->parentNode;
@@ -212,22 +161,20 @@ function apply_tincture ( $tincture, $object, $bb = '1000,1200',
       }
       $field = $parent->firstChild;
       // Then confirm that the field is a division
-      $field_tinc = $field->firstChild;
-      if ( $field_tinc->nodeName != 'division' ) return '<g fill="#050505"><title>Counterchange</title><desc>Not possible</desc>' . $object . '</g>';
-      if ( preg_match ( '/Chrome/i' , $_SERVER['HTTP_USER_AGENT'] ) != 0)
-        draw_message ('warning','Browser bug may not render counterchange correctly, try IE9');
-      $div_data = makeDivision( $field_tinc, true );
-      $pattTrans = '';
-      if ( $xscale or $yscale ) {
-        $pattTrans = 'patternTransform="scale(' . ( 1 / $xscale) . ',' . (1/ $yscale) . ')"';
-      }
-      $patt_id = add_def ( 'pattern ' . $pattTrans . ' patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="' .
-          $offsetX . '" y="' . $offsetY . '" width="' . '1000" height="1200"', '<title>Counterchanged</title>' . $div_data );
-      $retval = add_def();
-      $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
-      return $retval;
+      if ( $field->firstChild->nodeName != 'division' ) 
+			  return '<g fill="#050505"><title>Counterchange</title><desc>Not possible</desc>' . $object . '</g>';
+			// else go ahead
+      $div_data = makeDivision( $field->firstChild, true );
+      if ( $object_type == 'charge' and (preg_match ( '/(chrome|firefox)/i' , $_SERVER['HTTP_USER_AGENT'] ) != 0))
+        draw_message ('warning','Browser bug may not render counterchanged charge correctly.' );
+      $patt_id = add_def ( 'clipPath', $object );
+      $retval = add_def() . '<g clip-path="url(#' . $patt_id . ')"  >' . $div_data . '</g>';
+			if ( $object_type == 'charge' ) // add the outline and any shading
+			  $retval .= '<g fill="none">' . $object . '</g>';
       break;
+			// END of switch
   }
+  return $retval;
 }
 
 function choose_fit( $choices ) {

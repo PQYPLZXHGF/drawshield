@@ -27,7 +27,7 @@ function parser_message($category, $string, $file = '', $line = '' ) {
 function deep_copy($node) {
   global $dom;
 
-  $newnode = $dom->createElement($node->tagName);
+  $newnode = $dom->createElement($node->nodeName);
   foreach ($node->attributes as $attribute) {
     $newnode->setAttribute($attribute->name,$attribute->value);
   }
@@ -138,19 +138,20 @@ function make_mod($name, $param = null, $tokens = null ) {
   return $mod;
 }
 
-function make_colour($colour) {
+function make_colour($colour, $index='1') {
   global $dom;
 
   $tinc = $dom->createElement('tincture');
   $col = $dom->createElement('colour');
   $col->setAttribute('name',$colour);
+  $tinc->setAttribute('index',$index);
   $tinc->appendChild($col);
   return $tinc;
 }
 
 function get_mod($node, $name) {
   foreach ( $node->childNodes as $child ) {
-    if ( $child->tagName == 'modifier' and $child->getAttribute('name') == $name ) {
+    if ( $child->nodeName == 'modifier' and $child->getAttribute('name') == $name ) {
       $retval = $child->getAttribute('param');
       if ( $retval == null ) $retval = true; // Just say the modifier exists
       return $retval;
@@ -159,10 +160,10 @@ function get_mod($node, $name) {
   return null;
 }
 
-function get_child($node,$tagname) {
+function get_child($node,$nodeName) {
   $retval = null;
   foreach ( $node->childNodes as $child ) {
-    if ( $child->tagName == $tagname ) {
+    if ( $child->nodeName == $nodeName ) {
       $retval = $child;
       break;
     }

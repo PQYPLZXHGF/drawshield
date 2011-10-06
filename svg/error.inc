@@ -19,6 +19,9 @@ function draw_message( $category, $message, $filename = null, $line = null ) {
   global $message_list;
 
   if (! array_key_exists($category, $message_list)) $message_list[$category] = array();
+	foreach ( $message_list[$category] as $item )
+	  if ( $item['message'] == $message )
+		  return; // ignore duplicate messages
 
   $message_list[$category][] = compact ( 'message', 'filename', 'line');
 }
@@ -67,7 +70,7 @@ function get_error_messages() {
   foreach ( $message_list as $key => $messages ) {
     switch ( $key ) {
       case 'warning':
-        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="yellow" >Warnings:' . "</text>\n";
+        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="orange" >Warnings:' . "</text>\n";
         $notify = true;
         break;
       case 'blazon':

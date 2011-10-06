@@ -100,8 +100,10 @@ function drawshield() {
    else if ( eol2 == -1 ) { eol = eol1; }
    else { eol = Math.min(eol1, eol2); }
    if ( eol != -1 ) { shieldCaption.firstChild.nodeValue = blazonText.slice(0,eol);}
-   else { shieldCaption.firstChild.nodeValue= blazonText; }
-   requestSVG('/include/shield/drawshield.php?&size=' + shieldsize + '&blazon=' + encodeURIComponent(blazonText),shieldtarget);
+   else { shieldCaption.firstChild.nodeValue= blazonText; } 
+	 // Add a random number to force resend (avoids caching)
+   requestSVG('/include/shield/drawshield.php?&size=' + shieldsize + '&rand=' + Math.random()
+	   + '&blazon=' + encodeURIComponent(blazonText),shieldtarget);
 };
 
 // Arguments are:

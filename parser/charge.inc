@@ -78,7 +78,7 @@ function demi() {
 
 function get_feature_tinc($node) {
   foreach ( $node->childNodes as $child ) {
-    if ( $child->tagName == 'feature' ) {
+    if ( $child->nodeName == 'feature' ) {
       if ( ($tinc = get_child($child, 'tincture')) != null )
         return deep_copy($tinc);
     }
@@ -189,16 +189,20 @@ function charge( $assume_num = false ) {
   );
 
   $state = save();
+	$allow_arr_pos = true;
 
   // In case of "in chief, three whatever...
   $temp = $dom->createElement('charge');
   $arr_pos = get_features( array ( 'arr_pos', 'charge_prefix'), $temp );
-  if ( is_int($arr_pos) ) $assume_num = $arr_pos;
+  if ( is_int($arr_pos) ) {
+	  $assume_num = $arr_pos;
+		$allow_arr_pos = false;
+	}
 
   $found_on = search_match($on_prefix);
 
   // Look for the charge itself
-  if ( ($node = simple_charge( $assume_num, true )) == null ) {
+  if ( ($node = simple_charge( $assume_num, $allow_arr_pos )) == null ) {
     restore($state);
     return null;
   }

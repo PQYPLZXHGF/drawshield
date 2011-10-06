@@ -91,8 +91,7 @@ function draw() {
        baseProfile="full"
        xmlns="http://www.w3.org/2000/svg"
        xmlns:xlink="http://www.w3.org/1999/xlink" ' .
-       'preserveAspectRatio="xMidYMid meet" height="' . (int)($size * 1.2) . '" width="' . $size . '" viewBox="0 0 1000 1200" >
-  ';
+       'preserveAspectRatio="xMidYMid meet" height="' . (int)($size * 1.2) . '" width="' . $size . '" viewBox="0 0 1000 1200" >';
 
   $trailer =  "</svg>\n";
 
@@ -107,9 +106,9 @@ function draw() {
       // other elements for future expansion
     }
   }
-  $clipAll = add_def('clipPath', '<path d="M 0 0 L 0 800 A 800 400 0 0,0 500 1200 A 800 400 0 0,0 1000 800 L 1000 0 Z" />' );
+  $clipShield = add_def('clipPath', '<path d="M 0 0 L 0 800 A 800 400 0 0,0 500 1200 A 800 400 0 0,0 1000 800 L 1000 0 Z" />' );
   $body .= add_def();
-  $body = '<g clip-path="url(#' . $clipAll . ')">' . $body . '</g>';
+  $body = '<g clip-path="url(#' . $clipShield . ')">' . $body . '</g>';
   $body .= '<text x="10" y="1160" font-size="30" >' . $tagline1 . '</text><text x="10" y="1190" font-size="30" >' . $tagline2 . '</text>';
   $body .= get_error_messages();
 

@@ -21,33 +21,42 @@ $ordinary = array (
 
 );
 
-if ( $node == null ) {
   include 'ordinaries/common/_couped.inc';
   include 'ordinaries/common/_compony.inc';
   include 'ordinaries/common/_lozengy.inc';
-} else {
+
+if ( $node != null ) {
   $couped = get_mod($node,'couped');
   $compony = get_mod($node,'compony');
   
-  if ( $couped == 'both' )
-    $body_data = array ( 'shape_spec' => 'X100Y350A800c300E800g300', 'bounding_box' => '800,300,100,350' );
-  elseif ( $couped == 'dexter')
-    $body_data = array ( 'shape_spec' => 'X-100Y350A1000c300E1000g300', 'bounding_box' => '900,300,0,350'  );
-  elseif ( $couped == 'sinister')
-    $body_data = array ( 'shape_spec' => 'X100Y350A1000c300E1000g300', 'bounding_box' => '900,300,100,350'  );
-  elseif ( get_mod($node,'lozengy'))
-    $body_data = array ( 'body' => '<path d="M0,350l83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 v300 l-83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 " />',
-            'bounding_box' => '1000,300,0,350' );
-  elseif ( $compony == 'single' )
-    $body_data = array ( 'shape_spec' => 'X-100Y350A1200c300E1200g300', 'bounding_box' => '1000,300,0,350',
-            'body2' => '<path d="M0,350h250v300h-250z M500,350h250v300h-250z" />',);
+	// Set basic body shape
+  if ( $couped == 'both' ) {
+		$ordinary['shape_spec'] = 'X100Y350A800c300E800g300';
+//		$ordinary['bounding_box'] = '800,300,100,350';
+	}
+  elseif ( $couped == 'dexter') {
+		$ordinary['shape_spec'] = 'X-100Y350A1000c300E1000g300';
+//		$ordinary['bounding_box'] = '900,300,0,350';
+	}
+  elseif ( $couped == 'sinister') {
+		$ordinary['shape_spec'] = 'X100Y350A1000c300E1000g300';
+//		$ordinary['bounding_box'] = '900,300,100,350';
+	}
+  elseif ( get_mod($node,'lozengy')) {
+		$ordinary['body'] = '<path d="M0,350l83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 v300 l-83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 " />';
+//		$ordinary['bounding_box'] = '1000,300,0,350';
+	}
+  else {
+    $ordinary['shape_spec'] = 'X-100Y350A1200c300E1200g300';
+//		$ordinary['bounding_box'] = '1000,300,0,350';
+	}
+	
+	// Add extra layer if compony
+  if ( $compony == 'single' )
+    $ordinary['body2'] = '<path d="M0,300h250v400h-250z M500,300h250v400h-250z" />';
   elseif ( $compony == 'double' )
-    $body_data = array ( 'shape_spec' => 'X-100Y350A1200c300E1200g300', 'bounding_box' => '1000,300,0,350',
-            'body2' => '<path d="M0,350h250v150h-250z M250,500h250v150h-250z M500,350h250v150h-250z M750,500h250v150h-250z" />',);
-  else
-    $body_data = array ( 'shape_spec' => 'X-100Y350A1200c300E1200g300', 'bounding_box' => '1000,300,0,350' );
+    $ordinary['body2'] = '<path d="M0,300h250v200h-250z M250,500h250v200h-250z M500,300h250v200h-250z M750,500h250v200h-250z" />';
     
-  $ordinary = array_merge($ordinary, $body_data);
 }
 
 ?>

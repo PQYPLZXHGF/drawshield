@@ -109,8 +109,8 @@ function tincture2() {
     array ( 'checky',       '(checky|cheque?y)' ),
     array ( 'papelonny',    'pap(e|i)l?lonn(y|e)',    ),
     array ( 'scaly',        'scaly',        ),
-    array ( 'compony',      '(compony|gobone|gobonated)',        ),
-    array ( 'compony',      'counter (compony|gobone|gobonated)',  ),
+//    array ( 'compony',      '(compony|gobone|gobonated)',        ),
+//    array ( 'counter-compony',      'counter (compony|gobone|gobonated)',  ),
     array ( 'fretty',       'fretty',       ),
     array ( 'grillage',     'grillage',     ),
     array ( 'honeycombed',  'honeycombed',  ),
@@ -173,7 +173,7 @@ function tincture2() {
         $tinc1->appendChild($child);
         $treat->appendChild($tinc1);
         if ( !isset($match[2]) ) {
-          $tinc2 = tincture(false,true);
+          $tinc2 = tincture(true);
           $tinc2->setAttribute('index', '2');
           $treat->appendChild($tinc2);
         }
@@ -199,10 +199,10 @@ function tincture2() {
     $treat->setAttribute( 'name', $match[0]);
     $treat->setAttribute( 'tokens',tokens());
     comma();
-    $treat->appendChild(tincture2(true));
+    $treat->appendChild(tincture(true));
     comma();
     andd();
-    $tinc2 = tincture2(true);
+    $tinc2 = tincture(true);
     $tinc2->setAttribute('index',2);
     $treat->appendChild($tinc2);
     $child = $treat;

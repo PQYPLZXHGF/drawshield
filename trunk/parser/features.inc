@@ -126,6 +126,7 @@ function get_features ( $feature_sets, &$node ) {
 
   $retval = null;
   $look_for_rows = false;
+	$look_for_tinc = true;
 
   $features = array();
   foreach ( $feature_sets as $feature_set ) {
@@ -153,6 +154,9 @@ function get_features ( $feature_sets, &$node ) {
         case 'rows':
           $look_for_rows = true;
           break;
+				case 'no_tinc':
+				  $look_for_tinc = false;
+					break;
         default:
           parser_message('internal', "Unknown feature group - $feature_set");
           break;
@@ -171,7 +175,7 @@ function get_features ( $feature_sets, &$node ) {
       switch ( $match[2] ) {
         case 'shape':
           $shape_mod = make_mod($match[3], $match[0], tokens());
-          get_features(array('linetype'), $shape_mod);
+          get_features(array('linetype','no_tinc'), $shape_mod);
           if ( ($tinc = tincture()) != null ) $shape_mod->appendChild($tinc);
           $node->appendChild($shape_mod);
           break;
@@ -221,7 +225,7 @@ function get_features ( $feature_sets, &$node ) {
         case 'ignore':
           break;
       }
-    } elseif (($tinc = tincture(false)) != null ) {
+    } elseif ( $look_for_tinc and (($tinc = tincture(false)) != null) ) {
       $tinc->setAttribute('index',"$tinc_index" );
       $tinc_index++;
       $node->appendChild($tinc);

@@ -11,7 +11,16 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License. */
-
+	 
+function get_div_height ( $node ) {
+	// TODO rewrite this, possibly as full rewrite of divisions to match charges and ordinaries
+	// it relies on exact knowledge of internal division name
+  $subtype = $node->getAttribute('subtype');
+	if ( in_array($subtype,array('per-bend', 'per-bend-sinister', 'gyronny', 'quarterly', 'per-saltire')))
+		return 1000;
+	else
+	  return 1200;
+ }
 
 function makeDivision( $node, $counter = false ) {
 

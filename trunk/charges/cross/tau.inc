@@ -19,6 +19,7 @@ $charge = array (
   'patterns' => array (
   'tau ?cross(es)?',
   'cross(es)? ?of (saint|st) anthony',
+	'cross(es)? tau',
   ),
   'either' => array ( 'cross', ),
 

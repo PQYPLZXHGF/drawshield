@@ -221,11 +221,7 @@ function rewrite() {
     $item->appendChild(make_mod('wflex','9999'));
   }
 	
-	// A chevron quarterly needs a special quartering to line up with the chevron "arms" nicely
-/*	foreach ( $xpath->query("//ordinary[@subtype='chevron']/tincture/division[@type='quarterly']") as $item )
-	  $item->setAttribute('subtype','chevron-quarterly'); */
-
- // All (Some?) ordinaries when "reversed", actually mean "inverted"
+  // All (Some?) ordinaries when "reversed", actually mean "inverted"
   foreach ( $xpath->query("//ordinary/modifier[@name='reversed']") as $item ) {
 	//  if ( in_array($item->parentNode->getAttribute('subtype'), array ('chevron', 'pall', 'pile') ))
 		  $item->setAttribute('name','inverted');
@@ -238,14 +234,6 @@ function rewrite() {
       $inbend = make_mod('arrangement', 'inbend' );
       $prev->appendChild($inbend);
     }
-  }
-
-  // Another fudge, we can't just flip a pall if it is inverted, need a different shape to match up with per pall inverted
-  foreach ( $xpath->query("//ordinary[@subtype='pall' and modifier/@name='inverted']") as $item ) {
-    $item->setAttribute('subtype','pall-inv');
-    foreach ( $item->childNodes as $child )
-      if ( $child->nodeName == 'modifier' and $child->getAttribute('name') == 'inverted')
-        $item->removeChild($child);
   }
 
   // A charge/within/ordinary becomes ordinary/between/charge
@@ -261,6 +249,7 @@ function rewrite() {
     $ordinary->appendChild($new_mod);
     $parent->replaceChild($ordinary,$charge);
   }
+  
   // Help with error visualisation
 
   // Replace missing textures

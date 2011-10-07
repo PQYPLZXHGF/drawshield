@@ -12,30 +12,6 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-function ImagePosition ( $svg_data, $height, $width, $mods ) {
-  $transform = '';
-  if ( in_array ( 'sinister', $mods )) {
-    $xshift = $width;
-    $transform .= 'translate(' . $xshift . ',0) scale(-1,1) ';
-  }
-  if ( in_array ( 'inverted', $mods )) {
-    $yshift = $height;
-    $transform .= 'translate(0,' . $yshift . ') scale(1,-1) ';
-  }
-  if ( in_array ( 'enhanced', $mods )) {
-    $yshift = (-1) * $height * 0.15;
-    $transform .= 'translate(0,' . $yshift . ') ';
-  }
-  if ( in_array ( 'abased', $mods )) {
-    $yshift = $height * 0.15;
-    $transform .= 'translate(0, ' . $yshift . ') ';
-  }
-  if ( $transform != '' ) {
-    $svg_data = '<g transform="' . $transform . '">' . $svg_data . "</g>\n";
-  }
-  return $svg_data;
-}
-
 function add_def($element = '', $content = '', $name = '', $title = '', $desc = ''){
   static $defs;
 
@@ -143,11 +119,13 @@ function apply_tincture ( $tincture, $object, $chg_size = '',
 			  	break;
 			  case 'ordinary':
 				case 'charge':
-          $type = $child->getAttribute('subtype'); // TODO can we find this out from a flag?
-					$height = ($type == 'per-bend' || $type == 'per-bend-sinister' || $type == 'quarterly') ? 1000 : 1200;
+				  chief('push','NC');
+          $new_div = makeDivision( $child );
+          chief('pop');
+					$height = get_div_height($child);
           $patt_id = add_def ( 'pattern width="100%" height="100%" patternUnits="objectBoundingBox" preserveAspectRatio="none" viewBox="0 0 1000 ' .   $height . '"',
               $title . "<desc>Division used to fill $object_type</desc>" .
-               makeDivision( $child ) ); 
+               $new_div ); 
           $retval = add_def();
           $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
 				  break;

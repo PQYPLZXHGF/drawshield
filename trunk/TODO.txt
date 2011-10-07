@@ -6,11 +6,6 @@ Fix positions for in bend sinister, need to mirror bend positions in placement.i
 
 Indirection for modifier data? (mods repeat for each synonym) No they don't! But maybe combine things like couped...?
 
-chevron quarterly - need to switch chevron quarterly x and y for chevron mod quarterly 
-(Can body 2 use shape_spec to ensure wibbly edges? would need to transfer linetype also... )
-
-Chevron - finish compony &counter comp for all variants (sob!)
-
 Move all specific knowledge into "flags" (like $put_in_chief), do NOT rely on the NAME of the charge or ordinary
 
 Re-implement "facing" mod
@@ -19,17 +14,17 @@ Non symmetical ordinaries MUST not extend beyond shield boundaries!! Need to che
 this breaks fimbriation if done by just using stroke-width. See issue 206 for possible solution - would this
 work for variant linetypes...?
 
-Need to check all COMPONY body2 overlap their ordinary so linetypes are correctly filled (see e.g. fess.inc)
-
-azure a cartouche bendwise ermine - is not in the right place?
-
-azure a cartouche in bend ermine - does not rotate fur properly
-
-In ordinary.inc / charge.inc can we combine the mods array and inv, rot, rev to just use existing modifier nodes?
-
 Properly document ordinary and charge
 
+cross-pierced cotticing
+
 TEST EVERYTHING!!!
+
+Allow ordinary['fim_path'] to be a path spec & use if present instead of body
+
+split global.inc between parser and svg
+
+redo saltire path spec so exactly 200 pixels wide
 
 DONE
 
@@ -47,4 +42,12 @@ Lion passant guardant Or. - Now parses correctly.
 Better filling by division
 
 The vairy treatment was very large, it has been reduced
+
+Items placed "on" an ordinary sinister are now the right way around
+
+Fixed rotation / scaling / position of charges bendwise and bendwise sinister
+
+chevron and bend Quarterly now drawn correctly
+
+Compony and counter compony for chevron and saltire
 

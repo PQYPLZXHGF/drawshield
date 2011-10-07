@@ -60,7 +60,7 @@ function find_chief ( $ord_chgs ) {
   return false;
 }
 
-function makeOrdChgs( $node ) {
+function makeOrdChgs( &$node ) {
   $retval = '';
   foreach ( $node->childNodes as $child ) {
     switch ( $child->nodeName ) {
@@ -115,7 +115,7 @@ function draw() {
   return $header . $body . $trailer;
 }
 
-function makeshield( $node ) {
+function makeshield( &$node ) {
   global $dom;
 
   static $id_nodes = array();

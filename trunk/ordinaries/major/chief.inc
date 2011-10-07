@@ -43,10 +43,10 @@ if ( $node == null ) {
           'bounding_box' => '1000,300' );
   elseif ( $compony == 'single' )
     $body_data =  array ( 'shape_spec' => 'X-100Y-100a1200c400E1200g400', 'bounding_box' => '1000,300',
-        'body2' => '<path d="M0,0h250v300h-250z M500,0h250v300h-250z" />', );
+        'body2' => '<path d="M0,0h250v400h-250z M500,0h250v400h-250z" />', );
   elseif ( $compony == 'double' )
     $body_data = array ( 'shape_spec' => 'X-100Y-100a1200c400E1200g400', 'bounding_box' => '1000,300',
-        'body2' => '<path d="M0,0h250v150h-250z M250,150h250v150h-250z M500,0h250v150h-250z M750,150h250v150h-250z" />', );
+        'body2' => '<path d="M0,0h250v150h-250z M250,150h250v250h-250z M500,0h250v150h-250z M750,150h250v250h-250z" />', );
   else
     $body_data = array ( 'shape_spec' => 'X-100Y-100a1200c400E1200g400', 'bounding_box' => '1000,300', );
 		

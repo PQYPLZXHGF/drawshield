@@ -311,6 +311,7 @@ $lineSpecs = array (
 // SVG movements to create the path using the linetype. This is the bit
 // inside the 'd' parameter of an SVG path element
 function makePath ( $shapeSpec, $lineType, $size = 60 ) {
+  if ( !$lineType ) $lineType = 'none';
   $retval = '';
   $matches = preg_split('/   */', $shapeSpec);
   foreach ( $matches as $match ) {

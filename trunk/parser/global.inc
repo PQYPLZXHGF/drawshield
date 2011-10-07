@@ -160,6 +160,16 @@ function get_mod($node, $name) {
   return null;
 }
 
+function get_mod_node($node, $name) {
+  foreach ( $node->childNodes as $child ) {
+    if ( $child->nodeName == 'modifier' and $child->getAttribute('name') == $name ) {
+      return $child;
+    }
+  }
+  return null;
+}
+
+
 function get_child($node,$nodeName) {
   $retval = null;
   foreach ( $node->childNodes as $child ) {
@@ -169,5 +179,26 @@ function get_child($node,$nodeName) {
     }
   }
   return $retval;
+}
+
+function get_rgb($tinc_node) {
+	$col = $tinc_node->firstChild;
+	if ( !$col or $col->nodeName != 'colour' ) {
+	  draw_message('warning','plain colour expected');
+	  return ( '#555555' );
+	} // So now we have a colour node
+	return rgb($col->getAttribute('name'));
+}
+
+function get_tincture($node,$index=null) {
+  foreach ( $node->childNodes as $child ) {
+    if ( $child->nodeName == 'tincture' ) {
+		  if ( !$index ) return $child;
+			if ( $child->getAttribute('index') == $index ) {
+			  return $child;
+			}
+    }
+  }
+  return null; // TODO should this return missing node?
 }
 ?>

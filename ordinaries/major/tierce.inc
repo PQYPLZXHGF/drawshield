@@ -44,6 +44,8 @@ if ( $node == null ) {
     $ordinary['body2'] = '<path d="M0,0h433v300h-433z M0,600h433v300h-433z M0,600h433v300h-433z " />';
   elseif ( $compony == 'double' )
     $ordinary['body2'] = '<path d="M0,0h167v150h-167z M167,150h267v150h-267z M0,300h167v150h-167z M167,450h267v150h-267z M0,600h167v150h-167z M167,750h267v150h-267z M0,900h167v150h-167z M167,1050h267v150h-267z " />';
+		
+	//$ordinary['if_ord_on'] = 'scale'; ??
 }
 
 ?>

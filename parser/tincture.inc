@@ -143,6 +143,7 @@ function tincture2() {
 
   $node = $dom->createElement('tincture');
   $node->setAttribute('index', 1);
+	$node->setAttribute('origin','given');
   $child = null;
 
   // zeroth, discard grouping words
@@ -155,6 +156,7 @@ function tincture2() {
       parser_message('blazon', 'No previous tincture');
     } else {
       $child = deep_copy($p_globals[$match[0]]);
+			$node->setAttribute('origin','backref');
     }
   } elseif ( proper() ) {
     $child = $dom->createElement('proper');

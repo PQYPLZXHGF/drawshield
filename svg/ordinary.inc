@@ -51,149 +51,153 @@ function createCotise($spec, $num, $lineType) {
   return $retval;
 }
 
+function division_to_modifier(&$node, $type) {
+	// check for tincture being a quarterly division, if so handle separately & rewrite modifiers
+	$item = null;
+	// See if there is a division of the required type
+	foreach ( $node->childNodes as $child ) {
+		if ( $child->nodeName == 'tincture' and $child->firstChild->nodeName == 'division' and $child->firstChild->getAttribute('type') == $type ) {
+		  $item = $child;
+			break;
+		}
+	}
+	if ( $item == null ) return false; // not found
+	
+	// We cannot just iterate through childNodes as we want to make changes, so put in an array
+	foreach ( $item->firstChild->childNodes as $child ) {
+	  $children[] = $child;
+	}
+	// We can now remove the original tincture
+	$node->removeChild($item);
+	// Create a new modifier node
+	$mod = make_mod('div2ord',type);
+	// Now copy any tinctures back into the original node, and save any other modifiers
+	for ( $i = 0; $i < count($children); $i++ )
+	  if ( $children[$i]->nodeName == 'tincture' ) {
+			// We swap the colours over, as body2 draws the first one (other way round for normal divisions)
+			if ( $children[$i]->getAttribute('index') == '1')			
+			  $children[$i]->setAttribute('index','2');
+			else
+			  $children[$i]->setAttribute('index','1');
+		  $node->appendChild($children[$i]);
+		}
+		else
+		  $mod->appendChild($children[$i]);
+	// Create a modifier to show which division we replaced
+	$node->appendChild($mod);
+
+  return true;
+}
+
 function includeOrdinary( &$node ) {
   $ordinary = array ();
   include ( 'ordinaries/' . $node->getAttribute('type') . '/' . $node->getAttribute('subtype') . '.inc' );
   return $ordinary;
 }
 
-function makeOrdinary( $node ) {
+function makeOrdinary( &$node ) {
 
-  $prev_ord_map = '';
-  $retval = '';
-
-  // Some default values (may be overwritten by the ord_func data...)
-  $feature_size = 50;    // Size of edge mod features
-  $shape_spec = null;    // If null, just use raw SVG
-  $rev = false; $inv = false; $rot = 0;
-  $fim_col = null;      // No fimbriation
-  $voided = null;       // Not voided
-  $void_col = null;     // If voided, show background
-  $ord_body_col = null;
-  $body2_col = '';        // Colour of extra bits (e.g. for compony)
-  $on_ord = null;
-  $ord_between = null;
-
-  $cot_linetype = 'none'; // Set to the type of cotice (same as bars)
-  $cot_col = null;      // Set to a colour if cotice present
-  $cot_num = 0;       // Number of cottices
-  $mods = array();
-
-  // Get information about this ordinary
-  $type = $node->getAttribute('type');
-  $subtype = $node->getAttribute('subtype');
-  $ord_linetype = get_mod($node, 'linetype');
-  // Process sub-elements
-  foreach ( $node->childNodes as $child ) {
-    switch ( $child->nodeName ) {
-      case 'modifier':
-        $mods[] = $child->getAttribute('name');
-        switch ( $child->getAttribute('name') ) {
-          case 'sinister':
-            $rev = !$rev;
-            break;
-         case 'inverted':
-            $inv = !$inv;
-            break;
-          case 'voided':
-            $voided = true;
-            $void_col = $child->firstChild; // May be null
-            break;
-          case 'cotised': $cot_num = $child->getAttribute('param');
-            foreach ( $child->childNodes as $grandchild )
-              if ( $grandchild->nodeName == 'tincture' )
-                $cot_col = $grandchild;
-            $cot_linetype = get_mod($child,'linetype');
-            if ( $cot_linetype == null ) $cot_linetype = 'none';
-            break;
-          case 'fimbriated':
-            if ( $fim_col = $child->firstChild ) { ; // May be null
-              $fim_col = $fim_col->firstChild;
-              if ( $fim_col->nodeName == 'colour' ) {
-                $fim_col = $fim_col->getAttribute('name');
-              } else {
-                $fim_col = null;
-              }
-            }
-            break;
-           case 'on':
-            $on_ord = $child;
-            break;
-          case 'between':
-            $ord_between = $child->firstChild;
-            break;
-        }
-        break;
-      case 'tincture':
-        if ( $child->getAttribute('index') == 1 ) {
-          $ord_body_col = $child;
-        } else {
-          $body2_col = $child;
-        }
-        break;
-    }
-  }
-
-  // Get the svg data of the shapes to be drawn
+	// Get information about the shapes to be drawn
+	// We do this first in case the ordinary code changes any of the modifiers, e.g. a bend quarterly
   $ord_data = includeOrdinary( $node );
-
-  // Check out what we have found about drawing...
-  if ( array_key_exists('shape_spec', $ord_data) ) $shape_spec = choose_fit($ord_data['shape_spec']);
-  if ( array_key_exists('feature_size', $ord_data) ) $feature_size = $ord_data['feature_size'];
-  if ( array_key_exists('rotate_pattern', $ord_data) ) $rot = $ord_data['rotate_pattern'];
-
-  $cotise = '';
-  $body = '';
-  // Create ordinary, if shape_spec provided
-  if ( $shape_spec ) {
-    if ( $voided ) {
-      if ( $void_col ) $body .= apply_tincture ( $void_col, createBody($shape_spec, 'none', 0 ), '', $rot, $rev, $inv );
-      $body .= createVoid($shape_spec, $ord_linetype, $feature_size);
+	
+	// Some defaults (either from the ordinary data or from modifiers)
+  if ( array_key_exists('feature_size', $ord_data) ) 
+	  $feature_size = $ord_data['feature_size'];
+	else
+	  $feature_size = 50;
+	$voided = get_mod_node($node, 'voided');
+	$tinc1 = get_tincture($node,'1');
+	$cotise = '';
+	
+	// Create the basic shape
+	$body = '';
+	if ( array_key_exists('shape_spec', $ord_data) ) { //  we are given a path specification to convert to SVG
+	  $shape_spec = choose_fit($ord_data['shape_spec']);
+    if ( $voided != null ) {
+      if ( ($void_col = $voided->firstChild ) != null ) 
+			  $body .= apply_tincture ( $void_col, createBody($shape_spec, 'none', 0 ) );
+      $body .= createVoid($shape_spec, get_mod($node,'linetype'), $feature_size);
     } else {
-      $body .= createBody($shape_spec, $ord_linetype, $feature_size);
+      $body .= createBody($shape_spec, get_mod($node,'linetype'), $feature_size);
     }
-    for ( $i = 1; $i <= $cot_num; $i++ ) $cotise .= createCotise( $shape_spec, $i, $cot_linetype );
-  } else { // Create ordinary, if raw SVG given
-    if ( $voided and array_key_exists('voided', $ord_data) ) {
-      if ( $void_col ) $body .= apply_tincture ( $void_col, choose_fit($ord_data['body']), '', $rot, $rev, $inv );
-      $body .= choose_fit($ord_data['voided']);
+		// Now do the cotises
+		if ( ($cot_node = get_mod_node($node,'cotised')) != null ) {
+			$cot_linetype= get_mod($cot_node,'linetype');
+			$cot_tinc = get_tincture($cot_node);
+			if ( !$cot_tinc )
+			  $cot_tinc = $tinc1;
+      for ( $i = 1; $i <= $cot_node->getAttribute('param'); $i++ ) 
+			  $cotise .= createCotise( $shape_spec, $i, $cot_linetype );
+		  $cotise = apply_tincture ( $cot_tinc, $cotise );
+		}
+  } else { // we are given direct SVG data
+    if ( $voided != null ) {
+		  if ( !array_key_exists('voided', $ord_data) ) {
+		    draw_message('warning','cannot draw ' . $node->getAttribute('subtype') . 'as voided');
+        $body .= choose_fit($ord_data['body']);
+		  } else {
+        if ( ($void_col = $voided->firstChild ) != null ) 
+			    $body .= apply_tincture ( $void_col, choose_fit($ord_data['body']) );
+			  $body .= choose_fit($ord_data['voided']);
+			}
     } else {
       $body .= choose_fit($ord_data['body']);
     }
-    if ( $cot_num >= 3 and array_key_exists('cotise3',$ord_data) ) $cotise .= choose_fit($ord_data['cotise3']);
-    if ( $cot_num >= 2 and array_key_exists('cotise2',$ord_data) ) $cotise .= choose_fit($ord_data['cotise2']);
-    if ( $cot_num >= 1 and array_key_exists('cotise1',$ord_data) ) $cotise .= choose_fit($ord_data['cotise1']);
-  }
-  // reverse or invert if required
-  if ( count($mods) > 0 ) {
-    $body = ImagePosition ( $body, 1200, 1000, $mods );
-    $cotise = ImagePosition ( $cotise, 1200, 1000, $mods );
-  }
+	} // We now have $body and $cotise set.
+	
+	// Find out how we are arranged
+  if ( array_key_exists('rotate_pattern', $ord_data) )
+	  $rot = $ord_data['rotate_pattern'];
+	else 
+	  $rot = 0;
+	$mirrored = get_mod($node, 'sinister');
+	$inverted = get_mod($node, 'inverted');
 
-  // Create a mask, in case there is another ordinary "on" this one
-  $prev_ord_map = '<g  >' . $body . $cotise . '</g>';
+	// Start to build return string
+  $retval = apply_tincture ( $tinc1, $body, '', $rot, $mirrored, $inverted );
 
-  if ( $cot_col ) $cotise = apply_tincture ( $cot_col, $cotise, '', $rot, $rev, $inv );
-
-  // Apply tinctures
-  $body .= $cotise;
-  $retval .= apply_tincture ( $ord_body_col, $body, '', $rot, $rev, $inv );
-  if ( $fim_col != '' ) $retval = '<g stroke="' . rgb($fim_col) . '" stroke-width="15">' . "$retval</g>";
-  if ( get_mod($node,'depressed') ) $retval = '<g stroke="#000000" stroke-width="7">' . "$retval</g>";
-  if ( $body2_col != '' and array_key_exists('body2', $ord_data) ) {
-    $body2 = apply_tincture ( $body2_col, choose_fit($ord_data['body2']), '', $rot, $rev, $inv);
-    $body2_fill = add_def( 'pattern patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" ' .
+	// Do we need to add a second tincture as an overlay
+  if ( ($body2_col = get_tincture($node,'2')) != null ) {
+		if ( !array_key_exists('body2', $ord_data) )
+		  draw_message('warning','Unable to tincture ordinary as requested');
+		else {
+		  $body2_spec = choose_fit($ord_data['body2']);
+		  if ( $body2_spec{0} != '<' ) {
+			  // Is there a linetype here also
+				if ( ($div2ord = get_mod_node($node,'div2ord')) != null )
+				  $linetype = get_mod($div2ord,'linetype');
+			  $body2_spec = '<path d="' . makePath($body2_spec, $linetype, 30) . '" />';
+			}
+	    $body2 = apply_tincture ( $body2_col, $body2_spec, '', $rot, $mirrored, $inverted );
+      $body2_fill = add_def( 'pattern patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" ' .
                              'y="0" width="1000" height="1200"', $body2 );
-    $retval .= add_def() . '<g fill="url(#' . $body2_fill . ')">' . $body . '</g>';					
-  }
-  $retval = '<g><title>' . $subtype . '</title>' . $retval . '</g>';
-  // Does this ordinary go "between" some charges?
-  if ( $ord_between ) $retval .= makeCharge($ord_between, $mods);
-  // If there is something "ON" this ordinary, go find it
-  if ( $on_ord ) {
+      $retval .= add_def() . '<g fill="url(#' . $body2_fill . ')">' . $body . '</g>';					
+		}
+	}
+	
+	// Fimbriation goes on top of everything else
+	if ( ($fimbriated = get_mod_node($node,'fimbriated')) != null ) {
+		$fim_rgb = get_rgb( get_tincture($fimbriated) );
+	  $retval .= '<g stroke="' . $fim_rgb . '" stroke-width="15" fill="none">' . "$body</g>";
+	}
+  if ( get_mod($node,'depressed') ) 
+	  $retval .= '<g stroke="#000000" stroke-width="7">' . "$body</g>";
+		
+
+  // Now add anything that is "on" the ordinary
+	$on_object = '';
+  if ( ($on_ord = get_mod_node($node,'on')) != null ) {
     $what_on = $on_ord->firstChild;
     switch ( $what_on->nodeName ) {
       case 'ordinary':
+			  // If the underlying ordinary is mirrored, we need to mirror the "on" item so it ends up back the right way
+				if ( $mirrored ) {
+  				if ( ($sin = get_mod_node($what_on,'sinister')) != null )
+					  $what_on->removeChild($sin);
+					else
+					  $what_on->appendChild(make_mod('sinister'));
+				}
 			  // Make a normal ordinary, ignore any chief present
         chief('push','NC');
         $new_ord = makeOrdinary($what_on);
@@ -205,24 +209,53 @@ function makeOrdinary( $node ) {
 			  $patt_id = add_def ( 'pattern width="100%" height="100%" patternUnits="objectBoundingBox" preserveAspectRatio="none" viewBox="0 0 1000 ' .   $height . '"',
               $title . "<desc>Ordinary on ordinary</desc>" .
                $new_ord ); 
-          $temp = '<g fill="url(#' . $patt_id . ')"  >' . $prev_ord_map . '</g>';
-        if ( count($mods) > 0 ) // TODO - can we combine this with call above?
-          $temp = ImagePosition ( $temp, 1200, 1000, $mods );
+          $on_object = '<g fill="url(#' . $patt_id . ')"  >' . $body . '</g>';
 			  } else {
           $fill = add_def( 'pattern patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" ' .
                              'y="0" width="1000" height="1200"', $new_ord );
 					// TODO should this be a mask? Or a clip path?
-          $temp = '<g fill="url(#' . $fill . ')">' . $prev_ord_map . '</g>';					
+          $on_object = '<g fill="url(#' . $fill . ')">' . $body . '</g>';					
 			  } 
-				
-        $retval .= add_def() . $temp;
         break;
       case 'charge':
-        $retval .= makeCharge( $what_on, $mods );
+ 			  // If the underlying ordinary is mirrored, we need to mirror the "on" item so it ends up back the right way
+				if ( $mirrored ) {
+  				if ( ($sin = get_mod_node($what_on,'reversed')) != null )
+					  $what_on->removeChild($sin);
+					else
+					  $what_on->appendChild(make_mod('reversed'));
+				}
+        $on_object = makeCharge( $what_on );
         break;
     }
   }
-
-  return $retval;
+	
+	// Gather all the parts together
+  $retval = add_def() . $retval . $cotise . $on_object;
+	
+	// Are there any modifiers that affect over all position?
+	$transform = '';
+  if ( $mirrored ) {
+    $transform .= 'translate(1000,0) scale(-1,1) ';
+  }
+  if ( $inverted ) {
+    $transform .= 'translate(0,1200) scale(1,-1) ';
+  }
+  if ( get_mod($node,'enhanced') ) {
+    $yshift = -200; // Adjust to change movement for enhanced (match in layout.inc)
+    $transform .= 'translate(0,' . $yshift . ') ';
+  }
+  if ( get_mod($node,'abased' )) {
+    $yshift = 200; // As above
+    $transform .= 'translate(0, ' . $yshift . ') ';
+  }
+  if ( $transform != '' )
+    $retval = '<g transform="' . $transform . '">' . $retval . "</g>\n";
+	
+	// And finally...
+  $retval = '<g><title>' . $node->getAttribute('subtype') . '</title>' . $retval . '</g>';
+	
+	return $retval;
 }
+
 ?>

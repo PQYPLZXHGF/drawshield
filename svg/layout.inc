@@ -41,7 +41,7 @@
 // It should be assumed that the charge list will be provided in order,
 // left to right then top to bottom
 
-function place_charges ( $node, $placement, $mods = array() ) {
+function place_charges ( $node, $placement ) {
   global $dom;
 
   switch ($placement) {
@@ -109,6 +109,16 @@ function place_charges ( $node, $placement, $mods = array() ) {
     draw_message('internal', 'Bad placement list', __FILE__, __LINE__ );
     return '';
   }
+	// Are we on an ordinary that has been moved somewhere?
+/*	$sinister = false; $inverted = false; $enhanced = false; $abased = false;
+	if ( false and $node->parentNode->nodeName == 'modifier' and $node->parentNode->getAttribute('name') == 'on' ) {
+		$thing_we_are_on = $node->parentNode->parentNode;
+		$sinister = get_mod($thing_we_are_on,'sinister');
+		$inverted = get_mod($thing_we_are_on,'inverted');
+		$enhanced = get_mod($thing_we_are_on,'enhanced');
+		$abased = get_mod($thing_we_are_on,'abased');
+	} */
+	
   for ( $count = 0; $count < $num_of; $count++ ) {
     if ( $place_list[$count] == '' ) {
       draw_message('internal', 'Bad place item', __FILE__, __LINE__ );
@@ -117,20 +127,20 @@ function place_charges ( $node, $placement, $mods = array() ) {
     $items = explode(',', $place_list[$count]);
     if ( isset($items[0]) and $items[0] != '' ) {
       $cx = $items[0];
-      if ( in_array( 'sinister', $mods ))$cx = 1000 - $cx;
+  //    if ( $sinister )$cx = 1000 - $cx;
     }
     if ( isset($items[1]) and $items[1] != '' ) {
       $cy = $items[1];
-      if ( in_array( 'inverted', $mods )) $cy = 1200 - $cy;
-      if ( in_array( 'enhanced', $mods )) $cy -= 200;
-      if ( in_array( 'abased', $mods )) $cy += 200;
+    //  if ( $inverted) $cy = 1200 - $cy;
+   //   if ( $enhanced) $cy -= 200;
+   //   if ( $abased) $cy += 200;
     }
     if ( isset($items[2]) and $items[3] != '' ) $bbx = $items[2];
     if ( isset($items[3]) and $items[2] != '' ) $bby = $items[3];
     if ( isset($items[4]) and $items[4] != '' ) {
       $rot = $items[4];
-      if ( in_array ( 'sinister', $mods )) { if ( $rot != 0 ) { $rot += 90; } }
-      if ( in_array ( 'inverted', $mods )) { if ( $rot != 0 ) { $rot -= 90; } }
+  //    if ( $sinister ) { if ( $rot != 0 ) { $rot += 90; } }
+  //    if ( $inverted ) { if ( $rot != 0 ) { $rot -= 90; } }
     }
     if ( isset($items[5]) and $items[5] != '' ) $inv = $items[5];
     if ( isset($items[6]) and $items[6] != '' ) $rev = $items[6];
@@ -223,16 +233,13 @@ function PlaceCharge ( $node,  // images
         }
         break;
       case 'bendwise':
-        $movY = $chargeX * 0.707;
-        $retval = "<g transform=\"translate(0,$movY) rotate(-45)\"><desc>bendwise charge</desc>$retval</g>\n";
-        $chargeX = max ( $chargeX, $chargeY ) * 1.414;
-        $chargeY = $chargeX;
-        break;
       case 'bendsinwise':
-        $movX = $chargeY * 0.707;
-        $retval = "<g transform=\"translate($movX,0) rotate(45)\"><desc>bendwise sinister charge</desc>$retval</g>\n";
-        $chargeX = max ( $chargeX, $chargeY ) * 1.414;
+			  $angle = ($orientation == 'bendwise') ? "-45" : "45";
+			  $X2 = $chargeX / 2; $Y2 = $chargeY / 2;
+				$chargeX = ($chargeX + $chargeY) * 0.707;
+				$XY2 = $chargeX / 2;
         $chargeY = $chargeX;
+        $retval = "<g transform=\"translate($XY2,$XY2) rotate($angle) translate(-$X2,-$Y2)\"><desc>bendwise</desc>$retval</g>\n";
         break;
       case 'palewise':
         $do_turn = $chargeX >= $chargeY;

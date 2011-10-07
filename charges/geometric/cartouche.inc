@@ -27,7 +27,7 @@ $charge = array (
   'wflex' => 1.5,
   'hflex' => 2,
   'body' => '<rect x="0" y="0" height="400" width="100" rx="50" ry="50" />',
-  'orient_to_ordinary' => true,
+  'orient_to_ordinary' => -1,
 
 )
 

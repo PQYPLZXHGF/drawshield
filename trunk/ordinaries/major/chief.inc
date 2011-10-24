@@ -37,7 +37,7 @@ if ( $node == null ) {
   elseif ( $couped == 'sinister')
     $ordinary['shape_spec'] =  'X100Y-8a908c408E908g408';
   elseif ( get_mod($node,'triangular'))
-    $ordinary['shape_spec'] =  'V1X-8Y-8a1016D>719F<719';
+    $ordinary['shape_spec'] =  'V1X-8Y-8a1016D719F719';
   elseif ( get_mod($node,'lozengy'))
     $ordinary['body'] = '<path d="M0,0l83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 v300 l-83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 " />';
   else

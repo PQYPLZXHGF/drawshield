@@ -104,7 +104,7 @@ function rotatePath( $path, $theta ) {
       case 'l':
       case 'q':
       case 'c':
-        $newPath .= $command; // TODO and this, (not working for multi numbers....
+        $newPath .= $command; 
         for ( $j = 0; $j < count($numbers); $j += 2 )
           $newPath .= rotatePoint($numbers[$j], $numbers[$j+1], $theta ) . ' ';
         break;
@@ -326,7 +326,6 @@ function meetEdges($endDir, $endPos, $startDir, $startPos, $size ) {
     $subArg = $size;
     // Replace any references to size (as this is fixed for this path)
     $retval[2] = preg_replace_callback('/{S.*?}/', 'subFunc', $edgeMeets[$index]);
-    draw_message('warning',$index . ' '. $retval[2]);
     $retval[0] = 0;
     $retval[1] = 0;
   } else {
@@ -502,12 +501,7 @@ function makePath3 ( $shapeSpec, $lineType, $size = 60 ) {
   foreach ($edgeSpecs[0] as $edgeSpec) {
     $doMirror = false;
     $dir = $edgeSpec{0};
-    if ( $edgeSpec{1} == '>' or $edgeSpec{1} == '<' ) { // Not used anymore, but may still exist in some specs...
-      $offset = 2;
-    } else {
-      $offset = 1;
-    }
-    $dist = floatval(substr($edgeSpec,$offset));
+    $dist = floatval(substr($edgeSpec,1));
     if ( $dir == 'X' ) {
       $Xstart = $dist;
       continue;
@@ -549,7 +543,6 @@ function makePath3 ( $shapeSpec, $lineType, $size = 60 ) {
       $end = '-';
     }
 
-    //draw_message('warning',"$angle $dir $dist $flag $start $end " . (($doMirror)?'true':'false') );
     $edges[] = compact('dir','dist','flag','start','end','doMirror');
   }
   // We now have all the edge directions and lengths in an array, we calculate any
@@ -612,7 +605,6 @@ function makePath3 ( $shapeSpec, $lineType, $size = 60 ) {
       $retval .= str_repeat($path, $repeat);
       break;
     }
-    draw_message('warning',$dir . '@' . $path);
   }
   if ( $close_path ) $retval .= 'z';
   return $retval;
@@ -633,18 +625,8 @@ Function reverseSpec ( $shapeSpec ) {
   foreach ( array_reverse($matches[0]) as $match ) {
     // Get direction and distance
     $dir = $match{0};
-    if ( $match{1} == '>' or $match{1} == '<' )
-      $dist = substr($match,2);
-    else
-      $dist = substr($match,1);
-    if ( $dir == 'I' or $dir == 'O' ) {
-      $a = explode(',',$dist);
-      // swap directions to end point
-      $a[3] *= -1;
-      $a[4] *= -1;
-      $dist = implode(',',$a);
-      $retval .= $toReverse[$dir] . $dist;
-    } elseif ( $dir == 'X' or $dir == 'Y') {
+    $dist = substr($match,1);
+    if ( strpos ( "XYZQVO", $dir ) !== false ) {
       $retval .= $match;
     } else {
       $retval .= $toReverse[$dir] . $dist;
@@ -663,21 +645,22 @@ function parallelSpec ( $shapeSpec, $io, $size ) {
   $shape = array();
   $count = 0;
   $Xoff = 0; $Yoff = 0;
+  $flags = '';
   foreach ( $matches[0] as $match ) {
     // Get direction and distance
     $dir = $match{0};
-    if ( $match{1} == '>' or $match{1} == '<' )
-      $dist = floatval(substr($match,2));
-    else
-      $dist = floatval(substr($match,1));
+    $dist = floatval(substr($match,1));
     // Get the line spec for this direction
-    if ( $dir == 'X' ) { // TODO also match the other letters? Or not...?
+    if ( $dir == 'X' ) {
       $Xoff = $dist;
       continue;
     } elseif ( $dir == 'Y' ) {
       $Yoff = $dist;
       continue;
-    } // else
+    } elseif ( strpos("ZQVO", $dir) !== false ) {
+      $flags .= $dir . $dist;
+      continue;
+    }
     // Split the line spec into its parts
     $shape[$count++] = compact('dir','dist');
   }
@@ -703,7 +686,7 @@ function parallelSpec ( $shapeSpec, $io, $size ) {
     extract($shape[$i]); // creates $dir and $dist
     $retval .= $dir . $dist;
   }
-  return $retval;
+  return $flags . $retval;
 }
 
 ?>

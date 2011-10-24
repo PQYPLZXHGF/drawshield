@@ -20,7 +20,7 @@ $ordinary = array(
       
       'doc' => 'Stuff...',
       
-      'shape_spec' => array ( 'NC' => 'X-8Y500g508a508C>508E<508', 'CH' =>  'X-8Y800g508a508C>508E<608'),
+      'shape_spec' => array ( 'NC' => 'X-8Y500g508a508C508E508', 'CH' =>  'X-8Y800g508a508C508E608'),
 			'if_ord_on' => 'scale',
 );
 

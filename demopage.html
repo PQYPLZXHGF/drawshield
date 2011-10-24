@@ -97,11 +97,16 @@
             errorPara.appendChild(errorText);
             shieldImg.insertBefore(errorPara,null);
           } else {
-            //newNode = document.importNode(xmlhttp.responseXML.firstChild, true);
-            shieldImg.innerHTML = xmlhttp.responseText;
-            //shieldImg.appendChild(newNode);
+            if ( (navigator.userAgent.indexOf( "iPad" ) > 0) ||
+                      (navigator.userAgent.indexOf( "iPod" ) > 0) ||
+                      (navigator.userAgent.indexOf( "iPhone" ) > 0) 
+                    ) {
+              newNode = document.importNode(xmlhttp.responseXML.firstChild, true);
+              shieldImg.appendChild(newNode);
+            } else {
+              shieldImg.innerHTML = xmlhttp.responseText;
+            }
           }
-          asText = xmlhttp.responseText;
         }
       }
       function requestSVG(url,id) {
@@ -116,10 +121,10 @@
         shieldCaption.firstChild.nodeValue= document.forms['myform'].blazon.value;
         choice = document.forms['myform'].format.options.selectedIndex;
         format = document.forms['myform'].format.options[choice].value;
-        requestSVG( incDir + 'shield/drawshield.php?format=' + format + '&blazon=' + encodeURIComponent(document.forms['myform'].blazon.value),'shieldimg');
+        requestSVG( incDir + 'shield/drawshield.php?nolog=1&format=' + format + '&blazon=' + encodeURIComponent(document.forms['myform'].blazon.value),'shieldimg');
       };
       document.forms['myform'].textbutton.onclick = function () {
-        window.location.replace( incDir + 'shield/drawshield.php?asfile=1&blazon=' + encodeURIComponent(document.forms['myform'].blazon.value));
+        window.location.replace( incDir + 'shield/drawshield.php?asfile=1&nolog=1&blazon=' + encodeURIComponent(document.forms['myform'].blazon.value));
       };
       // Run automatically
       window.onload=requestSVG( incDir + 'shield/drawshield.php?nolog=1&blazon=' + encodeURIComponent( 'Argent the word shield; in chief the word Your; in base the word here sable'),'shieldimg');

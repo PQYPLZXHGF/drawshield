@@ -28,7 +28,7 @@ if ( $node != null ) {
     $node->removeChild($inv);
     $ordinary['shape_spec'] = array ( 'NC' => 'X450Y-100a100C589B889d141F848D848f141H889G589', 'CH' => 'X450Y200a100C289B889d141F848D848f141H889G289' );
   } else {
-    $ordinary['shape_spec'] = array ( 'NC' => 'X-100Y-200B848H848b141D889C800e141G800F889h141', 'CH' => 'X-100Y100B848H848b141D889C600e141G600F889h141' );
+    $ordinary['shape_spec'] = array ( 'NC' => 'X92Y-8B577H577a100c100D618C670e141G670F618g100a100', 'CH' => 'X92Y292B577H577a100c100D618C370e141G370F618g100a100' );
   }
 }
 ?>

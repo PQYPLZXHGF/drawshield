@@ -11,22 +11,233 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License. */
-
-function lineStraight( $dir, $dist ) {
-  switch ( strtoupper($dir) ) {
-  case 'A': return 'h' . $dist;
-  case 'B': return 'l' . ($dist*0.707) . ',' . ($dist*0.707);
-  case 'C': return 'v' . $dist;
-  case 'D': return 'l' . ($dist*-0.707) . ',' . ($dist*0.707);
-  case 'E': case 'P': return 'h-' . $dist;
-  case 'F': case 'Q': return 'l' . ($dist*-0.707) . ',' . ($dist*-0.707);
-  case 'G': case 'R': return 'v-' . $dist;
-  case 'H': case 'S': return 'l' . ($dist*0.707) . ',' . ($dist*-0.707);
-  case 'J': return 'l' . ($dist*0.5) . ',' . ($dist*-0.866);
-  case 'K': return 'l' . ($dist*0.5) . ',' . ($dist*0.866);
-  case 'L': return 'l' . ($dist*-0.5) . ',' . ($dist*0.866);
-  case 'M': return 'l' . ($dist*-0.5) . ',' . ($dist*-0.866);
+   
+function rotatePoint( $x, $y, $theta ) {
+  $retval = '';
+  switch ( $theta ) {
+    case 360:
+    case 0: // should not happen, but just in case...
+      $x2 = $x;
+      $y2 = $y;
+      break;
+    case 90:
+      $x2 = $y * -1;
+      $y2 = $x;
+      break;
+    case 180:
+      $x2 = $x * -1;
+      $y2 = $y * -1;
+      break;
+    case 270:
+      $x2 = $y;
+      $y2 = $x * -1;
+      break;
+    default:
+      $cos = cos(deg2rad($theta));
+      $sin = sin(deg2rad($theta));
+      $x2 = ($cos * $x) - ($sin * $y);
+      $y2 = ($cos * $y) + ($sin * $x);
+      $retval = sprintf('%.3f,%.3f',$x2,$y2);
+      break;
   }
+  if ($retval == '') $retval = "$x2,$y2";
+  return $retval;
+}
+
+function getNumbers( $argString ) {
+  $chunks = preg_split('/([ ,\-])/', $argString, null, PREG_SPLIT_DELIM_CAPTURE);
+  $argArray = array();
+  $negate = false;
+  foreach ($chunks as $chunk) {
+    if ( $chunk == '' or $chunk == ' ' or $chunk == ',' )
+      continue;
+    if ( $chunk == '-' ) {
+      $negate = true;
+      continue;
+    }
+    // We must have a number
+    if ( $negate ) {
+      $argArray[] = '-' . $chunk;
+      $negate = false;
+    }
+    else
+      $argArray[] = $chunk;
+  }
+  return $argArray;
+}
+
+function rotatePath( $path, $theta ) {
+  if ( $theta == 0 ) return $path;
+  $newPath = '';
+  $chunks = preg_split('/([a-z])/i', $path, null, PREG_SPLIT_DELIM_CAPTURE );
+  for ( $i = 0; $i < count($chunks); $i++ ) {
+    $command = $chunks[$i];
+    if ( isset($chunks[$i+1]) )
+      $numbers = getNumbers( $chunks[$i+1] );
+    switch ( strtolower($command) ) {
+      case 'h':
+        $x = $numbers[0];
+        if ($theta == 270 )
+          $newPath .= 'v' . ($x * -1);
+        elseif ( $theta == 180 )
+          $newPath .= 'h' . ($x * -1);
+        elseif ( $theta == 90 )
+          $newPath .= 'v' . $x;
+        else
+          $newPath .= 'l' . rotatePoint($x,0, $theta);
+        break;
+      case 'v':
+        $y = $numbers[0];
+        if ($theta == 270 )
+          $newPath .= 'h' . $y;
+        elseif ( $theta == 180 )
+          $newPath .= 'v' . ($y * -1);
+        elseif ( $theta == 90 )
+          $newPath .= 'h' . ($y * -1);
+        else
+          $newPath .= 'l' . rotatePoint(0,$y, $theta);
+        break;
+      case 'a':
+        list($rx,$ry,$rot,$arc,$sweep,$x,$y) = $numbers;
+        $newPath .= "a$rx,$ry " . (($rot + $theta)%360) . ",$arc,$sweep " . rotatePoint($x,$y, $theta);
+        break;
+      case 'l':
+      case 'q':
+      case 'c':
+        $newPath .= $command; // TODO and this, (not working for multi numbers....
+        for ( $j = 0; $j < count($numbers); $j += 2 )
+          $newPath .= rotatePoint($numbers[$j], $numbers[$j+1], $theta ) . ' ';
+        break;
+      case 'z':
+        $newPath .= $command;
+        break;
+    }
+    $newPath .= ' ';
+  }
+  return $newPath;
+}
+
+function mirrorPath ( $path, $axis = 'x' ) {
+  $newPath = '';
+  $chunks = preg_split('/([a-z])/i', $path, null, PREG_SPLIT_DELIM_CAPTURE );
+  for ( $i = 0; $i < count($chunks); $i++ ) {
+    $command = $chunks[$i];
+    if ( isset($chunks[$i+1]) ) {
+      $numbers = getNumbers($chunks[$i+1]);
+    }
+    switch ( strtolower($command) ) {
+      case 'h':
+        $x = $numbers[0];
+        if ($axis == 'x')
+          $newPath .= 'h' . $x;
+        else
+          $newPath .= 'h' . ($x * -1);
+        break;
+      case 'v':
+        $y = $numbers[0];
+        if ($axis == 'x')
+          $newPath .= 'v' . ($y * -1);
+        else
+          $newPath .= 'v' . $y;
+        break;
+      case 'a':
+        list($rx,$ry,$rot,$arc,$swap,$x,$y) = $numbers;
+        if ( $axis == 'x' ) {
+          $swap = $swap == 1? 0 : 1;
+          $newPath .= "a$rx,$ry " . (($rot + 180)%360) . ",$arc,$swap $x,$y";
+        } else {
+          $x *= -1;
+          $newPath .= "a$rx,$ry " . (($rot + 180)%360) . ",$arc,$swap $x,$y";
+        }
+        break;
+      case 'l':
+      case 'q':
+      case 'c':
+      case 's':
+        $newPath .= $command;
+        for ( $j = 0; $j < count($numbers); $j += 2 ) {
+          if ( $axis == 'x' ) {
+            $newX = $numbers[$j];
+            $newY = $numbers[$j+1] * -1;
+          } else {
+            $newX = $numbers[$j] * -1;
+            $newY = $numbers[$j+1];
+          }
+          $newPath .= "$newX,$newY ";
+        }
+        break;
+      case 'z':
+        $newPath .= $command;
+        break;
+    }
+    $newPath .= ' ';
+  }
+  return $newPath;
+}
+
+function scalePath ( $path, $xScale = 1, $yScale = 1 ) {
+  $newPath = '';
+  $chunks = preg_split('/([a-z])/i', $path, null, PREG_SPLIT_DELIM_CAPTURE );
+  for ( $i = 0; $i < count($chunks); $i++ ) {
+    $command = $chunks[$i];
+    if ( isset($chunks[$i+1]) ) {
+      $numbers = getNumbers($chunks[$i+1]);
+    }
+    switch ( strtolower($command) ) {
+      case 'h':
+        $x = $numbers[0];
+        if ($xScale == 1)
+          $newPath .= 'h' . $x;
+        else
+          $newPath .= 'h' . ($x * $xScale);
+        break;
+      case 'v':
+        $y = $numbers[0];
+        if ($yScale == 1)
+          $newPath .= 'v' . $y;
+        else
+          $newPath .= 'v' . ($y * $yScale);
+        break;
+      case 'a':
+        list($rx,$ry,$rot,$arc,$swap,$x,$y) = $numbers;
+        if ( $xScale != 1 ) {
+          $rx *= $xScale;
+          $x *= $xScale;
+        }
+        if ( $yScale != 1 ) {
+          $ry *= $yScale;
+          $y *= $yScale;
+        }
+        $newPath .= "a$rx,$ry $rot,$arc,$swap $x,$y";
+        break;
+      case 'l':
+      case 'q':
+      case 'c':
+      case 's':
+        $newPath .= $command;
+        for ( $j = 0; $j < count($numbers); $j += 2 ) {
+          $newY = $numbers[$j+1];
+          $newX = $numbers[$j];
+          if ( $xScale != 1 ) {
+            $newX *= $xScale;
+          }
+          if ( $yScale != 1 ) {
+            $newY *= $yScale;
+          }
+          $newPath .= "$newX,$newY ";
+        }
+        break;
+      case 'z':
+        $newPath .= $command;
+        break;
+    }
+    $newPath .= ' ';
+  }
+  return $newPath;
+}
+
+function lineStraight( $angle, $dist ) {
+  return rotatePath('h'.$dist, $angle);
 }
 
 
@@ -78,7 +289,10 @@ $edgeMeets = array (
      /*  45 deg 0 */    'X45-i0'=>'-H',  'X45-o0'=>'+H',  'X45i-0'=>'+S',  'X45ii0'=>'-K',  'X45io0'=>'+L',  'X45o-0'=>'-S',  'X45oi0'=>'-L',  'X45oo0'=>'+K',
      /*  45 deg 1 */    'X45-i1'=>'+S',  'X45-o1'=>'-S',  'X45i-1'=>'-H',  'X45ii1'=>'-K',  'X45io1'=>'-L',  'X45o-1'=>'+H',  'X45oi1'=>'+L',  'X45oo1'=>'+K',
 
-     /* 360 deg n/a */
+     /* 0 deg */        'XAo-' => 'v{S*0.5}', 'XAi-' => 'v-{S*0.5}', 'XBo-' => 'l-{S*0.353},{S*0.353}', 'XBi-' => 'l{S*0.353},-{S*0.353}', 
+     /* 0 deg */        'XCo-' => 'h-{S*0.5}', 'XCi-' => 'h{S*0.5}', 'XDo-' => 'l-{S*0.353},-{S*0.353}', 'XDi-' => 'l{S*0.353},{S*0.353}', 
+     /* 0 deg */        'XEo-' => 'v-{S*0.5}', 'XEi-' => 'v{S*0.5}', 'XFo-' => 'l{S*0.353},-{S*0.353}', 'XFi-' => 'l-{S*0.353},{S*0.353}', 
+     /* 0 deg */        'XGo-' => 'h{S*0.5}', 'XGi-' => 'h-{S*0.5}', 'XHo-' => 'l{S*0.353},{S*0.353}', 'XHi-' => 'l-{S*0.353},-{S*0.353}', 
 
      /* 300 deg 0 */   'X300-i0'=>'+P', 'X300-o0'=>'-P', 'X300i-0'=>'+Q', 'X300ii0'=>'+P', 'X300io0'=>'+P', 'X300o-0'=>'+Q', 'X300oi0'=>'-P', 'X300oo0'=>'-P',
      /* 300 deg 0 */   'X300-i1'=>'+Q', 'X300-o1'=>'-Q', 'X300i-1'=>'+R', 'X300ii1'=>'+P', 'X300io1'=>'-P', 'X300o-1'=>'+P', 'X300oi1'=>'+P', 'X300oo1'=>'-P',
@@ -93,49 +307,34 @@ $edgeMeets = array (
      /*  60 deg 0 */    'X60-i1'=>'-Q',  'X60-o1'=>'+Q',  'X60i-1'=>'+P',  'X60ii1'=>'-P',  'X60io1'=>'+R',  'X60o-1'=>'-P',  'X60oi1'=>'-R',  'X60oo1'=>'+P',
 );
 
-$curveMeets = array (
-        'A0' => '+0', 'B0' => '+T', 'C0' => '+S', 'D0' => '-T', 'E0' => '+0', 'F0' => '-T', 'G0' => '-S', 'H0' => '-T', 'I0' => '+0', 'O0' => '+0',
-        'A1' => '-S', 'B1' => '-T', 'C1' => '+0', 'D1' => '+T', 'E1' => '+S', 'F1' => '+T', 'G1' => '+0', 'H1' => '-T', 'I1' => '+0', 'O1' => '+0',
-);
-
-function meetCurves($endDir, $endPos, $startDir, $startPos, $size ) {
-  global $curveMeets;
-
-  if ( $endPos == '-' and $startPos == '-' ) return array (0,0); // No action if both are in middle
-  $endDir = strtoupper($endDir);
-  $startDir = strtoupper($startDir);
-  // Special treatment for curves
-  if ( $endDir == 'I' or $endDir == 'O' ) {
-    $retval[0] = subSize($curveMeets[$startDir . '0'], $size);
-    $retval[1] = subSize($curveMeets[$startDir . '1'], $size);
-  } elseif ( $startDir == 'I' or $startDir == 'O' ) {
-    $retval[0] = subSize($curveMeets[$endDir . '0'], $size);
-    $retval[1] = subSize($curveMeets[$endDir . '1'], $size);
-  }
-  // Table above is for 'i', reverse if Pos is 'o'
-  if ( ($endPos == 'o' or $startPos == 'o') ) { //xor ( $endDir == 'O' or $startDir == 'O') ) {
-    $retval[0] *= -1;
-    $retval[1] *= -1;
-  }
-  return $retval;
-}
-
 function meetEdges($endDir, $endPos, $startDir, $startPos, $size ) {
   global $edgeMeets;
+  global $subArg;
 
+  // Calculate the adjustment to the length of the edge to take account of whether they end in the outside, inside or middle
+  if ( $endPos == '-' and $startPos == '-' ) return array (0,0); // No action if both are in middle
   $endDir = strtoupper($endDir);
   $startDir = strtoupper($startDir);
   // We are calculating the CLOCKWISE angle through which we would turn to be on the new "heading"
   $dirAngles = array ( 'A' => 0, 'B' => 45, 'C' => 90, 'D' => 135, 'E' => 180, 'F' => 225, 'G' => 270, 'H' => 315,
-                                                                   'P' => 180, 'Q' => 225, 'R' => 270, 'S' => 315,
                         'J' => 300, 'K' => 60, 'L' => 120, 'M' => 240, );
   $angle = $dirAngles[$startDir] - $dirAngles[$endDir];
   if ( $angle < 0 ) $angle += 360;
-  if ( ($endPos == '-' and $startPos == '-') or $angle == 180 or $angle == 0 ) return array (0,0); // No action if both are in middle
-  $index = 'X' . $angle . $endPos . $startPos ; // From end of one line to start of next
-  if ( !array_key_exists($index . '0', $edgeMeets)) return array (0,0);
-  $retval[0] = subSize($edgeMeets[$index . '0'], $size);
-  $retval[1] = subSize($edgeMeets[$index . '1'], $size);
+  if ( $endDir == $startDir ) { // For straight connections we can't just adjust the length but need to insert a move
+    $index = 'X' . $startDir . $endPos . $startPos;
+    if ( !array_key_exists($index, $edgeMeets)) return array (0,0); // we have only done some of the combinations
+    $subArg = $size;
+    // Replace any references to size (as this is fixed for this path)
+    $retval[2] = preg_replace_callback('/{S.*?}/', 'subFunc', $edgeMeets[$index]);
+    draw_message('warning',$index . ' '. $retval[2]);
+    $retval[0] = 0;
+    $retval[1] = 0;
+  } else {
+    $index = 'X' . $angle . $endPos . $startPos ; // From end of one line to start of next
+    if ( !array_key_exists($index . '0', $edgeMeets)) return array (0,0);
+    $retval[0] = subSize($edgeMeets[$index . '0'], $size);
+    $retval[1] = subSize($edgeMeets[$index . '1'], $size);
+  }
   return $retval;
 }
 
@@ -166,25 +365,14 @@ function makeOffset ( $dir, $disp, $io, $size ) {
               break;
     case 'D': $x += $dispH; $y -= $dispH; $x -= $sizeH * $ioF; $y -= $sizeH * $ioF;
               break;
-    case 'P':
     case 'E': $x += $disp; $y -= $size * $ioF;
               break;
-    case 'Q':
     case 'F': $x += $dispH; $y += $dispH; $x += $sizeH * $ioF; $y -= $sizeH * $ioF;
               break;
-    case 'R':
     case 'G': $y += $disp; $x += $size * $ioF;
               break;
-    case 'S':
     case 'H': $x -= $dispH; $y += $dispH; $x += $sizeH * $ioF; $y += $sizeH * $ioF;
               break;
-    case 'J': $x -= $dispU; $y += $dispT; $x += $sizeT * $ioF; $y += $sizeU * $ioF;
-              break;
-    case 'K': $x -= $dispU; $y -= $dispT; $x -= $sizeT * $ioF; $y += $sizeU * $ioF;
-              break;
-    case 'L': $x += $dispU; $y -= $dispT; $x -= $sizeT * $ioF; $y -= $sizeU * $ioF;
-              break;
-    case 'M': $x += $dispU; $y += $dispT; $x += $sizeT * $ioF; $y -= $sizeU * $ioF; break;
   }
   return array( $x, $y );
 }
@@ -206,107 +394,6 @@ function subFunc( $match ) {
   return $match; // should not happen
 }
 
-$lineSpecs = array (
-//  'indented' =>  'A:*:{S*2}:-:-:l{S/2},{S/2} {S},-{S} {S/2},{S/2}   B:*:{S*2}:-:-:h{S*1.414}v{S*1.414}   C:*:{S*2}:-:-:l-{S/2},{S/2} {S},{S} -{S/2},{S/2}   D:*:{S*2}:-:-:v{S*1.414}h-{S*1.414}  ' .
-                 'E:*:{S*2}:-:-:l-{S/2},-{S/2} -{S},{S} -{S/2},-{S/2}   F:*:{S*2}:-:-:h-{S*1.414}v-{S*1.414}   G:*:{S*2}:-:-:l{S/2},-{S/2} -{S},-{S} {S/2},-{S/2}   H:*:{S*2}:-:-:v-{S*1.414}h{S*1.414}    K:*:{S*2}:-:-:l{S*1.366},{S*0.366} -{S*0.366},{S*1.366}',
-  'angled' => 'A:0:100:i:o:h50v-{S}h50   B:0:100:i:o:l35.4,35.4 {S*0.707},-{S*0.707} l35.4,35.4   C:0:100:i:o:v50h{S}v50   D:0:100:o:i:l-35.4,35.4 -{S*0.707},-{S*0.707} l-35.4,35.4   E:0:100:i:o:h-50v{S}h-50   F:0:100:i:o:l-35.4,-35.4 -{S*0.707},{S*0.707} l-35.4,-35.4   G:0:100:i:o:v-50h-{S}v-50   H:0:100:o:i:l35.4,-35.4 {S*0.707},{S*0.707} l35.4,-35.4',
-  'bevilled' => 'A:0:100:i:o:h75l-50,-{S}h75   B:0:100:i:o:l35.4,35.4l{S*0.353},{S*0.353}v-{S*1.414}l{S*0.353},{S*0.353}l35.4,35.4   C:0:100:i:o:v75l{S},-50v75   D:0:100:o:i:l-35.3,35.3l-{S*0.353},{S*0.353}v{S*1.414}l-{S*0.353},{S*0.353}l-35.3,35.3   E:0:100:i:o:h-75l50,{S}h-75   F:0:100:i:o:l-35.3,-35.3l-{S*0.353},-{S*0.353}v-{S*1.414}l-{S*0.353},-{S*0.353}l-35.3,-35.3   G:0:100:i:o:v-75l-{S},50v-75   H:0:100:o:i:l35.4,-35.4l{S*0.353},-{S*0.353}v{S*1.414}l{S*0.353},-{S*0.353}l35.4,-35.4',
-  'escartelly' => 'A:0:100:i:i:v-{S}h100v{S}   B:0:100:i:i:l{S*0.707},-{S*0.707} 70.7,70.7 -{S*0.707},{S*0.707}   C:0:100:i:i:h{S}v100h-{S}   D:0:100:o:o:l-{S*0.707},-{S*0.707} -70.7,70.7 {S*0.707},{S*0.707}   E:0:100:o:o:v-{S}h-100v{S}   F:0:100:o:o:l{S*0.707},-{S*0.707} -70.7,-70.7 -{S*0.707},{S*0.707}   G:0:100:o:o:h{S}v-100h-{S}   H:0:100:o:o:l-{S*0.707},-{S*0.707} 70.7,-70.7 {S*0.707},{S*0.707}',
-  'nowy' => 'A:0:100:i:i:a50,{S},0,0,1,100,0   B:0:100:i:i:a50,{S},45,0,1,70.7,70.7   C:0:100:i:i:a{S},50,0,0,1,0,100   D:0:100:o:o:a50,{S},-45,0,0,-70.7,70.7   E:0:100:o:o:a50,{S},0,0,0,-100,0   F:0:100:o:o:a50,{S},45,0,0,-70.7,-70.7   G:0:100:o:o:a{S},50,0,0,0,0,-100   H:0:100:i:i:a50,{S},-45,0,1,70.7,-70.7',
-  'arched' => 'A:1:{D}:i:i:a{D},{S*4} 0,0,1,{D},0   B:1:{D}:i:i:a{D},{S*4} 45,0,1,{D*0.707},{D*0.707}   C:1:{D}:i:i:a{S*4},{D} 0,0,1,0,{D}   D:1:{D}:o:o:a{D},{S*4} -45,0,0 -{D*0.707},{D*0.707}   E:1:{D}:o:o:a{D},{S*4} 0,0,0,-{D},0   F:1:{D}:o:o:a{D},{S*4} 45,0,0 -{D*0.707},-{D*0.707}   G:1:{D}:o:o:a{S*4},{D} 0,0,0 0,-{D}   H:1:{D}:i:i:a{D},{S*4} -45,0,1,{D*0.707},-{D*0.707}',
-  'double-arched' => 'A:2:{D/2}:i:i:a{D/2},{S*4} 0,0,1,{D/2},0   B:2:{D/2}:i:i:a{D/2},{S*4} 45,0,1 {D*0.354},{D*0.354}   C:2:{D/2}:i:i:a{S*4},{D/2} 0,0,1 0,{D/2}   D:2:{D/2}:o:o:a{D/2},{S*4} -45,0,0 -{D*0.354},{D*0.354}   E:2:{D/2}:o:o:a{D/2},{S*4} 0,0,0,-{D/2},0   F:2:{D/2}:o:o:a{D/2},{S*4} 45,0,0 -{D*0.354},-{D*0.354}   G:2:{D/2}:o:o:a{S*4},{D/2} 0,0,0 0,-{D/2}   H:2:{D/2}:o:o:a{D/2},{S*4} -45,0,1 {D*0.354},-{D*0.354}',
-  'none' => 'A:*:99999:-:-:   B:*:99999:-:-:   C:*:99999:-:-:   D:*:99999:-:-:   E:*:99999:-:-:   F:*:99999:-:-:   G:*:99999:-:-:   H:*:99999:-:-:   J:*:99999:-:-:   K:*:99999:-:-:   L:*:99999:-:-:   M:*:99999:-:-:',
-  'urdy' => 'A:*:{S}:i:i:l{S/4},-{S/4} 0,-{S/2} {S/4},-{S/4} {S/4},{S/4} 0,{S/2} {S/4},{S/4}   C:*:{S}:i:i:l{S/4},{S/4} {S/2},0 {S/4},{S/4} -{S/4},{S/4} -{S/2},0 -{S/4},{S/4}   E:*:{S}:i:i:l-{S/4},{S/4} 0,{S/2} -{S/4},{S/4} -{S/4},-{S/4} 0,-{S/2} -{S/4},-{S/4}   G:*:{S}:i:i:l-{S/4},-{S/4} -{S/2},0 -{S/4},-{S/4} {S/4},-{S/4} {S/2},0 {S/4},-{S/4}',
-  'invected' => 'A:*:{S*2}:i:i:a{S*2},{S*5},0,0,1,{S*2},0   B:*:{S*2}:i:i:a{S*2},{S*5} 45,0,1 {S*1.414},{S*1.414}   C:*:{S*2}:i:i:a{S*5},{S*2} 0,0,1 0,{S*2}    D:*:{S*2}:i:i:a{S*2},{S*5} -45,0,1 -{S*1.414},{S*1.414}   E:*:{S*2}:i:i:a{S*2},{S*5},0,0,1,-{S*2},0    F:*:{S*2}:i:i:a{S*2},{S*5} 45,0,1 -{S*1.414},-{S*1.414}    G:*:{S*2}:i:i:a{S*5},{S*2} 0,0,1 0,-{S*2}    H:*:{S*2}:i:i:a{S*2},{S*5} -45,0,1 {S*1.414},-{S*1.414}',
-  'wavy' => 'A:*:200:i:i:a100,{S*5},0,0,1,100,0a100,{S*5},0,0,0,100,0   B:*:200:i:i:a100,{S*5} 45,0,1 70.7,70.7a100,{S*5} 45,0,0 70.7,70.7   C:*:200:i:i:a{S*5},100 0,0,1 0,100a{S*5},100 0,0,0 0,100    D:*:200:i:i:a100,{S*5} -45,0,1 -70.7,70.7a100,{S*5} -45,0,0 -70.7,70.7   ' .
-            'E:*:200:i:i:a100,{S*5},0,0,1,-100,0a100,{S*5},0,0,0,-100,0    F:*:200:i:i:a100,{S*5} 45,0,1 -70.7,-70.7a100,{S*5} 45,0,0 -70.7,-70.7    G:*:200:i:i:a{S*5},100 0,0,1 0,-100a{S*5},100 0,0,0 0,-100    H:*:200:i:i:a100,{S*5} -45,0,1 70.7,-70.7a100,{S*5} -45,0,0 70.7,-70.7',
-  'engrailed' => 'A:*:{S*2}:o:o:a{S*2},{S*5},0,0,0 {S*2},0   B:*:{S*2}:o:o:a{S*2},{S*5} 45,0,0 {S*1.414},{S*1.414}   C:*:{S*2}:o:o:a{S*5},{S*2} 0,0,0 0,{S*2}    D:*:{S*2}:o:o:a{S*2},{S*5} -45,0,0 -{S*1.414},{S*1.414}   E:*:{S*2}:o:o:a{S*2},{S*5},0,0,0 -{S*2},0    F:*:{S*2}:o:o:a{S*2},{S*5} 45,0,0 -{S*1.414},-{S*1.414}    G:*:{S*2}:o:o:a{S*5},{S*2} 0,0,0 0,-{S*2}    H:*:{S*2}:o:o:a{S*2},{S*5} -45,0,0 {S*1.414},-{S*1.414}',
-'indented' =>
-  'A:*:{S*2}:-:-:l{S/2},-{S/2} l{S},{S} l{S/2},-{S/2}     ' .
-  'B:*:{S*2}:-:-:h{S*0.707} v{S*1.414} h{S*0.707}     ' .
-  'C:*:{S*2}:-:-:l{S/2},{S/2} l-{S},{S} l{S/2},{S/2}     ' .
-  'D:*:{S*2}:-:-:v{S*0.707} h-{S*1.414} v{S*0.707}     ' .
-  'E:*:{S*2}:-:-:l-{S/2},-{S/2} l-{S},{S} l-{S/2},-{S/2}     ' .
-  'F:*:{S*2}:-:-:h-{S*0.707} v-{S*1.414} h-{S*0.707}     ' .
-  'G:*:{S*2}:-:-:l{S/2},-{S/2} l-{S},-{S} l{S/2},-{S/2}     ' .
-  'H:*:{S*2}:-:-:h{S*0.707} v-{S*1.414} h{S*0.707}     ' .
-  'P:*:{S*2}:-:-:l-{S/2},{S/2} l-{S},-{S} l-{S/2},{S/2}     ' .
-  'Q:*:{S*2}:-:-:v-{S*0.707} h-{S*1.414} v-{S*0.707}     ' .
-  'R:*:{S*2}:-:-:l-{S/2},-{S/2} l{S},-{S} l-{S/2},-{S/2}     ' .
-  'S:*:{S*2}:-:-:v-{S*0.707} h{S*1.414} v-{S*0.707}     ' .
-  '',
-'embattled' =>
-  'A:*:{S*2}:-:-:v-{S/2}h{S} v{S} h{S} v-{S/2}    ' .
-  'B:*:{S*2}:-:-:l{S*0.353},-{S*0.353}l{S*0.707},{S*0.707} l-{S*0.707},{S*0.707} l{S*0.707},{S*0.707} l{S*0.353},-{S*0.353}    ' .
-  'C:*:{S*2}:-:-:h{S/2}v{S} h-{S} v{S} h{S/2}    ' .
-  'D:*:{S*2}:-:-:l{S*0.353},{S*0.353}l-{S*0.707},{S*0.707} l-{S*0.707},-{S*0.707} l-{S*0.707},{S*0.707} l{S*0.353},{S*0.353}    ' .
-  'E:*:{S*2}:-:-:v-{S/2} h-{S} v{S}h-{S} v-{S/2}     ' .
-  'F:*:{S*2}:-:-:l{S*0.353},-{S*0.353} l-{S*0.707},-{S*0.707} l-{S*0.707},{S*0.707}l-{S*0.707},-{S*0.707} l{S*0.353},-{S*0.353}     ' .
-  'G:*:{S*2}:-:-:h{S/2} v-{S} h-{S}v-{S} h{S/2}     ' .
-  'H:*:{S*2}:-:-:l{S*0.353},{S*0.353} l{S*0.707},-{S*0.707} l-{S*0.707},-{S*0.707}l{S*0.707},-{S*0.707} l{S*0.353},{S*0.353}     ' .
-  'P:*:{S*2}:-:-:v{S/2}h-{S} v-{S} h-{S} v{S/2}    ' .
-  'Q:*:{S*2}:-:-:l-{S*0.353},{S*0.353}l-{S*0.707},-{S*0.707} l{S*0.707},-{S*0.707} l-{S*0.707},-{S*0.707} l-{S*0.353},{S*0.353}    ' .
-  'R:*:{S*2}:-:-:h-{S/2}v-{S} h{S} v-{S} h-{S/2}    ' .
-  'S:*:{S*2}:-:-:l-{S*0.353},-{S*0.353}l{S*0.707},-{S*0.707} l{S*0.707},{S*0.707} l{S*0.707},-{S*0.707} l-{S*0.353},-{S*0.353}    ' .
-  '',
-  'battled-counter' => 'A:*:{S*2}:i:i:h{S}v{S}h{S}v-{S}    C:*:{S*2}:i:i:v{S}h{S}v{S}h-{S}    ' .
-                'E:*:{S*2}:i:i:h-{S}v-{S}h-{S}v{S}    G:*:{S*2}:i:i:v-{S}h-{S}v-{S}h{S}    ' .
-                'B:*:{S*2}:i:i:l{S*0.707},-{S*0.707} {S*0.707},{S*0.707} -{S*0.707},{S*0.707} {S*0.707},{S*0.707}   ' .
-                'F:*:{S*2}:i:i:l-{S*0.707},{S*0.707} -{S*0.707},-{S*0.707} {S*0.707},-{S*0.707} -{S*0.707},-{S*0.707}   ' .
-                'H:*:{S*2}:i:i:l{S*0.707},-{S*0.707} -{S*0.707},-{S*0.707} {S*0.707},-{S*0.707} {S*0.707},{S*0.707}    ' .
-                'D:*:{S*2}:i:i:l-{S*0.707},{S*0.707} {S*0.707},{S*0.707} -{S*0.707},{S*0.707} -{S*0.707},-{S*0.707}',
-  'rayonny' => 'A:*:{S}:o:o:a{S/4},{S*0.4}-30,0,0,{S/4},{S/2}a{S/4},{S*0.4}-30,0,1,{S/4},{S/2}a{S/4},{S*0.4},30,0,0,{S/4},-{S/2}a{S/4},{S*0.4},30,0,1,{S/4},-{S/2}    ' .
-               'B:*:{S}:o:o:a{S/4},{S*0.4},15,0,0,-{S*0.177},{S*0.53}a{S/4},{S*0.4},15,0,1,-{S*0.177},{S*0.53}a{S/4},{S*0.4},75,0,0,{S*0.53},-{S*0.177}a{S/4},{S*0.4},75,0,1,{S*0.53},-{S*0.177}    ' .
-               'C:*:{S}:o:o:a{S*0.4},{S/4}-30,0,0,-{S/2},{S/4}a{S*0.4},{S/4}-30,0,1,-{S/2},{S/4}a{S*0.4},{S/4},30,0,0,{S/2},{S/4}a{S*0.4},{S/4},30,0,1,{S/2},{S/4}    ' .
-               'D:*:{S}:o:o:a{S/4},{S*0.4},-75,0,0,-{S*0.53},-{S*0.177}a{S/4},{S*0.4},-75,0,1,-{S*0.53},-{S*0.177}a{S/4},{S*0.4},-15,0,0,{S*0.177},{S*0.53}a{S/4},{S*0.4},-15,0,1,{S*0.177},{S*0.53}    ' .
-               'E:*:{S}:o:o:a{S/4},{S*0.4}-30,0,0,-{S/4},-{S/2}a{S/4},{S*0.4}-30,0,1,-{S/4},-{S/2}a{S/4},{S*0.4},30,0,0,-{S/4},{S/2}a{S/4},{S*0.4},30,0,1,-{S/4},{S/2}    ' .
-               'F:*:{S}:o:o:a{S/4},{S*0.4},15,0,0,{S*0.177},-{S*0.53}a{S/4},{S*0.4},15,0,1,{S*0.177},-{S*0.53}a{S/4},{S*0.4},75,0,0,-{S*0.53},{S*0.177}a{S/4},{S*0.4},75,0,1,-{S*0.53},{S*0.177}    ' .
-               'G:*:{S}:o:o:a{S*0.4},{S/4}-30,0,0,{S/2},-{S/4}a{S*0.4},{S/4}-30,0,1,{S/2},-{S/4}a{S*0.4},{S/4},30,0,0,-{S/2},-{S/4}a{S*0.4},{S/4},30,0,1,-{S/2},-{S/4}    ' .
-               'H:*:{S}:o:o:a{S/4},{S*0.4},-75,0,0,{S*0.53},{S*0.177}a{S/4},{S*0.4},-75,0,1,{S*0.53},{S*0.177}a{S/4},{S*0.4},-15,0,0,-{S*0.177},-{S*0.53}a{S/4},{S*0.4},-15,0,1,-{S*0.177},-{S*0.53}    ',
-   'potenty' => 'A:*:{S*2}:i:i:h{S*0.75}v-{S/2}h-{S/2}v-{S/2}h{S*1.5}v{S/2}h-{S/2}v{S/2}h{S*0.75}    ' .
-                'B:*:{S*2}:i:i:l{S*.53},{S*0.53} {S*0.354},-{S*0.354} -{S*0.354},-{S*0.354} {S*0.354},-{S*0.354} {S*1.06},{S*1.06} -{S*0.354},{S*0.354} -{S*0.354},-{S*0.354} -{S*0.354},{S*0.354} {S*0.53},{S*0.53}    ' .
-                'C:*:{S*2}:i:i:v{S*0.75}h-{S/2}v-{S/2}h-{S/2}v{S*1.5}h{S/2}v-{S/2}h{S/2}v{S*0.75}    ' .
-                'D:*:{S*2}:i:i:l-{S*.53},{S*0.53} {S*0.354},{S*0.354} {S*0.354},-{S*0.354} {S*0.354},{S*0.354} -{S*1.06},{S*1.06} -{S*0.354},-{S*0.354} {S*0.354},-{S*0.354} -{S*0.354},-{S*0.354} -{S*0.53},{S*0.53}    ' .
-                'E:*:{S*2}:i:i:h-{S*0.75}v{S/2}h{S/2}v{S/2}h-{S*1.5}v-{S/2}h{S/2}v-{S/2}h-{S*0.75}    ' .
-                'F:*:{S*2}:i:i:l-{S*.53},-{S*0.53} -{S*0.354},{S*0.354} {S*0.354},{S*0.354} -{S*0.354},{S*0.354} -{S*1.06},-{S*1.06} {S*0.354},-{S*0.354} {S*0.354},{S*0.354} {S*0.354},-{S*0.354} -{S*0.53},-{S*0.53}    ' .
-                'G:*:{S*2}:i:i:v-{S*0.75}h{S/2}v{S/2}h{S/2}v-{S*1.5}h-{S/2}v{S/2}h-{S/2}v-{S*0.75}    ' .
-                'H:*:{S*2}:i:i:l{S*.53},-{S*0.53} -{S*0.354},-{S*0.354} -{S*0.354},{S*0.354} -{S*0.354},-{S*0.354} {S*1.06},-{S*1.06} {S*0.354},{S*0.354} -{S*0.354},{S*0.354} {S*0.354},{S*0.354} {S*0.53},-{S*0.53}    ',
-   'dovetailed' => 'A:*:{S*2}:i:i:l{S*0.95},0 -{S*0.9},-{S} {S*1.9},0 -{S*0.9},{S} {S*0.95},0    ' .
-                   'B:*:{S*2}:i:i:l{S*0.672},{S*0.672} 0,-{S*1.345} {S*1.3433},{S*1.3433} -{S*1.345},0 {S*0.672},{S*0.672}    ' .
-                   'C:*:{S*2}:i:i:l0,{S*0.95} -{S},-{S*0.9} 0,{S*1.9} {S},-{S*0.9} 0,{S*0.95}    ' .
-                   'D:*:{S*2}:i:i:l-{S*0.672},{S*0.672} {S*1.345},0 -{S*1.3433},{S*1.3433} 0,-{S*1.345} -{S*0.672},{S*0.672}    ' .
-                   'E:*:{S*2}:i:i:l-{S*0.95},0 {S*0.9},{S} -{S*1.9},0 {S*0.9},-{S} -{S*0.95},0    ' .
-                   'F:*:{S*2}:i:i:l-{S*0.672},-{S*0.672} 0,{S*1.345} -{S*1.3433},-{S*1.3433} {S*1.345},0 -{S*0.672},-{S*0.672}    ' .
-                   'G:*:{S*2}:i:i:l0,-{S*0.95} {S},{S*0.9} 0,-{S*1.9} -{S},{S*0.9} 0,-{S*0.95}    ' .
-                   'H:*:{S*2}:i:i:l{S*0.672},-{S*0.672} -{S*1.345},0 {S*1.3433},-{S*1.3433} 0,{S*1.345} {S*0.672},-{S*0.672}    ',
-   'dancetty' => 'A:*:{S*3}:i:i:l{S*1.5},-{S} {S*1.5},{S}     C:*:{S*3}:i:i:l{S},{S*1.5} -{S},{S*1.5}     ' .
-                 'B:*:{S*2.828}:i:i:l{S*1.707},{S*0.293} {S*0.293},{S*1.707}    F:*:{S*2.828}:o:o:l -{S*0.293},-{S*1.707} -{S*1.707},-{S*0.293}    ' .
-                 'E:*:{S*3}:o:o:l-{S*1.5},-{S} -{S*1.5},{S}     G:*:{S*3}:o:o:l{S},-{S*1.5} -{S},-{S*1.5}     ' .
-                 'D:*:{S*2.828}:i:i:l-{S*0.293},{S*1.707} -{S*1.707},{S*0.293}    H:*:{S*2.828}:o:o:l{S*1.707},-{S*0.293} {S*0.293},-{S*1.707}    ',
-   'battled-embattled' =>
-           'A:*:{S*2}:i:i:l{S/6},0 0,-{S/3} {S/3},0 0,-{S/3} {S/3},0 0,-{S/3} {S/3},0 0,{S/3} {S/3},0 0,{S/3} {S/3},0 0,{S/3} {S/6},0    ' .
-           'B:*:{S*2}:i:i:l{S*0.118},{S*0.118} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} -{S*0.235},{S*0.235} {S*0.235},{S*0.235} -{S*0.235},{S*0.235} {S*0.235},{S*0.235} -{S*0.235},{S*0.235} {S*0.118},{S*0.118}    ' .
-           'C:*:{S*2}:i:i:l0,{S/6} -{S/3},0 0,{S/3} -{S/3},0 0,{S/3} -{S/3},0 0,{S/3} {S/3},0 0,{S/3} {S/3},0 0,{S/3} {S/3},0 0,{S/6}    ' .
-           'H:*:{S*2}:i:i:l{S*0.118},-{S*0.118} -{S*0.235},-{S*0.235} {S*0.235},-{S*0.235} -{S*0.235},-{S*0.235} {S*0.235},-{S*0.235} -{S*0.235},-{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.235},-{S*0.235} {S*0.235},{S*0.235} {S*0.118},-{S*0.118}    ',
-   'raguly' => 'A:*:{S*2}:i:i:l{S},0 -{S*0.2},-{S} {S},0 {S*0.2},{S}    ' .
-               'B:*:{S*2}:i:i:l{S*0.707},{S*0.707} {S*0.629},-{S*0.777} {S*0.707},{S*0.707} -{S*0.629},{S*0.777}    ' .
-               'C:*:{S*2}:i:i:l0,{S} -{S},-{S*0.2} 0,{S} {S},{S*0.2}    ' .
-               'D:*:{S*2}:i:i:l-{S*0.707},{S*0.707} {S*0.777},{S*0.629} -{S*0.707},{S*0.707} -{S*0.777},-{S*0.629}    ' .
-               'E:*:{S*2}:i:i:l-{S},0 {S*0.2},{S} -{S},0 -{S*0.2},-{S}    ' .
-               'F:*:{S*2}:i:i:l-{S*0.707},-{S*0.707} -{S*0.629},{S*0.777} -{S*0.707},-{S*0.707} {S*0.629},-{S*0.777}    ' .
-               'G:*:{S*2}:i:i:l0,-{S} {S},{S*0.2} 0,-{S} -{S},-{S*0.2}    ' .
-               'H:*:{S*2}:i:i:l{S*0.707},-{S*0.707} -{S*0.777},-{S*0.629} {S*0.707},-{S*0.707} {S*0.777},{S*0.629}    ',
-   'nebuly' => 'A:*:{S*4}:i:i:a{S},{S/2},0,1,0,{S},-3a{S},{S/2},0,1,1,{S},3a{S},{S/2},0,1,0,{S},-3a{S},{S/2},0,1,1,{S},3    ' .
-               'B:*:{S*4}:i:i:a{S},{S/2},45,1,0,{S*0.707},{S*0.727}a{S},{S/2},45,1,1,{S*0.707},{S*0.727}a{S},{S/2},45,1,0,{S*0.707},{S*0.727}a{S},{S/2},45,1,1,{S*0.707},{S*0.727}    ' .
-               'C:*:{S*4}:i:i:a{S/2},{S},0,1,0,3,{S}a{S/2},{S},0,1,1,-3,{S}a{S/2},{S},0,1,0,3,{S}a{S/2},{S},0,1,1,-3,{S}    ' .
-               'D:*:{S*4}:i:i:a{S},{S/2},-45,1,0,-{S*0.727},{S*0.707}a{S},{S/2},-45,1,1,-{S*0.727},{S*0.707}a{S},{S/2},-45,1,0,-{S*0.727},{S*0.707}a{S},{S/2},-45,1,1,-{S*0.727},{S*0.707}    ' .
-               'E:*:{S*4}:i:i:a{S},{S/2},0,1,0,-{S},3a{S},{S/2},0,1,1,-{S},-3a{S},{S/2},0,1,0,-{S},3a{S},{S/2},0,1,1,-{S},-3    ' .
-               'F:*:{S*4}:i:i:a{S},{S/2},45,1,0,-{S*0.707},-{S*0.727}a{S},{S/2},45,1,1,-{S*0.707},-{S*0.727}a{S},{S/2},45,1,0,-{S*0.707},-{S*0.727}a{S},{S/2},45,1,1,-{S*0.707},-{S*0.727}    ' .
-               'G:*:{S*4}:i:i:a{S/2},{S},0,1,0,-3,-{S}a{S/2},{S},0,1,1,3,-{S}a{S/2},{S},0,1,0,-3,-{S}a{S/2},{S},0,1,1,3,-{S}    ' .
-               'H:*:{S*4}:i:i:a{S},{S/2},-45,1,0,{S*0.727},-{S*0.707}a{S},{S/2},-45,1,1,{S*0.727},-{S*0.707}a{S},{S/2},-45,1,0,{S*0.727},-{S*0.707}a{S},{S/2},-45,1,1,{S*0.727},-{S*0.707}    ' .
-                '',
-);
-
 // Given a shapeSpec, a lineType and a feature size, return the appropriate
 // SVG movements to create the path using the linetype. This is the bit
 // inside the 'd' parameter of an SVG path element
@@ -315,160 +402,226 @@ function makePath ( $shapeSpec, $lineType, $size = 60 ) {
   $retval = '';
   $matches = preg_split('/   */', $shapeSpec);
   foreach ( $matches as $match ) {
-    $retval .= makePath2(  $match, $lineType, $size );
+    $retval .= makePath3(  $match, $lineType, $size );
   }
   return $retval;
 }
 
-function makePath2 ( $shapeSpec, $lineType, $size = 60 ) {
-  global $lineSpecs;
+function dir2angle ( $dir ) {
+  $rotations = array ( 'A' => 0, 'B' => 45, 'C' => 90, 'D' => 135, 'E' => 180, 'F' => 225, 'G' => 270, 'H' => 315 );
+  
+  return $rotations[strtoupper($dir)];
+}
+
+function mirrorAction ( $angle, $condition ) {
+  $retval = false;
+  switch ( $condition ) {
+    case '90-270':
+      if (( $angle > 90 ) and ($angle <= 270))
+        $retval = true;
+      break;
+    case '45-135&225-315':
+      if ((( $angle > 45) and ($angle <=135)) or (($angle>225) and ($angle <= 315)))
+        $retval = true;
+      break;
+    case '90-180&270-360':
+      if ((( $angle > 90) and ($angle <=180)) or (($angle>270) and ($angle <= 360)))
+         $retval = true;
+      break;
+  }
+  return $retval;
+}
+
+function makePath3 ( $shapeSpec, $lineType, $size = 60 ) {
   global $subArg;
 
+  $lineSpecs = array (
+    'angled' => '0:100:i:o:h50v-{S}h50:O1',
+    'arched' => '1:{D}:i:i:q {D/2},-{S*2} {D},0:R1',
+    'battled-counter' => '*:{S*2}:-:-:v-{S/2}h{S}v{S}h{S}v-{S/2}:R1',
+    'battled-embattled' => '*:{S*2}:i:i:l{S/6},0 0,-{S/3} {S/3},0 0,-{S/3} {S/3},0 0,-{S/3} {S/3},0 0,{S/3} {S/3},0 0,{S/3} {S/3},0 0,{S/3} {S/6},0:U1',
+    'bevilled' => '0:{S}:o:i:h{S}l-{S},{S}h{S}:O1',
+    'dancetty' => '*:{S*3}:i:i:l{S*1.5},-{S} {S*1.5},{S}:R1',
+    'dancetty-floretty' => '*:160:-:-:l32.7,-52.1 c 0,0 -11.4,-7.2 -30,14.3 -3.371,-32.4 21.5,-30.1 32.2,-22.2 10.7,7.8 -29.84,-18 5.4,-43 35.3,25 -5.2,50.8 5.5,43 10.7,-7.9 35.6,-10.2 32.2,22.2 -18.6,-21.5 -30,-14.3 -30,-14.3 21.6,34.8 43.1,69.6 65,104.2 0,0 -12,7.2 -30.3,-14.3 -3.4,32.4 21.3,30.1 32.3,22.2 11,-7.8 -29.9,18 5,43 36,-25 -5,-50.8 6,-43 11,7.9 35,10.2 32,-22.2 -19,21.5 -30,14.3 -30,14.3 l32,-52.1',
+    'double-arched' => '2:{D/2}:i:i:q {D/4},-{S*2} {D/2},0:R1',
+    'dovetailed' => '*:{S*2}:i:i:l{S*0.95},0 -{S*0.9},-{S} {S*1.9},0 -{S*0.9},{S} {S*0.95},0',
+    'embattled' => '*:{S*2}:-:-:v-{S/2}h{S}v{S}h{S}v-{S/2}',
+    'engrailed' => '*:{S*2}:o:o:a{S*2},{S*5},0,0,0 {S*2},0',
+    'escartelly' => '0:{S*2}:i:i:v-{S}h{S*2}v{S}:R1',
+    'indented' => '*:{S*2}:-:-:l{S/2},-{S/2} {S},{S} {S/2},-{S/2}',
+    'invected' => '*:{S*2}:i:i:a{S*2},{S*5},0,0,1,{S*2},0',
+    'nebuly' => '*:{S*4}:-:-:a{S*0.95},{S/2},0,1,0,{S*0.95},0a{S*0.95},{S/2},0,1,1,{S*0.95},0a{S*0.95},{S/2},0,1,0,{S*0.95},0a{S*0.95},{S/2},0,1,1,{S*0.95},0',
+    'none' => '0:{D}:-:-:h{D}', // dummy values, not actually used
+    'nowy' => '0:{S*3}:i:i:q{S*1.5},-{S*2} {S*3},0:R1',
+    'potenty' => '*:{S*2}:-:-:h-{S/2}v-{S/2}h{S*1.5}v{S/2}h-{S/2},v{S/2}h{S*1.5}v-{S/2}',
+    'raguly' => '*:{S*2}:i:i:l{S*0.5},0 -{S*0.2},-{S} {S},0 {S*0.2},{S} {S*0.5},0',
+    'rayonny' => '*:{S}:o:o:a{S/4},{S*0.4}-30,0,0,{S/4},{S/2}a{S/4},{S*0.4}-30,0,1,{S/4},{S/2}a{S/4},{S*0.4},30,0,0,{S/4},-{S/2}a{S/4},{S*0.4},30,0,1,{S/4},-{S/2}',
+    'urdy' => '*:{S}:-:-:v{S/4}l{S/4},{S/4} l{S/4},-{S/4}v-{S/2}l{S/4},-{S/4} l{S/4},{S/4}v{S/4}',
+    'wavy' => '*:{S*3}:-:-:q{S*0.75},-{S} {S*1.5},0 q{S*0.75},{S} {S*1.5},0',
+  );
+
   if ( $shapeSpec == '' ) return '';
-  $matches = array();
+  $close_path = true;
   $retval = '';
+  $Xstart = 0;
+  $Ystart = 0;
+  $whenRotated = 'overlay'; // Flag for linetype, result when rotated 180 degreees
+  $doOffset = true;
+  $upperOnly = false;
+  $mirrorConds = array (
+    'offset' => 'none',
+    'reflected' => '90-270',
+    'overlay' => 'none',
+  );
+  
   // Get the line specification
   if ($lineType == null or  ! (array_key_exists($lineType, $lineSpecs)) ) $lineType = 'none';
-  $lineSpec = $lineSpecs[$lineType];
+  $lineSpec= $lineSpecs[$lineType];
+  // Size is fixed for this path, so can substitute now
   $subArg = $size;
-  // Replace any references to size (as this is fixed for this path)
-  $lineSpec = preg_replace_callback('/{S.*?}/', 'subFunc', $lineSpec );
-  $matches = preg_split('/   */', $lineSpec);
-  foreach ( $matches as $match ) { // insert supplied values
-    if ( $match != '') $lineData[$match{0}] = substr($match, 2);
-  }
-  // Check we have something for each direction
-  foreach ( range('A', 'S') as $letter ) {
-    if ( ! array_key_exists($letter, $lineData) ) {
-      if ( $letter == 'P' and array_key_exists('E',$lineData) ) $lineData['P'] = $lineData['E'];
-      elseif( $letter == 'Q' and array_key_exists('F',$lineData) ) $lineData['Q'] = $lineData['F'];
-      elseif( $letter == 'R' and array_key_exists('G',$lineData) ) $lineData['R'] = $lineData['G'];
-      elseif( $letter == 'S' and array_key_exists('H',$lineData) ) $lineData['S'] = $lineData['H'];
-      else $lineData[$letter] = '*:99999:-:-:';
+  $lineSpec = preg_replace_callback('/{S.*?}/', 'subFunc', $lineSpec);
+  list($repeat,$length,$defaultStart,$defaultEnd,$spec,$options) = explode(':',$lineSpec . ': ' ); // options are optional(!)
+  // Process any flags for this lineSpec
+  foreach ( str_split($options,2) as $option ) {
+    switch ( $option{0} ) {
+      case 'R':
+        $whenRotated = 'reflected';
+        break;
+      case 'O':
+        $whenRotated = 'offset';
+        break;
+      case 'U':
+        $upperOnly = true;
+        break;
     }
   }
-  // Chop the shape specification into "direction+distance" components
-  if ( preg_match_all ( '/[A-Za-z][0-9\.\-,<>]*/', $shapeSpec, $matches ) === false ) return '';
-  $shape = array();
-  $count = 0;
-  $Xoff = 0; $Yoff = 0;
-  foreach ( $matches[0] as $match ) {
-    $space = '-';
-    // Get direction and distance
-    $dir = $match{0};
-    if ( $match{1} == '>' ) {
-      $space = '>';
-      $dist = floatval(substr($match,2));
-    } elseif ( $match{1} == '<' ) {
-      $space = '<';
-      $dist = floatval(substr($match,2));
+  
+  // Chop up the shapeSpec into parts, extracting X,Y and other flags
+  if ( preg_match_all ( '/[A-Za-z][0-9\.\-,<>]*/', $shapeSpec, $edgeSpecs ) === false ) return '';
+  $edges = array();
+  foreach ($edgeSpecs[0] as $edgeSpec) {
+    $doMirror = false;
+    $dir = $edgeSpec{0};
+    if ( $edgeSpec{1} == '>' or $edgeSpec{1} == '<' ) { // Not used anymore, but may still exist in some specs...
+      $offset = 2;
     } else {
-      $dist = floatval(substr($match,1));
+      $offset = 1;
     }
-    // Get the line spec for this direction
+    $dist = floatval(substr($edgeSpec,$offset));
     if ( $dir == 'X' ) {
-      $Xoff = $dist;
+      $Xstart = $dist;
       continue;
     } elseif ( $dir == 'Y' ) {
-      $Yoff = $dist;
+      $Ystart = $dist;
       continue;
-    } // else
-    if ( $dir == 'I' or $dir == 'O' ) {
-      $type = '1';
+    } elseif ( $dir == 'Z' ) {
+      $close_path = ( $dist != 0 );
+      continue;
+    } elseif ( $dir == 'Q' ) { // mirroring for quartering
+      $mirrorConds['reflected'] = '45-135&225-315';
+      if ( ($defaultStart == $defaultEnd) and ($defaultStart != '-')) 
+        $whenRotated = 'reflected';
+      continue;
+    } elseif ( $dir == 'V' ) { // mirroring for chevron like things
+      $mirrorConds['offset'] = '90-180&270-360';
+      $mirrorConds['reflected'] = '90-180&270-360';
+      if ( $defaultStart == '-' and $defaultEnd == '-') 
+        $whenRotated = 'reflected';
+      continue;
+    } elseif ( $dir == 'O' ) {
+      $doOffset = false;
+      continue;
+    }
+    $angle = dir2angle($dir);
+    $start = $defaultStart;
+    $end = $defaultEnd;
+    $doMirror = mirrorAction ( $angle, $mirrorConds[$whenRotated] );
+    if ( $doMirror ) {
+      if ( $start != '-' ) $start = ($start == 'o') ? 'i' : 'o';
+      if ( $end != '-' ) $end = ($end == 'o') ? 'i' : 'o';
+    }
+    if ($lineType == 'none' or 
+        ctype_lower($dir) or 
+        (($upperOnly == true ) and ($angle >45) and ($angle < 315)) or
+        $length > $dist ) { // straight, or cannot fit this path into distance
+      $dir = strtolower($dir);
       $start = '-';
       $end = '-';
-      $path = substr($match,1);
-      $dist = 0; // This is in the path, above
-    } else {
-      // Now replace any references to distance (this is specific to each segment)
-      $thisLine = $lineData[strtoupper($dir)];
-      $subArg = $dist;
-      $thisLine = preg_replace_callback('/{D.*?}/', 'subFunc', $thisLine);
-      // Split the line spec into its parts
-      list($type,$len,$start,$end,$path) = explode(':',$thisLine);
-      $len = floatVal($len);
-      if ($lineType == 'none' or ctype_lower($dir) or $len > $dist ) { // straight, or cannot fit this path into distance
-        $dir = strtolower($dir);
-        $start = '-';
-        $end = '-';
-      }
     }
-    $shape[$count++] = compact('type','len','start','end','path','dir','dist', 'space');
-  }
-  // Move to the offset
-  $retval .= "M$Xoff,$Yoff";
-  // Adjust distances based on where the edges will meet
-  $numSegments = count($shape);
-  for ( $i = 0; $i < $numSegments; $i++ ) {
-    $next = ($i+1)%$numSegments;
-    // Curves we do a bit later...
-    if ($shape[$i]['dir'] == 'I' or $shape[$i]['dir'] == 'O' or $shape[$next]['dir'] == 'I' or $shape[$next]['dir'] == 'O' ) continue;
-    $adjust = meetEdges($shape[$i]['dir'], $shape[$i]['end'], $shape[$next]['dir'], $shape[$next]['start'], $size );
-    $shape[$i]['dist'] += $adjust[0];
-    $shape[$next]['dist'] += $adjust[1];
-  }
-  // The last adjustment also gives us the offset from the current position in the SVG path
-  // Calculate the offset for the first segment
-  $offs = makeOffset ( $shape[0]['dir'], $adjust[1], $shape[0]['start'], $size );
-  if ( $offs[0] != 0 or $offs[1] != 0 ) $retval .= 'm' . $offs[0] . ',' . $offs[1];
 
-  for ( $i = 0; $i < $numSegments; $i++ ) {
-    extract($shape[$i]); // creates $dir and $dist etc.
-    // Special handling for curves
-    if ( $dir == 'I' or $dir == 'O' ) {
-      // Curves are always drawn from the centre line
-      $next = ($i+1)%$numSegments;
-      $prev = ($i-1+$numSegments)%$numSegments;
-      $adjust = meetCurves($dir, $start, $shape[$prev]['dir'], $shape[$prev]['end'],  $size);
-      if ( $adjust[0] != 0 or $adjust[1] != 0 ) $retval .= "l$adjust[0],$adjust[1] ";
-      $a = explode(',',$path);
-      $IO = ($dir == 'I') ? '1' : '0';
-      $retval .= "a$a[0],$a[1] $a[2],0,$IO $a[3],$a[4] ";
-      $adjust = meetCurves($dir, $end, $shape[$next]['dir'], $shape[$next]['start'],  $size);
-      if ( $adjust[0] != 0 or $adjust[1] != 0 ) $retval .= 'l' . ($adjust[0] * -1) . ',' . ($adjust[1] * -1) . ' ';
+    //draw_message('warning',"$angle $dir $dist $flag $start $end " . (($doMirror)?'true':'false') );
+    $edges[] = compact('dir','dist','flag','start','end','doMirror');
+  }
+  // We now have all the edge directions and lengths in an array, we calculate any
+  // adjustments to the lengths to take account of how they meet (inner to outer or whatever)
+  $numEdges = count($edges);
+  for ( $i = 0; $i < $numEdges; $i++ ) {
+    $next = ($i+1)%$numEdges;
+    $adjust = meetEdges($edges[$i]['dir'], $edges[$i]['end'], $edges[$next]['dir'], $edges[$next]['start'], $size );
+    $edges[$i]['dist'] += $adjust[0];
+    $edges[$next]['dist'] += $adjust[1];
+  }
+  
+  // Start building the SVG path
+  // Move to the offset
+  $retval .= "M$Xstart,$Ystart";
+  // The last adjustment from above also gives us the offset from the current position in the SVG path
+  // Calculate the offset for the first segment
+  if ( $doOffset ) {
+    $offs = makeOffset ( $edges[0]['dir'], $adjust[1], $edges[0]['start'], $size );
+    if ( $offs[0] != 0 or $offs[1] != 0 ) $retval .= 'm' . $offs[0] . ',' . $offs[1];
+  }
+  
+  // We can now go along each edge, adding to the path
+  for ( $i = 0; $i < $numEdges; $i++ ) {
+    extract($edges[$i]); // creates $dir and $dist etc.
+    $angle = dir2angle($dir);
+    if ( ctype_lower($dir) ) { // Just a straight line, no need to look up lineSpec
+      $retval .= lineStraight($angle,$dist);
       continue;
     }
-    if ( ctype_lower($dir) or $lineType == 'none' ) { // Just a straight line, no need to look up lineSpec
-      $retval .= lineStraight($dir,$dist);
-      continue;
-    }
-    switch ( $type ) { // type of line
-    case '*': // insert as many times as will fit
+    // We know the distance of this edge, so we can substitute any 'D's
+    $subArg = $dist;
+    $path = preg_replace_callback('/{D.*?}/', 'subFunc', $spec);
+    $len = preg_replace_callback('/{D.*?}/', 'subFunc', $length);
+    $angle = dir2angle($dir);
+    if ( $doMirror )
+      $path = mirrorPath($path,'x');
+    // Stretch if required to fit
+    if ( $repeat == '*' ) {
       $reps = (int)($dist/$len);
       $left = $dist - ($reps * $len);
+      // if space left, expand the pattern to fit exactly
       if ( $left > 0 ) {
-        if ( $space == '-' ) $retval .= lineStraight($dir,$left/2);
-        elseif ( $space == '>' ) $retval .= lineStraight($dir,$left);
+        $path = scalePath ( $path, (($dist/$reps)/$len), 1 );
       }
+    }
+    // If necessary, rotate the path
+    $path = rotatePath($path, $angle);
+    switch ( $repeat ) { // type of line
+    case '*': // insert as many times as will fit
       $retval .= str_repeat($path,$reps);
-      if ( $left > 0 ) {
-        if ( $space == '-' ) $retval .= lineStraight($dir,$left/2);
-        elseif ( $space == '<' ) $retval .= lineStraight($dir,$left);
-      }
       break;
     case '0': // insert once, at a fixed size
       $left = $dist - $len;
-      if ( $left > 0 ) $retval .= lineStraight($dir,$left/2);
+      if ( $left > 0 ) $retval .= lineStraight($angle,$left/2);
       $retval .= $path;
-      if ( $left > 0 ) $retval .= lineStraight($dir,$left/2);
+      if ( $left > 0 ) $retval .= lineStraight($angle,$left/2);
       break;
-    case '1': // Fits the whole distance
-      $retval .= $path;
-      break;
-    case '2': // Fits into the whole distance twice
-      $retval .= $path . $path;
+    default: // repeat this number of times
+      $retval .= str_repeat($path, $repeat);
       break;
     }
+    draw_message('warning',$dir . '@' . $path);
   }
-  $retval .= 'Z';
+  if ( $close_path ) $retval .= 'z';
   return $retval;
 }
 
+
 // This maps lines and curves to their opposite directions, for spec reversal
-$toReverse = array ( 'A' => 'E', 'B' => 'F', 'C' => 'G', 'D' => 'H', 'E' => 'A', 'F' => 'B', 'G' => 'C', 'H' => 'D', 'I' => 'O', 'O' => 'I',
-                                                                     'P' => 'A', 'Q' => 'B', 'R' => 'C', 'S' => 'D',
-                     'a' => 'e', 'b' => 'f', 'c' => 'g', 'd' => 'h', 'p' => 'a', 'q' => 'b', 'r' => 'c', 's' => 'd',
-                                                                     'e' => 'a', 'f' => 'b', 'g' => 'c', 'h' => 'd', 'i' => 'o', 'o' => 'i' );
+$toReverse = array ( 'A' => 'E', 'B' => 'F', 'C' => 'G', 'D' => 'H', 'E' => 'A', 'F' => 'B', 'G' => 'C', 'H' => 'D', 
+                     'a' => 'e', 'b' => 'f', 'c' => 'g', 'd' => 'h', 'e' => 'a', 'f' => 'b', 'g' => 'c', 'h' => 'd', );
 
 Function reverseSpec ( $shapeSpec ) {
   global $toReverse;
@@ -500,19 +653,9 @@ Function reverseSpec ( $shapeSpec ) {
   return $retval;
 }
 
-// The inner and outer curves notionally turn through 90 degrees. This array maps the direction
-// at the start of the curve onto its notional direction at the end of the curve, for offset
-// matching purposes
-$iCurveTo = array ( 'A' => 'C', 'B' => 'D', 'C' => 'E', 'D' => 'F', 'E' => 'G', 'F' => 'H', 'G' => 'A', 'H' => 'B',
-                                                                    'P' => 'G', 'Q' => 'H', 'R' => 'A', 'S' => 'B', 'I' => 'I', 'O' => 'O' );
-$oCurveTo = array ( 'A' => 'G', 'B' => 'H', 'C' => 'A', 'D' => 'B', 'E' => 'C', 'F' => 'D', 'G' => 'E', 'H' => 'F',
-                                                                    'P' => 'C', 'Q' => 'D', 'R' => 'E', 'S' => 'F', 'I' => 'I', 'O' => 'O' );
-
 // Given a shapeSpec, return another shapeSpec that is exactly parallel to the first but
 // inside ($io = 'i') or outside ($io = 'o') and offset by $size
 function parallelSpec ( $shapeSpec, $io, $size ) {
-global $iCurveTo;
-global $oCurveTo;
 
   $retval = '';
   $matches = array(); // Chop the shape specification into "direction+distance" components
@@ -523,17 +666,12 @@ global $oCurveTo;
   foreach ( $matches[0] as $match ) {
     // Get direction and distance
     $dir = $match{0};
-    if ( $dir == 'I' or $dir == 'O' ) {
-      $dist = substr($match,1);
-      $shape[$count++] = compact('dir','dist');
-      continue;
-    }
     if ( $match{1} == '>' or $match{1} == '<' )
       $dist = floatval(substr($match,2));
     else
       $dist = floatval(substr($match,1));
     // Get the line spec for this direction
-    if ( $dir == 'X' ) {
+    if ( $dir == 'X' ) { // TODO also match the other letters? Or not...?
       $Xoff = $dist;
       continue;
     } elseif ( $dir == 'Y' ) {
@@ -550,35 +688,9 @@ global $oCurveTo;
     extract($shape[$i]); // creates $dir and $dist
     $next = ($i+1)%$numSegments;
     $nextDir = $shape[$next]['dir'];
-    // Deal with curves
-    if ( $dir == 'I' or $dir == 'O' ) {
-      $a = explode(',',$dist);
-      if ($io == 'i' xor $dir == 'O' ) {
-        $a[0] -= $size; $a[1] -= $size;
-      } else {
-        $a[0] += $size; $a[1] += $size;
-      }
-      if ( $dir == 'I' ) {
-        $endDir = $iCurveTo[$prevDir];
-      } else {
-        $endDir = $oCurveTo[$prevDir];
-      }
-      // Adjust end point in or out for start of curve
-      $adjust = meetCurves($dir, '-', $prevDir, $io, $size*2 );
-      $a[3] += $adjust[0];
-      $a[4] += $adjust[1];
-      // Now adjust end point for end of curve
-      $adjust = meetCurves($dir, '-', $endDir, $io, $size*2 );
-      $a[3] -= $adjust[0];
-      $a[4] -= $adjust[1];
-      $shape[$i]['dist'] = implode(',',$a);
-      $dir = $endDir; // Set up end of curve, for next time
-    // Deal with straight edges
-    } elseif ( $nextDir != 'I' and $nextDir != 'O' ) {
-      $adjust = meetEdges($dir, $io, $nextDir, $io, $size*2 );
-      $shape[$i]['dist'] += $adjust[0];
-      $shape[$next]['dist'] += $adjust[1];
-    }
+    $adjust = meetEdges($dir, $io, $nextDir, $io, $size*2 );
+    $shape[$i]['dist'] += $adjust[0];
+    $shape[$next]['dist'] += $adjust[1];
     $prevDir = strtoupper($dir);
   }
   // The last adjustment also gives us the offset from the current position in the SVG path

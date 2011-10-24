@@ -47,7 +47,7 @@ if ( $node == null ) {
 														
   if ( division_to_modifier($node, 'quarterly') )
 	  $ordinary['body2'] = array ( 'NC' => 'X-100Y-100B848D200f848h200   X1100Y1100F849H200b849d200',
-																	'CH' => 'X-100Y200B848D200f848h200   X1100Y1400F849H200b849d200' );
+			'CH' => 'X-100Y200B848D200f848h200   X1100Y1400F849H200b849d200' );
 	
 	$ordinary['rotate_pattern'] = 45;
 }

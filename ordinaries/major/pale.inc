@@ -30,27 +30,21 @@ if ( $node == null ) {
   $compony = get_mod($node,'compony');
   
   if ( $couped == 'both' )
-    $body_data = array ( 'shape_spec' => array ( 'NC' => 'X350Y100a300C1000e300G1000', 'CH' => 'X350Y400a300C700e300G700' ),
-                  'bounding_box' => array ( 'NC' => '300,1000,350,100', 'CH' => '300,700,350,400' ));
+    $ordinary['shape_spec'] = array ( 'NC' => 'X350Y100a300C1000e300G1000', 'CH' => 'X350Y400a300C700e300G700' );
   elseif ( $couped == 'chief')
-    $body_data = array ( 'shape_spec' => array ( 'NC' => 'X350Y100a300C1200e300G2000', 'CH' => 'X350Y400a300C900e300G900' ),
-                  'bounding_box' => array ( 'NC' => '300,1100,350,100', 'CH' => '300,800,350,400' ));
+    $ordinary['shape_spec'] = array ( 'NC' => 'X350Y100a300C1108e300G1108', 'CH' => 'X350Y400a300C808e300G808' );
   elseif ( $couped == 'base')
-    $body_data = array ( 'shape_spec' => array ( 'NC' => 'X350Y-100a300C1200e300G1200', 'CH' => 'X350Y200a300C900e300G900' ),
-                  'bounding_box' => array ( 'NC' => '300,1100,350,0', 'CH' => '300,800,350,300' ));
+    $ordinary['shape_spec'] = array ( 'NC' => 'X350Y-8a300C1108e300G1108', 'CH' => 'X350Y200a300C900e300G900' );
   elseif ( get_mod($node,'lozengy'))
-    $body_data = array ( 'body' => '<path d="M350,150l75,-150 75,150 75,-150 75,150 -75,150 -75,-150 -75,150 -75,-150  M350,450l75,-150 75,150 75,-150 75,150 -75,150 -75,-150 -75,150 -75,-150   M350,750l75,-150 75,150 75,-150 75,150 -75,150 -75,-150 -75,150 -75,-150  M350,1050l75,-150 75,150 75,-150 75,150 -75,150 -75,-150 -75,150 -75,-150" />' );
-  elseif ( $compony == 'single' )
-    $body_data = array ( 'shape_spec' => 'X350Y-200a300C1600e300G1600',
-        'body2' => '<path d="M250,0h500v300h-500z M250,600h500v300h-500z M250,600h500v300h-500z " />',);
-  elseif ( $compony == 'double' )
-    $body_data = array ( 'shape_spec' => 'X350Y-200a300C1600e300G1600',
-        'body2' => '<path d="M250,0h250v150h-250z M500,150h250v150h-250z M250,300h250v150h-250z M500,450h250v150h-250z M250,600h250v150h-250z M500,750h250v150h-250z M250,900h250v150h-250z M500,1050h250v150h-250z " />',);
+    $ordinary['body'] = '<path d="M350,150l75,-150 75,150 75,-150 75,150 -75,150 -75,-150 -75,150 -75,-150  M350,450l75,-150 75,150 75,-150 75,150 -75,150 -75,-150 -75,150 -75,-150   M350,750l75,-150 75,150 75,-150 75,150 -75,150 -75,-150 -75,150 -75,-150  M350,1050l75,-150 75,150 75,-150 75,150 -75,150 -75,-150 -75,150 -75,-150" />';
   else
-    $body_data = array ( 'shape_spec' => array ( 'NC' => 'X350Y-200a300C1600e300G1600', 'CH' => 'X350Y100a300C1300e300G1300' ));
+    $ordinary['shape_spec'] = array ( 'NC' => 'X350Y-8a300C1216e300G1216', 'CH' => 'X350Y292a300C916e300G916' );
+  
+  if ( $compony == 'single' )
+     $ordinary['body2'] = '<path d="M250,0h500v300h-500z M250,600h500v300h-500z M250,600h500v300h-500z " />';
+    elseif ( $compony == 'double' )
+      $ordinary['body2'] = '<path d="M250,0h250v150h-250z M500,150h250v150h-250z M250,300h250v150h-250z M500,450h250v150h-250z M250,600h250v150h-250z M500,750h250v150h-250z M250,900h250v150h-250z M500,1050h250v150h-250z " />';
     
-  if ( ! array_key_exists('bounding_box', $body_data)) $body_data['bounding_box'] = array ( 'NC' => '300,1200,350,0', 'CH' => '300,900,350,300' );
-  $ordinary = array_merge($ordinary, $body_data);
 }
 
 ?>

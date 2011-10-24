@@ -70,7 +70,7 @@ function get_features ( $feature_sets, &$node ) {
      array ( 'battled-embattled', '(em)?battled grady', 'mod', 'linetype',  ),
      array ( 'battled-counter', '(em)?battled counter embattled',  'mod', 'linetype', ),
      array ( 'bevilled',    'bevilled',     'mod', 'linetype',                         ),
-    // array ( 'dancetty-floretty', 'dancetty floretty' , 'mod', 'linetype',),
+     array ( 'dancetty-floretty', 'dancett(e|y) flor(y|etty)' , 'mod', 'linetype',),
      array ( 'dancetty',  'dau?ncetty',         'mod', 'linetype',                       ),
      array ( 'double-arched', 'double arched',  'mod', 'linetype',      ),
      array ( 'dovetailed','dovetailed',   'mod', 'linetype',                           ),

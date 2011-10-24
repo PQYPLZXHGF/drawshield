@@ -101,7 +101,7 @@ function get_error_messages() {
       }
       $formatted = format($text);
       foreach($formatted as $line) {
-        $retval .= '<text x="10" y="' . ($yCount += 30) . '" font-size="30" fill="black" >' . $line . "</text>\n";
+        $retval .= '<text x="10" y="' . ($yCount += 30) . '" font-size="30" fill="black" >' . htmlspecialchars($line) . "</text>\n";
       }
     }
   }

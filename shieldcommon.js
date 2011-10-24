@@ -44,25 +44,28 @@ function updateSVG() {
       shieldImg.insertBefore(errorPara,null);
     } else {
       if ( IEver != -1 && IEver < 9.0 ) {
-    	if ( typeof shieldSize=="undefined" ) {
-    		var shieldSize = 500;
-    	}
-    	var width = shieldSize;
-    	var height = (shieldSize * 1.2);
-    	height = height.toFixed();
+    	  if ( typeof shieldSize=="undefined" ) {
+    		  var shieldSize = 500;
+    	  }
+      	var width = shieldSize;
+      	var height = (shieldSize * 1.2);
+      	height = height.toFixed();
         var obj = document.createElement('object', true);
         obj.setAttribute('type', 'image/svg+xml');
         obj.setAttribute('data', 'data:image/svg+xml,' + xmlhttp.responseText);
         obj.setAttribute('width', width.toString());
         obj.setAttribute('height', height.toString());
         obj.addEventListener('load', function() { ; }, false);
-
         svgweb.appendChild(obj, shieldImg);
+      } else if ( (navigator.userAgent.indexOf( "iPad" ) > 0) ||
+                  (navigator.userAgent.indexOf( "iPod" ) > 0) ||
+                  (navigator.userAgent.indexOf( "iPhone" ) > 0) 
+                ) {
+         newNode = document.importNode(xmlhttp.responseXML.firstChild, true);
+        shieldImg.appendChild(newNode);
       } else {
-	   // newNode = document.importNode(xmlhttp.responseXML.firstChild, true);
-            shieldImg.innerHTML = xmlhttp.responseText;
-       // shieldImg.appendChild(newNode);
-	  }
+        shieldImg.innerHTML = xmlhttp.responseText;
+	    }
     }
     asText = xmlhttp.responseText;
   }

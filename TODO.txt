@@ -10,13 +10,11 @@ Move all specific knowledge into "flags" (like $put_in_chief), do NOT rely on th
 
 Re-implement "facing" mod
 
-Non symmetical ordinaries MUST not extend beyond shield boundaries!! Need to check all - see quarter.inc BUT 
-this breaks fimbriation if done by just using stroke-width. See issue 206 for possible solution - would this
-work for variant linetypes...?
-
 Properly document ordinary and charge
 
 cross-pierced cotticing
+
+https://docs.google.com/spreadsheet/ccc?key=0ApU4vAAfwWNQdGRjSFBWSXRlaWx1X29GMWdra0x4N0E&hl=en_GB
 
 TEST EVERYTHING!!!
 
@@ -25,6 +23,10 @@ Allow ordinary['fim_path'] to be a path spec & use if present instead of body
 split global.inc between parser and svg
 
 redo saltire path spec so exactly 200 pixels wide
+
+Compony and counter compony for plain cross
+
+per saltire with a chief should be non-45 degrees to look better?
 
 DONE
 
@@ -50,4 +52,6 @@ Fixed rotation / scaling / position of charges bendwise and bendwise sinister
 chevron and bend Quarterly now drawn correctly
 
 Compony and counter compony for chevron and saltire
+
+Made sure chevron and per-chevron with linetypes are all symmetrical
 

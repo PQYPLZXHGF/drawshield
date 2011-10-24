@@ -20,9 +20,9 @@ $ordinary = array(
       
       'doc' => 'Stuff...',
       
-      'shape_spec' => 'X-100Y-100a400C400E400g400', 
-      'bounding_box' => '300,300',
+      'shape_spec' => 'X-8Y-8a308C308E308g308', 
 			'if_ord_on' => 'scale',
+			'feature_size' => 40,
 );
 
 ?>

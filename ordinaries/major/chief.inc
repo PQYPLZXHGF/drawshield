@@ -31,28 +31,23 @@ if ( $node == null ) {
   $compony = get_mod($node,'compony');
   
   if ( $couped == 'both' )
-    $body_data = array ( 'shape_spec' => 'X100Y-100a800c400E800g400', 'bounding_box' => '800,300,100,0' );
+    $ordinary['shape_spec'] = 'X100Y-8a800c408E800g408';
   elseif ( $couped == 'dexter')
-    $body_data = array ( 'shape_spec' => 'X0Y-100a900c400E900g400', 'bounding_box' => '900,300,0,0' );
+    $ordinary['shape_spec'] =  'X-8Y-8a908c408E908g408';
   elseif ( $couped == 'sinister')
-    $body_data = array ( 'shape_spec' => 'X100Y-100a900c400E900g400', 'bounding_box' => '900,300,100,0' );
+    $ordinary['shape_spec'] =  'X100Y-8a908c408E908g408';
   elseif ( get_mod($node,'triangular'))
-    $body_data = array ( 'shape_spec' => 'X-100Y-100a1200D848F848', 'bounding_box' => '1000,500', );
+    $ordinary['shape_spec'] =  'V1X-8Y-8a1016D>719F<719';
   elseif ( get_mod($node,'lozengy'))
-    $body_data = array ( 'body' => '<path d="M0,0l83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 v300 l-83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 " />',
-          'bounding_box' => '1000,300' );
-  elseif ( $compony == 'single' )
-    $body_data =  array ( 'shape_spec' => 'X-100Y-100a1200c400E1200g400', 'bounding_box' => '1000,300',
-        'body2' => '<path d="M0,0h250v400h-250z M500,0h250v400h-250z" />', );
-  elseif ( $compony == 'double' )
-    $body_data = array ( 'shape_spec' => 'X-100Y-100a1200c400E1200g400', 'bounding_box' => '1000,300',
-        'body2' => '<path d="M0,0h250v150h-250z M250,150h250v250h-250z M500,0h250v150h-250z M750,150h250v250h-250z" />', );
+    $ordinary['body'] = '<path d="M0,0l83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 v300 l-83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 " />';
   else
-    $body_data = array ( 'shape_spec' => 'X-100Y-100a1200c400E1200g400', 'bounding_box' => '1000,300', );
+   $ordinary['shape_spec'] = 'X-8Y-8a1016c308E1016g308';
+  
+   if ( $compony == 'single' )
+    $ordinary['body2'] = '<path d="M0,0h250v450h-250z M500,0h250v450h-250z" />';
+  elseif ( $compony == 'double' )
+    $ordinary['body2'] =  '<path d="M0,0h250v150h-250z M250,150h250v300h-250z M500,0h250v150h-250z M750,150h250v300h-250z" />';
 		
-	$ordinary['if_ord_on'] = 'scale';
-    
-  $ordinary = array_merge($ordinary, $body_data);
 }
 
 ?>

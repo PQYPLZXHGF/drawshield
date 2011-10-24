@@ -70,7 +70,7 @@ function division_to_modifier(&$node, $type) {
 	// We can now remove the original tincture
 	$node->removeChild($item);
 	// Create a new modifier node
-	$mod = make_mod('div2ord',type);
+	$mod = make_mod('div2ord',$type);
 	// Now copy any tinctures back into the original node, and save any other modifiers
 	for ( $i = 0; $i < count($children); $i++ )
 	  if ( $children[$i]->nodeName == 'tincture' ) {

@@ -19,8 +19,8 @@ $ordinary = array(
       ),
       
       'doc' => 'Stuff...',
-      'shape_spec' => array ( 'NC' => 'X-100Y-241B848H848b200D848B848d200F848D848f200H848F848h200', 
-			                        'CH' => 'X-100Y0B848H848b200D848B848d200F848D848f200H848F848h200' ),
+      'shape_spec' => array ( 'NC' => 'X500Y358.6H615.5b200D615.5B615.5d200F615.5D615.5f200H615.5F615.5h200B615.5', 
+			                        'CH' => 'X500Y597.6H615.5b200D615.5B615.5d200F615.5D615.5f200H615.5F615.5h200B615.5' ),
 );
 
 include 'ordinaries/common/_compony.inc';

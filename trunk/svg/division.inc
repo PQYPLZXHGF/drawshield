@@ -16,7 +16,7 @@ function get_div_height ( $node ) {
 	// TODO rewrite this, possibly as full rewrite of divisions to match charges and ordinaries
 	// it relies on exact knowledge of internal division name
   $subtype = $node->getAttribute('subtype');
-	if ( in_array($subtype,array('per-bend', 'per-bend-sinister', 'gyronny', 'quarterly', 'per-saltire')))
+	if ( in_array($subtype,array('per-bend', 'per-bend-sinister', 'gyronny', 'quarterly', 'per-saltire', 'per-chevron')))
 		return 1000;
 	else
 	  return 1200;

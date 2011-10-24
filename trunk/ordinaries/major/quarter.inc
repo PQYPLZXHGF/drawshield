@@ -20,8 +20,7 @@ $ordinary = array(
       
       'doc' => 'Stuff...',
       
-      'shape_spec' => array ( 'NC' => 'X0Y500g500a500C500E500', 'CH' =>  'X-100Y700g500a600C500E600'),
-  //    'bounding_box' => array ( 'NC' => '500,500', 'CH' => '500,400,0,300' ),
+      'shape_spec' => array ( 'NC' => 'X-8Y500g508a508C>508E<508', 'CH' =>  'X-8Y800g508a508C>508E<608'),
 			'if_ord_on' => 'scale',
 );
 

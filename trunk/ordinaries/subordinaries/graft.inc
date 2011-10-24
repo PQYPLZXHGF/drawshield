@@ -20,6 +20,6 @@ $ordinary = array(
       
       'doc' => 'Stuff...',
       
-      'shape_spec' => 'X-100Y500B707C300e500g800', 'bounding_box' => '400,600,0,600' 
+      'shape_spec' => 'X-8Y600B577C208e408g600', 
 );
 ?>

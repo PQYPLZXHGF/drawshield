@@ -29,7 +29,7 @@ if ( $node != null ) {
     } else {
       switch ( $num ) {
         case 1:
-          $ordinary['shape_spec'] = array ( 'NC' => 'X50Y0J900K900L900M900', 'CH' => 'X50Y300J900K900L900M900' );
+          $ordinary['body'] = array ( 'NC' => '<path d="M50,-8l0,8 450,779 450,-779 0,-8 -900,0z" />', 'CH' => '<path d="M50,292l0,8 450,779 450,-779 0,-8 -900,0z" />' );
           break;
         case 2:
           $ordinary['body'] = '<path d="M 464.67,1086.86 L 345.47,-38.44 L -24.24,-38.44 L 464.67,1086.86 z" />

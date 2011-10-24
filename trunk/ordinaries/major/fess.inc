@@ -32,23 +32,18 @@ if ( $node != null ) {
 	// Set basic body shape
   if ( $couped == 'both' ) {
 		$ordinary['shape_spec'] = 'X100Y350A800c300E800g300';
-//		$ordinary['bounding_box'] = '800,300,100,350';
 	}
   elseif ( $couped == 'dexter') {
-		$ordinary['shape_spec'] = 'X-100Y350A1000c300E1000g300';
-//		$ordinary['bounding_box'] = '900,300,0,350';
+		$ordinary['shape_spec'] = 'X-8Y350A908c300E908g300';
 	}
   elseif ( $couped == 'sinister') {
-		$ordinary['shape_spec'] = 'X100Y350A1000c300E1000g300';
-//		$ordinary['bounding_box'] = '900,300,100,350';
+		$ordinary['shape_spec'] = 'X100Y350A908c300E908g300';
 	}
   elseif ( get_mod($node,'lozengy')) {
 		$ordinary['body'] = '<path d="M0,350l83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 v300 l-83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 " />';
-//		$ordinary['bounding_box'] = '1000,300,0,350';
 	}
   else {
-    $ordinary['shape_spec'] = 'X-100Y350A1200c300E1200g300';
-//		$ordinary['bounding_box'] = '1000,300,0,350';
+    $ordinary['shape_spec'] = 'X-8Y350A1016c300E1016g300';
 	}
 	
 	// Add extra layer if compony

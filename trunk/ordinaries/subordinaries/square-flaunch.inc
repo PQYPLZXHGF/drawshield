@@ -21,7 +21,7 @@ $ordinary = array(
       
       'doc' => 'Stuff...',
       
-      'shape_spec' => array ( 'NC' => 'X-50Y-87K693L693m693j693', 'CH' => 'X-50Y113K693L693m693j693' ),
-      'bounding_box' => array ( "NC" => '300,850', "CH" => '300,550,0,300' ) 
+      'body' => array ( 'NC' => '<path d="M-8,-8l308,508 -308,508 0,-1016z" />', 'CH' => '<path d="M-8,292l308,508 -308,508 0,-1016z" />' ),
+      // 'shape_spec' => array ( 'NC' => 'X-50Y-87K693L693m693j693', 'CH' => 'X-50Y113K693L693m693j693' ),
 );
 ?>

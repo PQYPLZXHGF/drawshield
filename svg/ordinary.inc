@@ -229,9 +229,23 @@ function makeOrdinary( &$node ) {
         break;
     }
   }
-	
+  
+  // Is this ordinary "between" anything?
+  $between_object = '';
+  if ( ($btwn_ord = get_mod_node($node,'between')) != null ) {
+    $btwn_ord = $btwn_ord->firstChild;
+ 		// If the underlying ordinary is mirrored, we need to mirror the "on" item so it ends up back the right way
+    if ( $mirrored ) {
+      if ( ($sin = get_mod_node($btwn_ord,'reversed')) != null )
+        $btwn_ord->removeChild($sin);
+      else
+        $btwn_ord->appendChild(make_mod('reversed'));
+    }
+    $between_object = makeCharge ( $btwn_ord );
+  }
+  	
 	// Gather all the parts together
-  $retval = add_def() . $retval . $cotise . $on_object;
+  $retval = add_def() . $retval . $cotise . $on_object . $between_object;
 	
 	// Are there any modifiers that affect over all position?
 	$transform = '';

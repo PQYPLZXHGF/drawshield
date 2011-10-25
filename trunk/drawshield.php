@@ -40,7 +40,7 @@ if ( $format == 'svgtext' ) $format = 'svg';
 // Global Variables
 //
 
-$tagline1 = "drawshield 2.3h";   // Advertising lines at bottom left
+$tagline1 = "drawshield 2.3i";   // Advertising lines at bottom left
 $tagline2 = "shield.karlwilcox.com";
 
 // Quick response for empty blazon

@@ -12,234 +12,6 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
    
-function rotatePoint( $x, $y, $theta ) {
-  $retval = '';
-  switch ( $theta ) {
-    case 360:
-    case 0: // should not happen, but just in case...
-      $x2 = $x;
-      $y2 = $y;
-      break;
-    case 90:
-      $x2 = $y * -1;
-      $y2 = $x;
-      break;
-    case 180:
-      $x2 = $x * -1;
-      $y2 = $y * -1;
-      break;
-    case 270:
-      $x2 = $y;
-      $y2 = $x * -1;
-      break;
-    default:
-      $cos = cos(deg2rad($theta));
-      $sin = sin(deg2rad($theta));
-      $x2 = ($cos * $x) - ($sin * $y);
-      $y2 = ($cos * $y) + ($sin * $x);
-      $retval = sprintf('%.3f,%.3f',$x2,$y2);
-      break;
-  }
-  if ($retval == '') $retval = "$x2,$y2";
-  return $retval;
-}
-
-function getNumbers( $argString ) {
-  $chunks = preg_split('/([ ,\-])/', $argString, null, PREG_SPLIT_DELIM_CAPTURE);
-  $argArray = array();
-  $negate = false;
-  foreach ($chunks as $chunk) {
-    if ( $chunk == '' or $chunk == ' ' or $chunk == ',' )
-      continue;
-    if ( $chunk == '-' ) {
-      $negate = true;
-      continue;
-    }
-    // We must have a number
-    if ( $negate ) {
-      $argArray[] = '-' . $chunk;
-      $negate = false;
-    }
-    else
-      $argArray[] = $chunk;
-  }
-  return $argArray;
-}
-
-function rotatePath( $path, $theta ) {
-  if ( $theta == 0 ) return $path;
-  $newPath = '';
-  $chunks = preg_split('/([a-z])/i', $path, null, PREG_SPLIT_DELIM_CAPTURE );
-  for ( $i = 0; $i < count($chunks); $i++ ) {
-    $command = $chunks[$i];
-    if ( isset($chunks[$i+1]) )
-      $numbers = getNumbers( $chunks[$i+1] );
-    switch ( strtolower($command) ) {
-      case 'h':
-        $x = $numbers[0];
-        if ($theta == 270 )
-          $newPath .= 'v' . ($x * -1);
-        elseif ( $theta == 180 )
-          $newPath .= 'h' . ($x * -1);
-        elseif ( $theta == 90 )
-          $newPath .= 'v' . $x;
-        else
-          $newPath .= 'l' . rotatePoint($x,0, $theta);
-        break;
-      case 'v':
-        $y = $numbers[0];
-        if ($theta == 270 )
-          $newPath .= 'h' . $y;
-        elseif ( $theta == 180 )
-          $newPath .= 'v' . ($y * -1);
-        elseif ( $theta == 90 )
-          $newPath .= 'h' . ($y * -1);
-        else
-          $newPath .= 'l' . rotatePoint(0,$y, $theta);
-        break;
-      case 'a':
-        list($rx,$ry,$rot,$arc,$sweep,$x,$y) = $numbers;
-        $newPath .= "a$rx,$ry " . (($rot + $theta)%360) . ",$arc,$sweep " . rotatePoint($x,$y, $theta);
-        break;
-      case 'l':
-      case 'q':
-      case 'c':
-        $newPath .= $command; 
-        for ( $j = 0; $j < count($numbers); $j += 2 )
-          $newPath .= rotatePoint($numbers[$j], $numbers[$j+1], $theta ) . ' ';
-        break;
-      case 'z':
-        $newPath .= $command;
-        break;
-    }
-    $newPath .= ' ';
-  }
-  return $newPath;
-}
-
-function mirrorPath ( $path, $axis = 'x' ) {
-  $newPath = '';
-  $chunks = preg_split('/([a-z])/i', $path, null, PREG_SPLIT_DELIM_CAPTURE );
-  for ( $i = 0; $i < count($chunks); $i++ ) {
-    $command = $chunks[$i];
-    if ( isset($chunks[$i+1]) ) {
-      $numbers = getNumbers($chunks[$i+1]);
-    }
-    switch ( strtolower($command) ) {
-      case 'h':
-        $x = $numbers[0];
-        if ($axis == 'x')
-          $newPath .= 'h' . $x;
-        else
-          $newPath .= 'h' . ($x * -1);
-        break;
-      case 'v':
-        $y = $numbers[0];
-        if ($axis == 'x')
-          $newPath .= 'v' . ($y * -1);
-        else
-          $newPath .= 'v' . $y;
-        break;
-      case 'a':
-        list($rx,$ry,$rot,$arc,$swap,$x,$y) = $numbers;
-        if ( $axis == 'x' ) {
-          $swap = $swap == 1? 0 : 1;
-          $newPath .= "a$rx,$ry " . (($rot + 180)%360) . ",$arc,$swap $x,$y";
-        } else {
-          $x *= -1;
-          $newPath .= "a$rx,$ry " . (($rot + 180)%360) . ",$arc,$swap $x,$y";
-        }
-        break;
-      case 'l':
-      case 'q':
-      case 'c':
-      case 's':
-        $newPath .= $command;
-        for ( $j = 0; $j < count($numbers); $j += 2 ) {
-          if ( $axis == 'x' ) {
-            $newX = $numbers[$j];
-            $newY = $numbers[$j+1] * -1;
-          } else {
-            $newX = $numbers[$j] * -1;
-            $newY = $numbers[$j+1];
-          }
-          $newPath .= "$newX,$newY ";
-        }
-        break;
-      case 'z':
-        $newPath .= $command;
-        break;
-    }
-    $newPath .= ' ';
-  }
-  return $newPath;
-}
-
-function scalePath ( $path, $xScale = 1, $yScale = 1 ) {
-  $newPath = '';
-  $chunks = preg_split('/([a-z])/i', $path, null, PREG_SPLIT_DELIM_CAPTURE );
-  for ( $i = 0; $i < count($chunks); $i++ ) {
-    $command = $chunks[$i];
-    if ( isset($chunks[$i+1]) ) {
-      $numbers = getNumbers($chunks[$i+1]);
-    }
-    switch ( strtolower($command) ) {
-      case 'h':
-        $x = $numbers[0];
-        if ($xScale == 1)
-          $newPath .= 'h' . $x;
-        else
-          $newPath .= 'h' . ($x * $xScale);
-        break;
-      case 'v':
-        $y = $numbers[0];
-        if ($yScale == 1)
-          $newPath .= 'v' . $y;
-        else
-          $newPath .= 'v' . ($y * $yScale);
-        break;
-      case 'a':
-        list($rx,$ry,$rot,$arc,$swap,$x,$y) = $numbers;
-        if ( $xScale != 1 ) {
-          $rx *= $xScale;
-          $x *= $xScale;
-        }
-        if ( $yScale != 1 ) {
-          $ry *= $yScale;
-          $y *= $yScale;
-        }
-        $newPath .= "a$rx,$ry $rot,$arc,$swap $x,$y";
-        break;
-      case 'l':
-      case 'q':
-      case 'c':
-      case 's':
-        $newPath .= $command;
-        for ( $j = 0; $j < count($numbers); $j += 2 ) {
-          $newY = $numbers[$j+1];
-          $newX = $numbers[$j];
-          if ( $xScale != 1 ) {
-            $newX *= $xScale;
-          }
-          if ( $yScale != 1 ) {
-            $newY *= $yScale;
-          }
-          $newPath .= "$newX,$newY ";
-        }
-        break;
-      case 'z':
-        $newPath .= $command;
-        break;
-    }
-    $newPath .= ' ';
-  }
-  return $newPath;
-}
-
-function lineStraight( $angle, $dist ) {
-  return rotatePath('h'.$dist, $angle);
-}
-
 
 function subSize($str,$size) {
   $S = $size/2;
@@ -401,7 +173,7 @@ function makePath ( $shapeSpec, $lineType, $size = 60 ) {
   $retval = '';
   $matches = preg_split('/   */', $shapeSpec);
   foreach ( $matches as $match ) {
-    $retval .= makePath3(  $match, $lineType, $size );
+    $retval .= makePath2(  $match, $lineType, $size );
   }
   return $retval;
 }
@@ -431,7 +203,7 @@ function mirrorAction ( $angle, $condition ) {
   return $retval;
 }
 
-function makePath3 ( $shapeSpec, $lineType, $size = 60 ) {
+function makePath2 ( $shapeSpec, $lineType, $size = 60 ) {
   global $subArg;
 
   $lineSpecs = array (
@@ -439,7 +211,8 @@ function makePath3 ( $shapeSpec, $lineType, $size = 60 ) {
     'arched' => '1:{D}:i:i:q {D/2},-{S*2} {D},0:R1',
     'battled-counter' => '*:{S*2}:-:-:v-{S/2}h{S}v{S}h{S}v-{S/2}:R1',
     'battled-embattled' => '*:{S*2}:i:i:l{S/6},0 0,-{S/3} {S/3},0 0,-{S/3} {S/3},0 0,-{S/3} {S/3},0 0,{S/3} {S/3},0 0,{S/3} {S/3},0 0,{S/3} {S/6},0:U1',
-    'bevilled' => '0:{S}:o:i:h{S}l-{S},{S}h{S}:O1',
+    'bevilled' => '0:{S}:i:o:h{S}l-{S},-{S}h{S}:O1',
+    // 'bevilled' => '0:{S}:o:i:h{S}l-{S},{S}h{S}:O1',
     'dancetty' => '*:{S*3}:i:i:l{S*1.5},-{S} {S*1.5},{S}:R1',
     'dancetty-floretty' => '*:160:-:-:l32.7,-52.1 c 0,0 -11.4,-7.2 -30,14.3 -3.371,-32.4 21.5,-30.1 32.2,-22.2 10.7,7.8 -29.84,-18 5.4,-43 35.3,25 -5.2,50.8 5.5,43 10.7,-7.9 35.6,-10.2 32.2,22.2 -18.6,-21.5 -30,-14.3 -30,-14.3 21.6,34.8 43.1,69.6 65,104.2 0,0 -12,7.2 -30.3,-14.3 -3.4,32.4 21.3,30.1 32.3,22.2 11,-7.8 -29.9,18 5,43 36,-25 -5,-50.8 6,-43 11,7.9 35,10.2 32,-22.2 -19,21.5 -30,14.3 -30,14.3 l32,-52.1',
     'double-arched' => '2:{D/2}:i:i:q {D/4},-{S*2} {D/2},0:R1',

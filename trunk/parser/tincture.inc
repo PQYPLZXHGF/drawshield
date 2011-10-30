@@ -75,9 +75,6 @@ function tincture($required=false)  {
   $tinc = tincture2();
   if ( $tinc != null ) {
     replace_pending($tinc);
-//    foreach ( $pending_items as $item )
-//      $item->appendChild(deep_copy($tinc->firstChild));
-//    $pending_items = array();
   }
   if ( $tinc == null and $required ) {
     $tinc = $dom->createElement('tincture');
@@ -183,7 +180,6 @@ function tincture2() {
       // Could also be [colour] [semyde] [charge]
       } elseif ( search_match($semyde) != null ) {
         $semyde = $dom->createElement('semyde');
-//        $semyde->setAttribute('name','semyde');
         $newNode = $dom->createElement('tincture');
         $newNode->setAttribute('index', 1);
         $newNode->appendChild($child);

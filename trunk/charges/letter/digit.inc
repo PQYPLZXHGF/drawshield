@@ -76,7 +76,7 @@ if ( $node != null ) {
     if ( array_key_exists($digit, $digit_data) ) {
         $charge = $digit_data["$digit"];
     } else {
-      my_trigger_error ( "Unknown digit $item", E_USER_NOTICE, __FILE__, __LINE__ );
+      draw_message ( 'warning', "Unknown digit $item", __FILE__, __LINE__ );
       $charge = array ( 'height' => 10, 'width' => 10, 'body' => '<g />' );
     }
 }

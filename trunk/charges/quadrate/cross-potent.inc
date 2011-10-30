@@ -17,7 +17,7 @@
 $charge = array (
 
   'patterns' => array (
-  'cross(es)? potent',
+  'cross(es)? poten(t|ce)',
   ),
   'either' => array ( 'quadrate', ),
 

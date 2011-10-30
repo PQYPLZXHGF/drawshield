@@ -1,5 +1,7 @@
 TODO
 
+demi lion not top half
+
 Fix positions for in bend sinister, need to mirror bend positions in placement.inc
 
 "an orle of" does not need tincture....
@@ -16,17 +18,21 @@ cross-pierced cotticing
 
 https://docs.google.com/spreadsheet/ccc?key=0ApU4vAAfwWNQdGRjSFBWSXRlaWx1X29GMWdra0x4N0E&hl=en_GB
 
-TEST EVERYTHING!!!
-
 Allow ordinary['fim_path'] to be a path spec & use if present instead of body
 
 split global.inc between parser and svg
 
-redo saltire path spec so exactly 200 pixels wide
-
 Compony and counter compony for plain cross
 
 per saltire with a chief should be non-45 degrees to look better?
+
+doevtailed - make separate start and end paths to return to center? Complicated, but might make quarterly etc. look better (+issue 144)
+
+voided and fimbriated not working?
+
+fluery on each point (adds -floretty to dancetty line type)
+
+rewrite calcPlace to use modifiers directly from node, not passed to it.
 
 DONE
 
@@ -54,4 +60,13 @@ chevron and bend Quarterly now drawn correctly
 Compony and counter compony for chevron and saltire
 
 Made sure chevron and per-chevron with linetypes are all symmetrical
+
+DONE (2.3j)
+
+issue 143, 206
+
+like as a keyword before charge
+
+bug where a number follows the charge
+
 

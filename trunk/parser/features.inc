@@ -20,7 +20,8 @@ function get_features ( $feature_sets, &$node ) {
     static $position_mods = array (
     array ( null, 'sinister', 'mod', 'sinister' ),
     array ( null, 'reversed', 'mod', 'reversed' ),
-    array ( null, 'fracted', 'mod', 'fracted' ), // Not really a position, but syntactically it fits in here
+    array ( null, '(rompu|fracted)', 'mod', 'fracted' ), // Not really a position, but syntactically it fits in here
+    array ( null, 'double dancetty', 'mod', 'fracted' ), 
     array ( null, 'dexter', 'mod', 'dexter', ),
     array ( null, 'inverted', 'mod', 'inverted', ),
     array ( null, 'enhanced', 'mod', 'enhanced', ),
@@ -37,11 +38,10 @@ function get_features ( $feature_sets, &$node ) {
   );
 
   static $charge_prefix = array (
-    array ( 'inquarter1',    'in ?the (first|1st|i) ?quarter', 'mod', 'position' ),
-    array ( 'inquarter2',    'in ?the (second|2nd|ii) ?quarter', 'mod', 'position' ),
-    array ( 'inquarter3',    'in ?the (third|3rd|iii) ?quarter', 'mod', 'position' ),
-    array ( 'inquarter4',    'in ?the (fourth|4th|iv) ?quarter', 'mod', 'position' ),
-    array ( null, 'demi|half', 'mod', 'demi' ),
+    array ( 'infirst',    'in ?the (first|1st|i) ?quarter', 'mod', 'position' ),
+    array ( 'insecond',    'in ?the (second|2nd|ii) ?quarter', 'mod', 'position' ),
+    array ( 'inthird',    'in ?the (third|3rd|iii) ?quarter', 'mod', 'position' ),
+    array ( 'infourth',    'in ?the (fourth|4th|iv) ?quarter', 'mod', 'position' ),
   );
 
   static $simple_charge = array (
@@ -63,16 +63,17 @@ function get_features ( $feature_sets, &$node ) {
   );
 
   static $linetype_mods = array (
-    //
      array ( 'angled',    'angled', 'mod', 'linetype',                                ),
      array ( 'arched',    '(en)?arched',  'mod', 'linetype',                            ),
      array ( 'battled-embattled', 'battled embattled', 'mod', 'linetype',),
      array ( 'battled-embattled', '(em)?battled grady', 'mod', 'linetype',  ),
      array ( 'battled-counter', '(em)?battled counter embattled',  'mod', 'linetype', ),
-     array ( 'bevilled',    'bevilled',     'mod', 'linetype',                         ),
-     array ( 'dancetty-floretty', 'dancett(e|y) flor(y|etty)' , 'mod', 'linetype',),
+     array ( 'bevilled',    'bevill?ed',     'mod', 'linetype',                         ),
+     array ( 'bevilled',    'bevill?y',     'mod', 'linetype',                         ),
+     array ( 'dancetty-floretty', 'dau?ncett(e|y) flor(y|etty)' , 'mod', 'linetype',),
      array ( 'dancetty',  'dau?ncetty',         'mod', 'linetype',                       ),
-     array ( 'double-arched', 'double arched',  'mod', 'linetype',      ),
+     array ( 'double-arched', 'double (en)?arched',  'mod', 'linetype',      ),
+     array ( 'double-arched', '(en)?arched double',  'mod', 'linetype',      ),
      array ( 'dovetailed','dovetailed',   'mod', 'linetype',                           ),
      array ( 'embattled', 'embattled',     'mod', 'linetype',                          ),
      array ( 'engrailed', 'engrailed',        'mod', 'linetype',                       ),
@@ -81,6 +82,7 @@ function get_features ( $feature_sets, &$node ) {
      array ( 'invected',  'invected',     'mod', 'linetype',                           ),
      array ( 'nebuly',    'nebuly',      'mod', 'linetype',                            ),
      array ( 'nowy' ,     'nowy',        'mod', 'linetype',                            ),
+     array ( 'none',   'plain',    'mod', 'linetype',                             ),
      array ( 'potenty',   'potenty',    'mod', 'linetype',                             ),
      array ( 'raguly',    'raguly',       'mod', 'linetype',                           ),
      array ( 'rayonny',   '(rayonny|radiant)',        'mod', 'linetype',               ),
@@ -167,11 +169,11 @@ function get_features ( $feature_sets, &$node ) {
   $tinc_index = 1;
 	comma();
   andd();
-
+  
   // Get any additional features
   while ( true ) {
+    $state = save();
     if ( $features and ($match = search_match($features)) != null) {
-      $state = save();
       switch ( $match[2] ) {
         case 'shape':
           $shape_mod = make_mod($match[3], $match[0], tokens());

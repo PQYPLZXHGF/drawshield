@@ -47,10 +47,10 @@ function place_charges ( $node, $placement ) {
   switch ($placement) {
     case '':
     case 'i':
-      draw_message('Internal (no placement)' );
+      draw_message('internal', 'No placement for charge' );
       return '';
     case 'n':
-      my_trigger_error('Not meaningful placement' );
+      draw_message('warning','Not meaningful placement' );
       return '';
   }
   $num_of = $node->getAttribute('number');
@@ -109,15 +109,6 @@ function place_charges ( $node, $placement ) {
     draw_message('internal', 'Bad placement list', __FILE__, __LINE__ );
     return '';
   }
-	// Are we on an ordinary that has been moved somewhere?
-/*	$sinister = false; $inverted = false; $enhanced = false; $abased = false;
-	if ( false and $node->parentNode->nodeName == 'modifier' and $node->parentNode->getAttribute('name') == 'on' ) {
-		$thing_we_are_on = $node->parentNode->parentNode;
-		$sinister = get_mod($thing_we_are_on,'sinister');
-		$inverted = get_mod($thing_we_are_on,'inverted');
-		$enhanced = get_mod($thing_we_are_on,'enhanced');
-		$abased = get_mod($thing_we_are_on,'abased');
-	} */
 	
   for ( $count = 0; $count < $num_of; $count++ ) {
     if ( $place_list[$count] == '' ) {

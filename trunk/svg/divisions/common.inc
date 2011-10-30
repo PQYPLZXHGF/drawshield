@@ -25,10 +25,10 @@ function makeDiv_common( $node, $div_num ) {
     'chausse' => '<path d="m500,1200 l500,-866 0,866 -1000,0 0,-866 500,866z" />',
     'paly-bendy' => '<path d="m 999,600 0,300 171,300 0,-300 z m -167,0 0,300 167,300 0,-300 z m -166,0 0,300 167,300 0,-300 z m -167,0 0,300 167,300 0,-300 z m -166,0 0,300 167,300 0,-300 z m -167,0 0,300 167,300 0,-300 z m -166,0 0,300 167,300 0,-300 z M 999,0 l 0,300 171,300 0,-300 z m -167,0 0,300 167,300 0,-300 z m -166,0 0,300 167,300 0,-300 z m -167,0 0,300 167,300 0,-300 z m -166,0 0,300 167,300 0,-300 z m -167,0 0,300 167,300 0,-300 z M 0,0 0,300 167,600 167,300 z" />',
     'per-chevron' => array ( 'div2' =>  array ( 'NC' => 'V1X500Y500B848c500e1200g500H848', 'CH' => 'V1X0Y1275g200H707B708c200e1000' )),
-    'per-chevron-reversed' => array ( 'div2' =>  array ( 'NC' => 'V1X-100Y300a100B707H708c900a100e1200g900', 'CH' => 'V1X-100Y500a100B707H708c900a100e1200g900' )),
+    'per-chevron-inverted' => array ( 'div2' =>  array ( 'NC' => 'V1X-100Y300a100B707H708c900a100e1200g900', 'CH' => 'V1X-100Y500a100B707H708c900a100e1200g900' )),
     'per-pall' => array ( 'div2' => array ( 'NC' => 'X1000Y0c1200e600g700a100H707', 'CH' => 'X1000Y300c900e600g400a100H707' ),
                           'div3' => array ( 'NC' => 'X0Y0B707C700e500g1200', 'CH' => 'X0Y300B707C400e500g900' )),
-    'per-pall-reversed' => array (  'div2' => array ( 'NC' => 'O1X500Y0a500c1100f707G600', 'CH' => 'O1X500Y200a500c800f707G400' ),
+    'per-pall-inverted' => array (  'div2' => array ( 'NC' => 'O1X500Y0a500c1100f707G600', 'CH' => 'O1X500Y200a500c800f707G400' ),
       'div3' => array ( 'NC' => 'O1X0Y1000H708B707c200e1000g200', 'CH' => 'O1X0Y1000H708B707c200e1000g200' )),
     'per-pile' => array ( 'div2' => '<polygon points="1000,-200 500,1200 500,1400 1000,1400" />',
                           'div3' => '<polygon points="0,-200 500,1200 500,1400 0,1400" />' ),
@@ -77,7 +77,7 @@ function makeDiv_common( $node, $div_num ) {
   $name = $node->getAttribute('subtype');
   $modifiers = '';
   // Order of these tests needs to match order of division names in the array above!
-  if ( get_mod($node, 'inverted') or get_mod($node, 'reversed')) $modifiers .= '-reversed';
+  if ( get_mod($node, 'inverted') or get_mod($node, 'reversed')) $modifiers .= '-inverted';
   if ( get_mod($node, 'sinister')) $modifiers .= '-sinister';
   if ( get_mod($node, 'fracted')) $modifiers .= '-fracted';
   if ( array_key_exists($name . $modifiers, $div_data))

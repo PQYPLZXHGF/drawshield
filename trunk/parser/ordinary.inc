@@ -101,9 +101,16 @@ function ordinary() {
   }
 
   // Does this ordinary go "between" some charges?
-  if ( $inside or search_match($between) != null )
-    adjacent($node,true); // have already found between word
-
+  if ( $inside or search_match($between) != null ) {
+    $btwn_mod = make_mod('between');
+    if ( ($btwn_charge = charge()) == null ) {
+      $btwn_charge = $dom->createElement('missing');
+      parser_message('blazon', 'Nothing to go between');
+    }
+    $btwn_mod->appendChild ( $btwn_charge);
+    $node->appendChild($btwn_mod);
+  }
+    
   // Now look for extras
   if ( $found_on or search_match($charge_with) != null ) {
     $on_ord = make_mod('on');

@@ -25,10 +25,10 @@ function adjacent(&$node, $found_between = false) {
   // Does this charge go "between/above/below" some others?
   if ( $found_between )
     $position = 'between';
- elseif (( $match = search_match($adjacent_charge)) != null )
-   $position = $match[2];
- else
-   return;
+  elseif (( $match = search_match($adjacent_charge)) != null )
+    $position = $match[2];
+  else
+    return;
 
   $adj_mod = make_mod($position);
   if ( $position == 'within' ) { // could be charge or ordinary
@@ -94,6 +94,10 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   global $modifier_list;
   global $pending_items;
 
+  static $prefix_features = array (
+    array ( null, '(demi|half)', 'mod', 'demi' ),
+    array ( null, 'like', 'mod', 'like' ), // not sure whether this has any real meaning, but added as mod just in case
+  );
   $specific_features = null;
   $flags = array();
   $state = save();
@@ -115,7 +119,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
 
   // Look for grouping words (bundle of etc.)
   bundle( $node );
-  if ( demi() ) $node->appendChild(make_mod('demi'));
+  get_features(array($prefix_features, 'no_tinc'), $node);
 
   if ( (($match = either('charge')) == null) and (($match = search_match($charge_list)) == null ) ) {
     restore($state);
@@ -192,8 +196,8 @@ function charge( $assume_num = false ) {
 	$allow_arr_pos = true;
 
   // In case of "in chief, three whatever...
-  $temp = $dom->createElement('charge');
-  $arr_pos = get_features( array ( 'arr_pos', 'charge_prefix'), $temp );
+  $temp = $dom->createElement('charge'); 
+  $arr_pos = get_features( array ( 'arr_pos', 'charge_prefix', 'no_tinc' ), $temp );
   if ( is_int($arr_pos) ) {
 	  $assume_num = $arr_pos;
 		$allow_arr_pos = false;

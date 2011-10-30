@@ -19,6 +19,10 @@ $charge = array (
   'patterns' => array (
   'bees?',
   ),
+  
+  'features' => array (
+    array ( null, 'volant', 'ignore' ),
+  ),
 
   'doc' => 'Stuff...',
 

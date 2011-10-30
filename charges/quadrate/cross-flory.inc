@@ -18,6 +18,7 @@ $charge = array (
 
   'patterns' => array (
   'cross(let|lets|es)? florys?',
+  'cross(let|lets|es)? fleuronny?',
   ),
   'either' => array ( 'quadrate', ),
 

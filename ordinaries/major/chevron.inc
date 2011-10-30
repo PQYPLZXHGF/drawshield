@@ -20,7 +20,6 @@ $ordinary = array (
   'either' => true,
   
   'modifiers' => array (
-    array ( null, 'rompu', 'mod', 'rompu' ),
     array ( null, 'throughout', 'mod', 'throughout' ),
     array ( null, 'couped', 'mod', 'couped' ),
     array ( null, 'inarched', 'mod', 'inarched' ),
@@ -38,7 +37,7 @@ if ( $node != null ) {
   if ( get_mod($node,'throughout') )
     // $ordinary['shape_spec'] = array ( 'NC' => 'V1X500Y0K1200l200M1000L1000m200J1200', 'CH' => 'V1X500Y300K1000l200M800L800m200J1000');
     $ordinary['body'] = array ( 'NC' => '<path fill-rule="evenodd" d="M500,0l600,1039 -100,173 -500,-866 -500,866 -100,-173 600,-1039z" />', 'CH' => '<path fill-rule="evenodd" d="M500,300l600,1039 -100,173 -500,-866 -500,866 -100,-173 600,-1039z" />');
-  elseif ( get_mod($node,'rompu') )
+  elseif ( get_mod($node,'fracted') )
     $ordinary['shape_spec'] = array ( 'NC' => 'V1X500Y200B100c282B800d200F600g282f100d100c282D600f200H800g282H100', 'CH' => 'V1X500Y300B100c282B800d200F600g282f100d100c282D600f200H800g282H100');
   elseif ( get_mod($node,'debruised') )
     $ordinary['shape_spec'] = array ( "NC" => 'X-65.6Y1065.6f200H800b200h200B800d200F800D800', 'CH' => 'X-65.6Y1165.6f200H800b200h200B800d200F800D800' );

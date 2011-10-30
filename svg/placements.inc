@@ -18,13 +18,13 @@ function on_division($xpath,$item,$chief) {
   $ofnum = get_mod($division->item(0),'ofnum');
   $subtype = $division->item(0)->getAttribute('subtype');
   $sinister = get_mod($division->item(0),'sinister');
-  $reversed = get_mod($division->item(0),'reversed');
+  $reversed = get_mod($division->item(0),'inverted');
   if ($subtype=='per-bend' and $number==2 and $chief == false) $placement = 'x/300,700,350,350:700,300/x/x/x/x';
   elseif ($subtype=='per-bend' and $sinister and $number==2 and $chief == false) $placement = 'x/300,300,350,350:700,700/x/x/x/x';
   elseif ($subtype=='per-bend' and $sinister and $number==2  and $chief == true) $placement = 'x/300,600,350,350:700,1000/x/x/x/x';
   elseif ($subtype=='per-bend' and $number==2  and $chief == true) $placement = 'x/300,900,250,250:600,600/x/x/x/x';
-  elseif ($subtype=='quarterly' and $number==4  and $chief == false) $placement = 'x/x/x/250,250,300,300:750,250:250,750:750,750/x/x/';
-  elseif ($subtype=='quarterly' and $number==4  and $chief == true) $placement = 'x/x/x/250,450,260,260:750,450:250,850:750,850/x/x/';
+  elseif (substr($subtype,0,9)=='quarterly' and $number==4  and $chief == false) $placement = 'x/x/x/250,250,300,300:750,250:250,750:750,750/x/x/';
+  elseif (substr($subtype,0,9)=='quarterly' and $number==4  and $chief == true) $placement = 'x/x/x/250,450,260,260:750,450:250,850:750,850/x/x/';
   elseif ($subtype=='gyronny' and $ofnum==8 and ($number==8 or $number==4)  and $chief == false) $placement = 'x/x/x/200,500,300,300:500,200:800,500:500,800/x/x/x/200,400,160,160:400,200:600,200:800,400:800,600:600,800:400,800:200,600';
   elseif ($subtype=='gyronny' and $ofnum==8 and ($number==8 or $number==4)  and $chief == true) $placement = 'x/x/x/200,700,250,250:500,400:800,700:500,1000/x/x/x/200,600,150,150:400,400:600,400:800,600:800,800:600,1000:400,1000:200,800';
   elseif ($subtype=='gyronny' and $ofnum==6 and ($number==6 or $number==3)  and $chief == false) $placement = 'x/200,500,300,600:800,500/x/x/x/350,200,200,200:650,200:150,500:850,500:350,800:650,800';
@@ -52,7 +52,16 @@ function placements() {
     // Set up parameters for this charge
     $chief = $xpath->evaluate("boolean(../../../ordinary[@subtype='chief'] or ../ordinary[@subtype='chief'])", $item);
     $conjoin = get_mod($item, 'conjoin');
+    $rows = get_mod($item,'rows');
     $number = $item->getAttribute('number');
+    $div_node = $xpath->query("parent::ord_chgs/parent::plain/tincture/division", $item);
+    if ( $div_node->length > 0 ) {
+      $underlying_div = $div_node->item(0)->getAttribute('subtype');
+      if (get_mod($div_node->item(0),'sinister')) $underlying_div .= '-sinister';
+      if (get_mod($div_node->item(0),'reversed')) $underlying_div .= '-reversed';
+    } else {
+      $underlying_div = null;
+    }
     if (get_mod($item, 'between')) {
       $charge = $xpath->query("modifier[@name='between']/charge",$item);
       $number += $charge->item(0)->getAttribute('number');
@@ -60,7 +69,7 @@ function placements() {
     if ( get_mod($item,'entire') )
       $boundingBox = $chief ? '0,300,1000,900' : '0,0,1000,1200';
     else
-      $boundingBox = $chief ? '150,350,700,600' : '100,100,800,850';
+      $boundingBox = $chief ? '200,400,600,600' : '100,100,800,800';
 
     // Try various placement regimes
 
@@ -158,6 +167,12 @@ function placements() {
       // Test order is important - check specific subtypes before generic type -->
       if ($ordsubtype=='chevron-couched') $placement = 'n';
       elseif ($ordsubtype=='chevron' and get_mod($ordinary,'throughout')) $placement = 'n';
+      elseif ($ordsubtype=='bordure') {
+        $style = $rows ? 'r' : 'w';
+        $bbox = $chief ? '100,400,800,600' :'100,100,800,800';
+        $num = $rows ? $rows : $number;
+        $placement = calcPlace($style,$num,$conjoin,$bbox);
+      }
       elseif ($ordsubtype=='chevronel') $placement = 'x/x/200,200,180,180:500,900,240,240:800,200,180,180/x/x/x';
       elseif ($ordsubtype=='tressure') $placement = calcPlace('w',$number,$conjoin,'300,300,400,500');
       elseif ($ordsubtype=='chevron' and get_mod($ordinary,'rompu') and $chief==false) $placement = 'x/200,500,300,300:800,500,300,300/200,500,340,340:500,1050,200,200:800,500,340,340/200,500,200,240:500,140,200,160:500,1050,200,200:800,500,200,240/s/s';
@@ -221,10 +236,23 @@ function placements() {
         case 'innombril': $loc = '300,700,400,400'; break;
         case 'insinside': $loc = '50,200,400,600'; break;
         case 'indexside': $loc = '550,200,400,400'; break;
-        case 'inquarter1': $loc = '50,50,400,400'; break;
-        case 'inquarter2': $loc = '550,50,400,400'; break;
-        case 'inquarter3': $loc = '50,550,400,400'; break;
-        case 'inquarter4': $loc = '550,550,400,400'; break;
+        case 'infirst': 
+          switch ( $underlying_div ) { // TODO finish this lot off
+            case 'tierced-in-pale': $loc = '50,200,233,233'; break;
+            case 'tierced-in-fess': $loc = '350,50,300,300'; break;
+            case 'tierced-in-bend': $loc = '750,50,250,250'; break;
+            case 'tierced-in-bend-sinister': $loc = '50,50,250,250'; break;
+            case 'tierced-in-chevron': $loc = ''; break;
+            case 'per-pall': $loc = ''; break;
+            case 'per-pile': $loc = ''; break;
+            case 'per-pall-inverted': $loc = ''; break;
+            case 'quarterly': // any type of quarterly in fact, but the default anyway, so do not need to test all
+            default: $loc = '50,50,400,400'; break;
+          }
+          break;
+        case 'insecond': $loc = '550,50,400,400'; break;
+        case 'inthird': $loc = '50,550,400,400'; break;
+        case 'infourth': $loc = '550,550,400,400'; break; // We only know how to place in a fourth quarter
         default: $loc = 'default';
       }
       $mod = make_mod('location',$loc);

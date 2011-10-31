@@ -14,36 +14,30 @@
 
 $charge['modifiers'] = array (
     array ( null, 'voided', 'mod', 'voided' ),
+    array ( null, '(fimbriated|edged)', 'mod+1tinc', 'fimbriated' ),
     array ( 'all', 'fitch(y|ee)', 'mod', 'fitchy' ),
     array ( 'foot', 'fitch(y|ee) at ?the foot', 'mod', 'fitchy' ),
 );
 
-
-$crossData = array (
-  'cross-crosslet' => '100:100:l10,0 0,10 20,0 0,20 -20,0 0,60::s:',
-  'cross-test' => '100:100:l10,0 0,10 20,0 0,20 -20,0 c 0,30 5,85 10,90::s:',
-  // 'cross-test' => '100:100:h20v80:::',
-  'cross-botonny' => '100:100:a15,15 0,0,1 10,24a15,15 0,0,1 2,24v42::s',
-  );
-
 if ( $node != null ) {
-  $crossType = $node->getAttribute('subtype');
   $fitchy = get_mod($node,'fitchy');
-  if ( ! array_key_exists($crossType, $crossData) ) {
+  $voided = get_mod($node,'voided');
+  $fimbriated = get_mod_node($node,'fimbriated');
+  if ( !isset($main ) ) {
     draw_message('internal',"No Cross of type $crossType" );
   } else {
-    list ( $size, $start, $main, $void, $fitch, $foot ) = explode ( ':', $crossData[$crossType] . ':::' );
-    $mirror = reversePath(mirrorPath($main,'y'));
+    if ( !isset($size) ) $size = 100;
+    if ( !isset($start) ) $start = 100;
+    if ( !isset($voidStart) ) $voidStart = 70;
+    if ( !isset($void) ) $void = 'h5v55';
+    if ( !isset($fitch) ) $fitch = 'v60l-10,30'; // standard fitchy, 20 wide, 100 high
+    if ( !isset($mirror) ) $mirror = reversePath(mirrorPath($main,'y'));
     $path = $main;
     $path .= rotatePath($mirror,90);
     $path .= rotatePath($main,90);
     if ( $fitchy && ($fitch != '') ) {
-      if ( $fitch == 's' ) { // standard fitchy, 20 wide, 100 high
-        $path .= 'v60l-10,30 -10,-30v-60';
-      } else {
-        $path .= $fitch;
-        $path .= reversePath(mirrorPath($fitch,'y'));
-      }  
+      $path .= $fitch;
+      $path .= reversePath(mirrorPath($fitch,'y'));
     } else {
       $path .= rotatePath($mirror,180);
       $path .= rotatePath($main,180);
@@ -52,8 +46,21 @@ if ( $node != null ) {
     $path .= rotatePath($main,270);
     $path .= $mirror;
     $path = 'm' . $size . ',' . ($size - $start) . $path . 'z';
+    if ( $voided && $void != '' ) {
+      $voidMirror = reversePath(mirrorPath($void,'y'));
+      $voidpath = $void;
+      $voidpath .= rotatePath($voidMirror,90);
+      $voidpath .= rotatePath($void,90);
+      $voidpath .= rotatePath($voidMirror,180);
+      $voidpath .= rotatePath($void,180);
+      $voidpath .= rotatePath($voidMirror,270);
+      $voidpath .= rotatePath($void,270);
+      $voidpath .= $voidMirror;
+      $path .= ' M' . $size . ',' . ($size - $voidStart) . reversePath($voidpath) . 'z';
+    }
+	  $stroke = ( $fimbriated ) ? 'stroke="' . get_rgb( get_tincture($fimbriated) ) . '" stroke-width="4"' : '';
     $charge['height'] = $charge['width'] = $size * 2;
-    $charge['body'] = "<path d=\"$path\" />";
+    $charge['body'] = "<path $stroke d=\"$path\" />";
   }
 }
 ?>

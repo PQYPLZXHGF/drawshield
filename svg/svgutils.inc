@@ -395,45 +395,114 @@ function scalePath ( $path, $xScale = 1, $yScale = 1 ) {
   return $newPath;
 }
 
-/*function displacePath ( $path, $xDisp, $yDisp = 0 ) {
+function makeRelative ( $path, $Xoff = 0, $Yoff = 0 ) {
   $newPath = '';
   $chunks = preg_split('/([a-z])/i', $path, null, PREG_SPLIT_DELIM_CAPTURE );
+  $curX = $Xoff; $curY = $Yoff; 
   for ( $i = 0; $i < count($chunks); $i++ ) {
     $command = $chunks[$i];
     if ( isset($chunks[$i+1]) ) {
       $numbers = getNumbers($chunks[$i+1]);
     }
-    switch ( strtolower($command) ) {
+    switch ( $command ) {
       case 'h':
         $x = $numbers[0];
-        $newPath .= $command . ($x $xDisp);
+        $curX += $x;
+        $newPath .= 'h' . $x;
+        break;
+      case 'H':
+        $x = $numbers[0];
+        $newPath .= 'h' . ($x - $curX);
+        $curX = $x;
+        break;
       case 'v':
         $y = $numbers[0];
-        $newPath .= $command . ($y + $yDisp);
+        $curY += $y;
+        $newPath .= 'v' . $y;
+        break;
+      case 'V':
+        $y = $numbers[0];
+        $newPath .= 'v' . ($y - $curY);
+        $curY = $y;
         break;
       case 'a':
         list($rx,$ry,$rot,$arc,$swap,$x,$y) = $numbers;
-        $newPath .= "$command$rx,$ry $rot,$arc,$swap " . ($x + $xDisp) . ',' . ($y  $yDisp);
+        $newPath = "a$rx,$ry $rot,$arc,$swap $x,$y";
+        $curX += $x;
+        $curY += $y;
+        break;
+      case 'A':
+        list($rx,$ry,$rot,$arc,$swap,$x,$y) = $numbers;
+        $newPath = "a$rx,$ry $rot,$arc,$swap " . ($x - $curX) . ',' . ($y - $curY);
+        $curX = $x;
+        $curY = $y;
+        break;
+      case 'c':
+        $tempPath = 'c';
+        for ( $j = 0; $j < count($numbers); $j += 6 ) {
+          $cpStartX = $numbers[$j+0];
+          $cpStartY = $numbers[$j+1];
+          $cpEndX = $numbers[$j+2];
+          $cpEndY = $numbers[$j+3];
+          $endX = $numbers[$j+4];
+          $endY = $numbers[$j+5];
+          $tempPath .= "$cpStartX,$cpStartY $cpEndX,$cpEndY $endX,$endY ";
+          $curX += $endX;
+          $curY += $endY;
+        }
+        $newPath .= $tempPath;
+        break;
+      case 'C': // $newPath .= "($curX,$curY)";
+        $tempPath = 'c';
+        for ( $j = 0; $j < count($numbers); $j += 6 ) {
+          $cpStartX = $numbers[$j+0];
+          $cpStartY = $numbers[$j+1];
+          $cpEndX = $numbers[$j+2];
+          $cpEndY = $numbers[$j+3];
+          $endX = $numbers[$j+4];
+          $endY = $numbers[$j+5];
+          $tempPath .= ($cpStartX - $curX) . ',' . ($cpStartY - $curY) . ' ';
+          $tempPath .= ($cpEndX - $curX) . ',' . ($cpEndY - $curY) . ' ';
+          $tempPath .= ($endX - $curX) . ',' . ($endY - $curY) .' ';
+          $curX = $endX;
+          $curY = $endY;
+        }
+        $newPath .= $tempPath;
         break;
       case 'l':
-      case 'q':
-      case 'c':
-      case 's':
-        $newPath .= $command;
+      case 'm':
+        $tempPath = $command;
         for ( $j = 0; $j < count($numbers); $j += 2 ) {
-          $newY = $numbers[$j+1] + $yDisp;
-          $newX = $numbers[$j] + $xDisp;
-          $newPath .= "$newX,$newY ";
+          $y = $numbers[$j+1];
+          $x = $numbers[$j];
+          $tempPath .= "$x,$y ";
+          $curX += $x;
+          $curY += $y;
         }
+        $newPath .= $tempPath;
+        break;
+      case 'L':
+      case 'M':
+        $tempPath = strtolower($command);
+        for ( $j = 0; $j < count($numbers); $j += 2 ) {
+          $y = $numbers[$j+1];
+          $x = $numbers[$j];
+          $tempPath .= ($x - $curX) . ',' . ($y - $curY) . ' ';
+          $curX = $x;
+          $curY = $y;
+        }
+        $newPath .= $tempPath;
         break;
       case 'z':
+      case 'Z':
         $newPath .= $command;
         break;
     }
     $newPath .= ' ';
   }
+  draw_message('warning',$newPath);
   return $newPath;
-} */
+}
 
 function reversePath ( $path ) {
   $newPath = '';

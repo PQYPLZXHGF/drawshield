@@ -201,6 +201,11 @@ function get_features ( $feature_sets, &$node ) {
 					// 2. The fact that a position has been found and we should not look again.
           if ( isset ( $match[4] ) ) $retval = $match[4];
           break;
+        case 'mod+1tinc':
+          $mod = make_mod ( $match[3], $match[0], tokens() );
+					$mod->appendChild(tincture(true));
+					$node->appendChild($mod);
+					break;
 				case 'mod+tinc':
           $mod = make_mod ( $match[3], $match[0], tokens() );
 					$tinc = tincture(true);

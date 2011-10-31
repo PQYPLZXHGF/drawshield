@@ -23,13 +23,10 @@ $charge = array (
 
   'doc' => 'Stuff...',
 
-  'height' => 400,
-  'width' => 400,
-  'body' => '<path d="M125,0v50h50v125h-125v-50h-50v150h50v-50h125v125h-50v50h150v-50h-50v-125h125v50h50v-150h-50v50h-125v-125h50v-50z" />',
-  
-  'fitchy' => '<path d="M125,0v50h50v125h-125v-50h-50v150h50v-50h125v175l25,100l25,-100v-175h125v50h50v-150h-50v50h-125v-125h50v-50z" />',
   );
 
-include ('charges/quadrate/_quadrate.inc');
+$main = 'h30v20h-20v70';
+
+include ('charges/quadrate/_quadrate8.inc');
   
 ?>

@@ -22,6 +22,8 @@ $charge = array (
   'either' => array ( 'quadrate', ),
   );
 
+$main = 'h10v20h20v20h-20v50';
+
 include ('charges/quadrate/_quadrate8.inc');
   
 ?>

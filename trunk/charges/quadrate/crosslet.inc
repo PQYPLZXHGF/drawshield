@@ -12,22 +12,22 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// maltese-cross
+// crosslet
 
 $charge = array (
 
   'patterns' => array (
-  'maltese cross(let|lets|es)?',
-  'cross(let|lets|es)? of (8|eight|huit) points',
+  '?plain crosslets?',
   ),
-  'either' => array ( 'quadrate', ),
 
   'doc' => 'Stuff...',
-  );
 
-$main = 'l30,-30 -30,100';
-$start = 70;
-$fitch = 'l10,3v67l-10,30';
+);
+
+$main = 'h20v80';
+$fitch = 'v60l-20,30';
+$voidStart = 95;
+$void = 'h15v80';
 
 include ('charges/quadrate/_quadrate8.inc');
 

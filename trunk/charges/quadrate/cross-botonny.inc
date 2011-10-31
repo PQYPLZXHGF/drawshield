@@ -26,6 +26,8 @@ $charge = array (
 
 );
 
+$main = 'c 15,0 10,15 10,15 15,0 15,20 0,20 l 0,55';
+
 include ('charges/quadrate/_quadrate8.inc');
 
 ?>

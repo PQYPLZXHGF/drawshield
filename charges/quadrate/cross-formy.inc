@@ -17,7 +17,7 @@
 $charge = array (
 
   'patterns' => array (
-  'cross(let|lets|es)? (formee|pattee)',
+  'cross(let|lets|es)? (formee|patt?ee?)',
   'cross(let|lets|es)? (formy|patt?y)',
   ),
   
@@ -28,8 +28,9 @@ $charge = array (
 );
 
 $main = 'l60,0 c-35,10 -50,70 -40,80';
-$fitch = 'v40l-20,40';
-
+$fitch = 'v40l-20,50';
+$foot = 'c-10,10 5,70 40,80 l-30,0 -30,50';
+$void = 'x';
 include ('charges/quadrate/_quadrate8.inc');
   
 

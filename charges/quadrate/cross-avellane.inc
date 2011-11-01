@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2011 Karl R. Wilcox 
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,23 +12,18 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// cross-cercele
+// cross-avellane
 
 $charge = array (
-
-  'patterns' => array (
-  'cross(let|lets|es)? cercelee?s?',
+ 'patterns' => array (
+    'cross(es)? avellane',
   ),
-  'either' => array ( 'quadrate', ),
-
-  'doc' => 'Stuff...',
-
+ 'either' => array ( 'quadrate', ),
 );
 
-$main = 'c0,-20 13.2,-24.348 25,-25 10.7,-0.59 23.7,9.41 25,20 1,8.3 0,15 -15,20 10,-15 3.5,-24.2 -5,-25 -8.9,-0.8 -10,15.3 -10,25 l0,40';
-$start = 75;
-$void = 'h10v60';
-$fitch = 'v40l-20,40';
+
+$main = 'c5,0 2.8599222,4.8638132 2.6653696,10.583658 0,0 0.9143969,-10.44747123 23.3268484,-10.05836617 c-15,10.00000017 -5.758331,30.98136517 -7.140274,45.85040217 -1.656809,17.826453 0.545343,31.788402 -18.851944,38.624306 c6.566197,1.090779 4.6860489,-0.355725 10,5';
+$void = 'x';
 
 include ('charges/quadrate/_quadrate8.inc');
 

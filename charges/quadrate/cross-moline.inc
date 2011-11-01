@@ -29,6 +29,7 @@ $charge = array (
 $main = 'c10,-45 65,0 65,10 -35,-20 -45,0 -45,15 l0,35';
 $start = 80;
 $fitch = 'v40l-20,40';
+$void = 'x'; // but see cross recercelee
 
 include ('charges/quadrate/_quadrate8.inc');
 

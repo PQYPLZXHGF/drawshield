@@ -34,6 +34,8 @@ fluery on each point (adds -floretty to dancetty line type)
 
 rewrite calcPlace to use modifiers directly from node, not passed to it.
 
+void version of fylfot and cross formy
+
 DONE
 
 Do not repeat error messages (e.g. once per charge)
@@ -68,5 +70,7 @@ issue 143, 206
 like as a keyword before charge
 
 bug where a number follows the charge
+
+Rewrote all quadrate crosses
 
 

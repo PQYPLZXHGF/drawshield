@@ -12,24 +12,22 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// cross-cercele
+// cramps
 
 $charge = array (
 
   'patterns' => array (
-  'cross(let|lets|es)? cercelee?s?',
+  'cramp(oon)?s?',
+  'cramp iron',
+  'crampiron',
   ),
-  'either' => array ( 'quadrate', ),
 
   'doc' => 'Stuff...',
 
-);
+  'height' => '100',
+  'width' => '50',
+  'body' => '<path d="M 0,50 50,0 50,30 45,25 20,50 45,75 50,70 50,100 0,50" />',
 
-$main = 'c0,-20 13.2,-24.348 25,-25 10.7,-0.59 23.7,9.41 25,20 1,8.3 0,15 -15,20 10,-15 3.5,-24.2 -5,-25 -8.9,-0.8 -10,15.3 -10,25 l0,40';
-$start = 75;
-$void = 'h10v60';
-$fitch = 'v40l-20,40';
-
-include ('charges/quadrate/_quadrate8.inc');
+)
 
 ?>

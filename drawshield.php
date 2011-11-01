@@ -54,9 +54,7 @@ if ( $format == 'svg' and $blazon == '' ) {
 if ( $log ) error_log($blazon);
 
 // Read in the generated parsing tables
-$flag_list = unserialize(file_get_contents('parser/data/flag_list.dat'));
 $charge_list = unserialize(file_get_contents('parser/data/charge_list.dat'));
-$modifier_list = unserialize(file_get_contents('parser/data/modifier_list.dat'));
 $either_list = unserialize(file_get_contents('parser/data/either_list.dat'));
 $ordinary_list = unserialize(file_get_contents('parser/data/ordinary_list.dat'));
 // This is the list of words in the blazon, and the current parsing position

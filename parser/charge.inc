@@ -86,12 +86,20 @@ function get_feature_tinc($node) {
   return null;
 }
 
+function get_modifier_array($type, $subtype, &$features, &$flags) {
+  $node = null;
+  $charge = array ();
+  include ( 'charges/' . $type . '/' . $subtype . '.inc' );
+  if ( array_key_exists('modifiers', $charge) )
+    $features = $charge['modifiers'];
+  if ( array_key_exists('flags', $charge) )
+    $flags = $charge['flags'];
+}
+
 
 function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   global $dom;
-  global $flag_list;
   global $charge_list;
-  global $modifier_list;
   global $pending_items;
 
   static $prefix_features = array (
@@ -134,10 +142,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   $node->setAttribute('number',"$num");
   $a_key = 'c:' . $subtype;
   // Get the set of features and flags, (if any)
-  if ( array_key_exists($a_key, $modifier_list ))
-    $specific_features = $modifier_list[$a_key];
-  if ( array_key_exists($a_key, $flag_list ))
-    $flags = $flag_list[$a_key];
+  get_modifier_array($type,$subtype,$specific_features,$flags);
 
   // Sometimes we want to just get the next word as a string
   if ( array_key_exists('get_item', $flags))

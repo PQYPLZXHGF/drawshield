@@ -19,21 +19,23 @@ $charge['modifiers'] = array (
      array ( null, '(on|with) a grie?ce of # steps?', 'mod', 'mounted' ),
 );
 
-if  ( $num = get_mod($node,'mounted') ) {
-  $width = max ( $charge['width'], 60 + ($num * 30) );
-  $height = $charge['height'] + 30 * $num;
-  $charge['body'] = preg_replace( '/{START}/', ($width / 2), $charge['body']);
-  for ( $count = 0; $count < $num; $count++ ) {
-    $inc = $count * 30;
-    $len = 90 + $inc + $inc;
-    $ypos = $charge['height'] + $inc;
-    $xpos = ($width - $len)/2;
-    $charge['body'] .= '<rect x="' . $xpos . '" y="' . $ypos .'" width="' . $len . '" height="30" stroke="#000000" stroke-width="3" />' . "\n";
+if ( $node != null ) {
+  if  ( $num = get_mod($node,'mounted') ) {
+    $width = max ( $charge['width'], 60 + ($num * 30) );
+    $height = $charge['height'] + 30 * $num;
+    $charge['body'] = preg_replace( '/{START}/', ($width / 2), $charge['body']);
+    for ( $count = 0; $count < $num; $count++ ) {
+      $inc = $count * 30;
+      $len = 90 + $inc + $inc;
+      $ypos = $charge['height'] + $inc;
+      $xpos = ($width - $len)/2;
+      $charge['body'] .= '<rect x="' . $xpos . '" y="' . $ypos .'" width="' . $len . '" height="30" stroke="#000000" stroke-width="3" />' . "\n";
+    }
+    $charge['width'] = $width;
+    $charge['height'] = $height;
+  } else {
+    $charge['body'] = preg_replace( '/{START}/', ($charge['width'] / 2), $charge['body']);
   }
-  $charge['width'] = $width;
-  $charge['height'] = $height;
-} else {
-  $charge['body'] = preg_replace( '/{START}/', ($charge['width'] / 2), $charge['body']);
 }
 
 ?>

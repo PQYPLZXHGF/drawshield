@@ -36,6 +36,8 @@ rewrite calcPlace to use modifiers directly from node, not passed to it.
 
 void version of fylfot and cross formy
 
+Add ringed modifier to quadrates
+
 DONE
 
 Do not repeat error messages (e.g. once per charge)

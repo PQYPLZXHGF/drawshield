@@ -33,11 +33,8 @@ function include_ordinary () {
 $node = null;
 
   $charges = array();
-  $chg_mods = array();
   $ordinaries = array();
-  $ord_mods = array();
   $either = array();
-  $flags = array();
   // Go through charges
   $dir = opendir('../charges');
   echo "Building charges...\n";
@@ -60,10 +57,6 @@ $node = null;
                 $charges[] = array ( $subtype, $pattern, $type, 'charge');
               }
             }
-            if ( array_key_exists( 'modifiers' , $charge ) )
-              $modifiers['c:' . $subtype] = $charge['modifiers'];
-            if ( array_key_exists( 'flags' , $charge ) )
-              $flags['c:' . $subtype] = $charge['flags'];
         }
       }
     }
@@ -102,10 +95,6 @@ $node = null;
                 $ordinaries[] = array ( $subtype, $pattern, $type );
               }
             }
-            if ( array_key_exists( 'modifiers' , $ordinary ) )
-              $modifiers['o:' . $subtype] = $ordinary['modifiers'];
-            if ( array_key_exists( 'flags' , $ordinary ) )
-              $flags['o:' . $subtype] = $ordinary['flags'];
         }
       }
     }
@@ -117,10 +106,6 @@ $node = null;
   fwrite ( $fp, serialize($charges) );
   fclose ( $fp );
   unset ( $charges );
-  $fp = fopen('../parser/data/modifier_list.dat','w');
-  fwrite ( $fp, serialize($modifiers) );
-  fclose($fp);
-  unset ( $modifiers );
   $fp = fopen('../parser/data/ordinary_list.dat','w');
   fwrite ( $fp, serialize($ordinaries) );
   fclose($fp);
@@ -129,10 +114,6 @@ $node = null;
   fwrite ( $fp, serialize($either) );
   fclose($fp);
   unset ( $either );
-  $fp = fopen('../parser/data/flag_list.dat','w');
-  fwrite ( $fp, serialize($flags) );
-  fclose($fp);
-  unset ( $flags );
   echo "completed\n";
 
  /* Fudge if web server can't write to folder, open in web browser

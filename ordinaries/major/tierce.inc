@@ -37,8 +37,10 @@ if ( $node == null ) {
     $ordinary['shape_spec'] =  array ( 'NC' => 'X0Y-8a300C1108e300G1108', 'CH' => 'X0Y292a300C808e300G808' );
   elseif ( get_mod($node,'lozengy'))
     $ordinary['body'] = '<path d="M0,150l75,-150 75,150 75,-150 75,150 -75,150 -75,-150 -75,150 -75,-150  M0,450l75,-150 75,150 75,-150 75,150 -75,150 -75,-150 -75,150 -75,-150   M0,750l75,-150 75,150 75,-150 75,150 -75,150 -75,-150 -75,150 -75,-150  M0,1050l75,-150 75,150 75,-150 75,150 -75,150 -75,-150 -75,150 -75,-150" />';
-  else
-    $ordinary['shape_spec'] =  array ( 'NC' => 'X333.33Y-8C1216e341g1216a341', 'CH' => 'X333.33Y292C916e341g916a341' );
+   elseif ( get_mod($node, 'voided'))
+     $ordinary['shape_spec'] =  array ( 'NC' => 'X333.33Y-38C1276e341g1276a341', 'CH' => 'X333.33Y262C966e341g966a341' );
+   else
+     $ordinary['shape_spec'] =  array ( 'NC' => 'X333.33Y-8C1216e341g1216a341', 'CH' => 'X333.33Y292C916e341g916a341' );
   
 	if ( $compony == 'single' )
     $ordinary['body2'] = '<path d="M0,0h433v300h-433z M0,600h433v300h-433z M0,600h433v300h-433z " />';

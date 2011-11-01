@@ -22,11 +22,20 @@ function get_cotise_tinc($node) {
   return null;
 }
 
+function get_ordmod_array($type, $subtype, &$features, &$flags) {
+  $node = null;
+  $ordinary = array ();
+  include ( 'ordinaries/' . $type . '/' . $subtype . '.inc' );
+  if ( array_key_exists('modifiers', $ordinary) )
+    $features = $ordinary['modifiers'];
+  if ( array_key_exists('flags', $ordinary) )
+    $flags = $ordinary['flags'];
+}
+
+
 function ordinary() {
   global $dom;
   global $ordinary_list;
-  global $modifier_list;
-  global $flag_list;
 	global $pending_items;
 
   // TODO Allow escutcheon to be followed by whole shield if overall?
@@ -72,10 +81,7 @@ function ordinary() {
   // get features for this ordinary
   $specific_features = null;
   $flags = array();
-  if ( array_key_exists($a_key, $modifier_list ))
-    $specific_features = $modifier_list[$a_key];
-  if ( array_key_exists($a_key, $flag_list ))
-    $flags = $flag_list[$a_key];
+  get_ordmod_array($ord_name,$ord_type,$specific_features,$flags);
 
   get_features ( array('shape', 'position', 'linetype', $specific_features), $node ); // for "bend sinister (angled).."
 

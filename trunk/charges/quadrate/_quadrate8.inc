@@ -20,6 +20,7 @@ $charge['modifiers'] = array (
     array ( 'foot', 'fitch(y|ee) at ?the foot', 'mod', 'fitchy' ),
     array ( null, '?on ?the (upper|lower|side) ?limbs?', 'warn', 'limbs' ),
     array ( null, '(at|on) each (corner|limb)', 'mod+charge', 'on' ),
+    array ( null, 'ringed', 'warn', 'ringed' ),
 );
 
 if ( $node != null ) {

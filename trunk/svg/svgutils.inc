@@ -263,9 +263,14 @@ function rotatePath( $path, $theta ) {
       case 'l':
       case 'q':
       case 'c':
-        $newPath .= $command; 
-        for ( $j = 0; $j < count($numbers); $j += 2 )
-          $newPath .= rotatePoint($numbers[$j], $numbers[$j+1], $theta ) . ' ';
+      case 'm':
+        $newPath .= $command;
+        if ($command == 'M') {
+          $newPath .= $numbers[0] . ',' . $numbers[1];
+        } else {
+          for ( $j = 0; $j < count($numbers); $j += 2 )
+            $newPath .= rotatePoint($numbers[$j], $numbers[$j+1], $theta ) . ' ';
+          }
         break;
       case 'z':
         $newPath .= $command;
@@ -313,9 +318,13 @@ function mirrorPath ( $path, $axis = 'x' ) {
       case 'q':
       case 'c':
       case 's':
+      case 'm':
         $newPath .= $command;
         for ( $j = 0; $j < count($numbers); $j += 2 ) {
-          if ( $axis == 'x' ) {
+          if ( $command == 'M' ) {
+            $newX = $numbers[$j];
+            $newY = $numbers[$j+1];
+          } elseif ( $axis == 'x' ) {
             $newX = $numbers[$j];
             $newY = $numbers[$j+1] * -1;
           } else {
@@ -373,6 +382,7 @@ function scalePath ( $path, $xScale = 1, $yScale = 1 ) {
       case 'q':
       case 'c':
       case 's':
+      case 'm':
         $newPath .= $command;
         for ( $j = 0; $j < count($numbers); $j += 2 ) {
           $newY = $numbers[$j+1];

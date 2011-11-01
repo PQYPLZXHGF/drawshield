@@ -17,7 +17,9 @@
 $charge = array (
 
   'patterns' => array (
-  'cross(let|lets|es)? pointeds?',
+  'cross(let|lets|es)? pointed',
+  'cross(let|lets|es)? (ve|u)rd(y|e|ee)',
+  'cross(let|lets|es)? champaine',
   ),
   'either' => array ( 'quadrate', ),
 

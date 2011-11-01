@@ -27,7 +27,7 @@ $charge = array (
   'doc' => 'Stuff...',
   );
 
-$main = 'h30v20h-20v70';
+$main = 'h50v20h-40v70';
 $mirror = 'v-90h10';
 
 include ('charges/quadrate/_quadrate8.inc');

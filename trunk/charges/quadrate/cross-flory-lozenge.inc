@@ -12,24 +12,24 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// cross-cercele
+// cross-formy
 
 $charge = array (
 
   'patterns' => array (
-  'cross(let|lets|es)? cercelee?s?',
+  'cross(let|lets|es)? (flory|fleuronny) of (one|1) lozenge',
   ),
+  
   'either' => array ( 'quadrate', ),
 
   'doc' => 'Stuff...',
 
 );
 
-$main = 'c0,-20 13.2,-24.348 25,-25 10.7,-0.59 23.7,9.41 25,20 1,8.3 0,15 -15,20 10,-15 3.5,-24.2 -5,-25 -8.9,-0.8 -10,15.3 -10,25 l0,40';
-$start = 75;
-$void = 'h10v60';
-$fitch = 'v40l-20,40';
-
+$main = 'c5,0 5.1986022,9.128465 5.0040496,14.84831 0,0 13.8459214,-14.57455382 22.0887234,-3.317465 c-19.4022209,-0.180137 -15.113051,12.769767 -12.092773,13.469155 l30,30';
+$fitch = 'h-35v35l-10,30';
+$void = 'x';
 include ('charges/quadrate/_quadrate8.inc');
+  
 
 ?>

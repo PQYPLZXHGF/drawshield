@@ -28,6 +28,8 @@ $charge = array (
 $main = 'l30,-30 -30,100';
 $start = 70;
 $fitch = 'l10,3v67l-10,30';
+$void = 'x';
+$pierce = 'x';
 
 include ('charges/quadrate/_quadrate8.inc');
 

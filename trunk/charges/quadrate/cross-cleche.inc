@@ -25,6 +25,8 @@ $charge = array (
   );
 
 $main = 'l5,0 30,20 -15,10 0,50 0,0';
+$void = 'h10v65';
+$voidStart = 75;
 $fitch = 'v40l-20,40';
 
 include ('charges/quadrate/_quadrate8.inc');

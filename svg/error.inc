@@ -111,4 +111,25 @@ function get_error_messages() {
   return $retval;
 }
 
+
+function get_error_text() {
+  global $message_list, $dom;
+  $retval = '';
+
+  // First, gather any parser messages
+  $parser_messages = $dom->documentElement->lastChild;
+  if ( $parser_messages->nodeName == 'messages' ) {
+    foreach ( $parser_messages->childNodes as $message )  {
+      draw_message($message->getAttribute('category'), $message->firstChild->wholeText);
+    }
+  }
+
+  foreach ( $message_list as $key => $messages ) {
+    foreach ( $messages as $message_item ) {
+      $retval .= "$key: " . $message_item['message'] . "\n";
+    }
+  }
+  return $retval;
+}
+
 ?>

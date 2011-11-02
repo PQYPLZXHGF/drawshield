@@ -84,7 +84,8 @@ function apply_tincture ( $tincture, $object, $chg_size = '',
          $fur_data[0] . '" height="' . $fur_data[1] . '"',
          $fur_data[2] );
       $retval = add_def();
-      $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
+      $stroke = ($object_type == 'ordinary') ? 'stroke="black" stroke-width="5"' : '';
+      $retval .= '<g ' . $stroke . ' fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
       break;
     case 'treatment':
       $treat_data = makeTreatment( $child );

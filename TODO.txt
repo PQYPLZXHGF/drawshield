@@ -38,6 +38,8 @@ void version of fylfot and cross formy
 
 Add ringed modifier to quadrates
 
+placement for in pale when in bottom quarters ( see showcase 2 )
+
 DONE
 
 Do not repeat error messages (e.g. once per charge)
@@ -74,5 +76,11 @@ like as a keyword before charge
 bug where a number follows the charge
 
 Rewrote all quadrate crosses
+
+Ordinaries with a fur now have a narrow black border
+
+Rewrote the various embattled edges
+
+less extraneous crap when saved as a file
 
 

@@ -12,43 +12,15 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-function on_division($xpath,$item,$chief) {
-  $number = $item->getAttribute('number');
-  $division = $xpath->query("parent::ord_chgs/parent::plain/tincture/division", $item);
-  $ofnum = get_mod($division->item(0),'ofnum');
-  $subtype = $division->item(0)->getAttribute('subtype');
-  $sinister = get_mod($division->item(0),'sinister');
-  $reversed = get_mod($division->item(0),'inverted');
-  if ($subtype=='per-bend' and $number==2 and $chief == false) $placement = 'x/300,700,350,350:700,300/x/x/x/x';
-  elseif ($subtype=='per-bend' and $sinister and $number==2 and $chief == false) $placement = 'x/300,300,350,350:700,700/x/x/x/x';
-  elseif ($subtype=='per-bend' and $sinister and $number==2  and $chief == true) $placement = 'x/300,600,350,350:700,1000/x/x/x/x';
-  elseif ($subtype=='per-bend' and $number==2  and $chief == true) $placement = 'x/300,900,250,250:600,600/x/x/x/x';
-  elseif (substr($subtype,0,9)=='quarterly' and $number==4  and $chief == false) $placement = 'x/x/x/250,250,300,300:750,250:250,750:750,750/x/x/';
-  elseif (substr($subtype,0,9)=='quarterly' and $number==4  and $chief == true) $placement = 'x/x/x/250,450,260,260:750,450:250,850:750,850/x/x/';
-  elseif ($subtype=='gyronny' and $ofnum==8 and ($number==8 or $number==4)  and $chief == false) $placement = 'x/x/x/200,500,300,300:500,200:800,500:500,800/x/x/x/200,400,160,160:400,200:600,200:800,400:800,600:600,800:400,800:200,600';
-  elseif ($subtype=='gyronny' and $ofnum==8 and ($number==8 or $number==4)  and $chief == true) $placement = 'x/x/x/200,700,250,250:500,400:800,700:500,1000/x/x/x/200,600,150,150:400,400:600,400:800,600:800,800:600,1000:400,1000:200,800';
-  elseif ($subtype=='gyronny' and $ofnum==6 and ($number==6 or $number==3)  and $chief == false) $placement = 'x/200,500,300,600:800,500/x/x/x/350,200,200,200:650,200:150,500:850,500:350,800:650,800';
-  elseif ($subtype=='gyronny' and $ofnum==6 and ($number==6 or $number==3)  and $chief == true) $placement = 'x/200,800,300,400:800,800/x/x/x/350,450,180,180:650,450:150,700:850,700:350,950:650,950';
-  elseif ($subtype=='per-chevron' and $number==3  and $chief == false) $placement = 'x/x/250,200,240,240:500,750,300,300:750,200,240,240';
-  elseif ($subtype=='per-chevron' and $number==3  and $chief == true) $placement = 'x/x/250,500,220,220:500,950,300,300:750,500,220,220';
-  elseif ($subtype=='per-pall' and $reversed and $number==3  and $chief == false) $placement = 'x/x/250,300,300,300:500,900:750,300/x/x/x/';
-  elseif ($subtype=='per-pall' and $reversed and $number==3  and $chief == true) $placement = 'x/x/250,500,260,260:500,950:750,500/x/x/x/';
-  elseif ($subtype=='per-pall' and $number==3  and $chief == false) $placement = 'x/x/250,700,300,300:500,200,300,300:750,700,300,300:/x/x/x/';
-  elseif ($subtype=='per-pall' and $number==3  and $chief == true) $placement = 'x/x/250,850,260,260:500,500:750,850:/x/x/x/';
-  elseif ($subtype=='per-saltire' and $number==3  and $chief == false) $placement = 'x/200,500,240,240:800,500/200,500,240,240:500,850,300,300:800,500,240,240/200,500,240,240:500,850,300,300:800,500,240,240:500,200,240,240/x/x';
-  elseif ($subtype=='per-saltire' and $number>=2 and $number<=4  and $chief == true) $placement = 'x/200,700,220,220:800,700/200,700,220,220:500,950,260,260:800,700,220,220/200,700,220,220:500,950,260,260:800,700,220,220:500,450,220,220/x/x';
-  else $placement = null;
-  return $placement;
-}
-
 function placements() {
   global $dom;
 
   $xpath = new DOMXPath($dom);
 
   $region = 'pl';
-
+  
   foreach ( $xpath->query("//charge") as $item ) {
+    $placement = ''; // This is what we are after, keep going until we find one
     // Set up parameters for this charge
     $chief = $xpath->evaluate("boolean(../../../ordinary[@subtype='chief'] or ../ordinary[@subtype='chief'])", $item);
     $conjoin = get_mod($item, 'conjoin');
@@ -75,12 +47,14 @@ function placements() {
 
     // strewn on a field (don't need any placement)
     if ( $item->parentNode->nodeName == 'semyde' )
-      $placement = null;
+      $placement = 'i';
+    
     // around another charge (no placement) - placement is below
-    elseif ( $xpath->evaluate("boolean(parent::modifier[@name='between']/parent::charge)",$item) )
-      $placement = null;
+    if ( $placement == '' && $xpath->evaluate("boolean(parent::modifier[@name='between']/parent::charge)",$item) )
+      $placement = 'i';
+    
     // between another charge (see above)
-    elseif ( $xpath->evaluate("boolean(modifier[@name='between']/charge[@number > 2])",$item ) ) {
+    if ( $placement == '' && $xpath->evaluate("boolean(modifier[@name='between']/charge[@number > 2])",$item ) ) {
       if ( $item->getAttribute('type') == 'quadrate' )
         $placement = 'x/x/x/x/200,300,160,160:500,600,600,600:800,300,160,160:200,900:800,900';
       elseif ( $chief )
@@ -88,8 +62,9 @@ function placements() {
       else
         $placement = 'x/x/x/250,200,300,280:500,550,700,400:750,200,300,280:500,1000/250,200,280,280:500,550,700,400:750,200,280,280:250,900:750,900/250,200,240,240:500,550,700,400:750,200,240,240:500,200:250,900:750,900';
     }
+    
     // on an ordinary
-    elseif ($xpath->evaluate("boolean(parent::modifier[@name='on']/parent::ordinary)",$item ) ) {
+    if ( $placement == '' && $xpath->evaluate("boolean(parent::modifier[@name='on']/parent::ordinary)",$item ) ) {
       $ordinary = $item->parentNode->parentNode;
       $ordtype = $ordinary->getAttribute('type');
       $ordsubtype = $ordinary->getAttribute('subtype');
@@ -125,11 +100,20 @@ function placements() {
       elseif ($ordsubtype=='orle' and $chief==true) $placement = 'x///////////130,800,80,80:870,800:500,420:500,1070:130,800:870,800:250,420:750,420:250,970:750,970:130,600:870,600';
       else $placement = 'n';
     }
+    
     // on particular charges
-    elseif ($xpath->evaluate("boolean(parent::modifier[@name='on']/parent::charge[@subtype='moon'])",$item ))
-      $placement = '500,750,400,400/250,750,375,375:750,750/200,750,300,300:500,950:800,750/s/s/s';
+    if ( $placement == '' && $xpath->evaluate("boolean(parent::modifier[@name='on']/parent::charge)",$item )) {
+      $type = $item->parentNode->parentNode->getAttribute('type');
+      $subtype = $item->parentNode->parentNode->getAttribute('subtype');
+      // Test order is important - check specific subtypes before generic type
+      if ( $type == 'quadrate' and $number <= 4)
+        $placement = '///500,200,200,200:120,600:880,600:500,1000';
+      elseif ( $subtype == 'moon' )
+        $placement = '500,750,400,400/250,750,375,375:750,750/200,750,300,300:500,950:800,750/s/s/s';
+    }
+    
     // explicit arrangements
-    elseif ( ($arr = get_mod($item,'arrangement')) ) {
+    if ( $placement == '' && ($arr = get_mod($item,'arrangement')) ) {
       if ( $arr == 'inbend' and $chief == false ) $placement = '500,500,400,800,45/333.33,333.33,180,180,45:666.67,666.67/250,250,200,200,45:500,500:750,750/200,200,200,200,45:400,400:600,600:800,800/166.67,166.67,160,160,45:333.33,333.33:500,500:666.67,666.67:833.33,833.33/142.86,142.86,140,140,45:285.71,285.71:428.57,428.57:571.43,571.43:714.29,714.29:857.14,857.14';
       elseif ( $arr == 'inbend' and $chief == true ) $placement = '500,800,350,700,45/333.33,633.33,180,180,45:666.67,966.67/200,500,180,180,45:400,700:600,900/166.67,466.67,180,180,45:333.33,633.33:500,800:666.67,966.67/142.86,442.86,180,180,45:285.71,585.71:428.57,728.57:571.43,871.43:714.29,1014.29/s';
       elseif ( $arr == 'inbendsin' and $chief == false ) $placement = '500,500,400,800,-45/333.33,333.33,180,180,-45:666.67,666.67/250,250,200,200,-45:500,500:750,750/200,200,200,200,-45:400,400:600,600:800,800/166.67,166.67,160,160,-45:333.33,333.33:500,500:666.67,666.67:833.33,833.33/142.86,142.86,140,140,-45:285.71,285.71:428.57,428.57:571.43,571.43:714.29,714.29:857.14,857.14';
@@ -159,8 +143,9 @@ function placements() {
       elseif ( $arr == 'quadrangle' and $chief == true ) $placement = 'x/x/x/250,500,400,300:750,500:250,900:750,900';
       else $placement = 'i';
     }
+    
     // between an ordinary
-    elseif ($xpath->evaluate("boolean(parent::modifier[@name='between']/parent::ordinary)",$item )) {
+    if ( $placement == '' && $xpath->evaluate("boolean(parent::modifier[@name='between']/parent::ordinary)",$item )) {
       $ordinary = $item->parentNode->parentNode;
       $ordtype = $ordinary->getAttribute('type');
       $ordsubtype = $ordinary->getAttribute('subtype');
@@ -202,20 +187,46 @@ function placements() {
       elseif ($ordsubtype=='flaunch' or $ordsubtype=='square-flaunch') $placement = calcPlace('n',$number,$conjoin,'300,300,400,600');
       else $placement = 'n';
     }
+    
     // Explicit rows
-    elseif ( ($rows = get_mod($item, 'rows'))) {
+    if ( $placement == '' &&  ($rows = get_mod($item, 'rows'))) {
       $placement = calcPlace('r',$rows,$conjoin,$boundingBox);
     }
+    
     // On an underlying division
-    elseif ($xpath->evaluate("boolean(parent::ord_chgs/parent::plain/tincture/division)", $item) and
-          ($result = on_division($xpath, $item, $chief)) != null ) {
-      $placement = $result;
+    if ( $placement == '' && $xpath->evaluate("boolean(parent::ord_chgs/parent::plain/tincture/division)", $item) ) {
+      $number = $item->getAttribute('number');
+      $division = $xpath->query("parent::ord_chgs/parent::plain/tincture/division", $item);
+      $ofnum = get_mod($division->item(0),'ofnum');
+      $subtype = $division->item(0)->getAttribute('subtype');
+      $sinister = get_mod($division->item(0),'sinister');
+      $reversed = get_mod($division->item(0),'inverted');
+      if ($subtype=='per-bend' and $number==2 and $chief == false) $placement = 'x/300,700,350,350:700,300/x/x/x/x';
+      elseif ($subtype=='per-bend' and $sinister and $number==2 and $chief == false) $placement = 'x/300,300,350,350:700,700/x/x/x/x';
+      elseif ($subtype=='per-bend' and $sinister and $number==2  and $chief == true) $placement = 'x/300,600,350,350:700,1000/x/x/x/x';
+      elseif ($subtype=='per-bend' and $number==2  and $chief == true) $placement = 'x/300,900,250,250:600,600/x/x/x/x';
+      elseif (substr($subtype,0,9)=='quarterly' and $number==4  and $chief == false) $placement = 'x/x/x/250,250,300,300:750,250:250,750:750,750/x/x/';
+      elseif (substr($subtype,0,9)=='quarterly' and $number==4  and $chief == true) $placement = 'x/x/x/250,450,260,260:750,450:250,850:750,850/x/x/';
+      elseif ($subtype=='gyronny' and $ofnum==8 and ($number==8 or $number==4)  and $chief == false) $placement = 'x/x/x/200,500,300,300:500,200:800,500:500,800/x/x/x/200,400,160,160:400,200:600,200:800,400:800,600:600,800:400,800:200,600';
+      elseif ($subtype=='gyronny' and $ofnum==8 and ($number==8 or $number==4)  and $chief == true) $placement = 'x/x/x/200,700,250,250:500,400:800,700:500,1000/x/x/x/200,600,150,150:400,400:600,400:800,600:800,800:600,1000:400,1000:200,800';
+      elseif ($subtype=='gyronny' and $ofnum==6 and ($number==6 or $number==3)  and $chief == false) $placement = 'x/200,500,300,600:800,500/x/x/x/350,200,200,200:650,200:150,500:850,500:350,800:650,800';
+      elseif ($subtype=='gyronny' and $ofnum==6 and ($number==6 or $number==3)  and $chief == true) $placement = 'x/200,800,300,400:800,800/x/x/x/350,450,180,180:650,450:150,700:850,700:350,950:650,950';
+      elseif ($subtype=='per-chevron' and $number==3  and $chief == false) $placement = 'x/x/250,200,240,240:500,750,300,300:750,200,240,240';
+      elseif ($subtype=='per-chevron' and $number==3  and $chief == true) $placement = 'x/x/250,500,220,220:500,950,300,300:750,500,220,220';
+      elseif ($subtype=='per-pall' and $reversed and $number==3  and $chief == false) $placement = 'x/x/250,300,300,300:500,900:750,300/x/x/x/';
+      elseif ($subtype=='per-pall' and $reversed and $number==3  and $chief == true) $placement = 'x/x/250,500,260,260:500,950:750,500/x/x/x/';
+      elseif ($subtype=='per-pall' and $number==3  and $chief == false) $placement = 'x/x/250,700,300,300:500,200,300,300:750,700,300,300:/x/x/x/';
+      elseif ($subtype=='per-pall' and $number==3  and $chief == true) $placement = 'x/x/250,850,260,260:500,500:750,850:/x/x/x/';
+      elseif ($subtype=='per-saltire' and $number==3  and $chief == false) $placement = 'x/200,500,240,240:800,500/200,500,240,240:500,850,300,300:800,500,240,240/200,500,240,240:500,850,300,300:800,500,240,240:500,200,240,240/x/x';
+      elseif ($subtype=='per-saltire' and $number>=2 and $number<=4  and $chief == true) $placement = 'x/200,700,220,220:800,700/200,700,220,220:500,950,260,260:800,700,220,220/200,700,220,220:500,950,260,260:800,700,220,220:500,450,220,220/x/x';
     }
+    
     // in some positions, arrange in narrow rows
-    elseif ($xpath->evaluate("boolean(modifier[@name='position'][@param='indexchief' or @param='insinchief' or @param='insinside' or @param='indexside'])", $item))
+    if ( $placement == '' && $xpath->evaluate("boolean(modifier[@name='position'][@param='indexchief' or @param='insinchief' or @param='insinside' or @param='indexside'])", $item))
       $placement = calcPlace('n',$number,$conjoin,$boundingBox);
+    
     // default, arrange in wide rows
-    else
+    if ( $placement == '' ) 
       $placement = calcPlace('w',$number,$conjoin,$boundingBox);
 
     // Add the placement modifier

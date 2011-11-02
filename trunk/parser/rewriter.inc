@@ -26,6 +26,14 @@ function rewrite() {
     $mod = make_mod('inverted');
     $item->appendChild($mod);
   }
+  
+  // oneach of quadrate becomes 4 on
+  foreach ( $xpath->query("//charge[@type='quadrate' and modifier/@name='oneach']") as $item ) {
+    $oneach = get_mod_node($item,'oneach');
+    $oncharge = $oneach->firstChild;
+    $oncharge->setAttribute('number','4');
+    $oneach->setAttribute('name','on');
+  }
 
   // fountain (is a roundel with wavy bars)
   foreach ( $xpath->query("//charge[@subtype='fountain']") as $item ) {

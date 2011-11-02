@@ -79,6 +79,7 @@ function makeOrdChgs( &$node ) {
 function draw() {
   global $dom;
   global $size, $tagline1, $tagline2;
+  global $asFile;
 
   // Apply heraldic knowledge!
   rewrite();
@@ -96,22 +97,25 @@ function draw() {
   $trailer =  "</svg>\n";
 
   $blazonNode = $dom->documentElement;
-//  $body = '<desc>' . htmlentities($blazonNode->getAttribute('blazonText')) . '</desc>';
   $body = '<desc>' . $blazonNode->getAttribute('blazonText') . '</desc>';
   foreach ( $blazonNode->childNodes as $node ) {
     switch ( $node->nodeName ) {
-      case 'shield':
-        $body .= makeshield($node);
-        break;
+    case 'shield':
+      $body .= makeshield($node);
+      break;
       // other elements for future expansion
     }
   }
   $clipShield = add_def('clipPath', '<path d="M 0 0 L 0 800 A 800 400 0 0,0 500 1200 A 800 400 0 0,0 1000 800 L 1000 0 Z" />' );
   $body .= add_def();
   $body = '<g clip-path="url(#' . $clipShield . ')">' . $body . '</g>';
-  $body .= '<text x="10" y="1160" font-size="30" >' . $tagline1 . '</text><text x="10" y="1190" font-size="30" >' . $tagline2 . '</text>';
-  $body .= get_error_messages();
-
+  if ( !$asFile ) {
+    $body .= '<text x="10" y="1160" font-size="30" >' . $tagline1 . '</text><text x="10" y="1190" font-size="30" >' . $tagline2 . '</text>';
+    $body .= get_error_messages();
+  } else {
+    $header .= '<title>' . htmlentities($blazonNode->getAttribute('blazonText')) . '</title>';
+    $header .= '<desc>'  . htmlentities(get_error_text()) . '</desc>'; 
+  }
   return $header . $body . $trailer;
 }
 

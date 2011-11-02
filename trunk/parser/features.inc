@@ -63,19 +63,21 @@ function get_features ( $feature_sets, &$node ) {
   );
 
   static $linetype_mods = array (
-     array ( 'angled',    'angled', 'mod', 'linetype',                                ),
-     array ( 'arched',    '(en)?arched',  'mod', 'linetype',                            ),
-     array ( 'battled-embattled', 'battled embattled', 'mod', 'linetype',),
-     array ( 'battled-embattled', '(em)?battled grady', 'mod', 'linetype',  ),
-     array ( 'battled-counter', '(em)?battled counter embattled',  'mod', 'linetype', ),
-     array ( 'bevilled',    'bevill?ed',     'mod', 'linetype',                         ),
-     array ( 'bevilled',    'bevill?y',     'mod', 'linetype',                         ),
-     array ( 'dancetty-floretty', 'dau?ncett(e|y) flor(y|etty)' , 'mod', 'linetype',),
+    array ( 'battled-embattled', '(battled|double) (e?m?battled|crenn?ell?e?y?)', 'mod', 'linetype',),  // two levels of battlements, on upper surface only
+    array ( 'battled-embattled', '(em)?battled grady', 'mod', 'linetype',  ),
+    array ( 'battled-brettesse', '(em)?battled brett?ess?e?y?', 'mod', 'linetype',  ),                // both sides, same pattern
+    array ( 'battled-counter', '(e?m?battled|crenn?ell?e?y?) counter (e?m?battled|crenn?ell?e?y?)',  'mod', 'linetype', ), // both sides, opposite pattern
+    array ( 'embattled', '?super (e?m?battled|crenn?ell?e?y?)',     'mod', 'linetype',   ),        // top only
+    array ( 'embattled-round', '(e?m?battled|crenn?ell?e?y?) arrondi',     'mod', 'linetype', ),           // top only, round crenelles
+    array ( 'angled',    'angled', 'mod', 'linetype',                                ),
+    array ( 'arched',    '(en)?arched',  'mod', 'linetype',                            ),
+    array ( 'bevilled',    'bevill?ed',     'mod', 'linetype',                         ),
+    array ( 'bevilled',    'bevill?y',     'mod', 'linetype',                         ),
+    array ( 'dancetty-floretty', 'dau?ncett(e|y) flor(y|etty)' , 'mod', 'linetype',),
      array ( 'dancetty',  'dau?ncetty',         'mod', 'linetype',                       ),
      array ( 'double-arched', 'double (en)?arched',  'mod', 'linetype',      ),
      array ( 'double-arched', '(en)?arched double',  'mod', 'linetype',      ),
      array ( 'dovetailed','dovetailed',   'mod', 'linetype',                           ),
-     array ( 'embattled', 'embattled',     'mod', 'linetype',                          ),
      array ( 'engrailed', 'engrailed',        'mod', 'linetype',                       ),
      array ( 'escartelly',    'escartelly',    'mod', 'linetype',                      ),
      array ( 'indented',  'indented',    'mod', 'linetype',                            ),
@@ -86,9 +88,9 @@ function get_features ( $feature_sets, &$node ) {
      array ( 'potenty',   'potenty',    'mod', 'linetype',                             ),
      array ( 'raguly',    'raguly',       'mod', 'linetype',                           ),
      array ( 'rayonny',   '(rayonny|radiant)',        'mod', 'linetype',               ),
-     array ( 'urdy' ,     '(urdy|urde|champaine|champion)',   'mod', 'linetype',       ),
      array ( 'wavy',      '(wavy|undy)',      'mod', 'linetype',                      ),
-  );
+     array ( 'urdy' ,     '(urdy|urde|champaine|champion)',   'mod', 'linetype',       ),
+     );
 
   static $arr_pos_mods = array (
     array ( 'inpale',        'in ?the pale' , 'mod', 'arrangement'    ,3              ),

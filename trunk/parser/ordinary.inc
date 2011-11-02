@@ -22,6 +22,17 @@ function get_cotise_tinc($node) {
   return null;
 }
 
+function get_voided_tinc($node) {
+  foreach ( $node->childNodes as $child ) {
+    if ( $child->nodeName == 'modifier' and $child->getAttribute('name') == 'voided' ) {
+      if ( ($tinc = get_child($child, 'tincture')) != null ) {
+        return $child->removeChild($tinc);
+      }
+    }
+  }
+  return null;
+}
+
 function get_ordmod_array($type, $subtype, &$features, &$flags) {
   $node = null;
   $ordinary = array ();
@@ -94,7 +105,9 @@ function ordinary() {
       $proper = $dom->createElement('proper');
       $tinc->appendChild($proper);
     } elseif ( ($tinc = get_cotise_tinc($node)) != null ) { // or it could be because the tincture was concsumed by a cotised modifier
-    // Don't need to do anything else
+      // Don't need to do anything else
+    } elseif ( ($tinc = get_voided_tinc($node)) != null ) { // or it was consumed (incorrectly) by the voided modifier
+      // Don't need to do anything else
     } else { // otherwise, wait for another tincture to come along
       $tinc = $dom->createElement('tincture');
       $tinc->setAttribute('origin','pending');

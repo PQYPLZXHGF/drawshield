@@ -74,8 +74,6 @@ function makeDivision( $node, $counter = false ) {
         $secondData = makeDivision( $secondDiv );
         $retval .= $secondData[2];
       }
-      elseif ( $child->nodeName == 'modifier' and substr( $child->getAttribute('name'), 0, 2 ) == 'on' )
-        $retval .= makeCharge( $child->firstChild );
     }
   }
   return $retval;

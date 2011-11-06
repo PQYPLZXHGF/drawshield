@@ -16,7 +16,8 @@ function makeDiv_common( $node, $div_num ) {
 
   $div_data = array (
     'per-fess' => 'X-8Y600A1016c608e1016g608',
-    'per-bend' => array ( 'div2' => array ( 'NC' => 'X0Y0B1414c200e1000g1200', 'CH' => 'X0Y300B1414e1000g900')),
+    // 'per-bend' => array ( 'div2' => array ( 'NC' => 'X0Y0B1414c200e1000g1200', 'CH' => 'X0Y300B1414e1000g900')),
+    'per-bend' => array ( 'div2' => array ( 'NC' => 'X-106Y-106B1714c100e1212g1312', 'CH' => 'X0Y300B1414e1000g900')),
     'per-bend-fracted' => array ( 'div2' => array ( 'NC' => 'X200Y0B717e500B1131c100e1010g1410', 'CH' => 'X200Y300B717e500B717e1010g1310' )),
     'per-bend-sinister' => array ( 'div2' => array ( 'NC' => 'X1000Y0c1200e1000g200H1414', 'CH' => 'X1000Y300c1000e1000H1414' )),
     'per-bend-sinister-fracted' => array ( 'div2' => array ( 'NC' => 'X800Y0a200c1300e1000H1131e500H717', 'CH' => 'X800Y300a200c1000e800H717e500H717' )),
@@ -67,17 +68,17 @@ function makeDiv_common( $node, $div_num ) {
                                  'div3' => array ( 'NC' => 'X0Y800A1000c400e1000g400',  'CH' => 'X0Y900A1000c300e1000g300' ) ),
     'tierced-in-pale' => array(  'div2' => array ( 'NC' => 'X333Y0a667c1200e667G1200',  'CH' => 'X333Y200a667c1100e667G1100' ) ,
                                  'div3' => array ( 'NC' => 'X666Y0a337c1200e337G1200',  'CH' => 'X666Y200a337c1100e337G1100' ) ),
-    'tierced-in-bend' => array ( 'div2' => array ( 'NC' => 'X-100Y-100a400B1131c600e1400g1200', 'CH' => 'X-100Y200a400B1131c300e1200g1100' ),
-                                 'div3' => array ( 'NC' => 'X-100Y100B1697e1200g1200', 'CH' => 'X-100Y400B1272e900g900' )),
+    'tierced-in-bend' => array ( 'div2' => array ( 'NC' => 'X-100Y-100a300B1131c600e1300g1200', 'CH' => 'X-100Y200a400B1131c300e1200g1100' ),
+                                 'div3' => array ( 'NC' => 'X-200Y100B1697e1200g1200', 'CH' => 'X0Y400B1272e900g900' )),
     'tierced-in-bend-sinister' => array ( 'div2' => array ( 'NC' => 'X800Y-100a400c1400e1200g600H1131', 'CH' => 'X1100Y200c1100e1200g300H1131a400' ),
-                                 'div3' => array ( 'NC' => 'X1100Y100c1200e1200H1697', 'CH' => 'X1100Y400c900e900H1272' )),
+                                 'div3' => array ( 'NC' => 'X1200Y100c1200e1200H1697', 'CH' => 'X1000Y400c900e900H1272' )),
     'tierced-in-chevron' => array ( 'div2' => array ( 'NC' => 'V1X-100Y1200g500H848B849c500e1200', 'CH' => 'V1X-100Y1300g400H848B849c400e1200' ),
                                  'div3' => array ( 'NC' => 'V1X-100Y1300g100H848B849c100e1200', 'CH' => 'V1X-100Y1400g100H848B849c100e1200' )),
   );
   $name = $node->getAttribute('subtype');
   $modifiers = '';
   // Order of these tests needs to match order of division names in the array above!
-  if ( get_mod($node, 'inverted') or get_mod($node, 'reversed')) $modifiers .= '-inverted';
+  if ( get_mod($node, 'inverted')) $modifiers .= '-inverted';
   if ( get_mod($node, 'sinister')) $modifiers .= '-sinister';
   if ( get_mod($node, 'fracted')) $modifiers .= '-fracted';
   if ( array_key_exists($name . $modifiers, $div_data))

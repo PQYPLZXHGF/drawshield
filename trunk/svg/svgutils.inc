@@ -379,9 +379,9 @@ function scalePath ( $path, $xScale = 1, $yScale = 1 ) {
         }
         $newPath .= "a$rx,$ry $rot,$arc,$swap $x,$y";
         break;
+      case 'c':
       case 'l':
       case 'q':
-      case 'c':
       case 's':
       case 'm':
         $newPath .= $command;

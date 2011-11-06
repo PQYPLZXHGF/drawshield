@@ -93,12 +93,12 @@ function get_error_messages() {
     }
     foreach ( $messages as $message_item ) {
       $text = $message_item['message'];
-      if ( $message_item['filename'] != null ) {
+      /* if ( $message_item['filename'] != null ) {
         $text .= " (${message_item['filename']}";
         if ( $message_item['line'] != null )
           $text .= ":${message_item['line']}";
-        $text .= ')';
-      }
+        $text .= ')'; 
+      }*/
       $formatted = format($text);
       foreach($formatted as $line) {
         $retval .= '<text x="10" y="' . ($yCount += 30) . '" font-size="30" fill="black" >' . htmlspecialchars($line) . "</text>\n";

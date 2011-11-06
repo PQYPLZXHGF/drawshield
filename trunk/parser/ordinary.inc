@@ -69,7 +69,7 @@ function ordinary() {
   $depressed = (search_match($dep_with) != null);
   if ( ($ord_num = number()) == null ) $ord_num = 1;
 
-  get_features ( array('position'), $node ); // Sometimes you get "sinister bend ...."
+  get_features ( array('ordinary'), $node ); // Sometimes you get "sinister bend ...."
 
   if ( ($match = either('ordinary')) != null) {
     if ($match[3] == 'either' and $ord_num > 1) {
@@ -94,7 +94,7 @@ function ordinary() {
   $flags = array();
   get_ordmod_array($ord_name,$ord_type,$specific_features,$flags);
 
-  get_features ( array('shape', 'position', 'linetype', $specific_features), $node ); // for "bend sinister (angled).."
+  get_features ( array('shape', 'ordinary', 'linetype', $specific_features), $node ); // for "bend sinister (angled).."
 
   // Have we found a tincture yet?
   if ( ($tinc = get_child($node, 'tincture')) == null ) {
@@ -122,7 +122,7 @@ function ordinary() {
   // Does this ordinary go "between" some charges?
   if ( $inside or search_match($between) != null ) {
     $btwn_mod = make_mod('between');
-    if ( ($btwn_charge = charge()) == null ) {
+    if ( ($btwn_charge = charge(false,false,false)) == null ) {
       $btwn_charge = $dom->createElement('missing');
       parser_message('blazon', 'Nothing to go between');
     }
@@ -141,7 +141,7 @@ function ordinary() {
         parser_message('blazon', 'Nothing to go "on" the ordinary (' . $ord_type .')' );
       }
     } else {
-      $items = charge(false);
+      $items = charge(false,false,false);
       if ( $items == null ) $items = ordinary();
       if ( $items == null ) {
         $items = $dom->createElement('missing');

@@ -231,7 +231,13 @@ function rewrite() {
 	
   // All (Some?) ordinaries when "reversed", actually mean "inverted"
   foreach ( $xpath->query("//ordinary/modifier[@name='reversed']") as $item ) {
-	//  if ( in_array($item->parentNode->getAttribute('subtype'), array ('chevron', 'pall', 'pile') ))
+	 // if ( in_array($item->parentNode->getAttribute('subtype'), array ('chevron', 'pall', 'pile') ))
+		  $item->setAttribute('name','inverted');
+	}
+
+  // Some divisions when "reversed", actually mean "inverted"
+  foreach ( $xpath->query("//division/modifier[@name='reversed']") as $item ) {
+	  if ( in_array($item->parentNode->getAttribute('subtype'), array ('per-chevron', 'per-pall') ))
 		  $item->setAttribute('name','inverted');
 	}
 

@@ -64,13 +64,6 @@ function division( $depth = 1 ) {
      array ( null, 'of # ?pieces', 'mod', 'ofnum' ),
    );
 
-  static $charges_on = array (
-    array ( 'oneach', 'charged with'  ),
-    array ( 'oneach', 'on each'  ),
-    array ( 'onfirst', 'on each ?of ?the first'  ),
-    array ( 'onlast', 'on each ?of ?the last'  ),
-  );
-
   $node = null;
   $tinc_count = 0;
   if ( ($match = search_match ( $divisions )) != null ) {
@@ -80,7 +73,7 @@ function division( $depth = 1 ) {
     $node->setAttribute( 'subtype', $match[0]);
     comma();
     // generic modifiers, including tinctures
-    get_features(array('linetype', 'position', $of_pieces), $node);
+    get_features(array('linetype', 'ordinary', $of_pieces), $node);
     // How many tinctures did we find?
     foreach ($node->childNodes as $child )
       if ( $child->nodeName == 'tincture' ) $tinc_count++;
@@ -88,7 +81,6 @@ function division( $depth = 1 ) {
       $tinc = $dom->createElement('tincture');
       $tinc->setAttribute('index', 1);
       $tinc->setAttribute('origin', 'missing');
-//        $pending_items[] = $tinc;
       $node->appendChild($tinc);
     }
     if ( $depth == 1 ) {
@@ -97,7 +89,6 @@ function division( $depth = 1 ) {
         $tinc = $dom->createElement('tincture');
         $tinc->setAttribute('index', 2);
         $tinc->setAttribute('origin', 'missing');
-//        $pending_items[] = $tinc;
         $node->appendChild($tinc);
       }
       // Do we need a third also?
@@ -105,7 +96,6 @@ function division( $depth = 1 ) {
         $tinc = $dom->createElement('tincture');
         $tinc->setAttribute('index', 3);
         $tinc->setAttribute('origin', 'missing');
-//        $pending_items[] = $tinc;
         $node->appendChild($tinc);
       }
     } else { // second tincture is implied
@@ -113,17 +103,6 @@ function division( $depth = 1 ) {
       $tinc->setAttribute('origin', 'implied');
       $tinc->setAttribute('index', 2);
       $node->appendChild($tinc);
-    }
-    if ( ($on_type = search_match($charges_on)) != null ) {
-      $on_div = make_mod('on');
-      if ( ($items = charge(false)) == null ) {
-        $items = $dom->createElement('missing');
-        parser_message('blazon','Nothing to go "on" the division (' . $match[0] .')' );
-      }
-      $pos = make_mod('position', $on_type[0]);
-      $items->appendChild($pos);
-      $on_div->appendChild($items);
-      $node->appendChild($on_div);
     }
   }
   return $node;

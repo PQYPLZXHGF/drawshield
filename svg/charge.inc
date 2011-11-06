@@ -15,34 +15,10 @@
 
 function makeCharge($charge) {
   $placements = array(0 => 'x/x/x/x/x/x');
-  $locations = array(0 => 'default');
-  $counts = array(0 => $charge->getAttribute('number'));
-  $pcount = $lcount = $ccount = 0;
+  $placements = get_mod($charge,'placement');
   $retval = '';
-  foreach ( $charge->childNodes as $child ){
-    if ( $child->nodeName == 'modifier' ) {
-      switch ( $child->getAttribute('name')) {
-        case 'location':
-          $locations[$lcount++] = $child->getAttribute('param');
-          break;
-        case 'placement':
-          $placements[$pcount++] = $child->getAttribute('param');
-          break;
-        case 'count':
-          $counts[$ccount++] = $child->getAttribute('param');
-          break;
-      }
-    }
-  }
-  for ( $i = 0; $i < count($placements); $i++ ) {
-    // If more than one location, use location counts, otherwise use given number
-    if ( $lcount > 1 ) $charge->setAttribute( 'number', $counts[$i]);
-    $retval .= place_charges ( $charge, $placements[$i] );
-    if ( $locations[$i] != 'default' ) {
-      $in_data = explode(',',$locations[$i]);
-      $transform = 'transform="' . sprintf("translate(%.2f,%.2f) scale(%.2f,%.2f)", $in_data[0], $in_data[1], $in_data[2]/1000, $in_data[3]/1000) . '" ';
-      $retval = "<g $transform >\n$retval\n</g>";
-    }
+  foreach ( explode('*',$placements) as $placement ) {
+    $retval .= place_charges ( $charge, $placement );
   }
   return $retval;
 }
@@ -173,10 +149,10 @@ function getCharge( $node ) {
   if ( $charges_on ) {
     // Turn off flexible scaling (as on charges could be distorted by flexing) ???
     // $chg_data['hflex'] = $chg_data['wflex'] = 1;
-    $scale = min ( $chg_data['width']/1000, $chg_data['height']/1200);
+    $scale = min ( $chg_data['width']/1000, $chg_data['height']/1000);
     $charges = makeCharge($charges_on);
     // scale to fit onto charge - then move so charges are central
-    $charges = sprintf('<g transform="translate(%2f,%2f) scale(%4f)">%s</g>', (($chg_data['width']/2)-(1000*$scale)/2), (($chg_data['height']/2)-(1200*$scale)/2),
+    $charges = sprintf('<g transform="translate(%2f,%2f) scale(%4f)">%s</g>', (($chg_data['width']/2)-(1000*$scale)/2), (($chg_data['height']/2)-(1000*$scale)/2),
                         $scale, $charges);
     $body .= $charges;
   }

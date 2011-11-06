@@ -6,8 +6,6 @@ Fix positions for in bend sinister, need to mirror bend positions in placement.i
 
 "an orle of" does not need tincture....
 
-Indirection for modifier data? (mods repeat for each synonym) No they don't! But maybe combine things like couped...?
-
 Move all specific knowledge into "flags" (like $put_in_chief), do NOT rely on the NAME of the charge or ordinary
 
 Re-implement "facing" mod
@@ -15,8 +13,6 @@ Re-implement "facing" mod
 Properly document ordinary and charge
 
 cross-pierced cotticing
-
-https://docs.google.com/spreadsheet/ccc?key=0ApU4vAAfwWNQdGRjSFBWSXRlaWx1X29GMWdra0x4N0E&hl=en_GB
 
 Allow ordinary['fim_path'] to be a path spec & use if present instead of body
 
@@ -28,8 +24,6 @@ per saltire with a chief should be non-45 degrees to look better?
 
 doevtailed - make separate start and end paths to return to center? Complicated, but might make quarterly etc. look better (+issue 144)
 
-voided and fimbriated not working?
-
 fluery on each point (adds -floretty to dancetty line type)
 
 rewrite calcPlace to use modifiers directly from node, not passed to it.
@@ -40,47 +34,18 @@ Add ringed modifier to quadrates
 
 placement for in pale when in bottom quarters ( see showcase 2 )
 
+ordinaries with black furs should have white border?
+
+in first and friends with a chief present
+
+placements not carried forward? e.g. on a cross 4 pommes a chief gules
+
+in svg/charge.inc call makeCharge early so that it can change any modifiers (so can move from rewriter.inc). Also get makeCharge to call its own placement()???
+
+inflank with the count mod is broken
+
+
 DONE
 
-Do not repeat error messages (e.g. once per charge)
-
-charge WITHIN ordinary (is same as WITHIN ordinary charge)
-
-Bug fix, treatments were reversed if colour treatment colour
-
-fix for ordinary reversed => ordinary inverted
-
-Gules a Chevron Argent between in chief two Lozenges and in base a
-Lion passant guardant Or. - Now parses correctly.
-
-Better filling by division
-
-The vairy treatment was very large, it has been reduced
-
-Items placed "on" an ordinary sinister are now the right way around
-
-Fixed rotation / scaling / position of charges bendwise and bendwise sinister
-
-chevron and bend Quarterly now drawn correctly
-
-Compony and counter compony for chevron and saltire
-
-Made sure chevron and per-chevron with linetypes are all symmetrical
-
-DONE (2.3j)
-
-issue 143, 206
-
-like as a keyword before charge
-
-bug where a number follows the charge
-
-Rewrote all quadrate crosses
-
-Ordinaries with a fur now have a narrow black border
-
-Rewrote the various embattled edges
-
-less extraneous crap when saved as a file
-
+Added embattled arrondi
 

@@ -32,12 +32,7 @@ function makeDiv_gyronny( $node, $div_num ) {
   $allowed = array ( '6', '8', '10', '12', '16' );
 
   $num_of = '0';
-  foreach ( $node->childNodes as $child ) {
-    if ( $child->nodeName == 'modifier' and $child->getAttribute('name') == 'ofnum' ) {
-      $num_of = $child->getAttribute('param');
-      break;
-    }
-  }
+  $num_of = get_mod($node,'ofnum');
   if ( !in_array($num_of, $allowed) ) $num_of = '8';
 
   return $g_data[('gyronny-of-' . $num_of)];

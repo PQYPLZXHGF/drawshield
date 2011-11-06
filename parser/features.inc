@@ -12,16 +12,171 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
+   function get_positions ( &$node, $found_so_far = null ) { // micro-parser for positions
+   // we have already found the word "in" (& maybe "the")
+   static $specifiers = array (
+     array ( 'first', '(first|1st)' ),
+     array ( 'second', '(second|2nd)' ),
+     array ( 'third', '(third|3rd)' ),
+     array ( 'fourth', '(fourth|4th)' ),
+     array ( 'dexter', '?each dexter' ),
+     array ( 'sinister', '?each sinister' ),
+     array ( 'each', '(each|every|all|both) ?of ?the' ),
+     array ( 'middle', 'middle' ),
+     );
+   static $locations = array (
+     array ( 'chief', 'chief' ),
+     array ( 'base', 'base' ),
+     array ( 'honpoint', 'honou?r point' ),
+     array ( 'fesspoint', 'fesse? point' ),
+     array ( 'nombril', 'navel point' ),
+     array ( 'nombril', 'nombril' ),
+     array ( 'flank', '(flanks?|flaunche?s?)' ),
+     );
+   static $quantifiers = array (
+     array ( 'quarter', 'quarters?' ),
+     array ( 'all', '(half|section|part)' ),
+     );
+   static $in_the = array (
+     array ( null, '(in|the)' ),
+     );
+   
+   $positions = array();
+   if ( $found_so_far ) $positions[] = $found_so_far;
+   while ( true ) {
+     $locs = array();
+     $specs = array();
+     $quant = null;
+     // look for parts
+     while ( ($match = search_match($specifiers)) != null ) {
+       $specs[] = $match[0];
+       comma();
+       andd();
+       search_match($in_the); // look for "in", "the", both or neither
+       search_match($in_the);
+     }
+     while ( ($match = search_match($locations)) != null ) {
+       $locs[] = $match[0];
+       comma();
+       andd();
+     }
+     if ( ($match = search_match($quantifiers)) != null ) {
+       $quant = $match[0];
+       comma();
+       andd();
+     }
+     // Did we find anything?
+     if ( count($locs) == 0 and count($specs) == 0 and $quant ==null ) break;
+     search_match($in_the); // look for "in", "the", both or neither
+     search_match($in_the); // ready for next iteration
+     // Now try to combine them into positions
+     if ($quant == 'quarter' ) { // one or more specific quarters
+       $found_pos = false;
+       foreach ( $specs as $spec ) {
+         $new_position = null;
+         switch ( $spec ) {
+         case 'first': $new_position = 'inQ1'; break;
+         case 'second': $new_position = 'inQ2'; break;
+         case 'third': $new_position = 'inQ3'; break;
+         case 'fourth': $new_position = 'inQ4'; break;
+         case 'each': if (count($locs)==0) $new_position = 'ineachQ'; break;
+         case 'dexter': $new_position = 'ineachQ13'; break;
+         case 'sinister': $new_position = 'ineachQ24'; break;
+         default:
+         }
+         if ( $new_position != null ) {
+           $positions[] = $new_position;
+           $found_pos = true;
+         }
+       }
+       if ( !$found_pos ) { // do we also have a chief or base location?
+         if ( in_array ( 'chief', $locs ) ) 
+           $positions[] = 'ineachQ12';
+         elseif ( in_array ( 'base', $locs) )
+           $positions[] = 'ineachQ34';
+         else
+           draw_message('warning','in which quarter?');
+       }
+     } elseif ( count($locs) > 0 ){ // no quantifier found (or it was "all"), but we have a location
+       foreach ( $locs as $location ) {
+         switch ( $location ) {
+         case 'flank': $positions[] = 'inflank'; break;
+         case 'fesspoint': $positions[] = 'infesspoint'; break;
+         case 'nombril': $positions[] = 'innombril'; break;
+         case 'honpoint': $positions[] = 'inhonpoint'; break;
+         case 'chief':
+         case 'base':
+           $count = count($positions);
+           if ( in_array ('dexter',$specs) ) $positions[] = 'in' . 'dex' . $location;
+           if ( in_array ('sinister',$specs) ) $positions[] = 'in' . 'sin' . $location;
+           if ( in_array ('middle',$specs) ) $positions[] = 'in' . 'mid' . $location;
+           if ( $count == count($positions) ) // didn't find any specs
+             $positions[] = 'in' . $location;
+           break;
+         }
+       }
+     } else { // no quantifier or location, need to have "each"
+       if ( in_array( 'each', $specs) ) {
+         if ( in_array( 'first', $specs ) )
+           $positions[] = 'ineach1st';
+         elseif ( in_array( 'second', $specs) )
+           $positions[] = 'ineach2nd';
+         else
+           $positions[] = 'ineach';
+       } else {
+         parser_message('warning','Do not understand position');
+       }
+     }
+   }
+   if ( count($positions)> 0 ) {
+     foreach ( $positions as $position )
+       $node->appendChild(make_mod('position',$position));
+     return true;
+   } else
+     return false;
+  }
+           
+
+/*     static $temp = array (
+    array ( 'inchief',       '(in|and) ?the chief' , 'mod', 'position'  ),
+    array ( 'inbase',        '(in|and) ?the base' , 'mod', 'position'  ),
+    array ( 'inQ1',    '(in|and) ?the (first|1st|i) quarter', 'mod', 'position' ),
+    array ( 'inQ2',    '(in|and) ?the (second|2nd|ii) quarter', 'mod', 'position' ),
+    array ( 'inQ3',    '(in|and) ?the (third|3rd|iii) quarter', 'mod', 'position' ),
+    array ( 'inQ4',    '(in|and) ?the (fourth|4th|iv) quarter', 'mod', 'position' ),
+    array ( 'infirst',    '(in|and) ?the (first|1st|i)', 'mod', 'position' ),
+    array ( 'insecond',    '(in|and) ?the (second|2nd|ii)', 'mod', 'position' ),
+    array ( 'inthird',    '(in|and) ?the (third|3rd|iii)', 'mod', 'position' ),
+    array ( 'ineach',  '(in|and) (each|every) ?(half|section|part)', 'mod', 'position' ), // must have underlying division
+    array ( 'ineachQ',  '(in|and) (each|every) quarter', 'mod', 'position' ),
+    array ( 'ineachQ12',  '(in|and) (each|every) chief quarter', 'mod', 'position' ),
+    array ( 'ineachQ13',  '(in|and) (each|every) dexter quarter', 'mod', 'position' ),
+    array ( 'ineachQ24',  '(in|and) (each|every) sinister quarter', 'mod', 'position' ),
+    array ( 'ineachQ34',  '(in|and) (each|every) base quarter', 'mod', 'position' ),
+    array ( 'ineach1st',  '(in|and) each of the (first|1st)', 'mod', 'position' ),
+    array ( 'ineach2nd',  '(in|and) each of the (second|2nd)', 'mod', 'position' ),
+    array ( 'inflank',       '(in|and) ?the (flanks?|flaunche?s?)', 'mod', 'position'   ),
+    array ( 'indexside',     '(in|and) ?the dexter side' , 'mod', 'position' ),
+    array ( 'insinside',     '(in|and) ?the sinister side' , 'mod', 'position'  ),
+    array ( 'indexchief',    '(in|and) ?the dexter chief' , 'mod', 'position' ),
+    array ( 'insinchief',    '(in|and) ?the sinister chief' , 'mod', 'position'  ),
+    array ( 'inmidchief',    '(in|and) ?the middle chief' , 'mod', 'position'  ),
+    array ( 'inhonpoint',    '(in|and) ?the honour point' , 'mod', 'position'  ),
+    array ( 'infesspoint',   '(in|and) ?the fesse? point' , 'mod', 'position'  ),
+    array ( 'indexbase',     '(in|and) ?the dexter base' , 'mod', 'position'  ),
+    array ( 'insinbase',     '(in|and) ?the sinister base' , 'mod', 'position'  ),
+    array ( 'inmidbase',     '(in|and) ?the middle base' , 'mod', 'position'  ),
+    array ( 'innombril',     '(in|and) ?the nombril' , 'mod', 'position' ),
+    array ( 'innombril',     '(in|and) ?the navel point' , 'mod', 'position'  ), 
+  ); */
 
 function get_features ( $feature_sets, &$node ) {
   global $dom;
   global $pending_items;
 
-    static $position_mods = array (
+    static $ordinary_mods = array ( // only used for ordinaries
     array ( null, 'sinister', 'mod', 'sinister' ),
     array ( null, 'reversed', 'mod', 'reversed' ),
-    array ( null, '(rompu|fracted)', 'mod', 'fracted' ), // Not really a position, but syntactically it fits in here
-    array ( null, 'double dancetty', 'mod', 'fracted' ), 
     array ( null, 'dexter', 'mod', 'dexter', ),
     array ( null, 'inverted', 'mod', 'inverted', ),
     array ( null, 'enhanced', 'mod', 'enhanced', ),
@@ -35,16 +190,16 @@ function get_features ( $feature_sets, &$node ) {
     array ( '1', 'between # cott?ices', 'shape', 'cotised',  ),
     array ( '2', 'double (cotised|cotticed)', 'shape', 'cotised',  ),
     array ( '3', '(triple|treble) (cotised|cotticed)', 'shape', 'cotised',  ),
+    array ( null, '(rompu|fracted)', 'mod', 'fracted' ),
+    array ( null, 'double dancetty', 'mod', 'fracted' ), 
   );
 
-  static $charge_prefix = array (
-    array ( 'infirst',    'in ?the (first|1st|i) ?quarter', 'mod', 'position' ),
-    array ( 'insecond',    'in ?the (second|2nd|ii) ?quarter', 'mod', 'position' ),
-    array ( 'inthird',    'in ?the (third|3rd|iii) ?quarter', 'mod', 'position' ),
-    array ( 'infourth',    'in ?the (fourth|4th|iv) ?quarter', 'mod', 'position' ),
-  );
+  static $position_mods = array (
+    array ( null, 'in ?the', 'in' ),
+    );
+  
 
-  static $simple_charge = array (
+  static $charge_mods = array ( // only used for charges
     array ( null, 'con?joined', 'mod', 'conjoin' ),
     array ( null, 'inverted', 'mod',  'inverted' ),
     array ( null, 'reversed', 'mod',  'reversed' ),
@@ -68,35 +223,37 @@ function get_features ( $feature_sets, &$node ) {
     array ( 'battled-brettesse', '(em)?battled brett?ess?e?y?', 'mod', 'linetype',  ),                // both sides, same pattern
     array ( 'battled-counter', '(e?m?battled|crenn?ell?e?y?) counter (e?m?battled|crenn?ell?e?y?)',  'mod', 'linetype', ), // both sides, opposite pattern
     array ( 'embattled', '?super (e?m?battled|crenn?ell?e?y?)',     'mod', 'linetype',   ),        // top only
-    array ( 'embattled-round', '(e?m?battled|crenn?ell?e?y?) arrondi',     'mod', 'linetype', ),           // top only, round crenelles
+    array ( 'embattled-arrondi', '(e?m?battled|crenn?ell?e?y?) arrondi',     'mod', 'linetype', ),           // top only, round crenelles
     array ( 'angled',    'angled', 'mod', 'linetype',                                ),
     array ( 'arched',    '(en)?arched',  'mod', 'linetype',                            ),
     array ( 'bevilled',    'bevill?ed',     'mod', 'linetype',                         ),
     array ( 'bevilled',    'bevill?y',     'mod', 'linetype',                         ),
     array ( 'dancetty-floretty', 'dau?ncett(e|y) flor(y|etty)' , 'mod', 'linetype',),
-     array ( 'dancetty',  'dau?ncetty',         'mod', 'linetype',                       ),
-     array ( 'double-arched', 'double (en)?arched',  'mod', 'linetype',      ),
-     array ( 'double-arched', '(en)?arched double',  'mod', 'linetype',      ),
-     array ( 'dovetailed','dovetailed',   'mod', 'linetype',                           ),
-     array ( 'engrailed', 'engrailed',        'mod', 'linetype',                       ),
-     array ( 'escartelly',    'escartelly',    'mod', 'linetype',                      ),
-     array ( 'indented',  'indented',    'mod', 'linetype',                            ),
-     array ( 'invected',  'invected',     'mod', 'linetype',                           ),
-     array ( 'nebuly',    'nebuly',      'mod', 'linetype',                            ),
-     array ( 'nowy' ,     'nowy',        'mod', 'linetype',                            ),
-     array ( 'none',   'plain',    'mod', 'linetype',                             ),
-     array ( 'potenty',   'potenty',    'mod', 'linetype',                             ),
-     array ( 'raguly',    'raguly',       'mod', 'linetype',                           ),
-     array ( 'rayonny',   '(rayonny|radiant)',        'mod', 'linetype',               ),
-     array ( 'wavy',      '(wavy|undy)',      'mod', 'linetype',                      ),
-     array ( 'urdy' ,     '(urdy|urde|champaine|champion)',   'mod', 'linetype',       ),
-     );
+    array ( 'dancetty',  'dau?ncetty',         'mod', 'linetype',                       ),
+    array ( 'double-arched', 'double (en)?arched',  'mod', 'linetype',      ),
+    array ( 'double-arched', '(en)?arched double',  'mod', 'linetype',      ),
+    array ( 'dovetailed','dovetailed',   'mod', 'linetype',                           ),
+    array ( 'engrailed', 'engrailed',        'mod', 'linetype',                       ),
+    array ( 'escartelly',    'escartelly',    'mod', 'linetype',                      ),
+    array ( 'indented',  'indented',    'mod', 'linetype',                            ),
+    array ( 'invected',  'invected',     'mod', 'linetype',                           ),
+    array ( 'nebuly',    'nebuly',      'mod', 'linetype',                            ),
+    array ( 'nowy' ,     'nowy',        'mod', 'linetype',                            ),
+    array ( 'none',   'plain',    'mod', 'linetype',                             ),
+    array ( 'potenty',   'potenty',    'mod', 'linetype',                             ),
+    array ( 'raguly',    'raguly',       'mod', 'linetype',                           ),
+    array ( 'rayonny',   '(rayonny|radiant)',        'mod', 'linetype',               ),
+    array ( 'wavy',      '(wavy|undy)',      'mod', 'linetype',                      ),
+    array ( 'urdy' ,     '(urdy|urde|champaine|champion)',   'mod', 'linetype',       ),
+  );
 
-  static $arr_pos_mods = array (
+  // these can appear before and after the charge (but only once)  
+  static $arrangement_mods = array (
     array ( 'inpale',        'in ?the pale' , 'mod', 'arrangement'    ,3              ),
     array ( 'inpalethrough', 'in ?the pale throughout' , 'mod', 'arrangement' ,3        ),
     array ( 'inpall',        'in ?the pall' , 'mod', 'arrangement'   ,3                 ),
     array ( 'infess',        'in ?the fesse?' , 'mod', 'arrangement',3                    ),
+    array ( 'infesspoint',   'in ?the fesse? point', 'mod', 'position' ), // This is a horrible fudge to distinguish "in fess" and "in fess point"
     array ( 'infessthrough', 'in ?the fesse? throughout' , 'mod', 'arrangement'  ,3       ),
     array ( 'inbendsin',     'in ?the bend sinister' , 'mod', 'arrangement',3 ),
     array ( 'inbend',        'in ?the bend ?dexter' , 'mod', 'arrangement',3 ),
@@ -109,62 +266,45 @@ function get_features ( $feature_sets, &$node ) {
     array ( 'counter-passant', '?in counter passant' , 'mod', 'arrangement', 4),
     array ( 'pilewise',      'pilewise', 'mod', 'arrangement', 3),
     array ( 'inbar',         '?in (bar|barwise)', 'mod',  'arrangement'),
-    array ( 'inflank',       'in ?the (flanks?|flaunche?s?)', 'mod', 'arrangement position',3   ),
-    array ( 'inchief',       'in ?the chief' , 'mod', 'arrangement position',3   ),
-    array ( 'inchiefthrough','in ?the chief throughout' , 'mod', 'arrangement position',3   ),
-    array ( 'inbase',        'in ?the base' , 'mod', 'arrangement position',3  ),
-    array ( 'indexside',     'in ?the dexter side' , 'mod', 'position', 1 ),
-    array ( 'insinside',     'in ?the sinister side' , 'mod', 'position', 1  ),
-    array ( 'indexchief',    'in ?the dexter chief' , 'mod', 'position', 1  ),
-    array ( 'insinchief',    'in ?the sinister chief' , 'mod', 'position', 1  ),
-    array ( 'inmidchief',    'in ?the middle chief' , 'mod', 'position', 1  ),
-    array ( 'inhonpoint',    'in ?the honour point' , 'mod', 'position', 1  ),
-    array ( 'infesspoint',   'in ?the fesse? point' , 'mod', 'position', 1  ),
-    array ( 'indexbase',     'in ?the dexter base' , 'mod', 'position', 1  ),
-    array ( 'insinbase',     'in ?the sinister base' , 'mod', 'position', 1  ),
-    array ( 'inmidbase',     'in ?the middle base' , 'mod', 'position', 1  ),
-    array ( 'innombril',     'in ?the nombril' , 'mod', 'position', 1  ),
-    array ( 'innombril',     'in ?the navel point' , 'mod', 'position', 1  ),
+    array ( 'inchiefthrough','in ?the chief throughout' , 'mod', 'arrangement',3   ),
     array ( 'quadrangle',    'in ?a quadrangle', 'mod', 'arrangement', 4 ),
   );
 
-  $retval = null;
+  $retval = array();
   $look_for_rows = false;
 	$look_for_tinc = true;
+	$pos_is_error = false;
+	$arr_is_error = false;
 
-  $features = array();
+  $features = array(
+    array(null, '(and|&)', 'ignore' ), // ignore, unless part of a longer feature
+  );
   foreach ( $feature_sets as $feature_set ) {
     if (is_array($feature_set)) $features = array_merge($features, $feature_set);
     elseif (is_string($feature_set)) {
-      switch ($feature_set) { // replace this with string -> varname conversion
-        case 'position':
-          $features = array_merge($features, $position_mods);
-          break;
-        case 'shape':
-          $features = array_merge($features, $shape_mods);
-          break;
-        case 'linetype':
-          $features = array_merge($features, $linetype_mods);
-          break;
-        case 'simple_charge':
-          $features = array_merge($features, $simple_charge);
-          break;
-        case 'charge_prefix':
-          $features = array_merge($features, $charge_prefix);
-          break;
-        case 'arr_pos':
-          $features = array_merge($features, $arr_pos_mods);
-          break;
-        case 'rows':
-          $look_for_rows = true;
-          break;
-				case 'no_tinc':
-				  $look_for_tinc = false;
-					break;
-        default:
-          parser_message('internal', "Unknown feature group - $feature_set");
-          break;
-      }
+      switch ( $feature_set ) {
+      case 'rows':
+         $look_for_rows = true;
+         break;
+			case 'no_tinc':
+				$look_for_tinc = false;
+		   	break;
+		  case 'pos_is_error':
+		    $pos_is_error = true;
+		   // $features = array_merge($features,$position_mods);
+		    break;
+		  case 'arr_is_error':
+		    $arr_is_error = true;
+		   // $features = array_merge($features,$arrangment_mods);
+		    break;
+		  default:
+		    $feature_set .= '_mods';
+		    if ( isset($$feature_set) )
+		      $features = array_merge($features, $$feature_set);
+		    else
+  		    parser_message('internal', "Unknown feature group - $feature_set");
+  		  break;
+  		}
     }
   }
 
@@ -177,6 +317,13 @@ function get_features ( $feature_sets, &$node ) {
     $state = save();
     if ( $features and ($match = search_match($features)) != null) {
       switch ( $match[2] ) {
+      case 'in': // looks like we have a position
+        if (!get_positions($node) ) {
+          restore($state);
+          return $retval;
+        }
+        $retval['found_position'] = true;
+        break;
         case 'shape':
           $shape_mod = make_mod($match[3], $match[0], tokens());
           get_features(array('linetype','no_tinc'), $shape_mod);
@@ -196,12 +343,9 @@ function get_features ( $feature_sets, &$node ) {
           $node->appendChild($feature);
           break;
         case 'mod':
-          foreach ( explode ( ' ', $match[3] ) as $match3 )
-            $node->appendChild(make_mod ( $match3, $match[0], tokens() ));
-				  // the presence of argument 4 tells 2 things SO BE CAREFUL
-					// 1. The default number of charges, if none is given
-					// 2. The fact that a position has been found and we should not look again.
-          if ( isset ( $match[4] ) ) $retval = $match[4];
+          $node->appendChild(make_mod ( $match[3], $match[0], tokens() ));
+          if ( isset ( $match[4] ) ) $retval['default_number'] = $match[4];
+          if ( $match[3] == 'arrangement' ) $retval['found_arrangement'] = true;
           break;
         case 'mod+1tinc':
           $mod = make_mod ( $match[3], $match[0], tokens() );
@@ -260,9 +404,9 @@ function get_features ( $feature_sets, &$node ) {
       break;
     }
     comma();
-    andd();
+    //andd();
   }
-  return $retval; // usually ignored, but see arr_pos above
+  return $retval; // usually ignored, but see mod above
 }
 
 

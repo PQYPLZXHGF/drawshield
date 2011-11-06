@@ -1,4 +1,6 @@
-<?php /* Copyright 2010 Karl R. Wilcox
+<?php 
+
+  /* Copyright 2010 Karl R. Wilcox
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -69,13 +71,6 @@ function bundle ( &$node ) {
   }
 }
 
-function demi() {
-  $prefix_words = array (
-    array ( null, 'demi|half' ),
-  );
-  return search_match($prefix_words);
-}
-
 function get_feature_tinc($node) {
   foreach ( $node->childNodes as $child ) {
     if ( $child->nodeName == 'feature' ) {
@@ -97,7 +92,7 @@ function get_modifier_array($type, $subtype, &$features, &$flags) {
 }
 
 
-function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
+function simple_charge( $assume_num = false, $allow_arr = false, $allow_pos = false ) {
   global $dom;
   global $charge_list;
   global $pending_items;
@@ -151,8 +146,9 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   // Look for grouping words again
   bundle( $node );
 
-  $mod_set = array ('simple_charge', 'rows', $specific_features);
-  if ( $allow_arr_pos ) $mod_set[] = 'arr_pos';
+  $mod_set = array ('charge', 'rows', $specific_features);
+  $mod_set[] = ($allow_arr) ? 'arrangement' : 'arr_is_error';
+  $mod_set[] = ($allow_pos) ? 'position' : 'pos_is_error';
 
   get_features ( $mod_set, $node );
 
@@ -184,7 +180,7 @@ function simple_charge( $assume_num = false, $allow_arr_pos = false ) {
   return $node;
 }
 
-function charge( $assume_num = false ) {
+function charge( $assume_num = false, $allow_arr = true, $allow_pos = true ) {
   global $dom;
 
   $on_charge = array (
@@ -198,26 +194,33 @@ function charge( $assume_num = false ) {
   );
 
   $state = save();
-	$allow_arr_pos = true;
 
   // In case of "in chief, three whatever...
   $temp = $dom->createElement('charge'); 
-  $arr_pos = get_features( array ( 'arr_pos', 'charge_prefix', 'no_tinc' ), $temp );
-  if ( is_int($arr_pos) ) {
-	  $assume_num = $arr_pos;
-		$allow_arr_pos = false;
+  $found = get_features( array ( 'arrangement', 'position', 'no_tinc' ), $temp );
+  foreach ( $found as $key => $value ) {
+    switch ( $key ) {
+    case 'default_number': 
+        $assume_num = $value;
+        break;
+      case 'found_position':
+        $allow_pos = false;
+        break;
+      case 'found_arrangement':
+        $allow_arr = false;
+        break;
+    }
 	}
 
   $found_on = search_match($on_prefix);
 
   // Look for the charge itself
-  if ( ($node = simple_charge( $assume_num, $allow_arr_pos )) == null ) {
+  if ( ($node = simple_charge( $assume_num, $allow_arr, $allow_pos )) == null ) {
     restore($state);
     return null;
   }
   // Copy over anything found earlier
-  foreach ($temp->childNodes as $child )
-    $node->appendChild($child);
+  copy_children($temp,$node);
 
   // Is there anything else "on" this charge?
   if ( $found_on or search_match($on_charge) != null ) {

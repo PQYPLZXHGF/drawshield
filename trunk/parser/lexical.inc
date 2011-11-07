@@ -37,7 +37,6 @@ function fill_words($blazon_in) {
       case "\n":
       case "\r":
       case '"':
-      case '.':
         if ( $this_word != '' ) {
           if ( !$comment and !in_array($this_word, $ignore_words)) { $words[] = $this_word; }
           $this_word = '';
@@ -84,6 +83,7 @@ function fill_words($blazon_in) {
         break;
       case ';':
       case ',':
+      case '.':
         if ( $this_word != '' ) {
           if ( !$comment and !in_array($this_word, $ignore_words)) { $words[] = $this_word; }
           $this_word = '';

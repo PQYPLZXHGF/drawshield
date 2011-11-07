@@ -104,7 +104,7 @@ function rewrite() {
   }
 
   // chargeA "on" chargeB means chargeB "charged with" chargeA
-  foreach ( $xpath->query("//charge[modifier/@name='on']") as $item ) {
+ /* foreach ( $xpath->query("//charge[modifier/@name='on']") as $item ) {
     $chargeA = deep_copy($item);
     $mod_node = get_mod_node($chargeA,'on');
     $chargeB = deep_copy($mod_node->firstChild);
@@ -113,7 +113,7 @@ function rewrite() {
     $new_mod->appendChild($chargeA);
     $chargeB->appendChild($new_mod);
     $item->parentNode->replaceChild($chargeB,$item);
-  }
+  } */
 
   // an orle ermine is implemented as 12 ermine spots on an orle, similarly for other furs
   foreach ( $xpath->query("//ordinary[@subtype='orle' and tincture/fur]") as $item ) {

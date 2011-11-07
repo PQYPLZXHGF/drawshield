@@ -187,7 +187,6 @@ function charge( $assume_num = false, $allow_arr = true, $allow_pos = true ) {
     array ( 'charged-with', 'charged with' ),
     array ( 'charged-with', 'on each' ),
     array ( 'charged-with', 'surmounted by' ),
-    array ( 'on', 'on' ),
   );
 
   $on_prefix = array (
@@ -232,6 +231,18 @@ function charge( $assume_num = false, $allow_arr = true, $allow_pos = true ) {
     }
     $on_mod->appendChild($on_charge);
     $node->appendChild($on_mod);
+  }
+  // look for charge "on" charge (but can also be end of charge, with "on" belonging to next item)
+  $state = save();
+  if ( search_match($on_prefix) ) {
+    if ( ($on_charge = simple_charge( true, true, false )) == null ) {
+      restore($state);
+    } else { // swap chargeA on chargeB to become chargeB charged with chargeA
+      $on_mod = make_mod('charged-with');
+      $on_mod->appendChild($node);
+      $on_charge->appendChild($on_mod);
+      $node = $on_charge;
+    }
   }
   if ( !semicolon() ) {
 

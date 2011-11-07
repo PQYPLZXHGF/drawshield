@@ -102,6 +102,7 @@ function andd() {
 function semicolon() {
   $semi = array (
     array ( true, ';'),
+    array ( true, '\\.'), // need to escape '.' as this is regex special character
    );
   if ( search_match($semi) != null ) return true;
   $state = save();

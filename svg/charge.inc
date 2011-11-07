@@ -82,7 +82,7 @@ function getCharge( $node ) {
           case 'demi':
             $demi = true;
             break;
-          case 'on':
+          case 'charged-with':
             $charges_on = $child->firstChild;
             break;
         }

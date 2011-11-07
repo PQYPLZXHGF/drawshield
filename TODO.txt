@@ -42,10 +42,8 @@ placements not carried forward? e.g. on a cross 4 pommes a chief gules
 
 in svg/charge.inc call makeCharge early so that it can change any modifiers (so can move from rewriter.inc). Also get makeCharge to call its own placement()???
 
-inflank with the count mod is broken
-
+label  can be couped, have charges on each point, including a canton, can have 3 or 5 points
 
 DONE
 
-Added embattled arrondi
-
+chargeA on chargeB means same as chargeB charged with chargeA (& on chargeB chargeA)

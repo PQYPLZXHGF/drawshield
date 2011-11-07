@@ -44,9 +44,12 @@
    $positions = array();
    if ( $found_so_far ) $positions[] = $found_so_far;
    while ( true ) {
+     $state = save();
      $locs = array();
      $specs = array();
      $quant = null;
+     search_match($in_the); // look for "in", "the", both or neither
+     search_match($in_the); 
      // look for parts
      while ( ($match = search_match($specifiers)) != null ) {
        $specs[] = $match[0];
@@ -66,9 +69,10 @@
        andd();
      }
      // Did we find anything?
-     if ( count($locs) == 0 and count($specs) == 0 and $quant ==null ) break;
-     search_match($in_the); // look for "in", "the", both or neither
-     search_match($in_the); // ready for next iteration
+     if ( count($locs) == 0 and count($specs) == 0 and $quant ==null ) {
+       restore($state);
+       break;
+     }
      // Now try to combine them into positions
      if ($quant == 'quarter' ) { // one or more specific quarters
        $found_pos = false;
@@ -215,6 +219,7 @@ function get_features ( $feature_sets, &$node ) {
     array ( 'palewise',      'palew(ise|ays)', 'mod', 'orientation' ),
     array ( null,            'arranged', 'ignore' ),
     array ( null,            '(lying|laying)', 'ignore' ),
+    array ( null, 'for difference', 'mod', 'cadency' ),
   );
 
   static $linetype_mods = array (

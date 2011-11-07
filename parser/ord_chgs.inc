@@ -26,26 +26,30 @@ function assign_layer ( $node ) {
 
   // Special case, depressed ordinaries (poor things...) mix in with charges (and above other ordinaries)
   if ( get_mod ( $node, 'depressed' )) return 2; 
-  $layer = 0;
-  foreach ( $layerNums as $layerNum ) 
-    if ( $node->getAttribute($layerNum[0]) == $layerNum[1] ) $layer = $layerNum[2];
-  return $layer;
+    $layer = 0;
+    foreach ( $layerNums as $layerNum ) 
+      if ( $node->getAttribute($layerNum[0]) == $layerNum[1] ) $layer = $layerNum[2];
+    return $layer;
 }
 
 function ord_chgs(){
   global $dom;
-
+  
   $node = null;
   $items = array();
   $itemLayer = array();
   $numItems = 0;
   $assume_num = false;
-
+  
   while (( ($item = ordinary()) != null ) or ( ($item = charge($assume_num)) != null )) {
     $assume_num = false;
     if ( $item->nodeName == 'charge' ) {
       $items[] = $item;
-      $itemLayer[] = 2;
+      // special case, ordinaries used for cadency are level 5
+      if ( get_mod($item,'cadency') )
+        $itemLayer[] = 5;
+      else
+        $itemLayer[] = 2;
     } else { // item is an ordinary
       $items[] = $item; 
       $itemLayer[] = assign_layer($item);

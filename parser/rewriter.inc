@@ -32,7 +32,7 @@ function rewrite() {
     $oneach = get_mod_node($item,'oneach');
     $oncharge = $oneach->firstChild;
     $oncharge->setAttribute('number','4');
-    $oneach->setAttribute('name','on');
+    $oneach->setAttribute('name','charged-with');
   }
 
   // fountain (is a roundel with wavy bars)
@@ -92,7 +92,7 @@ function rewrite() {
     $tinc = $dom->createElement('tincture');
     $tinc->appendChild($dom->createElement('proper'));
     $sun->appendChild($tinc);
-    $with = make_mod('on');
+    $with = make_mod('charged-with');
     $with->appendChild(deep_copy($item));
     $sun->appendChild($with);
     $item->parentNode->replaceChild($sun,$item);
@@ -101,6 +101,18 @@ function rewrite() {
   // on ordinary another of the first => voided
   foreach ( $xpath->query("//ordinary/modifier[@name='on' and child::ordinary/@subtype='another']") as $item ) {
     $item->setAttribute('name','voided');
+  }
+
+  // chargeA "on" chargeB means chargeB "charged with" chargeA
+  foreach ( $xpath->query("//charge[modifier/@name='on']") as $item ) {
+    $chargeA = deep_copy($item);
+    $mod_node = get_mod_node($chargeA,'on');
+    $chargeB = deep_copy($mod_node->firstChild);
+    $chargeA->removeChild($mod_node);
+    $new_mod = make_mod('charged-with');
+    $new_mod->appendChild($chargeA);
+    $chargeB->appendChild($new_mod);
+    $item->parentNode->replaceChild($chargeB,$item);
   }
 
   // an orle ermine is implemented as 12 ermine spots on an orle, similarly for other furs

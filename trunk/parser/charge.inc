@@ -184,9 +184,10 @@ function charge( $assume_num = false, $allow_arr = true, $allow_pos = true ) {
   global $dom;
 
   $on_charge = array (
-    array ( true, 'charged with' ),
-    array ( true, 'on each' ),
-    array ( true, 'surmounted by' ),
+    array ( 'charged-with', 'charged with' ),
+    array ( 'charged-with', 'on each' ),
+    array ( 'charged-with', 'surmounted by' ),
+    array ( 'on', 'on' ),
   );
 
   $on_prefix = array (
@@ -223,9 +224,9 @@ function charge( $assume_num = false, $allow_arr = true, $allow_pos = true ) {
   copy_children($temp,$node);
 
   // Is there anything else "on" this charge?
-  if ( $found_on or search_match($on_charge) != null ) {
-    $on_mod = make_mod('on');
-    if ( ($on_charge = simple_charge( true )) == null ) {
+  if ( $found_on or ($match = search_match($on_charge)) != null ) {
+    $on_mod = make_mod($match[0]);
+    if ( ($on_charge = simple_charge( true, true, false )) == null ) {
       $on_charge = $dom->createElement('missing');
       parser_message('blazon', 'Nothing for charge to go on');
     }

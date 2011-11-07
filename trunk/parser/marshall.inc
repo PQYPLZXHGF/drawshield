@@ -43,6 +43,8 @@ function overall() {
   $overall = array (
     array ( true, 'overall' ),
     array ( true, 'over all' ),
+    array ( true, 'over ?all ?the (four|4) quarterings' ),
+    array ( true, 'over ?all ?the (two|2) (halves|parts|sections)' ),
     array ( true, 'all with(in)?' ),
   );
 
@@ -68,10 +70,10 @@ function quartered() {
   );
 
   $quarters = array (
-    array ( 1, 'first|1st|i' ),
-    array ( 2, 'second|2nd|ii' ),
-    array ( 3, 'third|3rd|iii' ),
-    array ( 4, 'fourth|4th|iv|iiii' ),
+    array ( 1, '(first|1st|i|1|one)' ),
+    array ( 2, '(second|2nd|ii|2|two)' ),
+    array ( 3, '(third|3rd|iii|3|three)' ),
+    array ( 4, '(fourth|4th|iv|iiii|4|four)' ),
   );
   $subshields = array(0,null,null,null,null);
 

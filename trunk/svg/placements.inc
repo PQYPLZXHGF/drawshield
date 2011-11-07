@@ -62,6 +62,7 @@ function placements() {
     $rows = get_mod($item,'rows');
     $pos = get_mods($item,'position'); // THIS IS AN array, go through each one, appending * bounding_box as many times as required.
     $arr = get_mod($item,'arrangement');
+    $cadency = get_mod($item,'cadency');
     $apply_location = true;
     $number = $item->getAttribute('number');
     $div_node = $xpath->query("parent::ord_chgs/parent::plain/tincture/division", $item);
@@ -69,6 +70,10 @@ function placements() {
       $underlying_div = $div_node->item(0)->getAttribute('subtype');
       if (get_mod($div_node->item(0),'sinister')) $underlying_div .= '-sinister';
       if (get_mod($div_node->item(0),'inverted')) $underlying_div .= '-inverted';
+      if ($underlying_div == 'gyronny') {
+        $ofnum = get_mod($div_node,'ofnum');
+        $underlying_div .= '_of_' . (($ofnum == null) ? '8' : $ofnum);
+      }
     } else {
       $underlying_div = null;
     }
@@ -143,7 +148,7 @@ function placements() {
     }
     
     // on particular charges
-    if ( $placement == '' && $xpath->evaluate("boolean(parent::modifier[@name='on']/parent::charge)",$item )) {
+    if ( $placement == '' && $xpath->evaluate("boolean(parent::modifier[@name='charged-with']/parent::charge)",$item )) {
       $type = $item->parentNode->parentNode->getAttribute('type');
       $subtype = $item->parentNode->parentNode->getAttribute('subtype');
       // Test order is important - check specific subtypes before generic type
@@ -272,7 +277,7 @@ function placements() {
       elseif ($subtype=='per-saltire' and $number==3  and $chief == false) $placement = 'x/200,500,240,240:800,500/200,500,240,240:500,850,300,300:800,500,240,240/200,500,240,240:500,850,300,300:800,500,240,240:500,200,240,240/x/x';
       elseif ($subtype=='per-saltire' and $number>=2 and $number<=4  and $chief == true) $placement = 'x/200,700,220,220:800,700/200,700,220,220:500,950,260,260:800,700,220,220/200,700,220,220:500,950,260,260:800,700,220,220:500,450,220,220/x/x';
     }
-    
+   
     // now, do we need to modify placement to put the arrangement in a specific location?
     if ( count($pos) > 0 ) {
       if ( !$apply_location ) {
@@ -283,15 +288,78 @@ function placements() {
         foreach ( $pos as $position ) {
           switch ( $position ) {
           case 'ineach': // TODO more divisions!
+            if ( !$underlying_div ) {
+              draw_message('warning','Need a division for "in each"');
+              break;
+            } // else
             switch ( $underlying_div ) {
             case 'quarterly':
             case 'quarterly-per-fess':
             case 'quarterly-per-pale':
               $adjustment = '0,0,500,500*500,0,500,500*0,500,500,500*500,500,500,500'; 
               break;
+            case 'tierced-in-pale':
+              $adjustment = '50,100,233,1000*383,100,233,1000*716,100,233,1000';
+              break;
+            case 'tierced-in-fess':
+              $adjustment = '100,100,800,200*100,500,800,200*100,900,800,200';
+              break;
+            case 'tierced-in-bend':
+              $adjustment = '650,50,300,300*350,350,300,300*50,700,300,300';
+              break;
+            case 'tierced-in-bend-sinister':
+              $adjustment = '50,50,300,300*350,350,300,300*650,700,300,300';
+              break;
+            case 'tierced-in-chevron':
+              $adjustment = '400,0,200,200*350,250,300,300*350,850,300,300';
+              break;
+            case 'per-pall':
+              $adjustment = '50,550,400,400*350,50,300,300*550,550,400,400';
+              break;
+            case 'per-pile':
+              $adjustment = '50,700,250,250*300,100,400,400*700,700,250,250';
+              break;
+            case 'per-pall-inverted':
+              $adjustment = '50,50,400,400*550,50,400,400*350,750,300,300';
+              break;
+            case 'gyronny_of_8':
+              $adjustment = '50,250,200,200*250,50,200,200*550,50,200,200*750,250,200,200*750,550,200,200*550,750,200,200*250,750,200,200*50,550,200,200';
+              break;
             default:
-              draw_message('warning','Need a division for "in each"');
+              draw_message('warning','"in each" for ' . $underlying_div . 'not available' );
               $adjustment = 'x';
+              break;
+            }
+            break;
+          case 'ineach1st':
+            if ( !$underlying_div ) {
+              draw_message('warning','Need a division for "in each"');
+              break;
+            } // else
+            switch ( $underlying_div ) {
+            case 'quarterly':
+            case 'quarterly-per-fess':
+            case 'quarterly-per-pale':
+              $adjustment = '0,0,500,500*500,500,500,500'; 
+              break;
+            case 'gyronny_of_8':
+              $adjustment = '250,50,200,200*750,250,200,200*550,750,200,200*50,550,200,200';
+              break;
+            }
+            break;
+          case 'ineach2nd':
+            if ( !$underlying_div ) {
+              draw_message('warning','Need a division for "in each"');
+              break;
+            } // else
+            switch ( $underlying_div ) {
+            case 'quarterly':
+            case 'quarterly-per-fess':
+            case 'quarterly-per-pale':
+              $adjustment = '500,0,500,500*0,500,500,500'; 
+              break;
+            case 'gyronny_of_8':
+              $adjustment = '50,250,200,200*550,50,200,200*750,550,200,200*250,750,200,200';
               break;
             }
             break;
@@ -315,24 +383,24 @@ function placements() {
               $adjustment = '400,850,200,200';
             break;
           case 'inflank': $adjustment = '0,375,300,300*700,375,300,300'; break;
-          case 'indexchief': $adjustment = '0,0,400,400'; break;
-          case 'insinchief': $adjustment = '600,0,400,400'; break;
-          case 'inmidchief': $adjustment = '300,0,400,400'; break;
-          case 'indexbase': $adjustment = '150,750,350,400'; break;
-          case 'insinbase': $adjustment = '500,750,350,400'; break;
-          case 'inmidbase': $adjustment = '300,750,400,400'; break;
-          case 'inhonpoint': $adjustment = '300,150,400,400'; break;
-          case 'infesspoint': $adjustment = '250,250,500,500'; break;
-          case 'innombril': $adjustment = '300,700,400,400'; break;
-          case 'insinside': $adjustment = '0,200,400,400'; break;
-          case 'indexside': $adjustment = '600,200,400,400'; break;
+          case 'indexchief': $adjustment = ($cadency) ? '0,0,200,200' : '0,0,400,400'; break;
+          case 'insinchief': $adjustment = ($cadency) ? '800,0,200,200' : '600,0,400,400'; break;
+          case 'inmidchief': $adjustment = ($cadency) ? '400,0,200,200' : '300,0,400,400'; break;
+          case 'indexbase': $adjustment = ($cadency) ? '200,800,200,200' : '150,750,350,400'; break;
+          case 'insinbase': $adjustment = ($cadency) ? '600,800,200,200' : '500,750,350,400'; break;
+          case 'inmidbase': $adjustment = ($cadency) ? '400,800,200,200' : '300,750,400,400'; break;
+          case 'inhonpoint': $adjustment = ($cadency) ? '400,250,200,200' : '300,150,400,400'; break;
+          case 'infesspoint': $adjustment = ($cadency) ? '400,400,200,200' : '250,250,500,500'; break;
+          case 'innombril': $adjustment = ($cadency) ? '400,800,200,200' : '300,700,400,400'; break;
+          case 'insinside': $adjustment = ($cadency) ? '0,500,200,200' : '0,200,400,400'; break;
+          case 'indexside': $adjustment = ($cadency) ? '800,500,200,200' : '600,200,400,400'; break;
           case 'infirst': 
             switch ( $underlying_div ) { 
             case 'tierced-in-pale': $adjustment = '50,100,233,1000'; break;
             case 'tierced-in-fess': $adjustment = '100,100,800,200'; break;
             case 'tierced-in-bend': $adjustment = '650,50,300,300'; break;
             case 'tierced-in-bend-sinister': $adjustment = '50,50,300,300'; break;
-            case 'tierced-in-chevron': $placement = '//150,150,250,250:850,150/s/'; break;
+            case 'tierced-in-chevron': $adjustment = '400,0,200,200'; break;
             case 'per-pile': $adjustment = '50,700,250,250'; break;
             case 'per-pall': $adjustment = '50,550,400,400'; break;
             case 'per-pall-inverted': $adjustment = '50,50,400,400'; break;
@@ -389,6 +457,9 @@ function placements() {
         }
         $placement = implode('*',$placements);
       }
+    } elseif ( $cadency ) { // unless there is a specific location, put in the center, but small
+      $placement = calcPlace('w',$number,$conjoin,$boundingBox);
+      $placement = adjustplacement($placement,'400,400,200,200');
     }
     
     // If we don't have a placement yet the default is just to arrange in wide rows

@@ -97,7 +97,8 @@ function draw() {
   $trailer =  "</svg>\n";
 
   $blazonNode = $dom->documentElement;
-  $body = '<desc>' . $blazonNode->getAttribute('blazonText') . '</desc>';
+  $body = '';
+  //$body = '<desc>' . htmlentities($blazonNode->getAttribute('blazonText')) . '</desc>';
   foreach ( $blazonNode->childNodes as $node ) {
     switch ( $node->nodeName ) {
     case 'shield':
@@ -176,13 +177,13 @@ function makeshield( &$node ) {
       case 'quartered':
         $clip1 = add_def( 'clipPath', '<path d="m0,0L1000,0 1000,1200 0,1200Z" />' );
         region('push','Q1');
-        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="scale(0.5)" >' . makeshield( $children->item(0) ) . "</g>\n";
+        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="scale(0.5,0.416)" >' . makeshield( $children->item(0) ) . "</g>\n";
         region('swap','Q2');
-        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="translate(500,0) scale(0.5)" >' . makeshield( $children->item(1) ) . "</g>\n";
+        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="translate(500,0) scale(0.5,0.416)" >' . makeshield( $children->item(1) ) . "</g>\n";
         region('swap','Q3');
-        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="translate(0,600) scale(0.5)" >' . makeshield( $children->item(2) ) . "</g>\n";
+        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="translate(0,500) scale(0.5,0.584)" >' . makeshield( $children->item(2) ) . "</g>\n";
         region('swap','Q4');
-        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="translate(500,600) scale(0.5)" >' . makeshield( $children->item(3) ) . "</g>\n";
+        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="translate(500,500) scale(0.5,0.584)" >' . makeshield( $children->item(3) ) . "</g>\n";
         region('pop');
         $retval .= add_def();
         break;

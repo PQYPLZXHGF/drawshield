@@ -187,8 +187,14 @@ function check_match2 ( $match_string ) {
       $optional = true;
       $regex = substr($regex, 1);
     }
+    // Check for negative
+    $negative = false;
+    if ( $regex{0} == '!' ) {
+      $negative = true;
+      $regex = substr($regex,1);
+    }
     if ( $t_word >= sizeof(($words) ) ) { // no more input
-      if ( $optional ) {
+      if ( $optional or $negative ) {
         continue;
       } else {
         return 0;
@@ -201,7 +207,10 @@ function check_match2 ( $match_string ) {
       $t_word += 1;
     // Note search is case insensitive
     } elseif ( ( $regex == '#' and (($number = match_number( $count, $t_word )) != null) ) or ($res = preg_match ( '/^' . $regex . '$/i',  $words[$t_word] ))) {
-      $t_word += $count; // Got a match, move on
+      if ( $negative ) { // Got a match, but didn't want it
+        return 0;
+      }
+      $t_word += $count; // Got a match, all OK, so move on
       if ( $number ) $matched_number = $number;
     } elseif ( ! ($optional)) {
       if ( $res === false ) parser_message( 'internal', 'Bad regex - ' . $regex );

@@ -140,40 +140,6 @@
      return false;
   }
            
-
-/*     static $temp = array (
-    array ( 'inchief',       '(in|and) ?the chief' , 'mod', 'position'  ),
-    array ( 'inbase',        '(in|and) ?the base' , 'mod', 'position'  ),
-    array ( 'inQ1',    '(in|and) ?the (first|1st|i) quarter', 'mod', 'position' ),
-    array ( 'inQ2',    '(in|and) ?the (second|2nd|ii) quarter', 'mod', 'position' ),
-    array ( 'inQ3',    '(in|and) ?the (third|3rd|iii) quarter', 'mod', 'position' ),
-    array ( 'inQ4',    '(in|and) ?the (fourth|4th|iv) quarter', 'mod', 'position' ),
-    array ( 'infirst',    '(in|and) ?the (first|1st|i)', 'mod', 'position' ),
-    array ( 'insecond',    '(in|and) ?the (second|2nd|ii)', 'mod', 'position' ),
-    array ( 'inthird',    '(in|and) ?the (third|3rd|iii)', 'mod', 'position' ),
-    array ( 'ineach',  '(in|and) (each|every) ?(half|section|part)', 'mod', 'position' ), // must have underlying division
-    array ( 'ineachQ',  '(in|and) (each|every) quarter', 'mod', 'position' ),
-    array ( 'ineachQ12',  '(in|and) (each|every) chief quarter', 'mod', 'position' ),
-    array ( 'ineachQ13',  '(in|and) (each|every) dexter quarter', 'mod', 'position' ),
-    array ( 'ineachQ24',  '(in|and) (each|every) sinister quarter', 'mod', 'position' ),
-    array ( 'ineachQ34',  '(in|and) (each|every) base quarter', 'mod', 'position' ),
-    array ( 'ineach1st',  '(in|and) each of the (first|1st)', 'mod', 'position' ),
-    array ( 'ineach2nd',  '(in|and) each of the (second|2nd)', 'mod', 'position' ),
-    array ( 'inflank',       '(in|and) ?the (flanks?|flaunche?s?)', 'mod', 'position'   ),
-    array ( 'indexside',     '(in|and) ?the dexter side' , 'mod', 'position' ),
-    array ( 'insinside',     '(in|and) ?the sinister side' , 'mod', 'position'  ),
-    array ( 'indexchief',    '(in|and) ?the dexter chief' , 'mod', 'position' ),
-    array ( 'insinchief',    '(in|and) ?the sinister chief' , 'mod', 'position'  ),
-    array ( 'inmidchief',    '(in|and) ?the middle chief' , 'mod', 'position'  ),
-    array ( 'inhonpoint',    '(in|and) ?the honour point' , 'mod', 'position'  ),
-    array ( 'infesspoint',   '(in|and) ?the fesse? point' , 'mod', 'position'  ),
-    array ( 'indexbase',     '(in|and) ?the dexter base' , 'mod', 'position'  ),
-    array ( 'insinbase',     '(in|and) ?the sinister base' , 'mod', 'position'  ),
-    array ( 'inmidbase',     '(in|and) ?the middle base' , 'mod', 'position'  ),
-    array ( 'innombril',     '(in|and) ?the nombril' , 'mod', 'position' ),
-    array ( 'innombril',     '(in|and) ?the navel point' , 'mod', 'position'  ), 
-  ); */
-
 function get_features ( $feature_sets, &$node ) {
   global $dom;
   global $pending_items;
@@ -189,7 +155,7 @@ function get_features ( $feature_sets, &$node ) {
 
   static $shape_mods = array (
     array ( null, 'voided', 'shape', 'voided' ),
-    array ( null, '(fimbriated|edged)', 'shape', 'fimbriated',  ),
+    array ( null, '(fimbriated|edged)', 'mod+1tinc', 'fimbriated',  ),
     array ( '1', '(cotised|cotticed|endorsed)', 'shape', 'cotised',  ),
     array ( '1', 'between # cott?ices', 'shape', 'cotised',  ),
     array ( '2', 'double (cotised|cotticed)', 'shape', 'cotised',  ),
@@ -257,8 +223,7 @@ function get_features ( $feature_sets, &$node ) {
     array ( 'inpale',        'in ?the pale' , 'mod', 'arrangement'    ,3              ),
     array ( 'inpalethrough', 'in ?the pale throughout' , 'mod', 'arrangement' ,3        ),
     array ( 'inpall',        'in ?the pall' , 'mod', 'arrangement'   ,3                 ),
-    array ( 'infess',        'in ?the fesse?' , 'mod', 'arrangement',3                    ),
-    array ( 'infesspoint',   'in ?the fesse? point', 'mod', 'position' ), // This is a horrible fudge to distinguish "in fess" and "in fess point"
+    array ( 'infess',        'in ?the fesse? !point' , 'mod', 'arrangement',3                    ),
     array ( 'infessthrough', 'in ?the fesse? throughout' , 'mod', 'arrangement'  ,3       ),
     array ( 'inbendsin',     'in ?the bend sinister' , 'mod', 'arrangement',3 ),
     array ( 'inbend',        'in ?the bend ?dexter' , 'mod', 'arrangement',3 ),

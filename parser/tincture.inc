@@ -119,8 +119,8 @@ function tincture2() {
     array ( 'billetty',     'billetty',     ),
     array ( 'counter-billetty',     'billetty counter billetty', ),
     array ( 'estoilly',     'estoilly',    ),
-    array ( 'fleury',       '(fleury|floretty)',  ),
-    array ( 'fleury',       'sem(e|y) de l(i|y)s',  ),
+//    array ( 'fleury',       '(fleury|floretty)',  ), // This is not a treatment!!
+    array ( 'seme-de-lys',       'sem(e|y) de l(i|y)s',  ),
     array ( 'goutty',       'go?utty',     ),
     array ( 'bezanty',      'bezant(y|e)', true ),
     array ( 'platy',        'platy',       true ),

@@ -12,9 +12,11 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
+set_include_path('C:\Users\K Wilcox\Documents\Projects\website\www-new\include\shield');
+   
 function draw_message($category,$message) { echo $message; }
 function get_mod ( $node, $name ) { return null; }
-include '../svg/colour.inc';
+function rgb( $colour ) { return null; }
 
 function include_charge () {
   $node = null;

@@ -93,7 +93,7 @@ function quartered() {
         $found = $foundQuarter = true;
       }
       if ( $found ) {
-        $temp = shield(); // Look for the description of this quarter
+        $temp = shield(false); // Look for the description of this quarter
         if ( count($indices) > 1 ) $temp->setAttribute( 'ID',($ID=unique('shield')));
         $subshields[$indices[0]] = $temp; // Set the first quarter to this description
         for ( $i = 1; $i < count($indices); $i++ ) {
@@ -134,32 +134,38 @@ function halved() {
   return $node;
 }
 
-function shield() {
+function shield($ignore_semi = true) { // look for overall, even if a ";" is present
   global $dom;
   global $pending_items;
 
-  $quartered = false;
+  $overall = null;
 
   $node = $dom->createElement('shield');
 
   if ( ( $child = quartered() ) == null ) {
     $child = plain();
+    $overall = overall();
     if ( ($split = halved()) != null ) {
       $node2 = $dom->createElement('shield');
       $node2->appendChild($child);
+      if ( $overall ) $node2->appendChild($overall);
       $split->appendChild($node2);
-      $node2 = $dom->createElement('shield');
-      $node2->appendChild(plain());
-      $split->appendChild($node2);
+      $node3 = $dom->createElement('shield');
+      $node3->appendChild(plain());
+      $overall = semicolon() ? null : overall();
+      if ( $overall ) $node3->appendChild($overall);
+      $split->appendChild($node3);
       $child = $split;
+      $overall = null;
     }
-  } else { // Shield was quartered
-    $quartered = true;
   }
   $node->appendChild($child);
-  if ( ($quartered or !semicolon()) and (($overall = overall() ) != null) ) {
-    $node->appendChild($overall);
+  if ( $ignore_semi and ($overall ==null) ) {
+    semicolon();
+    $overall = overall();
   }
+  if ($overall)
+    $node->appendChild($overall);
   foreach ( $pending_items as $item ) {
     $item->setAttribute('origin','missing');
     parser_message('blazon', 'Tincture missing');

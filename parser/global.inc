@@ -105,6 +105,7 @@ function semicolon() {
     array ( true, '\\.'), // need to escape '.' as this is regex special character
    );
   if ( search_match($semi) != null ) return true;
+  //return false;
   $state = save();
   if ( lookahead(-1) && search_match($semi) != null ) return true;
   restore($state);

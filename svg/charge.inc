@@ -12,52 +12,54 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-
-function makeCharge($charge) {
-  $placements = array(0 => 'x/x/x/x/x/x');
-  $placements = get_mod($charge,'placement');
-  $retval = '';
-  foreach ( explode('*',$placements) as $placement ) {
-    $retval .= place_charges ( $charge, $placement );
-  }
-  return $retval;
-}
-
-function includeCharge( &$node ) {
-  $charge = array ();
-  include ( 'charges/' . $node->getAttribute('type') . '/' . $node->getAttribute('subtype') . '.inc' );
-  return $charge;
+   
+   function makeCharge($charge) {
+     $placements = array(0 => 'x/x/x/x/x/x');
+     $placements = get_mod($charge,'placement');
+     $retval = '';
+     foreach ( explode('*',$placements) as $placement ) {
+       $retval .= place_charges ( $charge, $placement );
+     }
+     return $retval;
+   }
+   
+function includeCharge( $node, $charge_key ) {
+   $charge = array ();
+   include ( $charge_key . '.inc' );
+   return $charge;
 }
 
 function getCharge( $node ) {
+   static $charge_cache = array();
 
-  $chg_data = null;
   if ( $node->nodeName == 'missing' ) {
-    $subtype = 'missing';
+    $title = 'missing';
     $chg_data = array ( 'width' => 100, 'height' => 100,
         'body' => '<g stroke="none"><path fill-rule="evenodd" d="M0,0h100v100h-100zM15,15h70v70h-70z" />
               <text x="50" y="65" font-size="30" text-anchor="middle">Msng</text></g>', 'wflex' => 2, 'hflex' => 2 );
   } else {
-    $subtype = $node->getAttribute('subtype');
-    $charge = includeCharge( $node );
-    if ( count($charge) < 1 ) {
-      draw_message('internal',"Cannot draw $sub_type", __FILE__, __LINE__);
+    if ( ($title = $node->getAttribute('tokens')) == null ) $title = $node->getAttribute('subtype');
+    $charge_key =  'charges/' . $node->getAttribute('type') . '/' . $node->getAttribute('subtype');
+    if ( array_key_exists($charge_key, $charge_cache) ) {
+      $chg_data = $charge_cache[$charge_key];
     } else {
-      $chg_data = $charge;
+      $chg_data = includeCharge( $node, $charge_key );
+      if ( array_key_exists('file', $chg_data )) { // Need to extract body and features from inkscape file
+        $chg_data = array_merge($chg_data, ink2chg('charges/' . $node->getAttribute('type') . '/' . $chg_data['file']));
+      }
+      $charge_cache[$charge_key] = $chg_data;
     }
   }
   if ( $chg_data == null or !array_key_exists('body', $chg_data) ) {
-    if ( ($name = $node->getAttribute('tokens')) == null ) $name = $subtype;
-    $chg_data = array ( 'width' => 100, 'height' => 100,
+      draw_message('internal',"Cannot draw $title");
+      $chg_data = array ( 'width' => 100, 'height' => 100,
         'body' => '<g stroke="none"><path fill-rule="evenodd" d="M0,0h100v100h-100zM10,10h80v80h-80z" />' .
-               '<text x="50" y="55" font-size="15" text-anchor="middle">' . $name . '</text></g>',
+               '<text x="50" y="55" font-size="15" text-anchor="middle">' . $title . '</text></g>',
                'wflex' => 2, 'hflex' => 2 );
-    $subtype = 'missing';
   }
   $features = (array_key_exists('features', $chg_data)) ? $chg_data['features'] : null;
-  if ( ($title = $node->getAttribute('tokens')) == null ) $title = $subtype;
-  if ( array_key_exists('licence', $charge) ) {
-    $title .= ': ' . $charge['licence'];
+  if ( array_key_exists('licence', $chg_data) ) {
+    $title .= ': ' . $chg_data['licence'];
     draw_message('licence', $title);
   }
   $chg_data['title'] = $title;

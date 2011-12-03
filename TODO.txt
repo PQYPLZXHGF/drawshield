@@ -44,6 +44,24 @@ in svg/charge.inc call makeCharge early so that it can change any modifiers (so 
 
 label  can be couped, have charges on each point, including a canton, can have 3 or 5 points
 
-DONE
+rest of the gyronny placements, also per saltire?
 
-chargeA on chargeB means same as chargeB charged with chargeA (& on chargeB chargeA)
+Fimbriation can have its own edge type, separate from that of the ordinary
+
+Crowns - mural crown masoned argent and sable
+
+Add flory counter flory edge type, ensure flory/fleury/floretty are synoynms
+
+prevent caching of charge data if the data is generated (e.g. mullets) - or only cache if in SVG file?
+
+DONE (for 2.3l)
+
+Crowns are now: antique, baron, earl, marquis, viscount, mural, vallary, dukes, ducal, palisado, crown of the king of arms
+
+
+Further twiddling with semi-colons
+
+Internal:
+
+Can work directly from inkscape SVG files
+

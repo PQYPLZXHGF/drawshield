@@ -12,21 +12,23 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// antique
+// earl
 
 $charge = array (
 
   'patterns' => array (
-  'antique crowns?',
+  'earls? (crown|coronet)s?',
   ),
 
   'doc' => 'Stuff...',
 
-  'wflex' => 2,
-  'hflex' => 1.5,
+  'width' => 470,
+  'height' => 340,
+  'wflex' => 1.2,
+  'hflex' => 1.2,
   'proper' => rgb('gold'),
-  'height' => 115, 'width' => 125,
-  'file' => 'inkscape/antique.svg',
+  'file' => 'inkscape/earl.inc',
+
 )
 
 ?>

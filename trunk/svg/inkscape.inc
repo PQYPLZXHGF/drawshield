@@ -12,8 +12,6 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-include('../svg/svgutils.inc');
-
 $groupXTrans = 0;
 $groupYTrans = 0;
 
@@ -26,7 +24,7 @@ function get_item($item) {
       return get_rect($item);
       break;
     default:
-      echo 'WARNING: unrecognised element - ' . $item->getName();
+      draw_message('INTERNAL', 'inkscape: element not handled - ' . $item->getName());
       break;
   }
 }
@@ -73,7 +71,6 @@ function get_transform ( $transform ) {
   
   if ( !$transform ) return array(0,0);
   preg_match('/translate *\(([\d\.-]+),([\d\.-]+)\)/', $transform, $match );
-  // echo "$match[1], $match[2]\n";
   return array ( ($match[1] + $groupXTrans), ($match[2] + $groupYTrans) );
 }
 
@@ -85,26 +82,13 @@ function get_path($path) {
   return $retval;
 }
 
-function ink2php($filename) {
+function ink2chg($filename) {
   global $groupXTrans, $groupYTrans;
 
-  $header = '<?php /* Copyright 2011 Karl R. Wilcox
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-         http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License. */';
-
-  $body = "'<g/>'";
+  $groupXTrans = 0;
+  $groupYTrans = 0;
+  $body = '';
   $features = array();
-  $modifiers = array();
   if ( ($xml = simplexml_load_file($filename)) == null ) return null;
   $groups = $xml->g;
   if ( substr($groups[0]['id'],1,4) == 'ayer' )
@@ -112,71 +96,24 @@ function ink2php($filename) {
   else
     $groups = $xml;
   foreach ( $groups->g as $group ) {
+    list($groupXTrans, $groupYTrans) = get_transform($group['transform']);
   	if ( $group['id'] == 'body' or $group['id'] == 'layer1') {
-  	  list($groupXTrans, $groupYTrans) = get_transform($group['transform']);
-  	  $body = "    'body' => '\n";
   	  foreach ( $group->children() as $child ) {
-  		$body .= "      " . get_item($child);
+  		  $body .= "      " . get_item($child);
   	  }
-  	  $body .= "      ',\n";
   	} else {
-  	  $temp = "      '" . $group['id'] . "' => array (\n        'body' => '\n";
   	  foreach ( $group->children() as $child ) {
-  		$temp .= "      " . get_item($child);
+  		  $temp .= "      " . get_item($child);
   	  }
-  	  $temp .= "      '),\n";
-  	  $features[] = $temp;
-  	  $modifiers[] = $group['id'];
+  	  $features[$group['id']] = array('body'=> $temp);
   	}
   }
-  $f = '';
-  $f .=  $header . "\n\n";
-  $f .= "\$charge = array ( \n";
-  $f .= "  'patterns' => array (\n  'PATTERN',\n  ),\n";
-  if ( count($modifiers) > 0 ) {
-    $f .= "\n  'modifiers' => array (\n";
-    foreach ($modifiers as $mod) {
-      $f .= "    array ( '$mod', '$mod', 'feature' ),\n";
-    }
-    $f .= "   ),\n";
-  }
-  $f .= "\n  'height' => " . $xml['height'] . ", 'width' => " . $xml['width'] . ",\n";
-  $f .= $body;
-  if ( count($features) > 0 ) {
-    $f .= "    'features' => array (\n";
-    foreach ($features as $feature) {
-      $f .= "      $feature";
-    }
-    $f .= "      ),\n";
-  }
-  $f .= "  );\n?>\n";
-  return $f;
+  //$f .= "\n  'height' => " . $xml['height'] . ", 'width' => " . $xml['width'] . ",\n";
+  if (count($features) > 0)
+    return array('body' => $body, 'features' => $features );
+  else
+    return array('body' => $body);
 }
 
 
-/*
-header("Content-Transfer-Encoding: text");
-header('Content-Type: text/plain');
-$output = null;
-if ( is_uploaded_file($_FILES['inksvg']['tmp_name']) ) {
-  $output = ink2php($_FILES['inksvg']['tmp_name']);
-}
-if ( $output == null )
-  echo 'no valid SVG found';
-else {
-  echo $output;
-}  */
-
-$in_dir = opendir('ink');
-while (($in = readdir($in_dir)) !== false) {
-  $file_bits = pathinfo($in);
-  if ( $file_bits['extension'] == 'svg' ) {
-    echo "converting $in\n";
-    file_put_contents('php/' . $file_bits['filename'] . '.inc', ink2php("ink/$in") );
-  }
-}
-//$filename = $argv[1];
-//for ( $i = 2; $i < $argc; $i++ ) $filename .= ' ' . $argv[$i];
-//echo ink2php($filename);
-exit();
 ?>

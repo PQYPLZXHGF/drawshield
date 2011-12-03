@@ -282,6 +282,76 @@ function rotatePath( $path, $theta ) {
   return $newPath;
 }
 
+function translatePath( $path, $xTrans, $yTrans ) {
+  if ( $xTrans == 0 and $yTrans == 0 ) return $path;
+  $newPath = '';
+  $chunks = preg_split('/([a-z])/i', $path, null, PREG_SPLIT_DELIM_CAPTURE );
+  $firstMove = true;
+  for ( $i = 0; $i < count($chunks); $i++ ) {
+    $command = $chunks[$i];
+    if ( isset($chunks[$i+1]) )
+      $numbers = getNumbers( $chunks[$i+1] );
+    switch ( $command ) {
+      case 'H':
+        $newPath .= 'H' . sprintf('%.3f', $numbers[0] + $xTrans);
+        break;
+      case 'V':
+        $newPath .= 'V' . sprintf('%.3f', $numbers[0] + $yTrans);
+        break;
+      case 'M':
+      case 'C':
+        $newPath .= $command;
+        for ( $j = 0; $j < count($numbers); $j += 2 ) {
+          $newPath .= sprintf('%.3f,', ($numbers[$j] + $xTrans));
+          $newPath .= sprintf('%.3f ', ($numbers[$j+1] + $yTrans));
+        }
+        if ( $command == 'M' ) $firstMove = false;
+        break;
+      case 'm':
+        $newPath .= 'm';
+        if ( $firstMove ) {
+          $newPath .= sprintf('%.3f,', ($numbers[0] + $xTrans));
+          $newPath .= sprintf('%.3f ', ($numbers[1] + $yTrans));
+          for ( $j = 2; $j < count($numbers); $j += 2 ) {
+            $newPath .= sprintf('%.3f,', ($numbers[$j]));
+            $newPath .= sprintf('%.3f ', ($numbers[$j+1]));
+          }
+          $firstMove = false;
+        } else {  
+          for ( $j = 0; $j < count($numbers); $j += 2 ) {
+            $newPath .= sprintf('%.3f,', ($numbers[$j]));
+            $newPath .= sprintf('%.3f ', ($numbers[$j+1]));
+          }
+        }
+        break;
+      case 'a':
+        list($rx,$ry,$rot,$arc,$sweep,$x,$y) = $numbers;
+        $newPath .= "a$rx,$ry $rot,$arc,$sweep $x,$y";
+        break;
+      case 'h':
+      case 'v': // Pass all unchanged
+        $newPath .= $command . sprintf('%.3f', $numbers[0]);
+        break;
+      case 'l':
+      case 'q':
+      case 'c':
+        $newPath .= $command;
+        $odd = true;
+        foreach ( $numbers as $number ) {
+          $newPath .= (sprintf('%.3f', $number)) . ($odd ? ',':' ');
+          $odd = !$odd;
+        }
+        break;
+      case 'Z':
+      case 'z':
+        $newPath .= $command;
+        break;
+    }
+    $newPath .= ' ';
+  }
+  return $newPath;
+}
+
 function mirrorPath ( $path, $axis = 'x' ) {
   $newPath = '';
   $chunks = preg_split('/([a-z])/i', $path, null, PREG_SPLIT_DELIM_CAPTURE );

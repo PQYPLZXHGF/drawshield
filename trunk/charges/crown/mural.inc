@@ -18,7 +18,7 @@ $charge = array (
   ),
   
   'modifiers' => array (
-    array ( null, 'masoned', 'feature', ),
+    array ( 'masoned', 'masoned', 'feature', ),
    ),
 
   'height' => 140, 'width' => 400,
@@ -26,6 +26,25 @@ $charge = array (
   'hflex' => 1.2,
   'proper' => rgb('gold'),
   'file' => 'inkscape/mural.svg',
+  
+  'features' => array ( 'masoned' => array ( 'proper' => rgb('sable'), 'colour' => rgb('sable'))),
 
 );
+
+// Special form of masoned treatment
+global $dom;
+
+if ( $node != null ) {
+  $tinc = get_tincture($node);
+  $col = $tinc->firstChild;
+  if ($col->nodeName == 'treatment' and $col->getAttribute('name') == 'masoned') {
+    $col1 = get_tincture($col,1);
+    $col2 = get_tincture($col,2);
+    $node->replaceChild($col1,$tinc);
+    $feature = $dom->createElement('feature');
+    $feature->setAttribute('name','masoned');
+    $feature->appendChild($col2);
+    $node->appendChild($feature);
+  }
+}
 ?>

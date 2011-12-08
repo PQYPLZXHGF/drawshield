@@ -20,6 +20,11 @@ $charge = array (
   'turners? axes?',
   ),
 
+  'modifiers' => array (
+    array ( 'handle', 'handled?s?', 'feature' ),
+    array ( 'blade', 'bladed?s?', 'feature' ),
+    ),
+
   'doc' => 'Stuff...',
 
   'width' => 60,

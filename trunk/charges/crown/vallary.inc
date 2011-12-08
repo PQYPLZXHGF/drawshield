@@ -15,6 +15,7 @@
 $charge = array ( 
   'patterns' => array (
   'vallary? (crown|coronet)s?',
+  '(crown|coronet)s? vallary?',
   ),
 
   'height' => 210, 'width' => 400,

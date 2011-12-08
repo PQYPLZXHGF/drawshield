@@ -21,6 +21,11 @@ $charge = array (
   'battleaxes?',
   ),
 
+  'modifiers' => array (
+    array ( 'handle', 'handled?s?', 'feature' ),
+    array ( 'blade', 'bladed?s?', 'feature' ),
+    ),
+
   'doc' => 'Stuff...',
 
   'height' => 395,

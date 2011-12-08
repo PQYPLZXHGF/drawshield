@@ -20,6 +20,11 @@ $charge = array (
   '?common axes?',
   'hatchets?',
   ),
+  
+  'modifiers' => array (
+    array ( 'handle', 'handled?s?', 'feature' ),
+    array ( 'blade', 'bladed?s?', 'feature' ),
+    ),
 
   'doc' => 'Stuff...',
 

@@ -14,15 +14,15 @@
 
 $charge = array ( 
   'patterns' => array (
-  'astral (crown|coronet)s?',
+  '(royal|regal) crowns?',
   ),
   
 
-  'height' => 275, 'width' => 400,
+  'height' => 400, 'width' => 400,
   'wflex' => 1.2,
   'hflex' => 1.2,
   'proper' => rgb('gold'),
-  'file' => 'inkscape/astral.svg',
+  'file' => 'inkscape/royal.svg',
 
 );
 ?>

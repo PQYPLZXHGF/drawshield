@@ -12,22 +12,24 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// earl
 
 $charge = array (
 
   'patterns' => array (
-  'earls? (crown|coronet)s?',
+  'seaxe?s?',
   ),
 
+  'modifiers' => array (
+    array ( 'handle', 'handled?', 'feature',    ),
+    array ( 'blade', 'bladed?', 'feature',    ),
+  ),
   'doc' => 'Stuff...',
 
-  'width' => 470,
-  'height' => 340,
+  'width' => 110,
+  'height' => 400,
   'wflex' => 1.2,
   'hflex' => 1.2,
-  'proper' => rgb('gold'),
-  'file' => 'inkscape/earl.svg',
+  'file' => 'inkscape/seax.svg',
 
 )
 

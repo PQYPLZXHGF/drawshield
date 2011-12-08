@@ -48,15 +48,11 @@ rest of the gyronny placements, also per saltire?
 
 Fimbriation can have its own edge type, separate from that of the ordinary
 
-Crowns - mural crown masoned argent and sable
-
 Add flory counter flory edge type, ensure flory/fleury/floretty are synoynms
-
-prevent caching of charge data if the data is generated (e.g. mullets) - or only cache if in SVG file?
 
 DONE (for 2.3l)
 
-Crowns are now: antique, baron, earl, marquis, viscount, mural, vallary, dukes, ducal, palisado, crown of the king of arms
+Crowns are now: antique, baron, earl, marquis, viscount, mural, vallary, dukes, ducal, palisado, crown of the king of arms, saxon
 
 
 Further twiddling with semi-colons

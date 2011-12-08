@@ -22,6 +22,11 @@ $charge = array (
   'miners axes?',
   ),
 
+  'modifiers' => array (
+    array ( 'handle', 'handled?s?', 'feature' ),
+    array ( 'blade', 'bladed?s?', 'feature' ),
+    ),
+
   'doc' => 'Stuff...',
 
   'height' => 150,

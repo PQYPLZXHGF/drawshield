@@ -45,9 +45,9 @@ function getCharge( $node ) {
     } else {
       $chg_data = includeCharge( $node, $charge_key );
       if ( array_key_exists('file', $chg_data )) { // Need to extract body and features from inkscape file
-        $chg_data = array_merge($chg_data, ink2chg('charges/' . $node->getAttribute('type') . '/' . $chg_data['file']));
+        $chg_data = array_merge_recursive($chg_data, ink2chg('charges/' . $node->getAttribute('type') . '/' . $chg_data['file']));
+        $charge_cache[$charge_key] = $chg_data;
       }
-      $charge_cache[$charge_key] = $chg_data;
     }
   }
   if ( $chg_data == null or !array_key_exists('body', $chg_data) ) {
@@ -57,7 +57,6 @@ function getCharge( $node ) {
                '<text x="50" y="55" font-size="15" text-anchor="middle">' . $title . '</text></g>',
                'wflex' => 2, 'hflex' => 2 );
   }
-  $features = (array_key_exists('features', $chg_data)) ? $chg_data['features'] : null;
   if ( array_key_exists('licence', $chg_data) ) {
     $title .= ': ' . $chg_data['licence'];
     draw_message('licence', $title);
@@ -103,8 +102,8 @@ function getCharge( $node ) {
   }
 
   // Apply colours to features and append to the body
-  if ( $features ) {
-    foreach ( $features as $key => $data ) {
+  if ( array_key_exists('features',$chg_data) and count($chg_data['features']) > 0 ) {
+    foreach ( $chg_data['features'] as $key => $data ) {
       // Find if there is a proper colour
       if ( array_key_exists('proper', $data) )
         $proper_spec = $data['proper'];

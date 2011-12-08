@@ -21,6 +21,11 @@ $charge = array (
   'carpenters? axes?',
   ),
 
+  'modifiers' => array (
+    array ( 'handle', 'handled?s?', 'feature' ),
+    array ( 'blade', 'bladed?s?', 'feature' ),
+    ),
+
   'doc' => 'Stuff...',
 
   'height' => 1052,

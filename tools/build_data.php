@@ -49,6 +49,8 @@ $node = null;
         	$subtype = substr($file,0,strlen($file)-4);
         	//echo "\r$subtype";
             $charge = include_charge ( '../charges/' . $subdir . '/' . $file );
+            if ( array_key_exists('file',$charge) and ! file_exists('../charges/' . $type . '/' . $charge['file']))
+              echo "Warning: file " .  $charge['file'] . " not found\n"; 
             $def_col = array();
             // Add this to the either list, for disambiguation?
             if ( array_key_exists ( 'either', $charge ) ) {

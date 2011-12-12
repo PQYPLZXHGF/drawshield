@@ -19,18 +19,14 @@ $charge = array (
   'seaxe?s?',
   ),
 
-  'modifiers' => array (
-    array ( 'handle', 'handled?', 'feature',    ),
-    array ( 'blade', 'bladed?', 'feature',    ),
-  ),
   'doc' => 'Stuff...',
 
-  'width' => 110,
-  'height' => 400,
-  'wflex' => 1.2,
-  'hflex' => 1.2,
   'file' => 'inkscape/seax.svg',
 
-)
+);
+
+include 'charges/weapon/_swords.inc';
+
+
 
 ?>

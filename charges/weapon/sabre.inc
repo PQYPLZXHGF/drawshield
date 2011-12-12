@@ -12,21 +12,23 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// earl
+// sword
 
 $charge = array (
 
   'patterns' => array (
-  'earls? (crown|coronet)s?',
+  'sabres?',
+  'crooked swords?',
+  'scim(i|e)tars?',
+  'cutlasse?s?',
   ),
 
   'doc' => 'Stuff...',
 
-  'wflex' => 1.2,
-  'hflex' => 1.2,
-  'proper' => rgb('gold'),
-  'file' => 'inkscape/earl.svg',
+  'file' => 'inkscape/sabre.svg',
 
-)
+);
+
+include 'charges/weapon/_swords.inc';
 
 ?>

@@ -9,8 +9,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="400"
-   height="400"
+   width="385.67938"
+   height="209.59662"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.2 r9819"
@@ -37,8 +37,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.6375"
-     inkscape:cx="231.14504"
-     inkscape:cy="271.45038"
+     inkscape:cx="100.62596"
+     inkscape:cy="80.268372"
      inkscape:document-units="px"
      inkscape:current-layer="body"
      showgrid="false"
@@ -49,10 +49,14 @@
      inkscape:window-maximized="0"
      borderlayer="true"
      showguides="true"
-     inkscape:guide-bbox="true">
+     inkscape:guide-bbox="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0">
     <sodipodi:guide
        orientation="0,1"
-       position="83.053435,191.75573"
+       position="79.557252,0.57372224"
        id="guide4649" />
   </sodipodi:namedview>
   <metadata
@@ -71,7 +75,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="body"
-     transform="translate(0,-650)">
+     transform="translate(-3.4961832,-649.22137)">
     <path
        style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 20.610687,119.38931 c 35.419847,-28.0916 322.313483,-22.004911 352.061063,7.32825 -7.3138,21.21813 -14.52125,55.60092 -25.64885,62.29007 -39.02246,23.45763 -280,18.9313 -300.763358,-3.05343 C 33.792494,172.7538 20.610687,119.38931 20.610687,119.38931 z"

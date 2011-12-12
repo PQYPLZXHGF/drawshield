@@ -85,7 +85,10 @@ function draw() {
   rewrite();
 
   // Calculate all charge placements
-  placements ();
+  placements();
+  
+  // Get all the charge data
+  get_chg_data();
 
   $header = '<?xml version="1.0" encoding="utf-8" ?>
   <svg version="1.1"

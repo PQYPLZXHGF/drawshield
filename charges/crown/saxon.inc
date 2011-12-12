@@ -26,7 +26,6 @@ $charge = array (
 
   'wflex' => 1.2,
   'hflex' => 1.2,
-  'height' => 250, 'width' => 400,
   'file' => 'inkscape/saxon.svg',
 );
 

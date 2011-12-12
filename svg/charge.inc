@@ -12,9 +12,52 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
+   $chg_data_cache = array();
+   
+   function get_chg_data() {
+     global $dom;
+     global $chg_data_cache;
+     
+     $xpath = new DOMXPath($dom);
+     
+     foreach ( $xpath->query("//charge") as $chg ) {
+       $chg_ref = unique('chg');
+       $chg_data_cache[$chg_ref] = read_chg_file($chg);
+       // Add a modifier to link to the cached charge data
+       $chg->appendChild(make_mod('chg_data', $chg_ref ));
+     }
+   }
+   
+   function read_chg_file($node) {
+     
+     if ( $node->nodeName == 'missing' ) {
+       $title = 'missing';
+       $chg_data = array();
+     } else {
+       $charge_key =  'charges/' . $node->getAttribute('type') . '/' . $node->getAttribute('subtype');
+       if ( ($title = $node->getAttribute('tokens')) == null ) $title = $node->getAttribute('subtype');
+       $chg_data = includeCharge( $node, $charge_key );
+       if ( array_key_exists('file', $chg_data )) { // Need to extract body and features from inkscape file
+         $chg_data = array_merge_recursive($chg_data, ink2chg('charges/' . $node->getAttribute('type') . '/' . $chg_data['file']));
+       }
+     }
+    if ( !array_key_exists('body', $chg_data) ) {
+      draw_message('internal',"Cannot draw $title");
+      $chg_data = array ( 'width' => 100, 'height' => 100,
+        'body' => '<g stroke="none"><path fill-rule="evenodd" d="M0,0h100v100h-100zM10,10h80v80h-80z" />' .
+               '<text x="50" y="55" font-size="15" text-anchor="middle">' . $title . '</text></g>',
+               'wflex' => 2, 'hflex' => 2 );
+    }
+    if ( array_key_exists('licence', $chg_data) ) {
+      $title .= ': ' . $chg_data['licence'];
+      draw_message('licence', $title);
+    }
+    $chg_data['title'] = $title;
+    return $chg_data;
+  }
+     
    
    function makeCharge($charge) {
-     $placements = array(0 => 'x/x/x/x/x/x');
      $placements = get_mod($charge,'placement');
      $retval = '';
      foreach ( explode('*',$placements) as $placement ) {
@@ -30,38 +73,14 @@ function includeCharge( $node, $charge_key ) {
 }
 
 function getCharge( $node ) {
-   static $charge_cache = array();
+  global $chg_data_cache;
+  
+  $chg_ref = get_mod($node, 'chg_data');
+  if ( !array_key_exists($chg_ref, $chg_data_cache) )
+    $chg_data = read_chg_file($node);
+  else
+    $chg_data = $chg_data_cache[$chg_ref];
 
-  if ( $node->nodeName == 'missing' ) {
-    $title = 'missing';
-    $chg_data = array ( 'width' => 100, 'height' => 100,
-        'body' => '<g stroke="none"><path fill-rule="evenodd" d="M0,0h100v100h-100zM15,15h70v70h-70z" />
-              <text x="50" y="65" font-size="30" text-anchor="middle">Msng</text></g>', 'wflex' => 2, 'hflex' => 2 );
-  } else {
-    if ( ($title = $node->getAttribute('tokens')) == null ) $title = $node->getAttribute('subtype');
-    $charge_key =  'charges/' . $node->getAttribute('type') . '/' . $node->getAttribute('subtype');
-    if ( array_key_exists($charge_key, $charge_cache) ) {
-      $chg_data = $charge_cache[$charge_key];
-    } else {
-      $chg_data = includeCharge( $node, $charge_key );
-      if ( array_key_exists('file', $chg_data )) { // Need to extract body and features from inkscape file
-        $chg_data = array_merge_recursive($chg_data, ink2chg('charges/' . $node->getAttribute('type') . '/' . $chg_data['file']));
-        $charge_cache[$charge_key] = $chg_data;
-      }
-    }
-  }
-  if ( $chg_data == null or !array_key_exists('body', $chg_data) ) {
-      draw_message('internal',"Cannot draw $title");
-      $chg_data = array ( 'width' => 100, 'height' => 100,
-        'body' => '<g stroke="none"><path fill-rule="evenodd" d="M0,0h100v100h-100zM10,10h80v80h-80z" />' .
-               '<text x="50" y="55" font-size="15" text-anchor="middle">' . $title . '</text></g>',
-               'wflex' => 2, 'hflex' => 2 );
-  }
-  if ( array_key_exists('licence', $chg_data) ) {
-    $title .= ': ' . $chg_data['licence'];
-    draw_message('licence', $title);
-  }
-  $chg_data['title'] = $title;
   $body = $chg_data['body'];
 
   // Process charge features and modifiers
@@ -103,7 +122,8 @@ function getCharge( $node ) {
 
   // Apply colours to features and append to the body
   if ( array_key_exists('features',$chg_data) and count($chg_data['features']) > 0 ) {
-    foreach ( $chg_data['features'] as $key => $data ) {
+    foreach ( array_reverse($chg_data['features']) as $key => $data ) {
+      if ( !array_key_exists('body', $data) ) $data['body'] = '<g />';
       // Find if there is a proper colour
       if ( array_key_exists('proper', $data) )
         $proper_spec = $data['proper'];

@@ -14,11 +14,10 @@
 
 $charge = array ( 
   'patterns' => array (
-  'astral (crown|coronet)s?',
+  '(astral|celestial) (crown|coronet)s?',
   ),
   
 
-  'height' => 275, 'width' => 400,
   'wflex' => 1.2,
   'hflex' => 1.2,
   'proper' => rgb('gold'),

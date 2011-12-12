@@ -21,7 +21,6 @@ $charge = array (
     array ( 'masoned', 'masoned', 'feature', ),
    ),
 
-  'height' => 140, 'width' => 400,
   'wflex' => 1.2,
   'hflex' => 1.2,
   'proper' => rgb('gold'),

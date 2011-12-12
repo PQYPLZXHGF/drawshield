@@ -17,7 +17,6 @@ $charge = array (
   'eastern (crown|coronet)s?',
   ),
 
-  'height' => 290, 'width' => 500,
   'wflex' => 1.2,
   'hflex' => 1.2,
   'proper' => rgb('gold'),

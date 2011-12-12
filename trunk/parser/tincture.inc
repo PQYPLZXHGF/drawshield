@@ -103,30 +103,30 @@ function tincture2() {
     // Field treatments
     // 'plumetty', how to draw this one?
     // array ( 'lozengy',      'lozengy',  ), made this back into a division
+    array ( 'annuletty',    'annuletty',    ),
+    array ( 'bezanty',      'bezant(y|e)', true ),
+    array ( 'billetty',     'billetty',     ),
     array ( 'checky',       '(checky|cheque?y)' ),
-    array ( 'papelonny',    'pap(e|i)l?lonn(y|e)',    ),
-    array ( 'scaly',        'scaly',        ),
-//    array ( 'compony',      '(compony|gobone|gobonated)',        ),
-//    array ( 'counter-compony',      'counter (compony|gobone|gobonated)',  ),
+    array ( 'counter-billetty',     '?billetty counter billetty', ),
+    array ( 'crusilly',     'crusilly',     ),
+    array ( 'estoilly',     'estoilly',    ),
     array ( 'fretty',       'fretty',       ),
+    array ( 'goutty',       'go?utty',     ),
     array ( 'grillage',     'grillage',     ),
     array ( 'honeycombed',  'honeycombed',  ),
+    array ( 'hurty',        'hurty',       true ),
     array ( 'maily',        'maily',        ),
     array ( 'masoned',      'masoned',      ),
-    array ( 'crusilly',     'crusilly',     ),
-    array ( 'vairy',        'vair(e|y)',    ),
-    array ( 'annuletty',    'annuletty',    ),
-    array ( 'billetty',     'billetty',     ),
-    array ( 'counter-billetty',     'billetty counter billetty', ),
-    array ( 'estoilly',     'estoilly',    ),
-//    array ( 'fleury',       '(fleury|floretty)',  ), // This is not a treatment!!
-    array ( 'seme-de-lys',       'sem(e|y) de l(i|y)s',  ),
-    array ( 'goutty',       'go?utty',     ),
-    array ( 'bezanty',      'bezant(y|e)', true ),
-    array ( 'platy',        'platy',       true ),
-    array ( 'hurty',        'hurty',       true ),
     array ( 'mullety',      'mullett?y',   ),
+    array ( 'papelonny',    'pap(e|i)l?lonn(y|e)',    ),
+    array ( 'platy',        'platy',       true ),
+    array ( 'scaly',        'scaly',        ),
+    array ( 'seme-de-lys',       'sem(e|y) de l(i|y)s',  ),
+    array ( 'vairy',        'vair(e|y)',    ),
    // array ( 'estoile',      'estoil(e|y)', ), TODO Different from mullet of six?
+//    array ( 'compony',      '(compony|gobone|gobonated)',        ),
+//    array ( 'counter-compony',      'counter (compony|gobone|gobonated)',  ),
+//    array ( 'fleury',       '(fleury|floretty)',  ), // This is not a treatment!!
    );
 
    $groupings = array (

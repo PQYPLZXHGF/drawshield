@@ -183,6 +183,7 @@ function get_features ( $feature_sets, &$node ) {
     array ( 'bendwise',      'bendw(ise|ays)', 'mod', 'orientation' ),
     array ( 'fesswise',      'fessw(ise|ays)', 'mod', 'orientation' ),
     array ( 'palewise',      'palew(ise|ays)', 'mod', 'orientation' ),
+    array ( 'palewise',      'erect in pale', 'mod', 'orientation' ),
     array ( null,            'arranged', 'ignore' ),
     array ( null,            '(lying|laying)', 'ignore' ),
     array ( null, 'for difference', 'mod', 'cadency' ),

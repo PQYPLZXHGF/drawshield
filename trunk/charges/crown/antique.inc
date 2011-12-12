@@ -25,7 +25,6 @@ $charge = array (
   'wflex' => 2,
   'hflex' => 1.5,
   'proper' => rgb('gold'),
-  'height' => 115, 'width' => 125,
   'file' => 'inkscape/antique.svg',
 )
 

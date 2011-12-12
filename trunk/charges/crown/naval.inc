@@ -26,7 +26,6 @@ $charge = array (
 
   'wflex' => 1.2,
   'hflex' => 1.2,
-  'height' => 300, 'width' => 400,
   'file' => 'inkscape/naval.svg',
 );
 

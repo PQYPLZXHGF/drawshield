@@ -18,7 +18,6 @@ $charge = array (
   '(crown|coronet)s?',
   ),
 
-  'height' => 270, 'width' => 440,
   'wflex' => 1.2,
   'hflex' => 1.2,
   'proper' => rgb('gold'),

@@ -18,7 +18,6 @@ $charge = array (
   ),
   
 
-  'height' => 400, 'width' => 400,
   'wflex' => 1.2,
   'hflex' => 1.2,
   'proper' => rgb('gold'),

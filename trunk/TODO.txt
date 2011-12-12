@@ -50,14 +50,12 @@ Fimbriation can have its own edge type, separate from that of the ordinary
 
 Add flory counter flory edge type, ensure flory/fleury/floretty are synoynms
 
-DONE (for 2.3l)
+Precise meaning of (addorsed)? saltireways/wise?
 
-Crowns are now: antique, baron, earl, marquis, viscount, mural, vallary, dukes, ducal, palisado, crown of the king of arms, saxon
+SVG import - deal with exponential numbers in path? (or assume they are 0?)
 
+DONE (for 2.3n)
 
-Further twiddling with semi-colons
+New sword, added seax and sword of st. paul, sabre, falchion
 
-Internal:
-
-Can work directly from inkscape SVG files
 

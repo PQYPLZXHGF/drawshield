@@ -34,12 +34,14 @@ function add_item($item, $curID) {
       $gID = $item['id'];
       $name = sprintf("%s",$item['id']);
   	  list($groupXTrans, $groupYTrans) = get_transform($item['transform']);
-      if ( strncasecmp($name,'layer',5) !== 0 ) { // just ignore layers
+      if ( (strncasecmp($name,'layer',5) !== 0) and (preg_match('/g[0-9]+/', $name) != 1) ) { // just ignore layers or auto named groups
         $curID = $name;
         $inkGroups[$name] = '';
       }
       foreach( $item->children() as $child ) 
         add_item($child, $curID);
+      $groupXTrans = 0;
+      $groupYTrans = 0; // Make this recursive?
       $curID = $prevID;
       break;
     default:
@@ -88,7 +90,8 @@ function get_rect($rect) {
 function get_transform ( $transform ) {
   global $groupXTrans, $groupYTrans;
   
-  if ( !$transform ) return array(0,0);
+  if ( !$transform ) 
+    return array($groupXTrans, $groupYTrans);
   preg_match('/translate *\(([\d\.-]+),([\d\.-]+)\)/', $transform, $match );
   return array ( ($match[1] + $groupXTrans), ($match[2] + $groupYTrans) );
 }
@@ -105,12 +108,14 @@ function ink2chg($filename) {
   global$inkGroups;
   
   
-  if ( ($xml = simplexml_load_file($filename)) == null ) {
+  if ( ($svg = simplexml_load_file($filename)) == null ) {
     draw_message('internal',"XML error reading $filename");
     return null;
   }
+  $height = $svg['height'];
+  $width = $svg['width'];
   
-  foreach( $xml->children() as $child ) 
+  foreach( $svg->children() as $child ) 
     add_item($child,'body');
   
   $features = array();
@@ -122,9 +127,9 @@ function ink2chg($filename) {
       $features[$key] = array('body' => $data);
   }   
   if ( count($features) )
-    return compact('body','features');
+    return compact('body','features','width','height');
   else
-    return compact('body');
+    return compact('body','width','height');
 }
   
  

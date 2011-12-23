@@ -297,6 +297,9 @@ function makePath2 ( $shapeSpec, $lineType, $size = 60 ) {
       if ( $defaultStart == '-' and $defaultEnd == '-') 
         $whenRotated = 'reflected';
       continue;
+    } elseif ( $dir == 'U' ) {
+      $upperOnly = ($dist == 0);
+      continue;
     } elseif ( $dir == 'O' ) {
       $doOffset = false;
       continue;

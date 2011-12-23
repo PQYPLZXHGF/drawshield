@@ -54,8 +54,26 @@ Precise meaning of (addorsed)? saltireways/wise?
 
 SVG import - deal with exponential numbers in path? (or assume they are 0?)
 
+Is the base too large?
+
+barry divisions with chief present (and base?)
+
+redraw griffin head
+
+A chief embattled arrondi is upside down
+
 DONE (for 2.3n)
 
-New sword, added seax and sword of st. paul, sabre, falchion
+New sword, added seax and sword of st. paul, sabre, falchion, rapier, dagger, claymore
+
+Added charge brey (barnacle), compass rose (nova) {voided, pierced}, 
+
+More flexible positioning in use of charge "between" charges
+
+The size of the canton depends on whether there is a chief present
+
+BUGS FIXED
+
+Chief embattled now works properly
 
 

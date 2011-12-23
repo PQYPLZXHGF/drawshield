@@ -1,4 +1,4 @@
-<?php /* Copyright 2011 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox 
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,15 +12,24 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// claymore
+// crosslet
 
 $charge = array (
- 'patterns' => array (
-    'claymores?',
+
+  'patterns' => array (
+  'compass roses?',
+  'compass stars?',
+  'novae?',
   ),
-  'file' => 'inkscape/claymore.svg',
+
+  'doc' => 'Stuff...',
 
 );
 
-include 'charges/weapon/_swords.inc';
+$main = 'l10,80 30,-20';
+$voidStart = 80;
+$void = 'l8,66 22,-16';
+
+include ('charges/quadrate/_quadrate8.inc');
+
 ?>

@@ -20,9 +20,19 @@ $ordinary = array(
       
       'doc' => 'Stuff...',
       
-      'shape_spec' => 'X-8Y-8a308C308E308g308', 
+      'shape_spec' => 'X-8Y-8a208C208E208g208', 
 			'if_ord_on' => 'scale',
-			'feature_size' => 40,
+			'feature_size' => 30,
 );
+
+if ( $node != null ) {
+  foreach ( $node->parentNode->childNodes as $sibling ) {
+    if ( $sibling->nodeName == 'ordinary' and $sibling->getAttribute('subtype') == 'chief' ) {
+      $ordinary['shape_spec'] = 'X-8Y-8a308C308E308g308';
+      $ordinary['feature_size'] = 40;
+      break;
+    }
+  }
+}
 
 ?>

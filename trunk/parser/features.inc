@@ -246,6 +246,7 @@ function get_features ( $feature_sets, &$node ) {
 	$look_for_tinc = true;
 	$pos_is_error = false;
 	$arr_is_error = false;
+	$max_tinc = 99;
 
   $features = array(
     array(null, '(and|&)', 'ignore' ), // ignore, unless part of a longer feature
@@ -263,6 +264,15 @@ function get_features ( $feature_sets, &$node ) {
 		  case 'pos_is_error':
 		    $pos_is_error = true;
 		   // $features = array_merge($features,$position_mods);
+		    break;
+		  case 'need2tinc':
+		    $max_tinc = 2;
+		    break;
+		  case 'need3tinc':
+		    $max_tinc = 3;
+		    break;
+		  case 'need1tinc':
+		    $max_tinc = 1;
 		    break;
 		  case 'arr_is_error':
 		    $arr_is_error = true;
@@ -349,10 +359,11 @@ function get_features ( $feature_sets, &$node ) {
         case 'ignore':
           break;
       }
-    } elseif ( $look_for_tinc and (($tinc = tincture(false)) != null) ) {
+    } elseif ( $look_for_tinc and ($max_tinc > 0) and (($tinc = tincture(false)) != null) ) {
       $tinc->setAttribute('index',"$tinc_index" );
       $tinc_index++;
       $node->appendChild($tinc);
+      $max_tinc--;
     } elseif ( $look_for_rows and (($num = number( true )) != null ) ) {
       comma();
       andd();

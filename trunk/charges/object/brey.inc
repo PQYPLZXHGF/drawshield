@@ -12,15 +12,13 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// claymore
 
 $charge = array (
  'patterns' => array (
-    'claymores?',
+    'br(a|e)ye?s?',
+    'barnacles?',
   ),
-  'file' => 'inkscape/claymore.svg',
-
+  'file' => 'inkscape/brey.svg',
+  'licence' => 'Tim Powys-Lybbe, for a miscellany of bygones: http://powys.org/',
 );
-
-include 'charges/weapon/_swords.inc';
 ?>

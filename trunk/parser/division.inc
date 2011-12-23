@@ -73,7 +73,8 @@ function division( $depth = 1 ) {
     $node->setAttribute( 'subtype', $match[0]);
     comma();
     // generic modifiers, including tinctures
-    get_features(array('linetype', 'ordinary', $of_pieces), $node);
+    $max_tinc = (isset($match[3]) and $match[3] === true) ? 'need3tinc' : 'need2tinc';
+    get_features(array('linetype', 'ordinary', $max_tinc, $of_pieces), $node);
     // How many tinctures did we find?
     foreach ($node->childNodes as $child )
       if ( $child->nodeName == 'tincture' ) $tinc_count++;

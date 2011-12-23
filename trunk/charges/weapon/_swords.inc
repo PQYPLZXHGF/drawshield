@@ -6,6 +6,7 @@ $charge['modifiers'] =  array (
     array ( 'blade', 'blades?d?', 'feature',    ),
     array ( 'hilt', 'handles?d?', 'feature', ), // This isn't quite right, should also include pomell?
     array ( null, 'points? upwards?', 'ignore',    ),
+    array ( null, 'erect', 'ignore',    ),
     array ( null, 'points? uppermost', 'ignore',    ),
     array ( null, '?the points? in chief', 'ignore',    ),
     array ( null, 'points? downwards?', 'mod', 'inverted',    ),

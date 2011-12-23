@@ -31,17 +31,17 @@ if ( $node == null ) {
   $compony = get_mod($node,'compony');
   
   if ( $couped == 'both' )
-    $ordinary['shape_spec'] = 'X100Y-8a800c408E800g408';
+    $ordinary['shape_spec'] = 'X100Y-8U1a800c408E800g408';
   elseif ( $couped == 'dexter')
-    $ordinary['shape_spec'] =  'X-8Y-8a908c408E908g408';
+    $ordinary['shape_spec'] =  'X-8Y-8U1a908c408E908g408';
   elseif ( $couped == 'sinister')
-    $ordinary['shape_spec'] =  'X100Y-8a908c408E908g408';
+    $ordinary['shape_spec'] =  'X100Y-8U1a908c408E908g408';
   elseif ( get_mod($node,'triangular'))
-    $ordinary['shape_spec'] =  'V1X-8Y-8a1016D719F719';
+    $ordinary['shape_spec'] =  'V1X-8Y-8U1a1016D719F719';
   elseif ( get_mod($node,'lozengy'))
     $ordinary['body'] = '<path d="M0,0l83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 v300 l-83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 " />';
   else
-   $ordinary['shape_spec'] = 'X-8Y-8a1016c308E1016g308';
+   $ordinary['shape_spec'] = 'X-8Y-8U1a1016c308E1016g308';
   
    if ( $compony == 'single' )
     $ordinary['body2'] = '<path d="M0,0h250v450h-250z M500,0h250v450h-250z" />';

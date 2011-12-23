@@ -112,8 +112,8 @@ function ink2chg($filename) {
     draw_message('internal',"XML error reading $filename");
     return null;
   }
-  $height = $svg['height'];
-  $width = $svg['width'];
+  $height = floatval($svg['height']);
+  $width = floatval($svg['width']);
   
   foreach( $svg->children() as $child ) 
     add_item($child,'body');

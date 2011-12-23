@@ -12,14 +12,15 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
    
-   // modify a full (1000x1200) placement to fit within the given bounding box
+   // modify a (1000x1000) placement to fit within the given bounding box
+   // TODO Deal with any arrangment that extends below 1000 (is this only in pale...?)
    function adjustPlacement($placement,$boundingBox) {
      if ( $boundingBox == 'x' ) return $placement; // dummy entry to give multiple locations
      $newPlacement = '';
      $numberGroups = explode('/',$placement);
      list($bbx,$bby,$bbw,$bbh) = explode(',',$boundingBox);
      $xScale = $bbw / 1000;
-     $yScale = $bbh / 1200;
+     $yScale = $bbh / 1000;
      foreach ( $numberGroups as $numberGroup ) {
        if ( strlen($numberGroup) < 2 ) { // i.e. if empty or just a single character like 'x'
          $newPlacement .= $numberGroup . '/';
@@ -77,10 +78,7 @@ function placements() {
     } else {
       $underlying_div = null;
     }
-    if (get_mod($item, 'between')) {
-      $charge = $xpath->query("modifier[@name='between']/charge",$item);
-      $number += $charge->item(0)->getAttribute('number');
-    }
+
     if ( get_mod($item,'entire') )
       $boundingBox = $chief ? '0,300,1000,900' : '0,0,1000,1200';
     else
@@ -91,20 +89,6 @@ function placements() {
     // strewn on a field (don't need any placement)
     if ( $item->parentNode->nodeName == 'semyde' )
       $placement = 'i';
-    
-    // around another charge (no placement) - placement is below
-    if ( $placement == '' && $xpath->evaluate("boolean(parent::modifier[@name='between']/parent::charge)",$item) )
-      $placement = 'i';
-    
-    // between another charge (see above)
-    if ( $placement == '' && $xpath->evaluate("boolean(modifier[@name='between']/charge[@number > 2])",$item ) ) {
-      if ( $item->getAttribute('type') == 'quadrate' )
-        $placement = 'x/x/x/x/200,300,160,160:500,600,600,600:800,300,160,160:200,900:800,900';
-      elseif ( $chief )
-        $placement = 'x/x/x/250,450,160,160:500,700,700,300:750,450,160,160:500,950/250,450,160,160:500,700,700,300:750,450,160,160:250,950:750,950/250,450,160,160:500,700,700,300:750,450,160,160:500,200:250,950:750,950';
-      else
-        $placement = 'x/x/x/250,200,300,280:500,550,700,400:750,200,300,280:500,1000/250,200,280,280:500,550,700,400:750,200,280,280:250,900:750,900/250,200,240,240:500,550,700,400:750,200,240,240:500,200:250,900:750,900';
-    }
     
     // on an ordinary
     if ( $placement == '' && $xpath->evaluate("boolean(parent::modifier[@name='on']/parent::ordinary)",$item ) ) {
@@ -122,7 +106,7 @@ function placements() {
           else
             $placement =  calcPlace('h',$number,$conjoin,'100,50,800,200');
           break;
-        case 'canton': $placement = calcPlace('w',$number,$conjoin,'20,20,260,260'); break;
+        case 'canton': $placement = calcPlace('w',$number,$conjoin, ($chief ? '20,20,260,260' : '10,10,180,180')); break;
         case 'gyron': $placement = '80,200,100,100/s/s/s/s/s'; break;
         case 'fess': $placement = calcPlace('h',$number,$conjoin,'100,400,800,200'); break;
         case 'gore': $placement = '130,700,160,160/130,600,140,140:130,800/x/x/x/x'; break;
@@ -158,17 +142,41 @@ function placements() {
         $placement = '500,750,400,400/250,750,375,375:750,750/200,750,300,300:500,950:800,750/s/s/s';
       $apply_location = false; // If we are on a charge we can't also be in a specific location (although the charge we are "on" can be)
     }
+
+    // Are we around another charge?
+    if ( $placement == '' && $xpath->evaluate("boolean(parent::modifier[@name='between']/parent::charge)",$item) ) {
+      // If our parent charge is "on" an ordinary, we don't need to do anything
+      if ( $xpath->evaluate("boolean(parent::modifier/parent::charge/parent::modifier[@name='on'])",$item) ) {
+        $placement = 'i';
+        // similarly, if our parent charge has an explicit arrangement
+      } elseif ( $xpath->evaluate("boolean(parent::modifier/parent::charge/modifier[@name='arrangement'])",$item) ) {
+        $placement = 'i';        
+      } else {
+        if ( $item->getAttribute('type') == 'quadrate' ) // TODO This is wrong!
+          $placement = 'x/x/x/200,300,160,160:800,300,160,160:200,900:800,900';
+        elseif ( $chief )
+          $placement = 'x/125,700,200,600:875:700/250,450,160,160:750,450,160,160:500,950/250,450,160,160:500,700,700,300:750,450,160,160:250,950:750,950/250,450,160,160:500,700,700,300:750,450,160,160:500,200:250,950:750,950';
+        else
+          $placement = 'x/125,500,200,800:875,500/250,200,300,280:750,200,300,280:500,1000/250,200,280,280:750,200,280,280:250,900:750,900/250,200,240,240:750,200,240,240:500,200:250,900:750,900';
+      }
+      // If our parent charge has a position, then we need to apply it to ourselves also
+      $pos = get_mods($item->parentNode->parentNode,'position');
+    }
     
     // explicit arrangements
     if ( $placement == '' && $arr ) {
-      switch ( $arr ) { // TODO add incross + insaltire with bend
+      if (get_mod($item, 'between')) {  // If we between some other charges, add them as well
+        $charge = $xpath->query("modifier[@name='between']/charge",$item);
+        $number += $charge->item(0)->getAttribute('number');
+      }
+      switch ( $arr ) { // TODO add incross + insaltire with chief
       case 'inbend': $placement = ($chief) ? '500,800,350,700,45/333.33,633.33,180,180,45:666.67,966.67/200,500,180,180,45:400,700:600,900/166.67,466.67,180,180,45:333.33,633.33:500,800:666.67,966.67/142.86,442.86,180,180,45:285.71,585.71:428.57,728.57:571.43,871.43:714.29,1014.29/s' :
         '500,500,400,800,45/333.33,333.33,180,180,45:666.67,666.67/250,250,200,200,45:500,500:750,750/200,200,200,200,45:400,400:600,600:800,800/166.67,166.67,160,160,45:333.33,333.33:500,500:666.67,666.67:833.33,833.33/142.86,142.86,140,140,45:285.71,285.71:428.57,428.57:571.43,571.43:714.29,714.29:857.14,857.14';
         break;
       case 'inbendsin': $placement = ($chief) ? '500,800,350,700,-45/333.33,633.33,180,180,-45:666.67,966.67/200,500,180,180,-45:400,700:600,900/166.67,466.67,180,180,-45:333.33,633.33:500,800:666.67,966.67/142.86,442.86,180,180,-45:285.71,585.71:428.57,728.57:571.43,871.43:714.29,1014.29/s' :
         '500,500,400,800,-45/333.33,333.33,180,180,-45:666.67,666.67/250,250,200,200,-45:500,500:750,750/200,200,200,200,-45:400,400:600,600:800,800/166.67,166.67,160,160,-45:333.33,333.33:500,500:666.67,666.67:833.33,833.33/142.86,142.86,140,140,-45:285.71,285.71:428.57,428.57:571.43,571.43:714.29,714.29:857.14,857.14';
         break;
-      case 'inpale': $placement = calcPlace('v',$number,$conjoin, ($chief) ? '200,350,600,750' : '200,100,600,1000');
+      case 'inpale': $placement = calcPlace('v',$number,$conjoin, ($chief) ? '100,350,800,750' : '100,100,800,1000');
         break;
       case 'inchiefthrough': $placement = calcPlace('h',$number,$conjoin,'0,25,1000,250'); break;
       case 'inpall': $placement = ($chief) ? 'x/x/250,550,180,400,-45:750,550,,,45:500,950,,,0/s/s/s' : 'x/x/250,250,180,400,-45:750,250,,,45:500,750,,,0/s/s/s' ; break;
@@ -190,6 +198,11 @@ function placements() {
       default: $placement = 'i'; break; // internal error, no placement
       }
     }
+
+    
+    // If we have other charges around us (i.e. charge between charges), shrink a bit to make room
+    if ( $placement == '' && $xpath->evaluate("boolean(modifier[@name='between']/charge)",$item ) )
+      $placement = adjustplacement(calcPlace('w',$number,$conjoin,$boundingBox), ($chief ? '150,210,700,700' : '150,150,700,700'));
     
     // between an ordinary
     if ( $placement == '' && $xpath->evaluate("boolean(parent::modifier[@name='between']/parent::ordinary)",$item )) {
@@ -389,9 +402,9 @@ function placements() {
           case 'indexbase': $adjustment = ($cadency) ? '200,800,200,200' : '150,750,350,400'; break;
           case 'insinbase': $adjustment = ($cadency) ? '600,800,200,200' : '500,750,350,400'; break;
           case 'inmidbase': $adjustment = ($cadency) ? '400,800,200,200' : '300,750,400,400'; break;
-          case 'inhonpoint': $adjustment = ($cadency) ? '400,250,200,200' : '300,150,400,400'; break;
-          case 'infesspoint': $adjustment = ($cadency) ? '400,400,200,200' : '250,250,500,500'; break;
-          case 'innombril': $adjustment = ($cadency) ? '400,800,200,200' : '300,700,400,400'; break;
+          case 'inhonpoint': $adjustment = ($cadency) ? '400,250,200,200' : '200,50,500,500'; break;
+          case 'infesspoint': $adjustment = ($cadency) ? '400,400,200,200' : '200,200,600,600'; break;
+          case 'innombril': $adjustment = ($cadency) ? '400,800,200,200' : '200,600,600,600'; break;
           case 'insinside': $adjustment = ($cadency) ? '0,500,200,200' : '0,200,400,400'; break;
           case 'indexside': $adjustment = ($cadency) ? '800,500,200,200' : '600,200,400,400'; break;
           case 'infirst': 
@@ -463,8 +476,9 @@ function placements() {
     }
     
     // If we don't have a placement yet the default is just to arrange in wide rows
-    if ( $placement == '' ) 
+    if ( $placement == '' ) {
       $placement = calcPlace('w',$number,$conjoin,$boundingBox);
+    }
     
     // Add the placement modifier
     $item->appendChild(make_mod('placement', $placement ));

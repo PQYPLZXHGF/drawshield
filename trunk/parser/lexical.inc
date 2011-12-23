@@ -212,7 +212,7 @@ function check_match2 ( $match_string ) {
       }
       $t_word += $count; // Got a match, all OK, so move on
       if ( $number ) $matched_number = $number;
-    } elseif ( ! ($optional)) {
+    } elseif ( ! ($optional || $negative)) {
       if ( $res === false ) parser_message( 'internal', 'Bad regex - ' . $regex );
       return 0;
     }

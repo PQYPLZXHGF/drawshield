@@ -45,6 +45,7 @@ function add_def($element = '', $content = '', $name = '', $title = '', $desc = 
 function apply_tincture ( $tincture, $object, $chg_size = '',
         $rot = '0', $rev = false, $inv = false ) {
   global $_SERVER;
+  $retval = '';
 	
 	$patTrans = '';
 	$object_type = $tincture->parentNode->nodeName;
@@ -299,6 +300,7 @@ function translatePath( $path, $xTrans, $yTrans ) {
         $newPath .= 'V' . sprintf('%.3f', $numbers[0] + $yTrans);
         break;
       case 'M':
+      case 'L':
       case 'C':
         $newPath .= $command;
         for ( $j = 0; $j < count($numbers); $j += 2 ) {

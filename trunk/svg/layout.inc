@@ -56,21 +56,28 @@ function place_charges ( $node, $placement ) {
   $num_of = $node->getAttribute('number');
   $facing = null;
   $between = null;
+  $retval = '';
   foreach ( $node->childNodes as $child ) {
     if ( $child->nodeName == 'modifier' ) {
       switch ( $child->getAttribute('name' )) {
-        case 'facing':
-          $facing = $child->getAttribute('param');
+      case 'facing':
+        $facing = $child->getAttribute('param');
           break;
         case 'between':
+          // If between has its own placement, use that
           $between = $child->firstChild;
-          $num_of += $between->getAttribute('number');
+          if ( ($between_placement = get_mod($between,'placement')) != 'i' ) {
+            $retval .= place_charges( $between, $between_placement);
+            $between = null;
+          } else {
+            $num_of += $between->getAttribute('number');
+            $half = ($between->getAttribute('number')) / 2;
+          }
           break;
       }
     }
   }
-
-  $retval = '';
+  
   $cx = 500; // default values
   $cy = 500;
   $rot = 0;
@@ -135,10 +142,10 @@ function place_charges ( $node, $placement ) {
     }
     if ( isset($items[5]) and $items[5] != '' ) $inv = $items[5];
     if ( isset($items[6]) and $items[6] != '' ) $rev = $items[6];
-    if ( $between and $count != 1 )
-      $retval .= PlaceCharge( $between, $bbx, $bby, $cx, $cy, $rot, $inv, $rev );
-    else
-      $retval .= PlaceCharge( $node, $bbx, $bby, $cx, $cy, $rot, $inv, $rev );
+    $item = $node;
+    if ( $between and ( ($count+1) <= $half or ($count+1) > ($num_of - $half))) 
+      $item = $between;
+    $retval .= PlaceCharge( $item, $bbx, $bby, $cx, $cy, $rot, $inv, $rev );
   }
   return $retval;
 }
@@ -215,9 +222,9 @@ function PlaceCharge ( $node,  // images
     $rotation = 0; // An explicit charge orientation overrides a rotation from the arrangment
     switch ( $orientation ) {
       case 'fesswise':
-        $do_turn = ( $chargeY > $chargeX );
+        $do_turn = $chargeY > $chargeX;
         if ( array_key_exists('turn_fesswise', $charge) ) { $do_turn = $charge['turn_fesswise']; }
-        if ( $do_turn ) {
+        if ($do_turn ) {
           $retval = "<g transform=\"translate($chargeY,0) rotate(90)\"><desc>fesswise charge</desc>$retval</g>\n";
           $temp = $chargeX; $chargeX = $chargeY; $chargeY = $temp;
           $temp = $Xflex; $Xflex = $Yflex; $Yflex = $temp;
@@ -241,7 +248,7 @@ function PlaceCharge ( $node,  // images
           $temp = $Xflex; $Xflex = $Yflex; $Yflex = $temp;
         }
         break;
-      case 'erect':
+      case 'erect': // TODO is this still used?
         $retval = "<g transform=\"translate($chargeY,0) rotate(90)\"><desc>erect charge</desc>$retval</g>\n";
         $temp = $chargeX; $chargeX = $chargeY; $chargeY = $temp;
         $temp = $Xflex; $Xflex = $Yflex; $Yflex = $temp;
@@ -397,6 +404,8 @@ function calcPlace( $type, $number, $conjoined = 'false', $bb = '100,100,800,900
         $placement .= sprintf ( "%.2f,%.2f,%.2f,%.2f:",$centre_x,$centre_y,$cbb_width,$cbb_height);
       }
     }
+ // } elseif ($number == 1) {
+ //   $placement = sprintf ( "%.2f,%.2f,%.2f,%.2f:",($bb_x + ($bb_w*0.5)), ($bb_y + ($bb_h*0.5)), ($bb_w*0.8), ($bb_h*0.8));
   } else {
     // Calculate the charge bounding box (same size for all)
     $vert_gap = ($num_rows == 1) ? 0 : ($bb_h * $space_pct) / ($num_rows-1);

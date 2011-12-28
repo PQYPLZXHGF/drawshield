@@ -1,4 +1,4 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php /* Copyright 2011 Karl R. Wilcox 
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,19 +12,12 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// fleurdelys
+// dummy object, same as the last charge
 
 $charge = array (
-
-  'patterns' => array (
-  'fleurs? de l(y|i)s',
+ 'patterns' => array (
+    '?of the same',
+    'more ?of ?the ?same',
   ),
-
-  'doc' => 'Stuff...',
-  'file' => 'inkscape/fleur-de-lys.svg',
-  'licence' => 'Tim Powys-Lybbe, for a miscellany of bygones: http://powys.org/',
-  'orient_to_ordinary' => true,
-
-)
-
+);
 ?>

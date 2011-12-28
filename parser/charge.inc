@@ -96,6 +96,8 @@ function simple_charge( $assume_num = false, $allow_arr = false, $allow_pos = fa
   global $dom;
   global $charge_list;
   global $pending_items;
+  static $last_type = null;
+  static $last_subtype = null;
 
   static $prefix_features = array (
     array ( null, '(demi|half)', 'mod', 'demi' ),
@@ -131,10 +133,22 @@ function simple_charge( $assume_num = false, $allow_arr = false, $allow_pos = fa
   // We have a charge
   $type = $match[2];
   $subtype = $match[0];
+  if ( $subtype == 'same' ) {
+    if ( $last_type == null ) {
+      parser_message('error','No previous charge for same');
+    } else {
+      $type = $last_type;
+      $subtype = $last_subtype;
+    }
+  } else {
+    $last_type = $type;
+    $last_subtype = $subtype;
+  }
   $node->setAttribute('type', $type);
   $node->setAttribute('subtype', $subtype);
   $node->setAttribute('tokens',tokens());
   $node->setAttribute('number',"$num");
+
   $a_key = 'c:' . $subtype;
   // Get the set of features and flags, (if any)
   get_modifier_array($type,$subtype,$specific_features,$flags);

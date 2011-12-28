@@ -40,8 +40,10 @@ if ( $node == null ) {
     $ordinary['shape_spec'] =  'V1X-8Y-8U1a1016D719F719';
   elseif ( get_mod($node,'lozengy'))
     $ordinary['body'] = '<path d="M0,0l83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 83.3,150 83.3,-150 v300 l-83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 -83.3,-150 -83.3,150 " />';
+  elseif ( get_mod($node, 'voided'))
+    $ordinary['shape_spec'] = 'X-40Y-8U1a1080c308E1080g308';
   else
-   $ordinary['shape_spec'] = 'X-8Y-8U1a1016c308E1016g308';
+    $ordinary['shape_spec'] = 'X-8Y-8U1a1016c308E1016g308';
   
    if ( $compony == 'single' )
     $ordinary['body2'] = '<path d="M0,0h250v450h-250z M500,0h250v450h-250z" />';

@@ -94,6 +94,8 @@ function placements() {
     if ( $placement == '' && $xpath->evaluate("boolean(parent::modifier[@name='on']/parent::ordinary)",$item ) ) {
       $ordinary = $item->parentNode->parentNode;
       $placement = 'n'; // for "on an ordinary" we must always have a placement.
+      // If there are other charges that we are "between" then add those to the count
+      $number += $xpath->evaluate("string(modifier[@name='between']/charge/@number)",$item);
       // Test order is important - check specific subtypes before generic type
       switch ($ordinary->getAttribute('subtype')) {
         case 'bend': $placement = ($chief) ? '500,800,180,400,45/333.33,633.33,180,200,45:666.67,966.67/200,500,180,180,45:400,700:600,900/166.67,466.67,180,180,45:333.33,633.33:500,800:666.67,966.67/142.86,442.86,140,140,45:285.71,585.71:428.57,728.57:571.43,871.43:714.29,1014.29/s' :
@@ -103,12 +105,19 @@ function placements() {
         case 'chief': 
           if (get_mod($ordinary,'triangular')) 
             $placement = '500,200,200,200/375,180,180,180:625,180/325,140,160,180:500,240:675,140/x/x/x';
+          else if (get_mod($ordinary,'voided'))
+            $placement =  calcPlace('h',$number,$conjoin,'100,30,800,180');
           else
             $placement =  calcPlace('h',$number,$conjoin,'100,50,800,200');
           break;
         case 'canton': $placement = calcPlace('w',$number,$conjoin, ($chief ? '20,20,260,260' : '10,10,180,180')); break;
         case 'gyron': $placement = '80,200,100,100/s/s/s/s/s'; break;
-        case 'fess': $placement = calcPlace('h',$number,$conjoin,'100,400,800,200'); break;
+        case 'fess':
+          if (get_mod($ordinary,'voided'))
+            $placement = calcPlace('h',$number,$conjoin,'100,430,800,160');
+          else
+            $placement = calcPlace('h',$number,$conjoin,'100,400,800,200');
+          break;
         case 'gore': $placement = '130,700,160,160/130,600,140,140:130,800/x/x/x/x'; break;
         case 'pale': $placement = calcPlace('v',$number,$conjoin, ($chief) ? '400,350,200,750' : '400,100,200,1000'); break;
         case 'tierce': $placement = calcPlace('v',$number,$conjoin, ($chief) ? '75,350,200,650' : '75,100,200,800'); break;
@@ -151,9 +160,9 @@ function placements() {
         // similarly, if our parent charge has an explicit arrangement
       } elseif ( $xpath->evaluate("boolean(parent::modifier/parent::charge/modifier[@name='arrangement'])",$item) ) {
         $placement = 'i';        
-      } else {
-        if ( $item->getAttribute('type') == 'quadrate' ) // TODO This is wrong!
-          $placement = 'x/x/x/200,300,160,160:800,300,160,160:200,900:800,900';
+      } else { // Arrange on an open field
+        if ( $item->parentNode->parentNode->getAttribute('type') == 'quadrate' ) // Special placement for items around a quadrate cross
+          $placement = '///300,300,160,160:700,300,160,160:300,700:700,700';
         elseif ( $chief )
           $placement = 'x/125,700,200,600:875:700/250,450,160,160:750,450,160,160:500,950/250,450,160,160:500,700,700,300:750,450,160,160:250,950:750,950/250,450,160,160:500,700,700,300:750,450,160,160:500,200:250,950:750,950';
         else
@@ -201,7 +210,7 @@ function placements() {
 
     
     // If we have other charges around us (i.e. charge between charges), shrink a bit to make room
-    if ( $placement == '' && $xpath->evaluate("boolean(modifier[@name='between']/charge)",$item ) )
+    if ( $placement == '' && $xpath->evaluate("boolean(modifier[@name='between']/charge)",$item ) && $item->getAttribute('type') != 'quadrate' )
       $placement = adjustplacement(calcPlace('w',$number,$conjoin,$boundingBox), ($chief ? '150,210,700,700' : '150,150,700,700'));
     
     // between an ordinary

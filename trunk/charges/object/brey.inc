@@ -18,7 +18,17 @@ $charge = array (
     'br(a|e)ye?s?',
     'barnacles?',
   ),
-  'file' => 'inkscape/brey.svg',
+ 
+   'modifiers' => array (
+     array ( null, '(expanded|extended)', 'mod', 'expanded' ),
+   ),
+   
+  'file' => 'inkscape/brey1.svg',
   'licence' => 'Tim Powys-Lybbe, for a miscellany of bygones: http://powys.org/',
 );
+
+if ($node != null) {
+  if ( get_mod( $node, 'expanded'))
+    $charge['file'] = 'inkscape/brey.svg';
+}
 ?>

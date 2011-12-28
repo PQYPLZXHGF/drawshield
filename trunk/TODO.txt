@@ -62,11 +62,13 @@ redraw griffin head
 
 A chief embattled arrondi is upside down
 
+Smaller placements for base voided + others (done chief & fess)
+
 DONE (for 2.3n)
 
-New sword, added seax and sword of st. paul, sabre, falchion, rapier, dagger, claymore
+New swords, added seax and sword of st. paul, sabre, falchion, rapier, dagger, claymore
 
-Added charge brey (barnacle), compass rose (nova) {voided, pierced}, 
+Added charge brey (barnacle) {expanded}, compass rose (nova) {voided, pierced}, stag {trippant}. wheatsheaf
 
 More flexible positioning in use of charge "between" charges
 

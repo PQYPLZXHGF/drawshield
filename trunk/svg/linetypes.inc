@@ -88,8 +88,7 @@ function meetEdges($endDir, $endPos, $startDir, $startPos, $size ) {
   $endDir = strtoupper($endDir);
   $startDir = strtoupper($startDir);
   // We are calculating the CLOCKWISE angle through which we would turn to be on the new "heading"
-  $dirAngles = array ( 'A' => 0, 'B' => 45, 'C' => 90, 'D' => 135, 'E' => 180, 'F' => 225, 'G' => 270, 'H' => 315,
-                        'J' => 300, 'K' => 60, 'L' => 120, 'M' => 240, );
+  $dirAngles = array ( 'A' => 0, 'B' => 45, 'C' => 90, 'D' => 135, 'E' => 180, 'F' => 225, 'G' => 270, 'H' => 315 );
   $angle = $dirAngles[$startDir] - $dirAngles[$endDir];
   if ( $angle < 0 ) $angle += 360;
   if ( $endDir == $startDir ) { // For straight connections we can't just adjust the length but need to insert a move

@@ -18,6 +18,12 @@ $charge = array (
  'patterns' => array (
     'garbs?',
     'shea(f|ves) of corn',
+    'wheatsheaf',
+    'wheatsheaves',
   ),
+ 
+   'file' => 'inkscape/corn-sheaf.svg',
+  'licence' => 'Tim Powys-Lybbe, for a miscellany of bygones: http://powys.org/',
+
 );
 ?>

@@ -99,7 +99,7 @@ $colours = array (
   array ( true,'ghost white'),
   array ( true,'gold'),
   array ( true,'goldenrod'),
-  array ( true,'gr(a|e)y'),
+  array ( true,'gr(a|e)y', 'gray'),
   array ( true,'green'),
   array ( true,'green yellow'),
   array ( true,'honeydew'),

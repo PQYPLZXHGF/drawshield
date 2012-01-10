@@ -58,24 +58,20 @@ Is the base too large?
 
 barry divisions with chief present (and base?)
 
-redraw griffin head
-
 A chief embattled arrondi is upside down
 
 Smaller placements for base voided + others (done chief & fess)
 
-DONE (for 2.3n)
+DONE (for 2.3o)
 
-New swords, added seax and sword of st. paul, sabre, falchion, rapier, dagger, claymore
+Better bee, griffin's head {langued}, griffin {langued, armed, beaked}, unicorn {unguled, armed}
 
-Added charge brey (barnacle) {expanded}, compass rose (nova) {voided, pierced}, stag {trippant}. wheatsheaf
+Added charges stag {trippant}, celtic knot
 
-More flexible positioning in use of charge "between" charges
-
-The size of the canton depends on whether there is a chief present
+Re-did lions: Now available are lion courant, lion cadent, lion rampant tail nowed, 
+ 
 
 BUGS FIXED
 
-Chief embattled now works properly
 
 

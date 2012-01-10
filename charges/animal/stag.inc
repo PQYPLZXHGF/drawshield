@@ -12,25 +12,26 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-$charge = array ( 
+// stags-head
+
+$charge = array (
+
   'patterns' => array (
-  'griffins?',
-  'gryphons?',
+  'stags?',
   ),
-
+  
   'modifiers' => array (
-    array ( 'beaked', 'beaked', 'feature' ),
-    array ( 'armed', 'armed', 'feature' ),
-    array ( 'legged', 'legged', 'warn' ),
-    array ( 'tailed', 'tailed', 'warn' ),
-    array ( 'winged', 'winged', 'feature' ),
-	array ( 'tongued', '(tongued|langued)', 'feature' ),
-	array ( null, 'sans wings', 'mod', 'wingless' ),
-	array ( null, 'rampant', 'ignore' ),
-	array ( null, 'segreant', 'ignore' ),
-   ),
+    array ( 'antlers', 'attired', 'feature' ),
+    array ( 'hooves', 'unguled', 'feature' ),
+    array ( 'trippant', 'trippant', 'mod', 'gait' ),
+    ),
 
-  'file' => 'inkscape/griffin.svg',
-  );
+  'doc' => 'Stuff...',
+
+  'demi' => 'horizontal',
+  'file' => 'inkscape/stag-trippant.svg',
+  'licence' => 'Tim Powys-Lybbe, for a miscellany of bygones: http://powys.org/',
+
+);
 
 ?>

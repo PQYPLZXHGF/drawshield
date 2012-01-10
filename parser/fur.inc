@@ -28,7 +28,6 @@ $furs = array (
   array ( 'counter-vair',    'counter vair', ),
   array ( 'counter-potent',  'counter potent', ),
   array ( 'potent-counter-potent', 'potent counter potent' , ),
-  array ( 'potent',          'potent',  ),
 );
 
   $node = null;

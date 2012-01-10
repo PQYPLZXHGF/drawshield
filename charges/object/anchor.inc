@@ -18,5 +18,6 @@ $charge = array (
  'patterns' => array (
     'anchors?',
   ),
+ 'file' => 'inkscape/anchor.svg',
 );
 ?>

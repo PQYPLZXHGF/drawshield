@@ -1,0 +1,71 @@
+
+/* This is an Extended Bachus Naur Form grammar for blazonry - the language of heraldic shield descriptions */
+/* Blazons conforming to this grammar MAY be succesfully parsed by the drawshield parsing engine            */
+/* found at karlwilcox.com/drawshield. Note that there are additional semantic checks that may cause        */
+/* parsing to fail, for example specifying a location both before *and* after a charge                      */
+/* In addition, drawshield also accepts many variant spellings and synonyms that are not shown here and in  */
+/* the case of tinctures, if one is not provided then the next tincture found in the input will be used     */
+
+blazon            ::= simpleShield | quarteredShield | halvedShield
+
+simpleShield      ::= field (ordinary | charge)* ('overall' (ordinary | charge)* )
+
+quarteredShield   ::= 'quarterly' (quarterSpec ('and' quarterSpec)? blazon semicolon?)+
+
+halvedShield      ::= blazon semicolon? ( 'dimidiated with' | 'impaled with' ) blazon
+
+quarterSpec       ::= 'first' | 'second' | 'third' | 'fourth'
+
+field             ::= tincture | division
+
+tincture          ::= (colour | fur | treatment | tinctureReference)? /* if not found, the next tincture encountered will be used */
+
+colour            ::= majorColour | minorColour
+
+majorColour       ::= 'azure' | 'argent' | 'gules' | 'or' | 'sable' | 'vert'
+
+minorColour       ::= 'murrey' | 'sanguine' | 'carnation' /* + others.... */
+
+fur               ::= 'ermine' | 'pean' | 'erminois' /* + others.... */
+
+treatment         ::= (treatmentName tincture 'and' tincture) | (tincture treatmentName tincture) | (tincture colouredTreatment) | (tincture 'semy de' simpleCharge)
+
+treatmentName     ::= 'annuletty' | 'billetty' | 'checky' /* + others.... */
+
+colouredTreatment ::= 'bezanty' | 'hurty'
+
+tinctureReference ::= 'of the' ('first' | 'second' | 'third' | 'fourth' | 'last' | 'field')
+
+division          ::= divisionSpec (tincture | treatment) 'and' (tincture | treatment) (divisionSpec 'counterchanged')?
+
+divisionSpec      ::= divisionName edgeSpec?
+
+divisionName      ::= 'per fess' | 'per bend' | 'per bend sinister' /* + others... */
+
+edgeSpec          ::= 'angled' | 'arched' | 'bevilled' | 'dancetty' /* + others... */
+
+ordinary          ::= simpleOrdinary | chargedOrdinary | arrangedOrdinary
+
+simpleOrdinary    ::= number ordinaryModifier* ordinaryName (edgeSpec | ordinaryModifier | shapeModifier)*
+
+ordinaryName      ::= 'fess' | 'pale' | 'bend' /* + others... */
+
+ordinaryModifier  ::= 'sinister' | 'reversed' | 'dexter' | 'inverted' | 'enhanced' | 'abased'
+
+shapeModifier     ::= ('voided' tincture?) | 'fimbriated' colour | cotticed | 'rompu'
+
+cotticed          ::= (('double' | 'triple')? 'cotticed' colour?) | ('between' ('one' | 'two' | 'three') 'cottice' colour?) 
+
+chargedOrdinary   ::= 'on' simpleOrdinary number simpleCharge
+
+arrangedOrdinary  ::= ('within' simpleOrdinary number simpleCharge) | (simpleOrdinary 'between' number simpleCharge)
+
+/* need to chargedArrangedOrdinary ! */
+
+simpleCharge      ::=
+
+semicolon         ::= ';' | '.'
+
+comma             ::= ','
+
+number            ::= 

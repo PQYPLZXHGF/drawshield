@@ -48,7 +48,7 @@
                '<text x="50" y="55" font-size="15" text-anchor="middle">' . $title . '</text></g>',
                'wflex' => 2, 'hflex' => 2 );
     }
-    if ( array_key_exists('licence', $chg_data) ) {
+    if ( array_key_exists('licence', $chg_data) and $chg_data['licence'] != null ) {
       $title .= ': ' . $chg_data['licence'];
       draw_message('licence', $title);
     }
@@ -157,7 +157,7 @@ function getCharge( $node ) {
   if ( $demi!= null ) {
     if ( array_key_exists('demi', $chg_data) and $chg_data['demi'] == 'top' ) {
       $half = $chg_data['height'] / 2;
-      $clip = add_def ( 'clipPath', '<rect x="0" y="0" width="' . $chg_data['height'] . '" height="' . $half . '" />' );
+      $clip = add_def ( 'clipPath', '<rect x="0" y="0" width="' . $chg_data['width'] . '" height="' . $half . '" />' );
       $body = '<g clip-path="url(#' . $clip . ')">' . $body . '</g>';
       $chg_data['height'] = $half;
     } else {

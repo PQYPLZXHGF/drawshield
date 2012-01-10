@@ -1,0 +1,45 @@
+
+/* This is an Extended Bachus Naur Form grammar for blazonry - the language of heraldic shield descriptions */
+/* Blazons conforming to this grammar MAY be succesfully parsed by the drawshield parsing engine            */
+/* found at karlwilcox.com/drawshield. Note that there are additional semantic checks that may cause        */
+/* parsing to fail, for example specifying a location both before *and* after a charge                      */
+/* In addition, drawshield also accepts many variant spellings and synonyms that are not shown here and in  */
+/* the case of tinctures, if one is not provided then the next tincture found in the input will be used     */
+/* SIMPLIFIED VERSION FOR TEACHING PURPOSES ONLY - see blazon.ebnf for the complete syntax                  */
+
+
+simpleShield      ::= field (ordinary | charge)* ('overall' (ordinary | charge)* )
+
+field             ::= tincture | division
+
+tincture          ::= colour | fur | treatment
+
+colour            ::= majorColour | minorColour
+
+majorColour       ::= 'azure' | 'argent' | 'gules' | 'or' | 'sable' | 'vert'
+
+minorColour       ::= 'murrey' | 'sanguine' | 'carnation' | '+ others...'
+
+fur               ::= 'ermine' | 'pean' | 'erminois' | '+ others...'
+
+treatment         ::= (treatmentName tincture 'and' tincture) | (tincture 'semy de' simpleCharge)
+
+treatmentName     ::= 'annuletty' | 'billetty' | 'checky' | '+ others...'
+
+division          ::= divisionSpec tincture 'and' tincture (divisionSpec 'counterchanged')?
+
+divisionSpec      ::= divisionName edgeSpec?
+
+divisionName      ::= 'per fess' | 'per bend' | 'per bend sinister' | '+ others...'
+
+edgeSpec          ::= 'angled' | 'arched' | 'bevilled' | 'dancetty' | '+ others...'
+
+ordinary          ::= ordinaryName (edgeSpec | ordinaryModifier | shapeModifier)*
+
+ordinaryName      ::= 'fess' | 'pale' | 'bend' | '+ others...'
+
+ordinaryModifier  ::= 'sinister' | 'reversed' | 'inverted' | 'enhanced' | 'abased'
+
+shapeModifier     ::= 'voided' | 'fimbriated' colour | (('double' | 'triple')? 'cotticed' colour?)
+
+

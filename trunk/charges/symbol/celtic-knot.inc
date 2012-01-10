@@ -15,7 +15,7 @@
 
 $charge = array (
  'patterns' => array (
-    '?celtic knots?',
+    'celtic knots?',
   ),
  
   'file' => 'inkscape/celtic-knot.svg',

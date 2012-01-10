@@ -22,7 +22,7 @@ $charge = array (
 
   'doc' => 'Stuff...',
   'file' => 'inkscape/fleur-de-lys.svg',
-  'licence' => 'Tim Powys-Lybbe, for a miscellany of bygones: http://powys.org/',
+  'licence' => 'http://commons.wikimedia.org/wiki/User:Rinaldum',
   'orient_to_ordinary' => true,
 
 )

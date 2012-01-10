@@ -96,24 +96,41 @@ function get_transform ( $transform ) {
   return array ( ($match[1] + $groupXTrans), ($match[2] + $groupYTrans) );
 }
 
+function applyTransform( $path, $transform ) {
+  global $groupXTrans, $groupYTrans;
+  if ( !$transform ) return $path;
+  /* Inkscape only seems to use translate on its own or matrix transforms - for the moment only handle these */
+  if ( preg_match('/translate *\(([\d\.-]+),([\d\.-]+)\)/', $transform, $match ) == 1 )
+    return translatePath($path, ($match[1] + $groupXTrans), ($match[2] + $groupYTrans));
+  elseif ( preg_match('/matrix *\(([\d\.-]+),([\d\.-]+),([\d\.-]+),([\d\.-]+),([\d\.-]+),([\d\.-]+)\)/', $transform, $match ) == 1 )
+    return matrixPath($path, $match[1], $match[2], $match[3], $match[4], $match[5], $match[6]);
+  else
+    draw_message('warning','transform problem ' . $transform );
+  return $path;
+}
+
 function get_path($path) {
   $retval = '<path ';
-  list($xTrans,$yTrans) = get_transform( $path['transform'] );
   $retval .= split_style( $path['style']);
-  $retval .= 'd="' . (translatePath($path['d'], $xTrans, $yTrans)) . "\" />\n";
+  $retval .= 'd="' . (applyTransform($path['d'], $path['transform'])) . "\" />\n";
   return $retval;
 }
 
 function ink2chg($filename) {
   global$inkGroups;
+  $retval = array();
   
   
   if ( ($svg = simplexml_load_file($filename)) == null ) {
     draw_message('internal',"XML error reading $filename");
     return null;
   }
-  $height = floatval($svg['height']);
-  $width = floatval($svg['width']);
+  $retval['height'] = floatval($svg['height']);
+  $retval['width'] = floatval($svg['width']);
+  $metadata = $svg->xpath('//cc:Agent/dc:title');
+  if ( is_array($metadata) and count($metadata) > 0) {
+    $retval['licence'] = $metadata[0];
+  }
   
   foreach( $svg->children() as $child ) 
     add_item($child,'body');
@@ -122,14 +139,13 @@ function ink2chg($filename) {
   $body = '';
   foreach ( $inkGroups as $key => $data ) {
     if ( $key == 'body' )
-      $body = $data;
+      $retval['body'] = $data;
     else
       $features[$key] = array('body' => $data);
   }   
   if ( count($features) )
-    return compact('body','features','width','height');
-  else
-    return compact('body','width','height');
+    $retval['features'] = $features;
+  return $retval;
 }
   
  

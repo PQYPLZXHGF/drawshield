@@ -76,17 +76,20 @@ function makeDiv_common( $node, $div_num ) {
                                  'div3' => array ( 'NC' => 'V1X-100Y1300g100H848B849c100e1200', 'CH' => 'V1X-100Y1400g100H848B849c100e1200' )),
   );
   $name = $node->getAttribute('subtype');
+  $linetype = get_mod($node,'linetype');
   $modifiers = '';
   // Order of these tests needs to match order of division names in the array above!
   if ( get_mod($node, 'inverted')) $modifiers .= '-inverted';
   if ( get_mod($node, 'sinister')) $modifiers .= '-sinister';
   if ( get_mod($node, 'fracted')) $modifiers .= '-fracted';
   if ( array_key_exists($name . $modifiers, $div_data))
-      $name .= $modifiers;
+    $name .= $modifiers;
   else
-      draw_message ( 'warning', "Cannot draw $name as $modifiers" );
+  draw_message ( 'warning', "Cannot draw $name as $modifiers" );
   if ( array_key_exists($name, $div_data) ) {
     $retval = $div_data[$name];
+    if ( ($name == 'per-fess') and ($linetype == 'nebuly' or $linetype == 'potenty')) 
+      $retval = 'X-100Y600A1200c608e1200g608';
     if ( is_array($retval) ) {
       if ( $div_num == 2 and array_key_exists('div2', $retval) ) {
         $retval = $retval['div2'];

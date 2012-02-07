@@ -108,6 +108,11 @@
             </xs:sequence>
             <xs:attribute ref="ID"/>
             <xs:attribute ref="IDREF"/>
+            <xs:attribute name="index">
+                <xs:annotation>
+                    <xs:documentation>If on a divided shield, the index gives the ordering of sub shields (numerical order, left to right, top to bottom)</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="overall">

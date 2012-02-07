@@ -17,7 +17,8 @@
 $charge = array (
 
   'patterns' => array (
-  'maunches?',
+  'maunche?s?',
+  'sleeeves?',
   ),
 
   'doc' => 'Stuff...',

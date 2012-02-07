@@ -1,7 +1,5 @@
 TODO
 
-demi lion not top half
-
 Fix positions for in bend sinister, need to mirror bend positions in placement.inc
 
 "an orle of" does not need tincture....
@@ -54,24 +52,26 @@ Precise meaning of (addorsed)? saltireways/wise?
 
 SVG import - deal with exponential numbers in path? (or assume they are 0?)
 
-Is the base too large?
-
 barry divisions with chief present (and base?)
 
 A chief embattled arrondi is upside down
 
 Smaller placements for base voided + others (done chief & fess)
 
-DONE (for 2.3o)
+Finish tudor rose.
 
-Better bee, griffin's head {langued}, griffin {langued, armed, beaked}, unicorn {unguled, armed}
+Features (for inkscape files anyway) by class attribute? And CSS? Should be much easier...
 
-Added charges stag {trippant}, celtic knot
+DONE (for 2.3p)
 
-Re-did lions: Now available are lion courant, lion cadent, lion rampant tail nowed, 
- 
+Tweaked per fess and size of base
+
+Added lion head (bit crude), cock, cockatrice
+
+Two chevrons are ordinaries, more than 2 are charges
 
 BUGS FIXED
 
+per bend fracted and counterchanged divisions were both broken and have now been fixed
 
 

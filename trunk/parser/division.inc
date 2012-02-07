@@ -20,7 +20,8 @@ function division( $depth = 1 ) {
   static $divisions = array (
     //       filename           regexs         needs 3 colours?
     array ( 'pily',               'pily', 'common', ),
-    array ( 'quarterly',          'quarterly/?party per cross', 'quarterly',  ),
+    array ( 'quarterly',          'quarterly', 'quarterly',  ),
+    array ( 'quarterly',          '?party per cross', 'quarterly',  ),
     array ( 'quarterly-per-fess', 'quarterly per fess', 'quarterly',  ),
     array ( 'quarterly-per-pale', 'quarterly per pale', 'quarterly',  ),
     array ( 'paly-bendy',         'paly bendy', 'common', ),
@@ -47,13 +48,15 @@ function division( $depth = 1 ) {
     array ( 'per-chevron',        'parted chevronwise' , 'common', ),
     array ( 'per-bend',           '?party per bend', 'common', ),
     array ( 'per-bend',           'parted bendwise', 'common', ),
-    array ( 'per-saltire',        '?party per saltire/parted saltirewise' , 'common',),
+    array ( 'per-saltire',        '?party per saltire' , 'common',),
+    array ( 'per-saltire',        'parted saltirewise' , 'common',),
     array ( 'tierced-in-pale',    'tierced in pale' , 'common', true,),
     array ( 'tierced-in-fess',    'tierced in fess' , 'common', true,),
     array ( 'tierced-in-bend',    'tierced in bend' , 'common', true,),
     array ( 'tierced-in-chevron',    'tierced in chevron' , 'common', true,),
     array ( 'fusily',             'fusill?y', 'pattern', ),
-    array ( 'fusily-bendy',       'fusill?y bendy ?dexter/fusill?y in bend', 'pattern', ),
+    array ( 'fusily-bendy',       'fusill?y bendy ?dexter', 'pattern', ),
+    array ( 'fusily-bendy',       'fusill?y in bend', 'pattern', ),
     array ( 'lozengy',            '(lozengy|masculy)', 'pattern' ),
     array ( 'barry-bendy',        'barry bendy ?lozengy' , 'pattern' ),
     array ( 'barry-pily',         'barry pily' , 'bar' ),
@@ -74,6 +77,7 @@ function division( $depth = 1 ) {
     comma();
     // generic modifiers, including tinctures
     $max_tinc = (isset($match[3]) and $match[3] === true) ? 'need3tinc' : 'need2tinc';
+    if ( $depth == 2 ) $max_tinc == null;
     get_features(array('linetype', 'ordinary', $max_tinc, $of_pieces), $node);
     // How many tinctures did we find?
     foreach ($node->childNodes as $child )

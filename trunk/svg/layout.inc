@@ -60,13 +60,14 @@ function place_charges ( $node, $placement ) {
   foreach ( $node->childNodes as $child ) {
     if ( $child->nodeName == 'modifier' ) {
       switch ( $child->getAttribute('name' )) {
-      case 'facing':
-        $facing = $child->getAttribute('param');
+        case 'facing':
+          $facing = $child->getAttribute('param');
           break;
         case 'between':
-          // If between has its own placement, use that
           $between = $child->firstChild;
-          if ( ($between_placement = get_mod($between,'placement')) != 'i' ) {
+          $between_placement = get_placement($between);
+          // If between has its own placement, use that
+          if ($between_placement != 'i' ) {
             $retval .= place_charges( $between, $between_placement);
             $between = null;
           } else {

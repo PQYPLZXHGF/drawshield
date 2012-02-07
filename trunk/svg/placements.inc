@@ -46,14 +46,23 @@
      return $newPlacement;
    }
 
-function placements() {
+function get_placement($item) {
   global $dom;
+  global $aspect_ratio;
+  
+  static $bounding_boxes = array (
+    //                 no-chief, no-entire,       no-chief, entire        chief, no-entire,         chief, entire
+    '10:12' => array ( '100,100,800,800',         '0,0,1000,1200',        '100,400,800,700',        '0,300,1000,900' ),
+    '10:10' => array ( '100,100,800,800',         '0,0,1000,1000',        '100,400,800,500',        '0,300,1000,900' ),
+    '10:14' => array ( '170,100,660,900',         '70,0,860,1200',        '170,400,660,600',        '70,300,860,900' ),
+    '10:24' => array ( '300,100,400,1100',        '250,0,500,1200',        '300,400,400,700',        '250,300,500,900' ),
+    '10:20' => array ( '300,100,400,800',         '250,0,500,1000',        '300,400,400,500',        '250,300,500,700' ),
+    '10:28' => array ( '300,100,400,900',         '285,0,430,1200',        '300,400,400,600',        '285,300,430,900' ),
+    );
 
   $xpath = new DOMXPath($dom);
 
-  $region = 'pl';
-  
-  foreach ( $xpath->query("//charge") as $item ) {
+ // foreach ( $xpath->query("//charge") as $item ) {
     $placement = ''; // This is what we are after, keep going until we find one
     $adjustment = ''; // And we might also have an adjustment once we have found it
     
@@ -78,12 +87,14 @@ function placements() {
     } else {
       $underlying_div = null;
     }
-
-    if ( get_mod($item,'entire') )
-      $boundingBox = $chief ? '0,300,1000,900' : '0,0,1000,1200';
-    else
-      $boundingBox = $chief ? '200,400,600,600' : '100,100,800,800';
-
+    
+    // Figure out default bounding box size for this aspect ratio, chief presence and entire
+    $bounding_index = 0;
+    if ( $chief ) $bounding_index += 2;
+    if ( get_mod($item,'entire') ) $bounding_index += 1;
+    $boundingBox = $bounding_boxes[$aspect_ratio][$bounding_index];
+    // draw_message('warning', "$aspect_ratio $boundingBox" );
+    
     // Try various placement regimes
 
     // strewn on a field (don't need any placement)
@@ -489,9 +500,8 @@ function placements() {
       $placement = calcPlace('w',$number,$conjoin,$boundingBox);
     }
     
-    // Add the placement modifier
-    $item->appendChild(make_mod('placement', $placement ));
-  }
+    return $placement;
+  //}
 }
 
 ?>

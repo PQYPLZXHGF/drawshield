@@ -160,7 +160,7 @@ function check_match ( $match_string ) {
     parser_message('internal','null match string');
     return false;
   }
-  $phrases = explode('/', $match_string);
+  $phrases = explode('/', $match_string); /* TODO check whether we need this anymore... */
   foreach ( $phrases as $phrase ) {
     if ( ($retval = check_match2($phrase)) != 0 ) break;
   }

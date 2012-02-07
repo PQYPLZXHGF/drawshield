@@ -99,13 +99,14 @@ function andd() {
   return false;
 }
 
-function semicolon() {
+function semicolon($lookback = true) {
   $semi = array (
     array ( true, ';'),
     array ( true, '\\.'), // need to escape '.' as this is regex special character
    );
   if ( search_match($semi) != null ) return true;
-  //return false;
+  if ( !$lookback )
+    return false;
   $state = save();
   if ( lookahead(-1) && search_match($semi) != null ) return true;
   restore($state);

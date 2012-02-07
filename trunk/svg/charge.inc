@@ -58,7 +58,7 @@
      
    
    function makeCharge($charge) {
-     $placements = get_mod($charge,'placement');
+     $placements = get_placement($charge);
      $retval = '';
      foreach ( explode('*',$placements) as $placement ) {
        $retval .= place_charges ( $charge, $placement );

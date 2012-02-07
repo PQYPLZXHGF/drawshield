@@ -15,7 +15,7 @@
 function makeDiv_common( $node, $div_num ) {
 
   $div_data = array (
-    'per-fess' => 'X-8Y600A1016c608e1016g608',
+    'per-fess' =>  array ( 'div2' => array ( 'CH' =>'X-8Y700A1016c508e1016g508' , 'NC' =>'X-8Y500A1016c708e1016g708' )),
     // 'per-bend' => array ( 'div2' => array ( 'NC' => 'X0Y0B1414c200e1000g1200', 'CH' => 'X0Y300B1414e1000g900')),
     'per-bend' => array ( 'div2' => array ( 'NC' => 'X-106Y-106B1714c100e1212g1312', 'CH' => 'X0Y300B1414e1000g900')),
     'per-bend-fracted' => array ( 'div2' => array ( 'NC' => 'X200Y0B717e500B1131c100e1010g1410', 'CH' => 'X200Y300B717e500B717e1010g1310' )),

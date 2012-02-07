@@ -16,9 +16,18 @@
 
 $charge = array (
  'patterns' => array (
-    '?dunghill cock',
-    'gamecock',
-    '(moor|heath)cock',
+    '?dunghill cocks?',
+    'gamecocks?',
+    '(moor|heath)cocks?',
   ),
+ 
+  'modifiers' => array (
+      array ( 'legged', '(legged|membered)', 'feature' ),
+      array ( 'beaked', 'beaked', 'feature' ),
+      array ( 'combed', 'combed', 'feature' ),
+      array ( 'jelloped', '(jel|jow)lopped', 'feature' ),
+    ),
+  
+  'file' => 'inkscape/cock.svg',
 );
 ?>

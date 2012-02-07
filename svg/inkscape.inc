@@ -16,7 +16,7 @@
    
 $groupXTrans = 0;
 $groupYTrans = 0;
-$inkGroups = array('body' => '');
+$inkGroups = null;
 
 function add_item($item, $curID) {
   global $inkGroups;
@@ -118,8 +118,9 @@ function get_path($path) {
 
 function ink2chg($filename) {
   global$inkGroups;
-  $retval = array();
   
+  $retval = array();
+  $inkGroups = array('body' => '');
   
   if ( ($svg = simplexml_load_file($filename)) == null ) {
     draw_message('internal',"XML error reading $filename");

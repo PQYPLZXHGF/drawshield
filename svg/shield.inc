@@ -16,6 +16,9 @@
 $svg_region = 'PL';
 $svg_chief = 'NC';
 $error_list = array();
+// These are for scaling into quarters & dimidiations
+$aspect_ratio = '10:12';
+$scale_factor = 1.0;
 
 function region ( $action, $region = null ) {
   global $svg_region;
@@ -84,9 +87,6 @@ function draw() {
   // Apply heraldic knowledge!
   rewrite();
 
-  // Calculate all charge placements
-  placements();
-  
   // Get all the charge data
   get_chg_data();
 
@@ -123,13 +123,70 @@ function draw() {
   return $header . $body . $trailer;
 }
 
+function set_aspect_ratio ( $hierarchy ) {
+  global $aspect_ratio, $scale_factor;
+  
+  $aspect_ratio = '10:12';
+  
+  static $data = array (
+    '10:12' => array ( 'Q1' => '10:10', 'Q2' => '10:10', 'Q3' => '10:14', 'Q4' => '10:14', 'I1' => '10:24', 'I2' => '10:24', 'D1' => '10:12', 'D2' => '10:12', 'scale' => 1.0 ),
+    '10:10' => array ( 'Q1' => '10:10', 'Q2' => '10:10', 'Q3' => '10:14', 'Q4' => '10:14', 'I1' => '10:20', 'I2' => '10:20', 'D1' => '10:10', 'D2' => '10:10', 'scale' => 0.5 ),
+    '10:14' => array ( 'Q1' => '10:14', 'Q2' => '10:14', 'Q3' => '10:14', 'Q4' => '10:14', 'I1' => '10:28', 'I2' => '10:28', 'D1' => '10:14', 'D2' => '10:14', 'scale' => 0.5833 ),
+    '10:24' => array ( 'Q1' => '10:24', 'Q2' => '10:24', 'Q3' => '10:24', 'Q4' => '10:24', 'I1' => null, 'I2' => null, 'D1' => null, 'D2' => null, 'scale' => 1.0 ),
+    '10:28' => array ( 'Q1' => '10:28', 'Q2' => '10:28', 'Q3' => '10:28', 'Q4' => '10:28', 'I1' => null, 'I2' => null, 'D1' => null, 'D2' => null, 'scale' => 0.5 ),
+    '10:20' => array ( 'Q1' => '10:20', 'Q2' => '10:20', 'Q3' => '10:20', 'Q4' => '10:20', 'I1' => null, 'I2' => null, 'D1' => null, 'D2' => null, 'scale' => 0.5833 ),
+    );
+  
+  foreach ( str_split($hierarchy, 2) as $level )
+    if ( $level and $aspect_ratio )
+      $aspect_ratio = $data[$aspect_ratio][$level];
+    if ( $aspect_ratio == null ) {
+      draw_message('warning', "Halved shield too narrow" );
+      $aspect_ratio = '10:28';
+    }
+    $scale_factor = $data[$aspect_ratio]['scale'];
+    // draw_message('warning', "$hierarchy $aspect_ratio" );
+}
+
+function get_hierarchy( &$item ) {
+  $hierarchy = '';
+  
+  do {
+    if ( $item->nodeName == 'shield') {
+      $index = $item->getAttribute('index');
+      switch ( $item->parentNode->nodeName ) {
+      case 'blazon':
+        // $hierarchy = 'PL' . $hierarchy;
+        break;
+      case 'quartered':
+        $hierarchy = 'Q' . $index . $hierarchy;
+        break;
+      case 'impaled':
+        $hierarchy = 'I' . $index . $hierarchy;
+        break;
+      case 'dimidiated':
+        $hierarchy = 'D' . $index . $hierarchy;
+        break;
+      }
+    }
+    $item = $item->parentNode;
+  } while ($item->nodeName != 'blazon');
+  
+  return $hierarchy;
+}
+
 function makeshield( &$node ) {
   global $dom;
+  global $aspect_ratio;
 
   static $id_nodes = array();
 
   if ( $node->hasAttribute('ID') ) $id_nodes[$node->getAttribute('ID')] = $node;
-  if ( $node->hasAttribute('IDREF') ) $node = $id_nodes[$node->getAttribute('IDREF')];
+  if ( $node->hasAttribute('IDREF') ) {
+    $index = $node->getAttribute('index'); // save our current index
+    $node = $id_nodes[$node->getAttribute('IDREF')]; // copy in previously defined node
+    $node->setAttribute('index', "$index"); // Restore current index
+  }
 
 
   $retval = '<g><title>Shield</title>';
@@ -142,6 +199,7 @@ function makeshield( &$node ) {
         foreach ( $children as $kid ) {
           if ( !$found and $kid->nodeName == 'ord_chgs' ) $found = find_chief ( $kid );
         }
+        set_aspect_ratio ( get_hierarchy($child->parentNode) );
         chief('push', $found ? 'CH' : 'NC');
         // Process the shield parts
         foreach ( $children as $kid ) {
@@ -169,24 +227,42 @@ function makeshield( &$node ) {
         $retval .= add_def();
         break;
       case 'impaled':
-        $clip1 = add_def( 'clipPath', '<path d="m0,0L1000,0 1000,1200 0,1200Z" />' );
+        $I1 = makeshield( $children->item(0)); // sets aspect_ratio (must be same for both sub-shields)
+        switch ( $aspect_ratio ) {
+        case '10:24':
+          $clipI = add_def( 'clipPath', '<path d="M250,0h500v1200h-500v-1200z" />' );
+          $xOffset = 250;
+          break;
+        case '10:20':
+          $clipI = add_def( 'clipPath', '<path d="M250,0h500v1000h-500v-1000z" />' );
+          $xOffset = 250;
+          break;
+        case '10:28':
+          $clipI = add_def( 'clipPath', '<path d="M285,0h430v1200h-430v-1200z" />' );
+          $xOffset = 285;
+          break;
+        default:
+          draw_message ( 'internal', 'Wrong aspect ratio for impaled ' . $aspect_ratio );
+        }
+        draw_message ( 'internal', "$aspect_ratio $xOffset" );
         region('push','I1');
-        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="scale(0.5,1)" >' . makeshield( $children->item(0) )  . "</g>\n";
+        $retval .= '<g clip-path="url(#' . $clipI . ')" transform="translate(-' . (500 - $xOffset) . ',0)" >' . $I1  . "</g>\n";
         region('swap','I2');
-        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="translate(500,0) scale(0.5,1)" >' . makeshield( $children->item(1) ) . "</g>\n";
+        $retval .= '<g clip-path="url(#' . $clipI . ')" transform="translate(' . (500 - $xOffset) . ',0)" >' . makeshield( $children->item(1) ) . "</g>\n";
         region('pop');
         $retval .= add_def();
         break;
       case 'quartered':
-        $clip1 = add_def( 'clipPath', '<path d="m0,0L1000,0 1000,1200 0,1200Z" />' );
+        $clipQ12 = add_def( 'clipPath', '<path d="m0,0L1000,0 1000,1000 0,1000Z" />' );
+        $clipQ34 = add_def( 'clipPath', '<path d="m70,0L930,0 930,1200 70,1200Z" />' );
         region('push','Q1');
-        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="scale(0.5,0.416)" >' . makeshield( $children->item(0) ) . "</g>\n";
+        $retval .= '<g clip-path="url(#' . $clipQ12 . ')" transform="scale(0.5,0.5)" >' . makeshield( $children->item(0) ) . "</g>\n";
         region('swap','Q2');
-        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="translate(500,0) scale(0.5,0.416)" >' . makeshield( $children->item(1) ) . "</g>\n";
+        $retval .= '<g clip-path="url(#' . $clipQ12 . ')" transform="translate(500,0) scale(0.5,0.5)" >' . makeshield( $children->item(1) ) . "</g>\n";
         region('swap','Q3');
-        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="translate(0,500) scale(0.5,0.584)" >' . makeshield( $children->item(2) ) . "</g>\n";
+        $retval .= '<g clip-path="url(#' . $clipQ34 . ')" transform="translate(0,500) scale(0.58333) translate(-70,0)" >' . makeshield( $children->item(2) ) . "</g>\n";
         region('swap','Q4');
-        $retval .= '<g clip-path="url(#' . $clip1 . ')" transform="translate(500,500) scale(0.5,0.584)" >' . makeshield( $children->item(3) ) . "</g>\n";
+        $retval .= '<g clip-path="url(#' . $clipQ34 . ')" transform="translate(500,500) scale(0.58333)  translate(-70,0)" >' . makeshield( $children->item(3) ) . "</g>\n";
         region('pop');
         $retval .= add_def();
         break;

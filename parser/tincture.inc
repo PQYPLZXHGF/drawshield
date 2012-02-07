@@ -210,7 +210,7 @@ function tincture2() {
   // Look for division
   } elseif ( ($child = division()) != null ) {
     // Look for a second (normally counterchanged) division
-  //  if ( ( $div2 = division() ) != null ) $child->appendChild($div2);
+    if ( ( $div2 = division(2) ) != null ) $child->appendChild($div2);
   } else {
     return null;
   }

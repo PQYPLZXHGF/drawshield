@@ -19,5 +19,14 @@ $charge = array (
     '?amphisien cockatrices?',
     'basilisks?',
   ),
+
+ 'modifiers' => array (
+      array ( 'legged', '(legged|membered)', 'feature' ),
+      array ( 'beaked', 'beaked', 'feature' ),
+      array ( 'combed', 'combed', 'feature' ),
+      array ( 'jelloped', '(jel|jow)lopped', 'feature' ),
+    ),
+ 
+ 'file' => 'inkscape/cockatrice.svg',
 );
 ?>

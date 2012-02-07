@@ -40,7 +40,7 @@ if ( $format == 'svgtext' ) $format = 'svg';
 // Global Variables
 //
 
-$tagline1 = "drawshield 2.3n";   // Advertising lines at bottom left
+$tagline1 = "drawshield 2.3p";   // Advertising lines at bottom left
 $tagline2 = "karlwilcox.com/drawshield";
 
 // Quick response for empty blazon
@@ -79,7 +79,8 @@ fill_words($blazon);
 
 $node = $dom->createElement('blazon');
 $node->setAttribute("blazonText", $blazon);
-$node->appendChild(shield());
+$node->appendChild(parse());
+//$node->appendChild(shield());
 $bad_words = '';
 if ( $cur_word < count($words) ) {
   while ($cur_word < count($words))

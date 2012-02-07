@@ -37,10 +37,13 @@ function makeDivision( $node, $counter = false ) {
   // Collect the required shapes
   $line_type = get_mod($node, 'linetype');
   $children = $node->childNodes;
+  $secondDiv = null;
   $tinctures = array();
   foreach ( $children as $child ) {
     if ( $child->nodeName == 'tincture' )
       $tinctures[$child->getAttribute('index')] = $child;
+    elseif ( $child->nodeName == 'division' )
+      $secondDiv = $child;
   }
   $div2 = choose_fit($div_func( $node, 2 ));
   $div3 = choose_fit($div_func( $node, 3 ));
@@ -51,8 +54,7 @@ function makeDivision( $node, $counter = false ) {
     return '<g />';
   }
   // set the main colours
-  $tinc2 = $children->item(1)->firstChild; // TODO is this still an element? (implied)
-  if ( $tinc2->nodeName == 'implied' ) { // This is a 2nd division
+  if ( $tinctures[2]->getAttribute('origin') == 'implied' ) { // This is a 2nd division
     $div1 = '';
     $div2 = apply_tincture( $tinctures[1], $div2 );
   } else {
@@ -68,13 +70,8 @@ function makeDivision( $node, $counter = false ) {
     }
   }
   $retval = "$div1\n$div2\n$div3\n";
-  if ( !$counter ) {
-    foreach ( $node->childNodes as $child ) {
-      if ( $child->nodeName == 'division' ) {
-        $secondData = makeDivision( $secondDiv );
-        $retval .= $secondData[2];
-      }
-    }
+  if ( !$counter and $secondDiv ) {
+    $retval .= makeDivision( $secondDiv );
   }
   return $retval;
 }

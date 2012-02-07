@@ -62,6 +62,7 @@ function ordinary() {
   $node = $dom->createElement('ordinary');
 
   $state = save();
+  $either = false;
 
   // Look for "prefixes" to ordinary, then a number
   $found_on = (search_match($on_word) != null);
@@ -72,10 +73,11 @@ function ordinary() {
   get_features ( array('ordinary'), $node ); // Sometimes you get "sinister bend ...."
 
   if ( ($match = either('ordinary')) != null) {
-    if ($match[3] == 'either' and $ord_num > 1) {
+    $either = true;
+   /* if ($match[3] == 'either' and $ord_num > 1) {
       restore($state);
       return null;
-    }
+    } */
   } elseif ( ($match = search_match($ordinary_list)) == null) {
     restore($state); // Not found anything, backtrack and exit
     return null;
@@ -83,16 +85,24 @@ function ordinary() {
   $ord_name = $match[2];
   $ord_type = $match[0];
   $ord_type = preg_replace ( '/\.inc/', '', $ord_type );
+  // get features for this ordinary
+  $specific_features = null;
+  $flags = array();
+  get_ordmod_array($ord_name,$ord_type,$specific_features,$flags);
+  // If either, can we distinguish by the number given?
+  $max_ord_num = 1;
+  if ( array_key_exists('max_num',$flags) ) $max_ord_num = $flags['max_num'];
+  if ( $either and $ord_num > $max_ord_num ) {
+    restore($state);
+    return null;
+  }
+  
+  // Create node
   $node->setAttribute('type',$ord_name);
   $node->setAttribute('subtype',$ord_type);
   $node->setAttribute('number',$ord_num);
   $node->setAttribute('tokens',tokens());
   if ( $depressed ) $node->appendChild( make_mod('depressed'));
-  $a_key = 'o:' . $ord_type;
-  // get features for this ordinary
-  $specific_features = null;
-  $flags = array();
-  get_ordmod_array($ord_name,$ord_type,$specific_features,$flags);
 
   get_features ( array('shape', 'ordinary', 'linetype', $specific_features), $node ); // for "bend sinister (angled).."
 
@@ -129,7 +139,7 @@ function ordinary() {
     $btwn_mod->appendChild ( $btwn_charge);
     $node->appendChild($btwn_mod);
   }
-    
+    // TODO Move these type specific checks into flags array
   // Now look for extras
   if ( $found_on or search_match($charge_with) != null ) {
     $on_ord = make_mod('on');

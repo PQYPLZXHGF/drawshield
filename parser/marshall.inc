@@ -95,14 +95,20 @@ function quartered() {
       if ( $found ) {
         $temp = shield(false); // Look for the description of this quarter
         if ( count($indices) > 1 ) $temp->setAttribute( 'ID',($ID=unique('shield')));
-        $subshields[$indices[0]] = $temp; // Set the first quarter to this description
+        if ( $subshields[$indices[0]] != null )
+          parser_message('error','Duplicate quarter' );
+        else
+          $subshields[$indices[0]] = $temp; // Set the first quarter to this description
         for ( $i = 1; $i < count($indices); $i++ ) {
           $temp = $dom->createElement('shield');
           $temp->setAttribute('IDREF',$ID); // Set other quarters to point to this one
-          $subshields[$indices[$i]] = $temp;
+          if ( $subshields[$indices[$i]] != null )
+            parser_message('error','Duplicate quarter' );
+          else
+            $subshields[$indices[$i]] = $temp;
         }
       } // Keep going as long as we find quarters
-    } while ( $found );
+    } while ( $found and ! semicolon() );
     if ( $marshall[0] == 'ly' and !$foundQuarter ) {
       restore($state); // backtrack, assume this is quarterly division
       return null;
@@ -112,6 +118,7 @@ function quartered() {
         $subshields[$i] = $dom->createElement('missing');
         parser_message('blazon','Missing quarter (' . $i . ')');
       }
+      $subshields[$i]->setAttribute('index',"$i");
       $node->appendChild($subshields[$i]);
     }
   }
@@ -134,24 +141,61 @@ function halved() {
   return $node;
 }
 
-function shield($ignore_semi = true) { // look for overall, even if a ";" is present
+function parse() {
   global $dom;
   global $pending_items;
-
-  $overall = null;
+  $impaled = array (
+    array ( 'impaled', 'impaled ?with' ),
+    );
 
   $node = $dom->createElement('shield');
+  $node->setAttribute('index','0');
+  
+  $child = shield();
+  
+  if ( search_match($impaled) != null ) {
+    $child->setAttribute('index','1');
+    $child2 = shield();
+    $child2->setAttribute('index','2');
+    $imp = $dom->createElement('impaled');
+    $imp->appendChild($child);
+    $imp->appendChild($child2);
+    $node->appendChild($imp);
+  } else {
+    $node->appendChild($child);
+  } 
+  
+  if ( ($over = overall()) != null )
+    $node->appendChild($over);
+  
+  foreach ( $pending_items as $item ) {
+    $item->setAttribute('origin','missing');
+    parser_message('blazon', 'Tincture missing');
+  }
+  
+  return $node;
+}
+
+function shield($ignore_semi = true) { // look for overall, even if a ";" is present
+  global $dom;
+
+  $overall = null;
 
   if ( ( $child = quartered() ) == null ) {
     $child = plain();
     $overall = overall();
-    if ( ($split = halved()) != null ) {
+    if ( !(!$ignore_semi and semicolon()) and ($split = halved()) != null ) {
       $node2 = $dom->createElement('shield');
+      $node2->setAttribute('index','1');
       $node2->appendChild($child);
       if ( $overall ) $node2->appendChild($overall);
       $split->appendChild($node2);
       $node3 = $dom->createElement('shield');
-      $node3->appendChild(plain());
+      if ( ($subshield = quartered() ) == null ) /* these 3 lines added to allow halved then quartered */
+        $subshield = plain();
+      $node3->setAttribute('index','2');
+      $node3->appendChild($subshield);
+      // $node3->appendChild(plain());
       $overall = semicolon() ? null : overall();
       if ( $overall ) $node3->appendChild($overall);
       $split->appendChild($node3);
@@ -159,17 +203,14 @@ function shield($ignore_semi = true) { // look for overall, even if a ";" is pre
       $overall = null;
     }
   }
-  $node->appendChild($child);
-  if ( $ignore_semi and ($overall ==null) ) {
+ // $node->appendChild($child);
+/*  if ( $ignore_semi and ($overall ==null) ) {
     semicolon();
     $overall = overall();
   }
   if ($overall)
-    $node->appendChild($overall);
-  foreach ( $pending_items as $item ) {
-    $item->setAttribute('origin','missing');
-    parser_message('blazon', 'Tincture missing');
-  }
-  return $node;
+    $node->appendChild($overall); */
+
+  return $child;
 }
 ?>

@@ -6,13 +6,15 @@
 /* In addition, drawshield also accepts many variant spellings and synonyms that are not shown here and in  */
 /* the case of tinctures, if one is not provided then the next tincture found in the input will be used     */
 
+/* THIS LIST IS PARTIAL - IT DOES NOT CONTAIN MOST OF THE TERMINAL SYMBOLS */
+
 blazon            ::= simpleShield | quarteredShield | halvedShield
 
 simpleShield      ::= field (ordinary | charge)* ('overall' (ordinary | charge)* )
 
-quarteredShield   ::= 'quarterly' (quarterSpec ('and' quarterSpec)? blazon semicolon?)+
+quarteredShield   ::= 'quarterly' (quarterSpec ('and'? quarterSpec)* blazon ';'?)+
 
-halvedShield      ::= blazon semicolon? ( 'dimidiated with' | 'impaled with' ) blazon
+halvedShield      ::= blazon ';'? ( 'dimidiated with' | 'impaled with' ) blazon
 
 quarterSpec       ::= 'first' | 'second' | 'third' | 'fourth'
 
@@ -36,19 +38,19 @@ colouredTreatment ::= 'bezanty' | 'hurty'
 
 tinctureReference ::= 'of the' ('first' | 'second' | 'third' | 'fourth' | 'last' | 'field')
 
-division          ::= divisionSpec (tincture | treatment) 'and' (tincture | treatment) (divisionSpec 'counterchanged')?
+division          ::= (division2Name edgeType? tincture 'and' tincture (division2Name 'counterchanged')?) | (division3Name edgeType? tincture 'and'? tincture 'and' tincture)
 
-divisionSpec      ::= divisionName edgeSpec?
+division2Name      ::= 'per fess' | 'per bend' | 'per bend sinister' /* + others... */
 
-divisionName      ::= 'per fess' | 'per bend' | 'per bend sinister' /* + others... */
+division3Name      ::= 'per pall' /* + others... */
 
 edgeSpec          ::= 'angled' | 'arched' | 'bevilled' | 'dancetty' /* + others... */
 
 ordinary          ::= simpleOrdinary | chargedOrdinary | arrangedOrdinary
 
-simpleOrdinary    ::= number ordinaryModifier* ordinaryName (edgeSpec | ordinaryModifier | shapeModifier)*
+simpleOrdinary    ::= number ordinaryModifier* ordinaryName (edgeSpec | ordinaryModifier | shapeModifier)* tincture
 
-ordinaryName      ::= 'fess' | 'pale' | 'bend' /* + others... */
+ordinaryName ::= major | subordinary | diminutive | 'label'
 
 ordinaryModifier  ::= 'sinister' | 'reversed' | 'dexter' | 'inverted' | 'enhanced' | 'abased'
 
@@ -60,12 +62,18 @@ chargedOrdinary   ::= 'on' simpleOrdinary number simpleCharge
 
 arrangedOrdinary  ::= ('within' simpleOrdinary number simpleCharge) | (simpleOrdinary 'between' number simpleCharge)
 
-/* need to chargedArrangedOrdinary ! */
+charge            ::=  location? number (simpleCharge | chargeList) (location | chargeModifier | arrangement)*
 
-simpleCharge      ::=
+simpleCharge      ::= ('sheaf of' | 'bundle of')? ('demi'? chargeName | 'the same')  (tincture | division | 'proper') (feature (tincture | 'proper')?)*
 
-semicolon         ::= ';' | '.'
+chargeList        ::= simpleCharge ('charge with' | 'on each' | 'between' | 'within' | 'above' | 'below' ) number simpleCharge
 
-comma             ::= ','
+location    ::= 'in' 'the'? (locationSpecifier ('and' 'in'? locationSpecifier)*)* locationPlace locationQuantifier?
 
-number            ::= 
+locationSpecifier ::= 'first' | 'second' | 'third' | 'fourth' | 'dexter' | 'sinsiter' | 'each' | 'middle'
+
+locationPlace ::= 'chief' | 'base' | ('honour' | 'fess' | 'navel' ) 'point' | 'flanks' | 'nombril'
+
+locationQuantifier ::= 'quarter' | 'half' | 'part'
+
+number            ::= 'a' | 'an' | 'one' | 'two' /* + others ... */

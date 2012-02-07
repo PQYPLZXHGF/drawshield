@@ -20,7 +20,7 @@ $ordinary = array(
       
       'doc' => 'Stuff...',
       
-      'shape_spec' => 'X-100,Y800A1200c500e1200g500',
+      'shape_spec' => 'X-8,Y900A1016c308e1016g308',
       
 );
 

@@ -151,16 +151,16 @@ function get_features ( $feature_sets, &$node ) {
     array ( null, 'inverted', 'mod', 'inverted', ),
     array ( null, 'enhanced', 'mod', 'enhanced', ),
     array ( null, '(abased|abaisse)', 'mod', 'abased', ),
-  );
-
-  static $shape_mods = array (
-    array ( null, 'voided', 'shape', 'voided' ),
+    array ( null, '(rompu|fracted)', 'mod', 'fracted' ),
+    );
+    
+    static $shape_mods = array (
+      array ( null, 'voided', 'shape', 'voided' ),
     array ( null, '(fimbriated|edged)', 'mod+1tinc', 'fimbriated',  ),
     array ( '1', '(cotised|cotticed|endorsed)', 'shape', 'cotised',  ),
     array ( '1', 'between # cott?ices', 'shape', 'cotised',  ),
     array ( '2', 'double (cotised|cotticed)', 'shape', 'cotised',  ),
     array ( '3', '(triple|treble) (cotised|cotticed)', 'shape', 'cotised',  ),
-    array ( null, '(rompu|fracted)', 'mod', 'fracted' ),
     array ( null, 'double dancetty', 'mod', 'fracted' ), 
   );
 

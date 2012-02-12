@@ -62,6 +62,8 @@ Finish tudor rose.
 
 Features (for inkscape files anyway) by class attribute? And CSS? Should be much easier...
 
+Font size and line length in information need to change depending on rendersize
+
 DONE (for 2.3p)
 
 Tweaked per fess and size of base
@@ -73,5 +75,7 @@ Two chevrons are ordinaries, more than 2 are charges
 BUGS FIXED
 
 per bend fracted and counterchanged divisions were both broken and have now been fixed
+
+faster download of website pages
 
 

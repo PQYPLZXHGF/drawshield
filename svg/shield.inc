@@ -227,7 +227,7 @@ function makeshield( &$node ) {
         $retval .= add_def();
         break;
       case 'impaled':
-        $I1 = makeshield( $children->item(0)); // sets aspect_ratio (must be same for both sub-shields)
+        // sets aspect_ratio (must be same for both sub-shields)
         switch ( $aspect_ratio ) {
         case '10:24':
           $clipI = add_def( 'clipPath', '<path d="M250,0h500v1200h-500v-1200z" />' );
@@ -244,26 +244,50 @@ function makeshield( &$node ) {
         default:
           draw_message ( 'internal', 'Wrong aspect ratio for impaled ' . $aspect_ratio );
         }
-        draw_message ( 'internal', "$aspect_ratio $xOffset" );
-        region('push','I1');
-        $retval .= '<g clip-path="url(#' . $clipI . ')" transform="translate(-' . (500 - $xOffset) . ',0)" >' . $I1  . "</g>\n";
-        region('swap','I2');
-        $retval .= '<g clip-path="url(#' . $clipI . ')" transform="translate(' . (500 - $xOffset) . ',0)" >' . makeshield( $children->item(1) ) . "</g>\n";
-        region('pop');
+        // draw_message ( 'internal', "$aspect_ratio $xOffset" );
+        foreach ( $children as $kid ) {
+          switch( $kid->getAttribute('index') ) {
+          case '1':
+            region('push','I1');
+            $retval .= '<g clip-path="url(#' . $clipI . ')" transform="translate(-' . (500 - $xOffset) . ',0)" >' .  makeshield( $kid )  . "</g>\n";
+            region('pop');
+            break;
+          case '2':
+            region('push','I2');
+            $retval .= '<g clip-path="url(#' . $clipI . ')" transform="translate(' . (500 - $xOffset) . ',0)" >' . makeshield( $kid ) . "</g>\n";
+            region('pop');
+            break;
+          }
+        }
         $retval .= add_def();
         break;
       case 'quartered':
         $clipQ12 = add_def( 'clipPath', '<path d="m0,0L1000,0 1000,1000 0,1000Z" />' );
         $clipQ34 = add_def( 'clipPath', '<path d="m70,0L930,0 930,1200 70,1200Z" />' );
-        region('push','Q1');
-        $retval .= '<g clip-path="url(#' . $clipQ12 . ')" transform="scale(0.5,0.5)" >' . makeshield( $children->item(0) ) . "</g>\n";
-        region('swap','Q2');
-        $retval .= '<g clip-path="url(#' . $clipQ12 . ')" transform="translate(500,0) scale(0.5,0.5)" >' . makeshield( $children->item(1) ) . "</g>\n";
-        region('swap','Q3');
-        $retval .= '<g clip-path="url(#' . $clipQ34 . ')" transform="translate(0,500) scale(0.58333) translate(-70,0)" >' . makeshield( $children->item(2) ) . "</g>\n";
-        region('swap','Q4');
-        $retval .= '<g clip-path="url(#' . $clipQ34 . ')" transform="translate(500,500) scale(0.58333)  translate(-70,0)" >' . makeshield( $children->item(3) ) . "</g>\n";
-        region('pop');
+        foreach ( $children as $kid ) {
+          switch( $kid->getAttribute('index') ) {
+          case '1':
+            region('push','Q1');
+            $retval .= '<g clip-path="url(#' . $clipQ12 . ')" transform="scale(0.5,0.5)" >' . makeshield( $kid ) . "</g>\n";
+            region('pop');
+            break;
+          case '2':
+            region('push','Q2');
+            $retval .= '<g clip-path="url(#' . $clipQ12 . ')" transform="translate(500,0) scale(0.5,0.5)" >' . makeshield( $kid ) . "</g>\n";
+            region('pop');
+            break;
+          case '3':
+            region('push','Q3');
+            $retval .= '<g clip-path="url(#' . $clipQ34 . ')" transform="translate(0,500) scale(0.58333) translate(-70,0)" >' . makeshield( $kid ) . "</g>\n";
+            region('pop');
+            break;
+          case '4':
+            region('push','Q4');
+            $retval .= '<g clip-path="url(#' . $clipQ34 . ')" transform="translate(500,500) scale(0.58333)  translate(-70,0)" >' . makeshield( $kid ) . "</g>\n";
+            region('pop');
+            break;
+          }
+        }
         $retval .= add_def();
         break;
       case 'missing':

@@ -22,12 +22,13 @@ $matched_word = null;
 // Fill the words array with words from the blazon
 // Punctuation and spaces ignored
 function fill_words($blazon_in) {
-  global $words;
+  global $words, $cur_word;
   $ignore_words = array ( 'also',  );
   $blazon = iconv("UTF-8", "ASCII//TRANSLIT", $blazon_in);
 
   $i = 0;
   $comment = false;
+  $in_string = false;
   $this_word = '';
   $end = strlen($blazon);
   while ( $i < $end ) {
@@ -36,8 +37,9 @@ function fill_words($blazon_in) {
       case "\t":
       case "\n":
       case "\r":
-      case '"':
-        if ( $this_word != '' ) {
+        if ( $in_string )
+          $this_word .= ' ';
+        elseif ( $this_word != '' ) {
           if ( !$comment and !in_array($this_word, $ignore_words)) { $words[] = $this_word; }
           $this_word = '';
         } // else ignore it
@@ -90,7 +92,17 @@ function fill_words($blazon_in) {
         }
         if ( !$comment) $words[] = $blazon[$i];
         break;
+      case '"':
       case "'":
+        if ( $in_string ) {
+          $words[] = $this_word;
+          $this_word = '';
+          $in_string = false;
+        } else {
+          // $this_word = '"';
+          $in_string = true;
+        }
+        break;
       case '\\':
       case '`':
       case '~':
@@ -104,6 +116,7 @@ function fill_words($blazon_in) {
   if ( $this_word != '' ) {
     if ( !$comment and !in_array($this_word, $ignore_words)) { $words[] = $this_word; }
   }
+  $cur_word = 0;
 }
 
 function match_number ( &$count, $t_word ) {

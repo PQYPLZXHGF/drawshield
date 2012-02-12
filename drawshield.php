@@ -24,6 +24,7 @@ $asText = false;
 $size = 500;
 $format = 'svg';
 $log = true;
+$p_globals = null;
 // Process arguments
 if (isset($_GET['blazon'])) $blazon = html_entity_decode(strip_tags ($_GET['blazon']));
 if (isset($_GET['format'])) $format = strip_tags ($_GET['format']);;
@@ -73,6 +74,8 @@ while ( ($file = readdir($dir)) != false ) {
   if ( substr($file,-4) == '.inc' ) require 'parser/' . $file;
 }
 
+// Set up (empty) backreferences
+setpGlobals();
 $parser_messages = $dom->createElement('messages');
 
 fill_words($blazon);

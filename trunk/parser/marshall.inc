@@ -93,7 +93,8 @@ function quartered() {
         $found = $foundQuarter = true;
       }
       if ( $found ) {
-        $temp = shield(false); // Look for the description of this quarter
+        $temp = $dom->createElement('shield'); 
+        $temp->appendChild(shield(false)); // Look for the description of this quarter
         if ( count($indices) > 1 ) $temp->setAttribute( 'ID',($ID=unique('shield')));
         if ( $subshields[$indices[0]] != null )
           parser_message('error','Duplicate quarter' );
@@ -178,8 +179,15 @@ function parse() {
 
 function shield($ignore_semi = true) { // look for overall, even if a ";" is present
   global $dom;
+  global $cur_word;
+  
+  if ( ($named_blazon = checkDB()) != null ) {
+    context('push');
+    fill_words($named_blazon);
+  }
 
   $overall = null;
+  search_match( array ( array( null, 'on a field ?of' )) );
 
   if ( ( $child = quartered() ) == null ) {
     $child = plain();
@@ -210,6 +218,10 @@ function shield($ignore_semi = true) { // look for overall, even if a ";" is pre
   }
   if ($overall)
     $node->appendChild($overall); */
+  if ( $named_blazon != null ) {
+    context('pop');
+    $cur_word++;
+  }
 
   return $child;
 }

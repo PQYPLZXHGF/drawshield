@@ -22,6 +22,7 @@ var IEver = -1;
 var shieldsize = 500;
 var shieldtarget = 'shieldimg';
 var captiontarget = 'shieldcaption';
+var tabletarget = 'resultstable';
 
 if (navigator.appName == 'Microsoft Internet Explorer')
 {
@@ -107,7 +108,12 @@ function drawshield() {
 	 // Add a random number to force resend (avoids caching)
    requestSVG('/include/shield/drawshield.php?&size=' + shieldsize + '&rand=' + Math.random()
 	   + '&blazon=' + encodeURIComponent(blazonText),shieldtarget);
-};
+}
+
+function dbquery() {
+  searchTerm = document.getElementById('searchterm').value;
+  requestSVG('/include/shield/dbquery.php?term=' + encodeURIComponent(searchTerm),tabletarget);
+}
 
 // Arguments are:
 // target - name of the div element that holds the shield image

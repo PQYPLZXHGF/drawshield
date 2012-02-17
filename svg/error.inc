@@ -105,9 +105,25 @@ function get_error_messages() {
       }
     }
   }
-  $retval = '<g id="errorbox" visibility="hidden"><rect x="0" y="0" height="' . ($yCount+30) . '" width="1000" fill="rgb(255,255,255)" />' . $retval . '</g>';
-  if ( $notify) $retval .= '<text onclick="showerrors(evt)" fill="red" text-anchor="end" x="990" y="1160" font-size="30">Error reported</text>';
-  $retval .= '<text onclick="showerrors(evt)" fill="black" text-anchor="end" x="990" y="1190" font-size="30">Click for information</text>';
+  $showinfo = '
+  window.showinfo = function() {
+  var infobox = document.getElementById("infotext");
+  if ( infobox.getAttribute("visibility") == "hidden" ) {
+    infobox.setAttribute("visibility","visible");
+  } else {
+    infobox.setAttribute("visibility","hidden");
+  }
+}
+  
+  ';
+  scripts('add', $showinfo );
+  // $retval = '<g onclick="document.getElementById(\'infotext\').setAttribute(\'visibility\',\'hidden\')" id="infotext" visibility="hidden"><rect x="0" y="0" height="' . ($yCount+30) . '" width="1000" fill="rgb(255,255,255)" />' . $retval . '</g>';
+  $retval = '<g id="infotext" visibility="hidden"><rect x="0" y="0" height="' . ($yCount+30) . '" width="1000" fill="rgb(255,255,255)" />' . $retval . '</g>';
+  // $retval .= '<g  onclick="document.getElementById(\'infotext\').setAttribute(\'visibility\',\'visible\')" >';
+  $retval .= '<g  onclick="window.showinfo()" >';
+  if ( $notify) $retval .= '<text fill="red" text-anchor="end" x="990" y="1160" font-size="30">Error reported</text>';
+  $retval .= '<text fill="black" text-anchor="end" x="990" y="1190" font-size="30">Click for information</text>';
+  $retval .= '</g>';
   return $retval;
 }
 

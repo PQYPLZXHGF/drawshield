@@ -50,8 +50,8 @@ $charge = array (
 
   'doc' => 'Stuff...',
   
-  'hflex' => 2.5,
-  'wflex' => 2.5,
+  'hflex' => 3,
+  'wflex' => 3,
   
   'demi' => 'top',
 

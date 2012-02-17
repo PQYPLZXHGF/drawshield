@@ -68,13 +68,13 @@
             </p>
           </td>
         </tr>
-          <td style="width: 459px; text-align:center">
+        <tr>
+          <td style="width: 459px;">
             <textarea name="searchterm" rows="2" cols="50"></textarea>
           </td>
           <td style="width: 81px">
-            <input type="button" name="searchbutton" value="Search" style="width: 90px"/>
+            <input type="button" name="searchbutton"  id="searchbutton" value="Search" style="width: 90px"/>
           </td>
-        <tr>
         </tr>
       </table>
     </form>
@@ -111,11 +111,13 @@
                       (navigator.userAgent.indexOf( "iPod" ) > 0) ||
                       (navigator.userAgent.indexOf( "iPhone" ) > 0) 
                     ) {
-              newNode = document.importNode(xmlhttp.responseXML.firstChild, true);
-              shieldImg.appendChild(newNode);
+              var svg = document.importNode(xmlhttp.responseXML.firstChild, true);
             } else {
-              shieldImg.innerHTML = xmlhttp.responseText;
+              var svg = xmlhttp.responseXML.documentElement;
+              svg = cloneToDoc(svg);
+              //shieldImg.innerHTML = xmlhttp.responseText;
             }
+            shieldImg.appendChild(svg);
           }
         }
       }
@@ -139,8 +141,24 @@
       document.forms['myform'].searchbutton.onclick = function () {
         requestSVG( incDir + '<?php echo $basedir; ?>/dbquery.php?term=' + encodeURIComponent(document.forms['myform'].searchterm.value),'resultstable');
       };
-      // Run automatically
-      window.onload=requestSVG( incDir + '<?php echo $basedir; ?>/drawshield.php?nolog=1&blazon=' + encodeURIComponent( 'Argent the word shield; in chief the word Your; in base the word here sable'),'shieldimg');
+    function cloneToDoc(node,doc){
+      if (!doc) doc=document;
+      var clone = doc.createElementNS(node.namespaceURI,node.nodeName);
+      for (var i=0,len=node.attributes.length;i<len;++i){
+        var a = node.attributes[i];
+        if (/^xmlns\b/.test(a.nodeName)) continue; // IE can't create these
+        clone.setAttributeNS(a.namespaceURI,a.nodeName,a.nodeValue);
+      }
+      for (var i=0,len=node.childNodes.length;i<len;++i){
+        var c = node.childNodes[i];
+        clone.insertBefore(
+          c.nodeType==1 ? cloneToDoc(c,doc) : doc.createTextNode(c.nodeValue),
+          null
+        ); }
+      return clone;
+    }
+    // Run automatically
+    window.onload=requestSVG( incDir + '<?php echo $basedir; ?>/drawshield.php?nolog=1&blazon=','shieldimg');
  //]]>
 </script>
 </body>

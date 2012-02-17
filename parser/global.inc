@@ -108,7 +108,8 @@ function lookahead($inc = 1) {
 
 function andd() {
   $and_words = array (
-    array ( true, '(and|&)' ),
+    array ( true, '(and|&|also)' ),
+    array ( true, '(and|&) also' ),
   );
 
   if ( search_match($and_words) ) return true;
@@ -120,13 +121,15 @@ function semicolon($lookback = true) {
     array ( true, ';'),
     array ( true, '\\.'), // need to escape '.' as this is regex special character
    );
-  if ( search_match($semi) != null ) return true;
-  if ( !$lookback )
-    return false;
-  $state = save();
-  if ( lookahead(-1) && search_match($semi) != null ) return true;
-  restore($state);
-  return false;
+  $retval = false;
+  if ( search_match($semi) != null ) 
+    $retval = true;
+  if ( $lookback ) {
+    $state = save();
+    if ( lookahead(-1) && search_match($semi) != null ) $retval = true;
+    restore($state);
+  }
+  return $retval;
 }
 
 function comma() {

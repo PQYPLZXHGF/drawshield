@@ -62,11 +62,13 @@ function updateSVG() {
                   (navigator.userAgent.indexOf( "iPod" ) > 0) ||
                   (navigator.userAgent.indexOf( "iPhone" ) > 0) 
                 ) {
-         newNode = document.importNode(xmlhttp.responseXML.firstChild, true);
-        shieldImg.appendChild(newNode);
-      } else {
-        shieldImg.innerHTML = xmlhttp.responseText;
-	    }
+         var svg = document.importNode(xmlhttp.responseXML.firstChild, true);
+       } else {
+         var svg = xmlhttp.responseXML.documentElement;
+         svg = cloneToDoc(svg);
+         //shieldImg.innerHTML = xmlhttp.responseText;
+       }
+       shieldImg.appendChild(svg);
     }
     asText = xmlhttp.responseText;
   }
@@ -81,19 +83,29 @@ function requestSVG(url,id) {
   xmlhttp.send(null);
 }
 
-function showerrors(evt) {
-  var errorbox = document.getElementById("errorbox");
-  if ( errorbox.getAttribute("visibility") == "hidden" ) {
-    errorbox.setAttribute("visibility","visible");
-  } else {
-    errorbox.setAttribute("visibility","hidden");
-  }
-}
-
 function saveshield() {
    blazonText = document.getElementById('blazon').value;
    window.location.replace( '/include/shield/drawshield.php?asfile=1&blazon=' + encodeURIComponent(blazonText));
 }
+
+// Function provided by http://stackoverflow.com/users/405017/phrogz
+function cloneToDoc(node,doc){
+  if (!doc) doc=document;
+  var clone = doc.createElementNS(node.namespaceURI,node.nodeName);
+  for (var i=0,len=node.attributes.length;i<len;++i){
+    var a = node.attributes[i];
+    if (/^xmlns\b/.test(a.nodeName)) continue; // IE can't create these
+    clone.setAttributeNS(a.namespaceURI,a.nodeName,a.nodeValue);
+  }
+  for (var i=0,len=node.childNodes.length;i<len;++i){
+    var c = node.childNodes[i];
+    clone.insertBefore(
+      c.nodeType==1 ? cloneToDoc(c,doc) : doc.createTextNode(c.nodeValue),
+      null
+    ); }
+  return clone;
+}
+
 
 function drawshield() {
    shieldCaption = document.getElementById(captiontarget);

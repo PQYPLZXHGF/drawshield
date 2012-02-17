@@ -15,24 +15,29 @@
 function plain() {
   global $dom, $p_globals;
 
-  $node = $dom->createElement('plain');
-
+  search_match( array ( array( null, 'on a field ?of' )) );
+  
+  $node = null;
+  
   if ( ($field = tincture() ) != null ) {
+    $plain = $dom->createElement('plain');
     comma();
     $p_globals['offield'] = deep_copy($field->firstChild);
-    $node->appendChild ( $field );
+    $plain->appendChild ( $field );
     // Check for a second division
     if ( ($div2 = division(2)) != null ) {
       $tinc2 = $dom->createElement('tincture');
       $tinc2->appendChild($div2);
-      $node->appendChild($tinc2);
+      $plain->appendChild($tinc2);
     }
     if ( ($ord_chgs = ord_chgs()) != null ) {
-      $node->appendChild($ord_chgs);
+      $plain->appendChild($ord_chgs);
     }
-  } else {
-    $node->appendChild($dom->createElement('missing'));
-    parser_message('blazon', 'Expected another shield description');
+    $node = $dom->createElement('shield');
+    $node->setAttribute('index','0');
+    $node->appendChild($plain);
+/*    if ( !semicolon() and ($overall = overall()) != null )
+      $node->appendChild($overall); */
   }
   return $node;
 }
@@ -81,7 +86,7 @@ function quartered() {
   $node = null;
 
   if ( ($marshall = search_match($quartered))  != null ) {
-    $node = $dom->createElement('quartered');
+    $quartered = $dom->createElement('quartered');
     $foundQuarter = false;
     do { // Look for quarters
       $found = false;
@@ -93,23 +98,25 @@ function quartered() {
         $found = $foundQuarter = true;
       }
       if ( $found ) {
-        $temp = $dom->createElement('shield'); 
-        $temp->appendChild(shield(false)); // Look for the description of this quarter
-        if ( count($indices) > 1 ) $temp->setAttribute( 'ID',($ID=unique('shield')));
+        $quarter = shield(); // Look for the description of this quarter
+        if ( $quarter != null and count($indices) > 1 ) { 
+          $quarter->setAttribute( 'ID',($ID=unique('shield')));
+          $quarter->setIdAttribute('ID',true);
+        }
         if ( $subshields[$indices[0]] != null )
           parser_message('error','Duplicate quarter' );
         else
-          $subshields[$indices[0]] = $temp; // Set the first quarter to this description
+          $subshields[$indices[0]] = $quarter; // Set the first quarter to this description
         for ( $i = 1; $i < count($indices); $i++ ) {
-          $temp = $dom->createElement('shield');
-          $temp->setAttribute('IDREF',$ID); // Set other quarters to point to this one
+          $reference = $dom->createElement('shield');
+          $reference->setAttribute('IDREF',$ID); // Set other quarters to point to this one
           if ( $subshields[$indices[$i]] != null )
             parser_message('error','Duplicate quarter' );
           else
-            $subshields[$indices[$i]] = $temp;
+            $subshields[$indices[$i]] = $reference;
         }
       } // Keep going as long as we find quarters
-    } while ( $found and ! semicolon() );
+    } while ( $found );
     if ( $marshall[0] == 'ly' and !$foundQuarter ) {
       restore($state); // backtrack, assume this is quarterly division
       return null;
@@ -120,8 +127,11 @@ function quartered() {
         parser_message('blazon','Missing quarter (' . $i . ')');
       }
       $subshields[$i]->setAttribute('index',"$i");
-      $node->appendChild($subshields[$i]);
+      $quartered->appendChild($subshields[$i]);
     }
+    $node = $dom->createElement('shield');
+    $node->setAttribute('index','0');
+    $node->appendChild($quartered);
   }
 
   return $node;
@@ -131,43 +141,49 @@ function halved() {
   global $dom;
 
   $splits = array (
-    array ( 'impaled', 'impaled ?with' ),
-    array ( 'dimidiated', 'dimidiated ?with' ),
+    array ( 'impaled', 'impaled !with' ),
+    array ( 'dimidiated', 'dimidiated !with' ),
+  );
+  
+  $with = array (
+    array ( true, '(with|upon)' ),
   );
 
   $node = null;
   if ( ($match = search_match($splits)) != null ) {
-    $node = $dom->createElement($match[0]);
+    $half = $dom->createElement($match[0]);
+    if ( ($shield1 = shield()) == null ) {
+      parser_error('warning', 'Expected 1st shield description');
+      $shield1 = $dom->createElement('missing');
+    }
+    $shield1->setAttribute('index','1');
+    if ( ! search_match($with) ) {
+      // uncomment to require "impaled A with B"
+      //      parser_error('warning','expected "with"');
+      //      return $shield1;
+    }
+    if ( ($shield2 = shield()) == null ) {
+      parser_error('warning', 'Expected 2nd shield description');
+      $shield2 = $dom->createElement('missing');
+    }
+    $shield2->setAttribute('index','2');
+    $half = $dom->createElement($match[0]);
+    $half->appendChild($shield1);
+    $half->appendChild($shield2);
+    $node = $dom->createElement('shield');
+    $node->setAttribute('index','0');
+    $node->appendChild($half);
   }
   return $node;
 }
 
 function parse() {
-  global $dom;
   global $pending_items;
-  $impaled = array (
-    array ( 'impaled', 'impaled ?with' ),
-    );
 
-  $node = $dom->createElement('shield');
-  $node->setAttribute('index','0');
-  
-  $child = shield();
-  
-  if ( search_match($impaled) != null ) {
-    $child->setAttribute('index','1');
-    $child2 = shield();
-    $child2->setAttribute('index','2');
-    $imp = $dom->createElement('impaled');
-    $imp->appendChild($child);
-    $imp->appendChild($child2);
-    $node->appendChild($imp);
-  } else {
-    $node->appendChild($child);
-  } 
-  
-  if ( ($over = overall()) != null )
-    $node->appendChild($over);
+  $node = shield();
+  semicolon();
+  if ( ($overall = overall()) != null )
+    $node->appendChild($overall);
   
   foreach ( $pending_items as $item ) {
     $item->setAttribute('origin','missing');
@@ -177,52 +193,69 @@ function parse() {
   return $node;
 }
 
-function shield($ignore_semi = true) { // look for overall, even if a ";" is present
+function shield() {
   global $dom;
   global $cur_word;
+
+  $splits = array (
+    array ( 'impaled', 'impaled with' ),
+    array ( 'dimidiated', 'dimidiated with' ),
+  );
   
   if ( ($named_blazon = checkDB()) != null ) {
     context('push');
     fill_words($named_blazon);
   }
 
-  $overall = null;
-  search_match( array ( array( null, 'on a field ?of' )) );
-
-  if ( ( $child = quartered() ) == null ) {
-    $child = plain();
-    $overall = overall();
-    if ( !(!$ignore_semi and semicolon()) and ($split = halved()) != null ) {
-      $node2 = $dom->createElement('shield');
-      $node2->setAttribute('index','1');
-      $node2->appendChild($child);
-      if ( $overall ) $node2->appendChild($overall);
-      $split->appendChild($node2);
-      $node3 = $dom->createElement('shield');
-      if ( ($subshield = quartered() ) == null ) /* these 3 lines added to allow halved then quartered */
-        $subshield = plain();
-      $node3->setAttribute('index','2');
-      $node3->appendChild($subshield);
-      // $node3->appendChild(plain());
-      $overall = semicolon() ? null : overall();
-      if ( $overall ) $node3->appendChild($overall);
-      $split->appendChild($node3);
-      $child = $split;
-      $overall = null;
+  $node1 = quartered();
+  if ( $node1 == null ) $node1 = halved();
+  if ( $node1 == null ) $node1 = plain();
+  if ( $node1 == null ) {
+    $node1 = $dom->createElement('shield');
+    $node1->appendChild($dom->createElement('missing'));
+    parser_message('blazon', 'Expected a shield description');
+  }
+  if ( !semicolon() and ($overall = overall()) != null )
+    $node1->appendChild($overall);
+  $retval = $node1;
+  
+  // Now do it all again, in case of "A impaled with B"
+  if ( ($match = search_match($splits)) != null ) {
+    if ( ($named2_blazon = checkDB()) != null ) {
+      context('push');
+      fill_words($named2_blazon);
     }
-  }
- // $node->appendChild($child);
-/*  if ( $ignore_semi and ($overall ==null) ) {
-    semicolon();
-    $overall = overall();
-  }
-  if ($overall)
-    $node->appendChild($overall); */
+    $node2 = quartered();
+    if ( $node2 == null ) $node2 = halved();
+    if ( $node2 == null ) $node2 = plain();
+    if ( $node2 == null ) {
+      $node2 = $dom->createElement('shield');
+      $node2->appendChild($dom->createElement('missing'));
+      parser_message('blazon', 'Expected a shield description');
+    }
+    if ( !semicolon() and ($overall = overall()) != null )
+      $node2->appendChild($overall);
+    // Got two nodes, now create a mother node
+    $motherNode = $dom->createElement('shield');
+    $motherNode->setAttribute('index','0');
+    $daughterNode = $dom->createElement($match[0]);
+    $node1->setAttribute('index','1');
+    $node2->setAttribute('index','2');
+    $daughterNode->appendChild($node1);
+    $daughterNode->appendChild($node2);
+    $motherNode->appendChild($daughterNode);
+    $retval = $motherNode;
+    if ( $named2_blazon != null ) {
+      context('pop');
+      $cur_word += 1;
+    }
+  } 
   if ( $named_blazon != null ) {
     context('pop');
-    $cur_word++;
+    $cur_word += 1;
   }
 
-  return $child;
+  return $retval;
 }
+
 ?>

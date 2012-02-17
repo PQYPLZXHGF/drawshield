@@ -23,7 +23,6 @@ $matched_word = null;
 // Punctuation and spaces ignored
 function fill_words($blazon_in) {
   global $words, $cur_word;
-  $ignore_words = array ( 'also',  );
   $blazon = iconv("UTF-8", "ASCII//TRANSLIT", $blazon_in);
 
   $i = 0;
@@ -40,7 +39,7 @@ function fill_words($blazon_in) {
         if ( $in_string )
           $this_word .= ' ';
         elseif ( $this_word != '' ) {
-          if ( !$comment and !in_array($this_word, $ignore_words)) { $words[] = $this_word; }
+          if ( !$comment ) { $words[] = $this_word; }
           $this_word = '';
         } // else ignore it
         break;
@@ -48,7 +47,7 @@ function fill_words($blazon_in) {
       case '(':
       case '[':
         if ( $this_word != '' ) {
-          if ( !$comment and !in_array($this_word, $ignore_words)) { $words[] = $this_word; }
+          if ( !$comment ) { $words[] = $this_word; }
           $this_word = '';
         }
         $comment = true;
@@ -57,7 +56,7 @@ function fill_words($blazon_in) {
       case '}':
       case ']':
         if ( $this_word != '' ) {
-          if ( !$comment and !in_array($this_word, $ignore_words)) { $words[] = $this_word; }
+          if ( !$comment ) { $words[] = $this_word; }
           $this_word = '';
         }
         $comment = false;
@@ -66,14 +65,14 @@ function fill_words($blazon_in) {
       case '/':
       case ':':
         if ( $this_word != '' ) {
-          if ( !$comment and !in_array($this_word, $ignore_words)) { $words[] = $this_word; }
+          if ( !$comment ) { $words[] = $this_word; }
           $this_word = '';
         }
         $i = $end;
         break;
       case '-':
         if ( $this_word != '' ) {
-          if ( !$comment and !in_array($this_word, $ignore_words)) { $words[] = $this_word; }
+          if ( !$comment ) { $words[] = $this_word; }
           $this_word = '';
         }
         if ( $i > 0 and strstr(  " \t\n\r'\",.", $blazon[$i-1])) {
@@ -87,10 +86,10 @@ function fill_words($blazon_in) {
       case ',':
       case '.':
         if ( $this_word != '' ) {
-          if ( !$comment and !in_array($this_word, $ignore_words)) { $words[] = $this_word; }
+          if ( !$comment ) { $words[] = $this_word; }
           $this_word = '';
         }
-        if ( !$comment) $words[] = $blazon[$i];
+        if ( !$comment ) $words[] = $blazon[$i];
         break;
       case '"':
       case "'":
@@ -114,7 +113,7 @@ function fill_words($blazon_in) {
     $i++;
   }
   if ( $this_word != '' ) {
-    if ( !$comment and !in_array($this_word, $ignore_words)) { $words[] = $this_word; }
+    if ( !$comment ) { $words[] = $this_word; }
   }
   $cur_word = 0;
 }

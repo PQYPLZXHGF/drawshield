@@ -72,6 +72,17 @@ Added lion head (bit crude), cock, cockatrice
 
 Two chevrons are ordinaries, more than 2 are charges
 
+Added blazon database
+
+Items in double quotes become single words
+
+Aribitrary depth nesting
+
+Website improvements
+
+Changed way SVG is inserted into document & moved javascript into the SVG itself. Opens the way for scriptable & animated charges. Demo - the sun in splendour winks
+at you if you hover the mouse(!)
+
 BUGS FIXED
 
 per bend fracted and counterchanged divisions were both broken and have now been fixed

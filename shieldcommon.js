@@ -18,6 +18,7 @@
 var xmlhttp;
 var asText;
 var useId;
+var useHTMLId;
 var IEver = -1;
 var shieldsize = 500;
 var shieldtarget = 'shieldimg';
@@ -30,6 +31,23 @@ if (navigator.appName == 'Microsoft Internet Explorer')
   var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
   if (re.exec(ua) != null)
     IEver = parseFloat( RegExp.$1 );
+}
+
+function updateHTML() {
+	if ( xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
+    var item = document.getElementById(useHTMLId);
+    while ( item.hasChildNodes() ) {
+      item.removeChild(shieldImg.firstChild);
+    }
+    if ( xmlhttp.responseXML == null ) {
+      errorText = document.createTextNode(xmlhttp.responseText);
+      errorPara = document.createElement('p');
+      errorPara.appendChild(errorText);
+      item.insertBefore(errorPara,null);
+    } else {
+      item.innerHTML = xmlhttp.responseText;
+    }
+  }
 }
 
 function updateSVG() {
@@ -72,6 +90,15 @@ function updateSVG() {
     }
     asText = xmlhttp.responseText;
   }
+}
+
+function requestHTML(url,id) {
+  if (!xmlhttp) xmlhttp = new XMLHttpRequest();
+  if (!xmlhttp) return;
+  useHTMLId = id;
+  xmlhttp.open('GET', url, true);
+  xmlhttp.onreadystatechange = updateHTML;
+  xmlhttp.send(null);
 }
 
 function requestSVG(url,id) {
@@ -124,7 +151,7 @@ function drawshield() {
 
 function dbquery() {
   searchTerm = document.getElementById('searchterm').value;
-  requestSVG('/include/shield/dbquery.php?term=' + encodeURIComponent(searchTerm),tabletarget);
+  requestHTML('/include/shield/dbquery.php?term=' + encodeURIComponent(searchTerm),tabletarget);
 }
 
 // Arguments are:

@@ -40,6 +40,7 @@ function context($action) {
 function checkDB() {
   global $dom;
   global $words, $cur_word;
+  global $DBList;
   
   $retval = null;
   $keyname = $words[$cur_word];
@@ -51,6 +52,7 @@ function checkDB() {
       'test1' => 'test1',
       'test2' => 'test3',
       'test3' => 'test2',
+      'testq' => 'quartered 1st and 4th england 2nd and 3rd france',
       );
     if (array_key_exists($keyname, $blazonDB )) {
       if ( in_array ($keyname, $DBList ) ) 

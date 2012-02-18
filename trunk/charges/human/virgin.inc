@@ -14,7 +14,7 @@
 
 $charge = array ( 
   'patterns' => array (
-  'virgin ?and child',
+  'virgin ?mary ?and child',
   ),
   
   'licence' => 'by http://commons.wikimedia.org/wiki/User:Henrysalome',

@@ -193,21 +193,30 @@ function parse() {
   return $node;
 }
 
+function builtin() {
+  global $cur_word;
+  
+  $retval = null;
+  if ( ($named_blazon = checkDB()) != null ) {
+    context('push');
+    fill_words($named_blazon);
+    $retval = shield();
+    context('pop');
+    $cur_word += 1;
+  }
+  return $retval;
+}
+
 function shield() {
   global $dom;
-  global $cur_word;
 
   $splits = array (
     array ( 'impaled', 'impaled with' ),
     array ( 'dimidiated', 'dimidiated with' ),
   );
   
-  if ( ($named_blazon = checkDB()) != null ) {
-    context('push');
-    fill_words($named_blazon);
-  }
-
-  $node1 = quartered();
+  $node1 = builtin();
+  if ( $node1 == null ) $node1 = quartered();
   if ( $node1 == null ) $node1 = halved();
   if ( $node1 == null ) $node1 = plain();
   if ( $node1 == null ) {
@@ -221,11 +230,8 @@ function shield() {
   
   // Now do it all again, in case of "A impaled with B"
   if ( ($match = search_match($splits)) != null ) {
-    if ( ($named2_blazon = checkDB()) != null ) {
-      context('push');
-      fill_words($named2_blazon);
-    }
-    $node2 = quartered();
+    $node2 = builtin();
+    if ( $node2 == null ) $node2 = quartered();
     if ( $node2 == null ) $node2 = halved();
     if ( $node2 == null ) $node2 = plain();
     if ( $node2 == null ) {
@@ -245,15 +251,7 @@ function shield() {
     $daughterNode->appendChild($node2);
     $motherNode->appendChild($daughterNode);
     $retval = $motherNode;
-    if ( $named2_blazon != null ) {
-      context('pop');
-      $cur_word += 1;
-    }
   } 
-  if ( $named_blazon != null ) {
-    context('pop');
-    $cur_word += 1;
-  }
 
   return $retval;
 }

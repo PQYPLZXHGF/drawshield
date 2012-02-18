@@ -1,0 +1,16 @@
+# Basic parsing functions, blazonML output
+name:parser1
+fatal:true
+desc:Parse empty blue shield
+format:blazonml
+blazon:azure
+
+name:parser2
+desc:Parse colour forward reference
+format:blazonml
+blazon:azure a bend and chief or
+
+name:parser3
+desc Parse colour backward reference
+format:blazonml
+blazon:azure on a chief or a roundel of the first

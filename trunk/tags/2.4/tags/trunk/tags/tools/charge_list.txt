@@ -1,0 +1,16 @@
+t weapon
+s javelin
+p javelins?
+
+t object
+s key
+p keys?
+
+t weapon
+s knife
+p (knife|knives)
+
+t object
+s knot
+p knots?
+

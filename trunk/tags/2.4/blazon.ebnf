@@ -1,0 +1,79 @@
+
+/* This is an Extended Bachus Naur Form grammar for blazonry - the language of heraldic shield descriptions */
+/* Blazons conforming to this grammar MAY be succesfully parsed by the drawshield parsing engine            */
+/* found at karlwilcox.com/drawshield. Note that there are additional semantic checks that may cause        */
+/* parsing to fail, for example specifying a location both before *and* after a charge                      */
+/* In addition, drawshield also accepts many variant spellings and synonyms that are not shown here and in  */
+/* the case of tinctures, if one is not provided then the next tincture found in the input will be used     */
+
+/* THIS LIST IS PARTIAL - IT DOES NOT CONTAIN MOST OF THE TERMINAL SYMBOLS */
+
+blazon            ::= simpleShield | quarteredShield | halvedShield
+
+simpleShield      ::= field (ordinary | charge)* ('overall' (ordinary | charge)* )
+
+quarteredShield   ::= 'quarterly' (quarterSpec ('and'? quarterSpec)* blazon ';'?)+
+
+halvedShield      ::= blazon ';'? ( 'dimidiated with' | 'impaled with' ) blazon
+
+quarterSpec       ::= 'first' | 'second' | 'third' | 'fourth'
+
+field             ::= tincture | division
+
+tincture          ::= (colour | fur | treatment | tinctureReference)? /* if not found, the next tincture encountered will be used */
+
+colour            ::= majorColour | minorColour
+
+majorColour       ::= 'azure' | 'argent' | 'gules' | 'or' | 'sable' | 'vert'
+
+minorColour       ::= 'murrey' | 'sanguine' | 'carnation' /* + others.... */
+
+fur               ::= 'ermine' | 'pean' | 'erminois' /* + others.... */
+
+treatment         ::= (treatmentName tincture 'and' tincture) | (tincture treatmentName tincture) | (tincture colouredTreatment) | (tincture 'semy de' simpleCharge)
+
+treatmentName     ::= 'annuletty' | 'billetty' | 'checky' /* + others.... */
+
+colouredTreatment ::= 'bezanty' | 'hurty'
+
+tinctureReference ::= 'of the' ('first' | 'second' | 'third' | 'fourth' | 'last' | 'field')
+
+division          ::= (division2Name edgeType? tincture 'and' tincture (division2Name 'counterchanged')?) | (division3Name edgeType? tincture 'and'? tincture 'and' tincture)
+
+division2Name      ::= 'per fess' | 'per bend' | 'per bend sinister' /* + others... */
+
+division3Name      ::= 'per pall' /* + others... */
+
+edgeSpec          ::= 'angled' | 'arched' | 'bevilled' | 'dancetty' /* + others... */
+
+ordinary          ::= simpleOrdinary | chargedOrdinary | arrangedOrdinary
+
+simpleOrdinary    ::= number ordinaryModifier* ordinaryName (edgeSpec | ordinaryModifier | shapeModifier)* tincture
+
+ordinaryName ::= major | subordinary | diminutive | 'label'
+
+ordinaryModifier  ::= 'sinister' | 'reversed' | 'dexter' | 'inverted' | 'enhanced' | 'abased'
+
+shapeModifier     ::= ('voided' tincture?) | 'fimbriated' colour | cotticed | 'rompu'
+
+cotticed          ::= (('double' | 'triple')? 'cotticed' colour?) | ('between' ('one' | 'two' | 'three') 'cottice' colour?) 
+
+chargedOrdinary   ::= 'on' simpleOrdinary number simpleCharge
+
+arrangedOrdinary  ::= ('within' simpleOrdinary number simpleCharge) | (simpleOrdinary 'between' number simpleCharge)
+
+charge            ::=  location? number (simpleCharge | chargeList) (location | chargeModifier | arrangement)*
+
+simpleCharge      ::= ('sheaf of' | 'bundle of')? ('demi'? chargeName | 'the same')  (tincture | division | 'proper') (feature (tincture | 'proper')?)*
+
+chargeList        ::= simpleCharge ('charge with' | 'on each' | 'between' | 'within' | 'above' | 'below' ) number simpleCharge
+
+location    ::= 'in' 'the'? (locationSpecifier ('and' 'in'? locationSpecifier)*)* locationPlace locationQuantifier?
+
+locationSpecifier ::= 'first' | 'second' | 'third' | 'fourth' | 'dexter' | 'sinsiter' | 'each' | 'middle'
+
+locationPlace ::= 'chief' | 'base' | ('honour' | 'fess' | 'navel' ) 'point' | 'flanks' | 'nombril'
+
+locationQuantifier ::= 'quarter' | 'half' | 'part'
+
+number            ::= 'a' | 'an' | 'one' | 'two' /* + others ... */

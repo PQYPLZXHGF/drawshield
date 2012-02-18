@@ -1,0 +1,4 @@
+The following are questions of heraldic practice for which I don't have a clear answer:
+(But usually have a simple implementation whatever the answer is)
+
+1) Treatments are rotated to match up with a bend. Which way should masoned (for example) be turned?

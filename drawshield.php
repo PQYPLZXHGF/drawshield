@@ -41,7 +41,7 @@ if ( $format == 'svgtext' ) $format = 'svg';
 // Global Variables
 //
 
-$tagline1 = "drawshield 2.4";   // Advertising lines at bottom left
+$tagline1 = "drawshield 2.4a";   // Advertising lines at bottom left
 $tagline2 = "karlwilcox.com/drawshield";
 
 // Quick response for empty blazon

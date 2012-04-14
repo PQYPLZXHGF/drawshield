@@ -16,10 +16,10 @@
 
 $charge = array (
  'patterns' => array (
-    'dragons?',
+    'snails?',
   ),
 
- 'file' => 'inkscape/wyvern.svg',
+ 'file' => 'inkscape/snail.svg',
 
  
  );

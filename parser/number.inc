@@ -18,7 +18,7 @@ function number( $layout_only = false ) {
 
   $numbers = array (
   array (0, '(0|zero)' ) ,// just for completeness...
-  array (1, '(1|one)' ),
+  array (1, '(1|one|another)' ),
   array ('a', '(a|an|un|une|the)' ),
   array (2, '(2|two|deux)/a (pair|couple) of' ),
   array (3, '(3|three|trois)' ),

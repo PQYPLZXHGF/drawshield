@@ -18,5 +18,15 @@ $charge = array (
  'patterns' => array (
     'badgers?|brocks?|grays?',
   ),
+ 
+  'modifiers' => array (
+    array ( null, 'statant', 'ignore' ),
+   ),
+ 
+ 'file' => 'inkscape/badger.svg',
+ 
+ 'proper' => 'gray',
+ 'hflex' => 1.5,
+ 'wflex' => 1.2,
 );
 ?>

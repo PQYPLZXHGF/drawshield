@@ -45,6 +45,7 @@
      $newPlacement = rtrim($newPlacement,'/');
      return $newPlacement;
    }
+   //TODO above / below modifiers
 
 function get_placement($item) {
   global $dom;
@@ -52,14 +53,23 @@ function get_placement($item) {
   
   static $bounding_boxes = array (
     //                 no-chief, no-entire,       no-chief, entire        chief, no-entire,         chief, entire
-    '10:12' => array ( '100,100,800,800',         '0,0,1000,1200',        '100,400,800,700',        '0,300,1000,900' ),
+    '10:12' => array ( '100,100,800,1000',         '0,0,1000,1200',        '100,400,800,700',        '0,300,1000,900' ),
     '10:10' => array ( '100,100,800,800',         '0,0,1000,1000',        '100,400,800,500',        '0,300,1000,900' ),
     '10:14' => array ( '170,100,660,900',         '70,0,860,1200',        '170,400,660,600',        '70,300,860,900' ),
     '10:24' => array ( '300,100,400,1000',        '250,0,500,1200',        '300,400,400,700',        '250,300,500,900' ),
     '10:20' => array ( '300,100,400,800',         '250,0,500,1000',        '300,400,400,500',        '250,300,500,700' ),
     '10:28' => array ( '300,100,400,900',         '285,0,430,1200',        '300,400,400,600',        '285,300,430,900' ),
     );
-
+  
+  $aspect_groups = array (
+    '10:12' => 'wide',
+    '10:10' => 'wide',
+    '10:14' => 'wide',
+    '10:24' => 'narrow',
+    '10:20' => 'narrow',
+    '10:28' => 'narrow',
+  );
+  $aspect_group = $aspect_groups[$aspect_ratio];
   $xpath = new DOMXPath($dom);
 
  // foreach ( $xpath->query("//charge") as $item ) {
@@ -73,6 +83,7 @@ function get_placement($item) {
     $pos = get_mods($item,'position'); // THIS IS AN array, go through each one, appending * bounding_box as many times as required.
     $arr = get_mod($item,'arrangement');
     $cadency = get_mod($item,'cadency');
+    $overall = ($item->parentNode->parentNode->nodeName == 'overall');
     $apply_location = true;
     $number = $item->getAttribute('number');
     $div_node = $xpath->query("parent::ord_chgs/parent::plain/tincture/division", $item);
@@ -239,9 +250,14 @@ function get_placement($item) {
         elseif (get_mod($ordinary,'rompu')) 
           $placement = ($chief)? 'x/200,500,300,300:800,500,300,300/200,500,340,340:500,1050,200,200:800,500,340,340/s/s/s' :
                                  'x/200,500,300,300:800,500,300,300/200,500,340,340:500,1050,200,200:800,500,340,340/200,500,200,240:500,140,200,160:500,1050,200,200:800,500,200,240/s/s';
-        else
-          $placement = ($chief) ? 'x/x/180,480,180,180:500,950,280,280:820,480,180,180/s/s' :
+        else {
+          if ( $aspect_group == 'wide' )
+            $placement = ($chief) ? 'x/x/180,480,180,180:500,950,280,280:820,480,180,180/s/s' :
                                 'x/500,140,300,180:500,850,300,300/200,200,240,240:500,850,300,300:800,200,240,240/200,240,200,240:500,140,200,160:500,850,300,300:800,240,200,240/200,240,200,240:500,140,200,160:400,900,160,200:600,900:800,240,200,240/200,240,200,240:500,140,200,160:400,950,160,200:500,720:600,950:800,240,200,240';
+          else 
+            $placement = ($chief) ? 'x/x/180,480,180,180:500,950,280,280:820,480,180,180/s/s' : // TODO FINISH THESE (only 3 below is done)
+                                'x/500,140,300,180:500,850,300,300/360,150,200,240:500,850,300,300:640,150,200,240/200,240,200,240:500,140,200,160:500,850,300,300:800,240,200,240/200,240,200,240:500,140,200,160:400,900,160,200:600,900:800,240,200,240/200,240,200,240:500,140,200,160:400,950,160,200:500,720:600,950:800,240,200,240';
+        }
         break;
       case 'bordure':
         $style = $rows ? 'r' : 'w';
@@ -493,6 +509,9 @@ function get_placement($item) {
     } elseif ( $cadency ) { // unless there is a specific location, put in the center, but small
       $placement = calcPlace('w',$number,$conjoin,$boundingBox);
       $placement = adjustplacement($placement,'400,400,200,200');
+    } elseif ( $overall ) { // like cadency, but a bit bigger
+      $placement = calcPlace('w',$number,$conjoin,$boundingBox);
+      $placement = adjustplacement($placement,'300,300,400,400');
     }
     
     // If we don't have a placement yet the default is just to arrange in wide rows

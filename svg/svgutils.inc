@@ -133,6 +133,14 @@ function apply_tincture ( $tincture, $object, $chg_size = '',
 				  break;
 			}
 			break;	
+	  case 'shield':
+	    $shield = makeshield( $child, '10:10' );
+	    $patt_id = add_def ( 'pattern width="100%" height="100%" patternUnits="objectBoundingBox" preserveAspectRatio="none" viewBox="0 0 1000 1000"',
+              "<desc>Shield used to fill $object_type</desc>" .
+               $shield ); 
+      $retval = add_def();
+      $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
+      break;
     case 'counterchanged': // Never change anything, just fill with this pattern
       // First we have to locate the field
       $parent = $tincture->parentNode;

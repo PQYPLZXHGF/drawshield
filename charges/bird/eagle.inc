@@ -19,5 +19,8 @@ $charge = array (
     'eagles?',
     'all?erions?',
   ),
+
+ 'file' => 'inkscape/eagle.svg',
+
 );
 ?>

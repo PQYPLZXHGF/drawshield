@@ -48,7 +48,7 @@ function checkDB() {
     $blazonDB = array (
       'england' => 'gules three lions passant guardant in pale or',
       'france' => 'azure seme de lys or',
-      'simple' => 'azure a bend or',
+      'scrope' => 'azure a bend or',
       'test1' => 'test1',
       'test2' => 'test3',
       'test3' => 'test2',

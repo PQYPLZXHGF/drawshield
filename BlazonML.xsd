@@ -100,6 +100,11 @@
                                 <xs:element ref="shield"/>
                                 <xs:element ref="shield"/>
                             </xs:sequence>
+                            <xs:attribute name="order" type="xs:positiveInteger" use="required">
+                                <xs:annotation>
+                                    <xs:documentation>The number of quarterings</xs:documentation>
+                                </xs:annotation>
+                            </xs:attribute>
                         </xs:complexType>
                     </xs:element>
                     <xs:element ref="missing"/>

@@ -183,7 +183,7 @@ function tincture2() {
         $newNode = $dom->createElement('tincture');
         $newNode->setAttribute('index', 1);
         $newNode->appendChild($child);
-        $semyde->appendChild($newNode);
+        $semyde->appendChild($newNode); // TODO Handle error if no charge found
         $charge = simple_charge( true ); // Do not worry if no number given
         $charge->appendChild( make_mod('hflex','1') );  //TODO are flex modifiers used?
         $charge->appendChild( make_mod('wflex','1') );

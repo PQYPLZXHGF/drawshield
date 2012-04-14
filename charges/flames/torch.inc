@@ -1,4 +1,4 @@
-<?php /* Copyright 2011 Karl R. Wilcox 
+<?php /* Copyright 2010 Karl R. Wilcox 
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,15 +12,20 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// dragon
+// flames
 
 $charge = array (
- 'patterns' => array (
-    'dragons?',
+
+  'patterns' => array (
+  'torche?s?',
   ),
 
- 'file' => 'inkscape/wyvern.svg',
+  'doc' => 'Stuff...',
 
- 
- );
+  'file' => 'inkscape/torch.svg',
+  'hflex' => 2,
+  'wflex' => 2,
+
+)
+
 ?>

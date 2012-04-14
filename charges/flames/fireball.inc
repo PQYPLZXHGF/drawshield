@@ -12,15 +12,29 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// dragon
+// fireball
 
 $charge = array (
  'patterns' => array (
-    'dragons?',
+    'fire balls?',
+    'fireballs?',
+    'bombshells?',
+    'bomb shells?',
+    '?hand grenado?e?s?',
+    'bombe?s?',
   ),
-
- 'file' => 'inkscape/wyvern.svg',
-
+  'modifiers' => array (
+    /* Features */
+    array ( 'flamed', '(flamed|fired|bursting|exploding)', 'feature' ),
+    /* Other */
+    array ( 'places', 'in # places', 'warn', 'places' ),
+  ),
+  
+  'features' => array (
+    'flamed' => array ( 'proper' => rgb('gules'), ),
+  ),
  
- );
+  'file' => 'inkscape/fireball.svg',
+  'proper' => rgb('sable'),
+);
 ?>

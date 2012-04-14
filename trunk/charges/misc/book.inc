@@ -16,7 +16,24 @@
 
 $charge = array (
  'patterns' => array (
-    'books?',
+    '?open books?',
   ),
+ 
+ 'modifiers' => array (
+   array ( 'leaved', 'leaved?s?', 'feature' ),
+   array ( 'clasped', 'clasps?e?d?', 'feature' ),
+   array ( 'garnished', 'garnishe?d?', 'feature' ),
+   array ( 'closed', 'closed', 'mod', 'closed' ),
+   array ( 'open', '(open|expanded)', 'ignore' ),
+   ),
+ 'file' => 'inkscape/book-open.svg',
 );
+
+if ( $node != null ) {
+  if ( get_mod($node,'closed') != null ) {
+    $charge['file'] = 'inkscape/book-closed.svg';
+    $charge['features']['leaved']['behind'] = true;
+  }
+}
+      
 ?>

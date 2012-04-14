@@ -48,8 +48,7 @@ function overall() {
   $overall = array (
     array ( true, 'overall' ),
     array ( true, 'over all' ),
-    array ( true, 'over ?all ?the (four|4) quarterings' ),
-    array ( true, 'over ?all ?the (two|2) (halves|parts|sections)' ),
+    array ( true, 'over ?all ?the ?# (quarters|quarterings|halves|parts|sections)' ),
     array ( true, 'all with(in)?' ),
   );
 
@@ -79,8 +78,12 @@ function quartered() {
     array ( 2, '(second|2nd|ii|2|two)' ),
     array ( 3, '(third|3rd|iii|3|three)' ),
     array ( 4, '(fourth|4th|iv|iiii|4|four)' ),
+    array ( 5, '(fifth|5th|v|5|five)' ),
+    array ( 6, '(sixth|6th|vi|6|six)' ),
+    array ( 7, '(seventh|7th|vii|7|seven)' ),
+    array ( 8, '(eigth|8th|viii|8|eight)' ),
   );
-  $subshields = array(0,null,null,null,null);
+  $subshields = array(0,null,null,null,null,null,null,null,null);
 
   $state = save();
   $node = null;
@@ -121,14 +124,24 @@ function quartered() {
       restore($state); // backtrack, assume this is quarterly division
       return null;
     }
-    for ( $i = 1; $i <= 4; $i++ ) {
+    $highest = false;
+    for ( $i = 8; $i > 0; $i-- ) {
       if ( $subshields[$i] == null ) {
-        $subshields[$i] = $dom->createElement('missing');
-        parser_message('blazon','Missing quarter (' . $i . ')');
+        if ( !$highest )
+          continue;
+        else { // highest already been found
+          $subshields[$i] = $dom->createElement('missing');
+          parser_message('blazon','Missing quarter (' . $i . ')');
+        }
+      } else { // NOT null
+        if ( !$highest )
+          $highest = $i;
+        $subshields[$i]->setAttribute('index',"$i");
       }
-      $subshields[$i]->setAttribute('index',"$i");
-      $quartered->appendChild($subshields[$i]);
     }
+    $quartered->setAttribute('order',$highest);
+    for ( $i = 1; $i <= $highest; $i++ )
+      $quartered->appendChild($subshields[$i]);
     $node = $dom->createElement('shield');
     $node->setAttribute('index','0');
     $node->appendChild($quartered);
@@ -195,15 +208,24 @@ function parse() {
 
 function builtin() {
   global $cur_word;
+  $theshieldof = array (
+    array ( true, '?the (shield|arms) of' ),
+  );
   
+  $state = save();
   $retval = null;
+  
+  search_match($theshieldof);
+  
   if ( ($named_blazon = checkDB()) != null ) {
     context('push');
     fill_words($named_blazon);
     $retval = shield();
     context('pop');
     $cur_word += 1;
-  }
+  } else
+    restore($state);
+    
   return $retval;
 }
 

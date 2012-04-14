@@ -17,6 +17,10 @@ $ordinary = array(
       'patterns' => array (
         'cantons?',
       ),
+  'modifiers' => array (
+    array ( null, 'of pretence', 'ignore',    ),
+    array ('subshield', 'of !pretence', 'shieldmod', ),
+  ),
       
       'doc' => 'Stuff...',
       

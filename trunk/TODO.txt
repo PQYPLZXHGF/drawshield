@@ -64,29 +64,28 @@ Features (for inkscape files anyway) by class attribute? And CSS? Should be much
 
 Font size and line length in information need to change depending on rendersize
 
-DONE (for 2.3p)
+saxon and celtic crosses
 
-Tweaked per fess and size of base
+escutcheon overall (and maybe single also) is too big
 
-Added lion head (bit crude), cock, cockatrice
+Scallop is off-centre
 
-Two chevrons are ordinaries, more than 2 are charges
+Undefined index: U in C:\Users\Public\www\include\shield\svg\linetypes.inc on line 92
 
-Added blazon database
+positioning of single charge in impaled with bordure (all placements in general really...)
 
-Items in double quotes become single words
+Need to normalise stuff in strings
 
-Aribitrary depth nesting
+DONE (for 2.4a)
 
-Website improvements
+Escutcheons and cantons can be entire shields e.g. "a canton of england"
 
-Changed way SVG is inserted into document & moved javascript into the SVG itself. Opens the way for scriptable & animated charges. Demo - the sun in splendour winks
-at you if you hover the mouse(!)
+Added charges badger, squirrel, dragon, eagle, snail, cart wheel, torch, fireball (grenade) {flamed} books {open|closed|leaved|clasped|garnished}
+
+Can have 2 bends
+
 
 BUGS FIXED
 
-per bend fracted and counterchanged divisions were both broken and have now been fixed
-
-faster download of website pages
-
+Problem with apostrophes fixed
 

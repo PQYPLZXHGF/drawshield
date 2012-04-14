@@ -12,15 +12,13 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// dragon
+// beacon
 
 $charge = array (
  'patterns' => array (
-    'dragons?',
+    'beacons?',
+    'bale fires?',
   ),
-
- 'file' => 'inkscape/wyvern.svg',
-
- 
- );
+  'file' => 'inkscape/beacon.svg',
+);
 ?>

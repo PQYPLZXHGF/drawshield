@@ -71,6 +71,10 @@ function fill_words($blazon_in) {
         $i = $end;
         break;
       case '-':
+        if ( $in_string ) {
+          $this_word .= ' ';
+          break;
+        }
         if ( $this_word != '' ) {
           if ( !$comment ) { $words[] = $this_word; }
           $this_word = '';
@@ -92,7 +96,6 @@ function fill_words($blazon_in) {
         if ( !$comment ) $words[] = $blazon[$i];
         break;
       case '"':
-      case "'":
         if ( $in_string ) {
           $words[] = $this_word;
           $this_word = '';
@@ -102,6 +105,7 @@ function fill_words($blazon_in) {
           $in_string = true;
         }
         break;
+      case "'":
       case '\\':
       case '`':
       case '~':
@@ -109,6 +113,7 @@ function fill_words($blazon_in) {
         break;
       default:
         $this_word .= $blazon[$i];
+        break;
     }
     $i++;
   }

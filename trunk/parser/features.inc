@@ -99,7 +99,7 @@
          elseif ( in_array ( 'base', $locs) )
            $positions[] = 'ineachQ34';
          else
-           draw_message('warning','in which quarter?');
+           parser_message('warning','in which quarter?');
        }
      } elseif ( count($locs) > 0 ){ // no quantifier found (or it was "all"), but we have a location
        foreach ( $locs as $location ) {
@@ -217,6 +217,7 @@ function get_features ( $feature_sets, &$node ) {
     array ( 'rayonny',   '(rayonny|radiant)',        'mod', 'linetype',               ),
     array ( 'wavy',      '(wavy|undy)',      'mod', 'linetype',                      ),
     array ( 'urdy' ,     '(urdy|urde|champaine|champion)',   'mod', 'linetype',       ),
+    array ( 'twigged' ,     'fir twiggy?e?d?',   'mod', 'linetype',       ),
   );
 
   // these can appear before and after the charge (but only once)  
@@ -333,6 +334,13 @@ function get_features ( $feature_sets, &$node ) {
 					$mod->appendChild(tincture(true));
 					$node->appendChild($mod);
 					break;
+				case 'shieldmod':
+				  $tinc = $dom->createElement('tincture');
+          $tinc->setAttribute('index',"$tinc_index" );
+          $tinc_index++;
+          $tinc->appendChild(shield());
+          $node->appendChild($tinc);
+				  break;
 				case 'mod+tinc':
           $mod = make_mod ( $match[3], $match[0], tokens() );
 					$tinc = tincture(true);

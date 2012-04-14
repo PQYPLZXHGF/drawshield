@@ -12,15 +12,21 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// dragon
+// badger
 
 $charge = array (
  'patterns' => array (
-    'dragons?',
+    'squirrels?',
   ),
-
- 'file' => 'inkscape/wyvern.svg',
-
  
- );
+  'modifiers' => array (
+    array ( null, 'seje?ant', 'ignore' ),
+    array ( null, 'cracking ?a nuts?', 'ignore' ),
+   ),
+ 
+ 'file' => 'inkscape/squirrel.svg',
+ 
+ 'hflex' => 1.2,
+ 'wflex' => 1.2,
+);
 ?>

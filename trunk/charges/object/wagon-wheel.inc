@@ -12,15 +12,14 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// dragon
+// corn-sheaf
 
 $charge = array (
  'patterns' => array (
-    'dragons?',
+    '(wagon|cart) wheels?',
+    'wheels? of # spokes',
   ),
-
- 'file' => 'inkscape/wyvern.svg',
-
  
- );
+   'file' => 'inkscape/wagon-wheel.svg',
+);
 ?>

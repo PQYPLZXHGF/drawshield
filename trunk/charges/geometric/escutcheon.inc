@@ -19,6 +19,10 @@ $charge = array (
   'patterns' => array (
   'escut?cheons?',
   ),
+  'modifiers' => array (
+    array ( null, 'of pretence', 'ignore',    ),
+    array ('subshield', 'of !pretence', 'shieldmod', ),
+  ),
 
   'doc' => 'Stuff...',
 

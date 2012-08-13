@@ -20,13 +20,20 @@ $charge = array (
   ),
  
   'modifiers' => array (
-    array ( null, 'seje?ant', 'ignore' ),
+    array ( 'sejant', 'seje?ant', 'mod', 'stance' ),
     array ( null, 'cracking ?a nuts?', 'ignore' ),
+    array ( 'courant', 'courant', 'mod', 'stance' ),
    ),
  
- 'file' => 'inkscape/squirrel.svg',
+ 'file' => 'inkscape/squirrel-sejant.svg',
  
  'hflex' => 1.2,
  'wflex' => 1.2,
 );
+
+if ( $node != null ) {
+  if ( ($stance = get_mod($node, 'stance')) == null ) $stance = 'sejant'; 
+  $charge['file'] = 'inkscape/squirrel' . '-' . $stance . '.svg';
+}
+  
 ?>

@@ -76,16 +76,11 @@ positioning of single charge in impaled with bordure (all placements in general 
 
 Need to normalise stuff in strings
 
-DONE (for 2.4a)
+remove PLNC and friends, with all associated code
 
-Escutcheons and cantons can be entire shields e.g. "a canton of england"
+DONE (for 2.4b)
 
-Added charges badger, squirrel, dragon, eagle, snail, cart wheel, torch, fireball (grenade) {flamed} books {open|closed|leaved|clasped|garnished}
+Added squirrel courant
 
-Can have 2 bends
-
-
-BUGS FIXED
-
-Problem with apostrophes fixed
+fixed chevronels
 

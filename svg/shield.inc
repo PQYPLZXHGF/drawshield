@@ -45,7 +45,28 @@ $halfHeights = array (
     '10:6' => 300,  
 );
 
-function get_hierarchy( $item ) {
+function getShieldShape( $item ) {
+  global $aspect_ratio;
+  
+  // TODO deal with chiefs as well.
+  $shapes = array (
+    'PL' => 'v800a800,400 0 0,0 500,400 a800,400 0 0,0 500,-400v-800h-1000z',
+   // 'PLQ3' => 'v200a800,400 0 0,0 500,400v-600h-500z',
+    'PLQ3' => 'v342a1371,685 0 0,0 857,685v-1028h-857z',
+    'PLQ4' => '',
+    
+   );
+  
+  $rectangles = array ( 
+    '10:12' => 'v1200h1000v-1200h-1000z',
+    '10:10' => 'v1000h1000v-1000h-1000z',
+    '10:14' => 'v12h860v-1200h-860z',
+    '10:24' => 'v1200h500v-1200h-500z',
+    '10:20' => 'v1000h500v-1000h-500z',
+    '10:28' => 'v1200h430v-1200h-430z',
+    '10:6' => 'v600h1000v-600h-1000z',  
+  );    
+  
   $hierarchy = '';
   
   do {
@@ -69,7 +90,10 @@ function get_hierarchy( $item ) {
     $item = $item->parentNode;
   } while ($item->nodeName != 'blazon');
   
-  return $hierarchy;
+  if ( array_key_exists($hierarchy, $shapes) )
+    return $shapes[$hierarchy];
+  else
+    return $rectangles[$aspect_ratio]; // Just a rectangle
 }
 
 function makePlain( &$children, $drawnAR = '10:12' ) {
@@ -342,19 +366,20 @@ function makeshield( &$node, $this_AR ) {
   global $dom;
   global $aspect_ratio;
   
+  
   $origNode = $node;
   if ( $node->hasAttribute('IDREF') ) {
     $node = $dom->getElementById($node->getAttribute('IDREF'));
   }
-
-
+  
+  
   $retval = '<g>';
   
   foreach ( $node->childNodes as $child ) {
     $children = $child->childNodes;
     switch ( $child->nodeName . $child->getAttribute('order') ) {
-      case 'plain':
-        $retval .= makePlain($children, $this_AR);
+    case 'plain':
+      $retval .= makePlain($children, $this_AR);
         break;
       case 'dimidiated':
         $retval .= makeDimidiated( $children, $this_AR );

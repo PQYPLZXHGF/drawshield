@@ -17,8 +17,6 @@ $ordinary = array (
     'chevronels?',
   ), 
   
-  'either' => true,
-  
   'modifiers' => array (
     array ( null, '(braced|interlaced)', 'mod', 'braced' ),
   ),

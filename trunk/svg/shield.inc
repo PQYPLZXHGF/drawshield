@@ -206,6 +206,7 @@ function makequartered4( $children, $this_AR ) {
   return makequarters( $children, $child_ARs, $child_Scales, $translates );
 }
 
+// TODO Finish this function (see 10:12 for working example)
 function makequartered6( $children, $this_AR ) {
   global $halfHeights;
   

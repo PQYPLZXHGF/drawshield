@@ -15,6 +15,7 @@
 // cronel
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/cronel',
  'patterns' => array (
     'cronels?',
   ),

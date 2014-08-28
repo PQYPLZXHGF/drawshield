@@ -16,6 +16,7 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/w/word',
   'patterns' => array (
   'words?',
   ),
@@ -25,15 +26,14 @@ $charge = array (
     'default_colour' => 'sable',
   ),
 
-  'doc' => 'Stuff...',
+  'file' => 'null', // overridden in use
 );
 
+if ( $node != null ) {
   $item = get_mod( $node, 'item' );
   if ( $item == null ) $item = '???';
   $len = 25 * strlen($item);
-  $charge['height'] = 44;
-  $charge['width'] = $len;
-  $charge['body'] = '<text x="' . $len / 2 . '" y="44" text-anchor="middle" font-size="44" font-style="italic" font-family="serif">' .
-        $item . '</text>';
- 
-?>
+  $charge['svgCode'] = '<svg height="44" width="' . $len . '"><text x="' . $len / 2 . '" y="44" text-anchor="middle" font-size="44" font-style="italic" font-family="serif">' .
+        $item . '</text></svg>';
+}
+

@@ -15,6 +15,7 @@
 // hill
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/h/hill',
  'patterns' => array (
     'hill(ock)',
   ),

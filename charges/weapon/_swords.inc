@@ -13,22 +13,19 @@ $charge['modifiers'] =  array (
     array ( null, '?the points? in base', 'mod', 'inverted',    ),
   );
 
-$charge['proper'] = '#F0F0F0';
+$charge['proper'] = rgb('argent');
 
 $charge['features'] = 
   array (
     'pomell' => 
     array (
-      'proper' => '#EFD807',
+      'proper' => rgb('or'),
     ),
     'hilt' => 
     array (
-      'proper' => '#EFD807',
+      'proper' => rgb('or'),
     ),
   );
   
 $charge['orient_to_ordinary'] = true;
 
-
-
-?>

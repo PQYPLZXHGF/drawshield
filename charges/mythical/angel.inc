@@ -15,8 +15,9 @@
 // angel
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/a/angel',
  'patterns' => array (
     'angels?',
   ),
+  'file' => 'inkscape/angel.svg',
 );
-?>

@@ -31,19 +31,23 @@ function makeDiv_bar( $node, $div_num ) {
   for ( $i = 1; $i < $num_of; $i +=2 ) {
     switch ( $name ) {
       case 'barry-pily':
+        draw_message('link',"$name http://karlwilcox.com/parker/b/barry");
         $Y1 = ($i - 1) * $stepV;
         $svg .= "M0,{$Y1}l1000,{$stepV} -1000,{$stepV}z ";
         break;
       case 'barry-pily-sinister':
+        draw_message('link',"$name http://karlwilcox.com/parker/b/barry");
         $Y1 = ($i - 1) * $stepV;
         $svg .= "M1000,{$Y1}l-1000,{$stepV} 1000,{$stepV}z ";
         break;
       case 'paly':
+        draw_message('link',"$name http://karlwilcox.com/parker/p/paly");
         $X1 = $i * $stepH;
         $NC .= "X{$X1}Y-100a{$stepH}C1400e{$stepH}G1400   ";
         $CH .= "X{$X1}Y200a{$stepH}C1200e{$stepH}G1200   ";
         break;
       case 'bendy':
+        draw_message('link',"$name http://karlwilcox.com/parker/b/bendy");
         $X1 = (($i-1) * $stepH) - 500;
         $Y1 = 500 - (($i-1) * $stepH);
         $X2 = (($i-1) * $stepC) - 500;
@@ -52,6 +56,7 @@ function makeDiv_bar( $node, $div_num ) {
         $CH .= "X{$X2}Y{$Y2}h{$stepB}B1300d{$stepB}F1300   ";
         break;
       case 'bendy-sinister':
+        draw_message('link',"$name http://karlwilcox.com/parker/b/bendy");
         $X1 = 1500 - (($i-1) * $stepH);
         $Y1 = 500 -(($i-1) * $stepH);
         $X2 = 500 - (($i-1) * $stepC);
@@ -60,6 +65,7 @@ function makeDiv_bar( $node, $div_num ) {
         $CH .= "X{$X2}Y{$Y2}b{$stepB}D1300f{$stepB}H1300   ";
         break;
       case 'barry':
+        draw_message('link',"$name http://karlwilcox.com/parker/b/barry");
         $Y1 = $i * $stepV;
         $YC = 300 + $i * $stepC;
         $NC .= "X-100Y{$Y1}A1200c{$stepV}E1200g{$stepV}   ";
@@ -69,4 +75,4 @@ function makeDiv_bar( $node, $div_num ) {
   }
   return  ( $svg == '' ) ? compact('NC', 'CH') : ('<path d="' . $svg . '" />');
 }
-?>
+

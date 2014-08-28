@@ -15,6 +15,7 @@
 // garland
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/g/garland',
  'patterns' => array (
     '(garlands?|chaplets?|wreaths?)',
   ),

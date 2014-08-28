@@ -66,11 +66,13 @@ function apply_tincture ( $tincture, $object, $chg_size = '',
     case 'colour':
     case 'default': // don't think these two ever occur
     case 'proper':
-      if ( $child->hasAttribute('name') ) $spec = rgb($child->getAttribute('name'));
-      elseif ( $child->hasAttribute('spec') ) $spec = $child->getAttribute('spec');
-      else {
+      if ( $child->hasAttribute('name') )  {
+        $spec = rgb($child->getAttribute('name'));
+      } elseif ( $child->hasAttribute('spec') ) {
+        $spec = $child->getAttribute('spec');
+      } else {
+        draw_message('internal', "Colour not known", __FILE__, __LINE__);
         $spec = '#F0F0F0'; // raise error
-        draw_message('internal', 'Colour not known', __FILE__, __LINE__);
       }
       $retval = '<g fill="' . $spec . '">' . $object . '</g>';
       break;
@@ -79,36 +81,40 @@ function apply_tincture ( $tincture, $object, $chg_size = '',
       $fur_data = makeFur( $fur_name );
       // If what we are placing is inverted, we also invert the fill so it appears the "right way up"
       // Don't need to do reversed as all furs are symmetrical
-      if ( $inv ) $fur_data[2] = "<g transform=\"translate(0,{$fur_data[1]}) scale(1,-1)\">{$fur_data[2]}</g>";
+      if ( $inv ) $fur_data['body'] = "<g transform=\"translate(0,{$fur_data[1]}) scale(1,-1)\">{$fur_data['body']}</g>";
       $patt_id = add_def ( 'pattern ' . $patTrans .
          ' patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" y="0" width="' .
-         $fur_data[0] . '" height="' . $fur_data[1] . '"',
-         $fur_data[2] );
+         $fur_data['width'] . '" height="' . $fur_data['height'] . '"',
+         '<g class="fur">' . $fur_data['body'] . '</g>' );
       $retval = add_def();
-      $stroke = ($object_type == 'ordinary') ? 'stroke="black" stroke-width="5"' : '';
+      $stroke = ($object_type == 'ordinary') ? 'stroke="' . rgb('sable') . '" stroke-width="5"' : '';
       $retval .= '<g ' . $stroke . ' fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
+      if ( isset($fur_data['link']))
+        draw_message('link',$fur_name. ' ' . $fur_data['link']);
       break;
     case 'treatment':
       $treat_data = makeTreatment( $child );
       // If what we are placing is inverted, we also invert the fill so it appears the "right way up"
       // Don't need to do reversed as all treatments are symmetrical
-      if ( $inv ) $treat_data[2] = "<g transform=\"translate(0,{$treat_data[1]}) scale(1,-1)\">{$treat_data[2]}</g>";
+      if ( $inv ) $treat_data['width'] = "<g transform=\"translate(0,{$treat_data['height']}) scale(1,-1)\">{$treat_data['body']}</g>";
       $patt_id = add_def ( 'pattern ' . $patTrans .
          ' patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" y="0" width="' .
-         $treat_data[0] . '" height="' . $treat_data[1] . '"',
-         $treat_data[2] );
+         $treat_data['width'] . '" height="' . $treat_data['height'] . '"',
+        '<g class="treatment">' . $treat_data['body'] . '</g>' );
       $retval = add_def();
       $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
+      if ( isset($treat_data['link']))
+        draw_message('link',$child->getAttribute('name') . ' ' . $treat_data['link']);
       break;
     case 'semyde':
       $treat_data = makeSemy( $child );
       // If what we are placing is inverted, we also invert the fill so it appears the "right way up"
-      if ( $inv ) $treat_data[2] = "<g transform=\"translate(0,{$treat_data[1]}) scale(1,-1)\">{$treat_data[2]}</g>";
-      if ( $rev ) $treat_data[2] = "<g transform=\"translate({$treat_data[0]},0) scale(-1,1)\">{$treat_data[2]}</g>";
+      if ( $inv ) $treat_data['body'] = "<g transform=\"translate(0,{$treat_data['height']}) scale(1,-1)\">{$treat_data['body']}</g>";
+      if ( $rev ) $treat_data['body'] = "<g transform=\"translate({$treat_data['width']},0) scale(-1,1)\">{$treat_data['body']}</g>";
       $patt_id = add_def ( 'pattern ' . $patTrans .
          ' patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" y="0" width="' .
-         $treat_data[0] . '" height="' . $treat_data[1] . '"',
-         $treat_data[2] );
+         $treat_data['width'] . '" height="' . $treat_data['height'] . '"',
+         $treat_data['body'] );
       $retval = add_def();
       $retval .= '<g fill="url(#' . $patt_id . ')"  >' . $object . '</g>';
       break;
@@ -144,7 +150,7 @@ function apply_tincture ( $tincture, $object, $chg_size = '',
     case 'counterchanged': // Never change anything, just fill with this pattern
       // First we have to locate the field
       $parent = $tincture->parentNode;
-      while ( $parent->nodeName != 'plain' ) { // TODO what about if overall?
+      while ( $parent->nodeName != 'plain' and $parent->nodeName != 'shield' ) { // TODO what about if overall?
         $parent = $parent->parentNode;
       }
       $field = $parent->firstChild;

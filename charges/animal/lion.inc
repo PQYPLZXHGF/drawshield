@@ -16,6 +16,7 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/l/lion',
   'patterns' => array (
   'lions?',
   'lioncels?',
@@ -55,6 +56,10 @@ $charge = array (
   
   'demi' => 'top',
 
+  'behind' => true,
+
+  'file' => 'inkscape/lion-courant.svg', // default type, may be overridden
+
 );
 
 if ($node != null ) {
@@ -76,7 +81,6 @@ if ($node != null ) {
         $charge['file'] = $filename;
       else {
         draw_message ( 'warning', 'no lion of given type' );
-        $charge['file'] = 'inkscape/lion-courant.svg';
       }
     }
   }

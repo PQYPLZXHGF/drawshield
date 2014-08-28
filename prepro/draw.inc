@@ -12,15 +12,15 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-include 'svg/placements.inc';
-include 'svg/layout.inc';
+//include 'svg/placements.inc';
+//include 'svg/layout.inc';
    
 function draw() {
   global $dom;
 
   rewrite();
-  placements ();
+  //placements ();
   $dom->formatOutput = true;
   return $dom->saveXML();
 }
-?>
+

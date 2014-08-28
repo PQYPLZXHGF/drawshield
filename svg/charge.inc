@@ -30,27 +30,25 @@
    
    function read_chg_file($node) {
      
-     if ( $node->nodeName == 'missing' ) {
+     if ( is_null($node) or $node->nodeName == 'missing' ) {
        $title = 'missing';
        $chg_data = array();
      } else {
        $charge_key =  'charges/' . $node->getAttribute('type') . '/' . $node->getAttribute('subtype');
        if ( ($title = $node->getAttribute('tokens')) == null ) $title = $node->getAttribute('subtype');
        $chg_data = includeCharge( $node, $charge_key );
-       if ( array_key_exists('file', $chg_data )) { // Need to extract body and features from inkscape file
-         $chg_data = array_merge_recursive($chg_data, ink2chg('charges/' . $node->getAttribute('type') . '/' . $chg_data['file']));
+       if ( array_key_exists('file', $chg_data ) and ($chg_data['file'] != null)) { // Need to read from inkscape file
+         $target = 'charges/' . $node->getAttribute('type') . '/' . $chg_data['file'];
+         if ( file_exists($target) )
+           $chg_data['svgCode'] = file_get_contents($target);
+         else
+           draw_message('internal',"Missing SVG file $target");
        }
      }
-    if ( !array_key_exists('body', $chg_data) ) {
+    if ( !array_key_exists('svgCode', $chg_data) ) {
       draw_message('internal',"Cannot draw $title");
-      $chg_data = array ( 'width' => 100, 'height' => 100,
-        'body' => '<g stroke="none"><path fill-rule="evenodd" d="M0,0h100v100h-100zM10,10h80v80h-80z" />' .
-               '<text x="50" y="55" font-size="15" text-anchor="middle">' . $title . '</text></g>',
-               'wflex' => 2, 'hflex' => 2 );
-    }
-    if ( array_key_exists('licence', $chg_data) and $chg_data['licence'] != null ) {
-      $title .= ': ' . $chg_data['licence'];
-      draw_message('licence', $title);
+      $chg_data['svgCode'] = '<svg height="100" width="100"><g stroke="none"><path fill-rule="evenodd" d="M0,0h100v100h-100zM10,10h80v80h-80z" />' .
+               '<text x="50" y="55" font-size="15" text-anchor="middle">' . $title . '</text></g></svg>';
     }
     $chg_data['title'] = $title;
     return $chg_data;
@@ -81,18 +79,40 @@ function getCharge( $node ) {
   else
     $chg_data = $chg_data_cache[$chg_ref];
 
-  $body = $chg_data['body'];
-
   // Process charge features and modifiers
   $charges_on = null;
   $feat_cols = array();
-  $charge_col = null;
+  $bodyTincture = null;
   $demi = null;
-  $charge_is_proper = false;
+  $proper = null;
+  if ( array_key_exists('proper',$chg_data)) $proper = $chg_data['proper'];
   foreach ( $node->childNodes as $child ) {
     switch ( $child->nodeName ) {
       case 'feature':
-        $feat_cols[$child->getAttribute('name')] = $child->firstChild;
+        $featureTinc = $child->firstChild;
+        $featureName = $child->getAttribute('name');
+        $tinctureType = $featureTinc->firstChild;
+        switch ($tinctureType->nodeName) {
+          case 'colour':
+            $feat_cols[$featureName] = rgb($tinctureType->getAttribute('name'));
+            break;
+          case 'proper':
+            if ( is_array($proper) ) {
+              if ( array_key_exists($featureName,$proper))
+                $feat_cols[$featureName] = $proper[$featureName];
+              else
+                $feat_cols[$featureName] = $proper['body'];
+            } elseif ( $proper != null ) // not an array, everything is same colour
+              $feat_cols[$featureName] = $proper;
+            else { // no proper colour given
+              $feat_cols[$featureName] = '#696969';
+              draw_message('blazon',"No proper colour for $featureName");
+            }
+            break;
+          default: // treatment or something
+            draw_message('Warning',"Features can only be plain colours");
+            break;
+        }
         break;
       case 'tincture':
         $charge_col = $child;
@@ -109,76 +129,56 @@ function getCharge( $node ) {
         break;
     }
   }
+  if (is_array($proper)) $proper = $proper['body'];
+  // By this point, $proper contains the proper colour code for the body (if given).
+  // $feat_cols contains a array of named features => colour codes
+  // We will now work out the actual colours to be used for the body and any unnamed features
   $col_type = $charge_col->firstChild;
-  if ( $col_type->nodeName == 'default' and array_key_exists('default', $chg_data) ) {
-    $col_type->setAttribute('spec', $chg_data['default']);
-  }
-  // Apply proper colour (if there is one)
-  if ( $col_type->nodeName == 'proper' and array_key_exists('proper', $chg_data) )
-  {
-    $col_type->setAttribute('spec', $chg_data['proper']);
-    $charge_is_proper = true;
-  }
-
-  // Apply colours to features and append to the body
-  if ( array_key_exists('features',$chg_data) and count($chg_data['features']) > 0 ) {
-    foreach ( array_reverse($chg_data['features']) as $key => $data ) {
-      if ( !array_key_exists('body', $data) ) $data['body'] = '<g />';
-      // Find if there is a proper colour
-      if ( array_key_exists('proper', $data) )
-        $proper_spec = $data['proper'];
-      elseif ( array_key_exists('proper', $chg_data) )
-        $proper_spec = $chg_data['proper'];
-      // if ( ! array_key_exists('body', $data) ) continue; // No body, so no colour to apply
-      if ( array_key_exists($key, $feat_cols) and ($feat_col = $feat_cols[$key]) != null ) { // we have an explicitly coloured feature
-        $col_type = $feat_col->firstChild;
-        if ( $col_type->nodeName == 'proper' ) $col_type->setAttribute('spec', $proper_spec);
-        $feature = apply_tincture( $feat_col, $data['body'] );
-      } else { // colour not given in blazon
-        if ( array_key_exists('notpresent', $data) and !array_key_exists($key,$feat_cols) ) {
-          $feature= $data['notpresent']; // Use the notpresent data
-        } elseif ( array_key_exists('colour', $data )) {
-          // if given, use a default colour
-          $feature= '<g fill="' . $data['colour'] . '">' . $data['body'] . '</g>';
-        } elseif ( $charge_is_proper and array_key_exists('proper', $data )) {
-          // if given, use a proper colour
-          $feature= '<g fill="' . $data['proper'] . '">' . $data['body'] . '</g>';
-        } else {
-          // else just add the feature to the main body
-          $feature= $data['body'];
-        }
-      }
-      if ( array_key_exists('behind', $data ))
-        $body = $feature . $body;
-      else
-        $body .= $feature;
+  if ( $col_type->nodeName == 'proper' ) {
+    if ( $proper != null ) {
+      $col_type->setAttribute('spec', $proper);
+    } else {
+      $col_type->setAttribute('spec', '#696969');
+      draw_message('warning','No proper colour for ' . $node->getAttribute('subtype'));
     }
   }
-  if ( $demi!= null ) {
-    if ( array_key_exists('demi', $chg_data) and $chg_data['demi'] == 'top' ) {
-      $half = $chg_data['height'] / 2;
-      $clip = add_def ( 'clipPath', '<rect x="0" y="0" width="' . $chg_data['width'] . '" height="' . $half . '" />' );
+  // So we now have $charge_col set to a valid tincture node and the feat_cols array set, apply this to the svg Data
+  // dummy assignments
+  $body = $height = $width = $licence = null;
+  extract(getSvgFragment($chg_data['svgCode'], $feat_cols ));
+  // $body now contains a valid fragment of SVG, ready for use
+  // Also, $licence, $height and $width are set
+  if ( $demi != null ) {
+    if ( array_key_exists('demi', $chg_data) and $chg_data['demi'] == 'horizontal' ) {
+      $half = $height / 2;
+      $clip = add_def ( 'clipPath', '<rect x="0" y="0" width="' . $width . '" height="' . $half . '" />' );
       $body = '<g clip-path="url(#' . $clip . ')">' . $body . '</g>';
-      $chg_data['height'] = $half;
+      $height = $half;
     } else {
       $half = $chg_data['width'] / 2;
-      $clip = add_def ( 'clipPath', '<rect x="0" y="0" width="' . $half . '" height="' . $chg_data['height'] . '" />' );
+      $clip = add_def ( 'clipPath', '<rect x="0" y="0" width="' . $half . '" height="' . $height . '" />' );
       $body = '<g clip-path="url(#' . $clip . ')">' . $body . '</g>';
-      $chg_data['width'] = $half;
+      $width = $half;
     }
   }
   if ( $charges_on ) {
     // Turn off flexible scaling (as on charges could be distorted by flexing) ???
     // $chg_data['hflex'] = $chg_data['wflex'] = 1;
-    $scale = min ( $chg_data['width']/1000, $chg_data['height']/1000);
+    $scale = min ( $width/1000, $height/1000);
     $charges = makeCharge($charges_on);
     // scale to fit onto charge - then move so charges are central
-    $charges = sprintf('<g transform="translate(%2f,%2f) scale(%4f)">%s</g>', (($chg_data['width']/2)-(1000*$scale)/2), (($chg_data['height']/2)-(1000*$scale)/2),
+    $charges = sprintf('<g transform="translate(%2f,%2f) scale(%4f)">%s</g>', (($width/2)-(1000*$scale)/2), (($height/2)-(1000*$scale)/2),
                         $scale, $charges);
     $body .= $charges;
   }
-  // Set the stroke colour for all charges
-  $chg_data['body'] = '<g stroke="#696969">' . $body . '</g>';
+
+  if (isset($chg_data['link']))
+    draw_message('link',$node->getAttribute('subtype') . ' ' . $chg_data['link'] );
+
+  draw_message('licence',$node->getAttribute('subtype') . " $licence");
+  $chg_data['licence'] = $licence;
+  $chg_data['body'] = $body;
+  $chg_data['height'] = $height;
+  $chg_data['width'] = $width;
   return $chg_data;
 }
-?>

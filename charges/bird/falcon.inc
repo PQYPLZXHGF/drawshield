@@ -15,6 +15,7 @@
 // falcon
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/f/falcon',
  'patterns' => array (
     'falcons?',
   ),

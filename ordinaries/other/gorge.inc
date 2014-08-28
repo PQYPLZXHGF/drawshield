@@ -14,6 +14,7 @@
 
 
 $ordinary = array(
+  'link' => 'http://karlwilcox.com/parker/g/gorge',
       'patterns' => array (
         '(gorge|whirlpool|gurges)',
       ),
@@ -25,4 +26,3 @@ $ordinary = array(
 
 );
 
-?>

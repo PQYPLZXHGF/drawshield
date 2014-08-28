@@ -51,9 +51,12 @@ function createCotise($spec, $num, $lineType) {
   return $retval;
 }
 
-function division_to_modifier(&$node, $type) {
+function division_to_modifier(DOMElement &$node, $type) {
 	// check for tincture being a quarterly division, if so handle separately & rewrite modifiers
-	$item = null;
+  /**
+   * @var DOMElement $item
+   */
+  $item = null;
 	// See if there is a division of the required type
 	foreach ( $node->childNodes as $child ) {
 		if ( $child->nodeName == 'tincture' and $child->firstChild->nodeName == 'division' and $child->firstChild->getAttribute('type') == $type ) {
@@ -62,10 +65,11 @@ function division_to_modifier(&$node, $type) {
 		}
 	}
 	if ( $item == null ) return false; // not found
-	
+
+  $children = array();
 	// We cannot just iterate through childNodes as we want to make changes, so put in an array
 	foreach ( $item->firstChild->childNodes as $child ) {
-	  $children[] = $child;
+	  $children[] = (object)$child;
 	}
 	// We can now remove the original tincture
 	$node->removeChild($item);
@@ -89,24 +93,31 @@ function division_to_modifier(&$node, $type) {
   return true;
 }
 
-function includeOrdinary( &$node ) {
+function includeOrdinary( DOMElement &$node ) {
   $ordinary = array ();
   include ( 'ordinaries/' . $node->getAttribute('type') . '/' . $node->getAttribute('subtype') . '.inc' );
   return $ordinary;
 }
 
-function makeOrdinary( &$node ) {
+function makeOrdinary( DOMElement &$node ) {
+  global $options;
 
 	// Get information about the shapes to be drawn
 	// We do this first in case the ordinary code changes any of the modifiers, e.g. a bend quarterly
   $ord_data = includeOrdinary( $node );
+  $subtype = $node->getAttribute('subtype');
+  if ( array_key_exists('link', $ord_data))
+    draw_message('link',$subtype . ' ' . $ord_data['link']);
 	
 	// Some defaults (either from the ordinary data or from modifiers)
   if ( array_key_exists('feature_size', $ord_data) ) 
 	  $feature_size = $ord_data['feature_size'];
 	else
 	  $feature_size = 50;
-	$voided = get_mod_node($node, 'voided');
+  /**
+   * @var DOMElement $voided
+   */
+  $voided = get_mod_node($node, 'voided');
 	$tinc1 = get_tincture($node,'1');
 	$cotise = '';
 	
@@ -115,14 +126,17 @@ function makeOrdinary( &$node ) {
 	if ( array_key_exists('shape_spec', $ord_data) ) { //  we are given a path specification to convert to SVG
 	  $shape_spec = choose_fit($ord_data['shape_spec']);
     if ( $voided != null ) {
-      if ( ($void_col = $voided->firstChild ) != null ) 
+      if ( ($void_col = $voided->firstChild ) != null )
 			  $body .= apply_tincture ( $void_col, createBody($shape_spec, 'none', 0 ) );
       $body .= createVoid($shape_spec, get_mod($node,'linetype'), $feature_size);
     } else {
       $body .= createBody($shape_spec, get_mod($node,'linetype'), $feature_size);
     }
 		// Now do the cotises
-		if ( ($cot_node = get_mod_node($node,'cotised')) != null ) {
+    /**
+     * @var DOMElement $cot_node
+     */
+    if ( ($cot_node = get_mod_node($node,'cotised')) != null ) {
 			$cot_linetype= get_mod($cot_node,'linetype');
 			$cot_tinc = get_tincture($cot_node);
 			if ( !$cot_tinc )
@@ -134,7 +148,7 @@ function makeOrdinary( &$node ) {
   } else { // we are given direct SVG data
     if ( $voided != null ) {
 		  if ( !array_key_exists('voided', $ord_data) ) {
-		    draw_message('warning','cannot draw ' . $node->getAttribute('subtype') . 'as voided');
+		    draw_message('warning','cannot draw ' . $subtype . 'as voided');
         $body .= choose_fit($ord_data['body']);
 		  } else {
         if ( ($void_col = $voided->firstChild ) != null ) 
@@ -164,6 +178,7 @@ function makeOrdinary( &$node ) {
 		else {
 		  $body2_spec = choose_fit($ord_data['body2']);
 		  if ( $body2_spec{0} != '<' ) {
+        $linetype = null;
 			  // Is there a linetype here also
 				if ( ($div2ord = get_mod_node($node,'div2ord')) != null )
 				  $linetype = get_mod($div2ord,'linetype');
@@ -187,7 +202,13 @@ function makeOrdinary( &$node ) {
 
   // Now add anything that is "on" the ordinary
 	$on_object = '';
+  /**
+   * @var DOMElement $on_ord
+   */
   if ( ($on_ord = get_mod_node($node,'on')) != null ) {
+    /**
+     * @var DOMElement $what_on
+     */
     $what_on = $on_ord->firstChild;
     switch ( $what_on->nodeName ) {
       case 'ordinary':
@@ -207,8 +228,7 @@ function makeOrdinary( &$node ) {
         $type = $what_on->getAttribute('subtype'); // TODO can we find this out from a flag?
 			  $height = ($type == 'per-bend' || $type == 'per-bend-sinister' || $type == 'quarterly') ? 1000 : 1200;
 			  $patt_id = add_def ( 'pattern width="100%" height="100%" patternUnits="objectBoundingBox" preserveAspectRatio="none" viewBox="0 0 1000 ' .   $height . '"',
-              $title . "<desc>Ordinary on ordinary</desc>" .
-               $new_ord ); 
+               "<desc>Ordinary on ordinary</desc>" . $new_ord );
           $on_object = '<g fill="url(#' . $patt_id . ')"  >' . $body . '</g>';
 			  } else {
           $fill = add_def( 'pattern patternContentUnits="userSpaceOnUse" patternUnits="userSpaceOnUse" x="0" ' .
@@ -232,8 +252,11 @@ function makeOrdinary( &$node ) {
   
   // Is this ordinary "between" anything?
   $between_object = '';
+  /**
+   * @var DOMElement $btwn_ord
+   */
   if ( ($btwn_ord = get_mod_node($node,'between')) != null ) {
-    $btwn_ord = $btwn_ord->firstChild;
+    $btwn_ord = (object)$btwn_ord->firstChild;
  		// If the underlying ordinary is mirrored, we need to mirror the "on" item so it ends up back the right way
     if ( $mirrored ) {
       if ( ($sin = get_mod_node($btwn_ord,'reversed')) != null )
@@ -267,9 +290,11 @@ function makeOrdinary( &$node ) {
     $retval = '<g transform="' . $transform . '">' . $retval . "</g>\n";
 	
 	// And finally...
-  $retval = '<g><title>' . $node->getAttribute('subtype') . '</title>' . $retval . '</g>';
+  $retval = '<g><title>' . $subtype . '</title>' . $retval . '</g>';
+
+  if ( $options['palette'] == 'nocolour' )
+    $retval = '<g stroke-width="3" stroke="' . rgb('ordinary-stroke') . '" >' . $retval . '</g>';
 	
 	return $retval;
 }
 
-?>

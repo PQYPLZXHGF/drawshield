@@ -16,6 +16,7 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/e/earl',
   'patterns' => array (
   'earls? (crown|coronet)s?',
   ),

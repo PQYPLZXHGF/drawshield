@@ -20,5 +20,6 @@ $charge = array (
     'fer de moline',
     'ink moline',
   ),
+
+  'file' => 'inkscape/millrind.svg',
 );
-?>

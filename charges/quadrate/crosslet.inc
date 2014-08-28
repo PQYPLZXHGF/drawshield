@@ -16,6 +16,7 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/c/cross/crosslet',
   'patterns' => array (
   '?plain crosslets?',
   ),

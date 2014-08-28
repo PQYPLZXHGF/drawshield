@@ -20,7 +20,7 @@ $charge = array (
   'roman ?letter',
   ),
 
-  'doc' => 'Stuff...',
+  'file' => 'null', // overridden in use
   
   'flags' => array (
     'get_item' => 1,
@@ -36,11 +36,9 @@ if ( $node != null ) {
     $item = '?';
   else 
     $item = strtoupper($item{0});
-  $charge['height'] = 44;
-  $charge['width'] = 25;
-  $charge['body'] = '<text stroke="none" x="12.5" y="44" text-anchor="middle" font-size="44" font-family="serif">' .
-        $item . '</text>';
+  $charge['svgCode'] = '<svg height="44" width="25"><text stroke="none" x="12.5" y="44" text-anchor="middle" font-size="44" font-family="serif">' .
+        $item . '</text></svg>';
 
 }
 
-?>
+

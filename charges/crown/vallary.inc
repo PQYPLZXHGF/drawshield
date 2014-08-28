@@ -13,6 +13,7 @@
      limitations under the License. */
 
 $charge = array ( 
+  'link' => 'http://karlwilcox.com/parker/v/vallary',
   'patterns' => array (
   'vallary? (crown|coronet)s?',
   '(crown|coronet)s? vallary?',

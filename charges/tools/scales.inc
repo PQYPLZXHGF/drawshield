@@ -15,9 +15,11 @@
 // scales
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/s/scales',
  'patterns' => array (
     'balances?',
     '?set ?of scales?',
   ),
+	'file' => 'inkscape/balance.svg',
 );
 ?>

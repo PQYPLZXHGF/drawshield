@@ -17,9 +17,28 @@ $charge = array (
   'lions? heads?',
   'leopards? heads?'
   ),
+  'modifiers' => array (
+    /* Features */
+    array ( 'armed', 'armed', 'feature' ),
+    array ( 'langued', 'langued', 'feature' ),
+    array ( 'crowned', 'crowned', 'feature' ),
+    /* facing direction */
+    array ( 'guardant', 'guardant', 'mod', 'head-pos' ),
+    array ( 'reguardant', 'reguardant', 'mod', 'head-pos' ),
+  ),
 
   'file' => 'inkscape/lion-head.svg',
 );
 
+if ($node != null ) {
+    /* Try to get the most specific lion */
+	$head_pos = (get_mod($node, 'head-pos'));
+    if ( $head_pos  == "guardant" )
+      $charge['file'] = "inkscape/lion-head-guardant.svg";
+    elseif ( $head_pos == 'reguardant')
+      $charge['file'] = "inkscape/lion-head-reguardant.svg";
+    elseif ( has_feature($node, 'crowned' ))
+		$charge['file'] = 'inkscape/lion-head-crowned.svg';
+  }
 
-?>
+

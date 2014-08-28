@@ -16,13 +16,14 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/f/flames',
   'patterns' => array (
   'flames? ?of ?fire',
   ),
 
   'doc' => 'Stuff...',
 
-  'proper' => '#e21313',
+  'proper' => rgb('gules'),
   'orient_to_ordinary' => false,
   'file' => 'inkscape/fire.svg',
   'hflex' => 2,

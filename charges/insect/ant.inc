@@ -15,6 +15,7 @@
 // ant
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/a/ant',
  'patterns' => array (
     'ants?',
   ),

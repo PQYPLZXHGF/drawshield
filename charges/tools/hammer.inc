@@ -15,8 +15,10 @@
 // hammer
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/h/hammer',
  'patterns' => array (
     'hammers?',
   ),
+  'file' => 'inkscape/hammer.svg',
 );
-?>
+

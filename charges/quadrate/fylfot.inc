@@ -16,6 +16,7 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/f/fylfot',
   'patterns' => array (
   'cross(es)? potent rebated',
   'cross(es)? gammadions?',

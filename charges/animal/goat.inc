@@ -15,8 +15,13 @@
 // goat
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/g/goat',
  'patterns' => array (
     'goats?',
   ),
+  'modifiers' => array (
+    array ( 'horned', 'horn(s|ed)?', 'feature' ),
+  ),
+  'file' => 'inkscape/goat.svg',
 );
 ?>

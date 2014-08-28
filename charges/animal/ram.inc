@@ -1,53 +1,52 @@
-<?php /* Copyright 2011 Karl R. Wilcox 
-  
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-  
-         http://www.apache.org/licenses/LICENSE-2.0
-  
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License. */
+<?php
+/**
+ * Drawshield PHP Source File
+ *
+ * Description...
+ *
+ * @author Karl R. Wilcox <karl@karlwilcox.com>
+ * @copyright Karl R. Wilcox 2014
+ * @license http://www.apache.org/licenses/LICENSE-2.0
+ * Date: 12/08/14
+ * Time: 18:50
+ */
 
-$charge = array ( 
-  'patterns' => array (
-  'rams?',
+$charge = array(
+'file' => 'inkscape/ram.svg',
+  'link' => 'http://karlwilcox.com/parker/r/ram',
+'patterns' => array (
+  0 => 'rams?',
+),
+'modifiers' => array (
+  0 => 
+  array (
+    0 => 'armed',
+    1 => 'armed',
+    2 => 'feature',
   ),
-
-  'modifiers' => array (
-    array ( 'armed', 'armed', 'feature' ),
-    array ( 'armed', '(u|o)nguled', 'feature' ),
-    array ( null, 'statant', 'ignore' ), // TODO ram statant
-    array ( null, 'rampant', 'ignore' ), // TODO ram rampant
-    array ( null, 'passant', 'ignore', ) // This is the one below
-   ),
-
-   'licence' => 'by http://commons.wikimedia.org/wiki/User:-Strogoff-',
-  'height' => 660, 'width' => 600,
-    'body' => '
-      <path stroke="inherit" stroke-width="3.69" d="m 176,548 27,5 c -5,-16 11,-23 6,-33 -9,-22 -15,-70 -10,-86 13,-15 33,-32 53,-43 l 18,-7 c 0,-13 -1,-24 -8,-32 -16,-10 -35,-22 -53,6 -14,26 -30,45 -52,55 -7,4 1,30 1,56 0,20 -2,41 -5,61 11,1 18,7 23,18 z" />
-      <path stroke="inherit" stroke-width="3.696" d="m 418,284 c -35,27 -64,60 -59,91 1,26 8,58 33,71 15,8 4,2 14,21 -14,22 -20,44 -32,63 10,3 3,10 -1,17 l 26,10 c 8,-7 14,-22 25,-17 -4,-43 31,-100 36,-109 -7,-10 -12,-13 -14,-19 -17,-36 16,-45 46,-53 -11,-39 -32,-72 -74,-75 z" />
-      <path stroke="inherit" stroke-width="3.69" d="m 137,108 c -11,1 -20,3 -29,6 -5,2 -7,4 -8.7,6 l -25.8,39 c -13.6,22 -28.3,44 -30.8,61 -3.7,15 6.2,28 17.2,33 13.6,-6 24.6,-14 30.8,-28 4.9,10 0,21 -14.8,33 -4.9,4 -18.4,9 4.9,11 9.9,0 34.2,-26 54.2,-33 4,10 4,21 -1,36 0,11 -35.9,38 -37.2,62 0,24 0,48 23.2,64 l 0,0 c -1,8 1,14 -3,13 -27.5,0 -68.1,-3 -76.7,14 -7.4,28 -14.8,60 -24.6,82 12.3,3 19.6,12 23.3,24 l 22.2,-14 c 0,-20 0,-40 8.6,-62 9.8,-9 58.2,-10 88.2,-11 10,1 14,-14 16,-28 2,-5 2,-10 3,-14 l -3,14 0,3 c 21,15 48,9 75,2 31,-9 63,-31 115,-42 35,-4 55,5 66,19 9,10 1,18 9,24 43,1 58,1 75,22 10,18 11,69 7,103 l 32,11 c 1,-21 22,-7 28,-14 -12,-30 -29,-59 -32,-98 0,-17 5,-45 -4,-52 -5,-4 -14,-9 -24,-12 -18,-14 -11,-49 -8,-61 1,-7 3,-42 -13,-52 l -8,-1 c 18,4 19,15 28,37 9,18 22,11 16,-20 -6,-21 -18,-58 -58,-61 -60,-1 -96,21 -133,21 -42,0 -86,-18 -102,-35 -16,-17 -27,-53 -35,-66 -10,-15 -36,-31 -61,-35 -3,-1 -7,-1 -10,-1 z m -14,284 -3,6 c 0,-2 0,-4 3,-6 z" />
-      <path fill="#000000" stroke="inherit" stroke-width="1.23px" d="m 69.8,179 c 7.4,-1 14.7,0 19.7,8 0,-12 4.9,-22 12.5,-33 -10.1,7 -19.9,16 -32.2,25 z" />
-      ',
-    'features' => array (
-            'armed' => array (
-        'body' => '
-        <path stroke="inherit" stroke-width="3.69" d="M 99.3,120 C 118,41.7 183,33.1 226,46.6 c 17,5 37,20.9 49,38.2 30,40.2 20,92.2 -22,134.2 -16,16 -39,23 -63,22 -12,-1 -24,-5 -34,-10 -19,-10 -28,-28 -32,-48 -5,-28 9,-40 34,-50 9,-4 16,0 19,8 -5,2 -9,3 -13,4 -6,3 -11,6 -15,11 -5,6 -5,20 0,30 -4,1 -8,0 -13,-4 5,4 9,5 13,4 l 8,12 c -6,1 -12,1 -18,0 6,1 12,1 18,0 4,4 7,6 12,9 -5,3 -11,6 -17,8 6,-2 12,-5 17,-8 7,1 11,2 19,2 -6,6 -12,9 -20,14 8,-5 14,-8 20,-14 2,-1 2,-1 7,-1 -1,6 -5,12 -10,17 5,-5 9,-11 10,-17 5,-1 10,-4 15,-6 2,9 -1,16 -7,23 6,-7 9,-14 7,-23 5,-3 9,-5 12,-8 4,13 5,17 -1,25 6,-8 5,-12 1,-25 5,-5 9,-8 13,-13 11,10 9,18 9,28 0,-9 0,-20 -9,-28 3,-4 5,-9 5,-14 4,-2 12,1 23,19 -11,-18 -19,-21 -23,-19 0,-6 0,-10 0,-16 11,0 20,0 28,5 -8,-5 -17,-5 -28,-5 0,-3 -3,-10 -5,-13 12,-8 23,-10 37,-5 -14,-5 -25,-3 -37,5 -3,-5 -5,-10 -9,-14 11,-11 21,-21 37,-18 -16,-2 -26,7 -37,18 -4,-4 -9,-7 -15,-11 9,-15.9 21,-24.5 37,-28.2 -15,3.7 -28,12.3 -37,28.2 -5,-2 -10,-5 -16,-5 -2,-14.6 8,-28.2 26,-41.7 -18,13.5 -28,27.1 -26,41.7 -10,-1 -13,-1 -16,0 -7,-12.2 -6,-24.5 0,-36.8 -6,12.3 -7,24.6 0,36.8 -7,1 -12,5 -16,11 -14,-12 -14,-26.9 -13,-41.6 -1,14.7 0,29.6 13,41.6 -2,3 -5,6 -7,10 -17,-5 -37,-9 -56.7,-9 z" />
-      ',
-             'unguled' => array (
-         'colour' => '#000000',
-         'body' => '
-      <path stroke="inherit" stroke-width="3.69" d="m 180,547 c -17,8 -27,22 -28,42 l 51,1 c 3,-12 6,-24 1,-35 -3,-7 -14,-13 -24,-8 z" />
-      <path stroke="inherit" stroke-width="3.696" d="m 373,545 c -16,9 -26,25 -29,46 l 50,0 c 3,-12 10,-26 6,-37 -3,-6 -16,-13 -27,-9 z" />
-      <path stroke="inherit" stroke-width="3.69" d="m 37.8,531 c 1.2,19 13.5,38 32,48 l 20.9,-44 c -9.9,-9 -18.5,-18 -30.8,-18 -6.1,0 -20.9,3 -22.1,14 z" />
-      <path stroke="inherit" stroke-width="3.69" d="m 525,545 c -17,8 -27,24 -28,45 l 50,0 c 2,-13 9,-24 4,-35 -3,-7 -16,-14 -26,-10 z" />
-         ',),
-   
-   ),
-      ),
-  );
-?>
+  1 => 
+  array (
+    0 => 'armed',
+    1 => '(u|o)nguled',
+    2 => 'feature',
+  ),
+  2 => 
+  array (
+    0 => NULL,
+    1 => 'statant',
+    2 => 'ignore',
+  ),
+  3 => 
+  array (
+    0 => NULL,
+    1 => 'rampant',
+    2 => 'ignore',
+  ),
+  4 => 
+  array (
+    0 => NULL,
+    1 => 'passant',
+    2 => 'ignore',
+  ),
+),
+);

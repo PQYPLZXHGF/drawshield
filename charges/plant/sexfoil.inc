@@ -16,8 +16,9 @@
 
 $charge = array (
  'patterns' => array (
-    'sexfoils?',
+    's[ie]xfoils?',
     'angennes?',
   ),
+  'file' => 'inkscape/sixfoil.svg',
 );
-?>
+

@@ -15,6 +15,7 @@
 // dragon
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/s/snail',
  'patterns' => array (
     'snails?',
   ),

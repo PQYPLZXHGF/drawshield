@@ -13,6 +13,7 @@
    limitations under the License. */
 
 $ordinary = array (
+  'link' => 'http://karlwilcox.com/parker/t/tierce',
   'patterns' => array (
     'tierce',
   ), 

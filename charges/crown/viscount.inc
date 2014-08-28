@@ -13,6 +13,7 @@
      limitations under the License. */
 
 $charge = array ( 
+  'link' => 'http://karlwilcox.com/parker/v/viscount',
   'patterns' => array (
   'viscounts? (crown|coronet)s?',
   ),

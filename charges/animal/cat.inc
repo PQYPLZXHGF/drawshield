@@ -15,8 +15,9 @@
 // cat
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/cat',
  'patterns' => array (
-    'cat ?a ?mountain',
+    'cats? ?a ?mountain',
   ),
 );
 ?>

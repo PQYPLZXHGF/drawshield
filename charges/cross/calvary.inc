@@ -16,20 +16,25 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/c/cross/calvary',
   'patterns' => array (
   'cross(es)? calvary',
   'calvary cross(es)?'
   ),
-  
+
+  'modifiers' => array (
+    array ( null, '?mounted on # (degree|step|ascent|grice|griece)s?', 'mod', 'mounted' ),
+    array ( null, '(on|with) a grie?ce of # steps?', 'mod', 'mounted' ),
+  ),
+
   'either' => array ( 'cross', ),
 
-  'doc' => 'Stuff...',
-
-  'height' => 400,
-  'width' => 200,
-  'body' => '<path d="M{START},0h25v100h75v50h-75v250h-50v-250h-75v-50h75v-100z" stroke="#000000" stroke-width="4" />',
-
+  'file' => 'inkscape/patriarchal.svg',
 );
-include ('charges/cross/_addsteps.inc');
 
-?>
+if ( $node != null ) {
+  if  ( $num = get_mod($node,'mounted') ) {
+    if ($num > 9) $num = 9;
+    $charge['file'] = "inkscape/calvary-$num.svg";
+  }
+}

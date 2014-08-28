@@ -15,6 +15,7 @@
 // butterfly
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/b/butterfly',
  'patterns' => array (
     'butterfl(y|ies)',
   ),

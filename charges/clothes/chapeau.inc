@@ -15,6 +15,7 @@
 // chapeau
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/chapeau',
  'patterns' => array (
     '(chapeaux?|capelots?)',
   ),

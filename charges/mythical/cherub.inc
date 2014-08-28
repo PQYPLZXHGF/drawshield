@@ -15,6 +15,7 @@
 // cherub
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/cherub',
  'patterns' => array (
     'cherubs?',
   ),

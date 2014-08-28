@@ -163,6 +163,7 @@ function PlaceCharge ( $node,  // images
   $charge = getCharge( $node );
   $orientation = null;
   $tincture = null;
+  // TODO also populate same from modifier if present? or remove 'entire' processing from rewriter and put here?
   $Xflex = array_key_exists('wflex', $charge) ? $charge['wflex'] : 1;
   $Yflex = array_key_exists('hflex', $charge) ? $charge['hflex'] : 1;
 //  $parent = $node->parentNode;
@@ -220,7 +221,7 @@ function PlaceCharge ( $node,  // images
     $retval = "<g transform=\"translate($chargeX,0) scale(-1,1)\"><desc>reversed charge</desc>$retval</g>\n";
   }
   if ( $orientation ) {
-    $rotation = 0; // An explicit charge orientation overrides a rotation from the arrangment
+    $rotation = 0; // An explicit charge orientation overrides a rotation from the arrangement
     switch ( $orientation ) {
       case 'fesswise':
         $do_turn = $chargeY > $chargeX;
@@ -385,6 +386,7 @@ function calcPlace( $type, $number, $conjoined = 'false', $bb = '100,100,800,900
       break;
   }
 
+  if ( $number < 1 ) $number = 1; // Fixes bug elsewhere?
   $placement = str_repeat('x/', $number-1);
   $space_pct = 0.2;
   $max_row = max($row_list);
@@ -411,7 +413,7 @@ function calcPlace( $type, $number, $conjoined = 'false', $bb = '100,100,800,900
     // Calculate the charge bounding box (same size for all)
     $vert_gap = ($num_rows == 1) ? 0 : ($bb_h * $space_pct) / ($num_rows-1);
     $cbb_height = ($num_rows == 1) ? $bb_h : ($bb_h * (1-$space_pct)) / $num_rows;
-    $cbb_width = ($max_row == 1 ) ? $bb_w : ($bb_w * (1-$space_pct)) / $max_row;
+    $cbb_width = ($max_row <= 1 ) ? $bb_w : ($bb_w * (1-$space_pct)) / $max_row;
     $horiz_gap = ($bb_w * $space_pct) / max(1,($max_row - 1));
     for ( $i = 0; $i < $num_rows; $i++ ) {
       $centre_y = $bb_y + (($cbb_height + $vert_gap) * $i) + ($cbb_height / 2);
@@ -428,4 +430,3 @@ function calcPlace( $type, $number, $conjoined = 'false', $bb = '100,100,800,900
   }
   return $placement;
 }
-?>

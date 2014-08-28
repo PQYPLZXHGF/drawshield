@@ -15,6 +15,7 @@
 // badger
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/b/badger',
  'patterns' => array (
     'badgers?|brocks?|grays?',
   ),
@@ -25,8 +26,8 @@ $charge = array (
  
  'file' => 'inkscape/badger.svg',
  
- 'proper' => 'gray',
+ 'proper' => rgb('gray'),
  'hflex' => 1.5,
  'wflex' => 1.2,
 );
-?>
+

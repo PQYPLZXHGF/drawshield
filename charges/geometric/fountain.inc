@@ -16,13 +16,14 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/f/fountain',
   'patterns' => array (
   'fountains?',
   ),
   'modifiers' => array (
     array ( NULL, 'barry wavy of # argent ?and azure', 'ignore',    ),
   ),
-  'default_colour' => false,
+  'always_proper' => true,
 
   'doc' => 'Stuff...',
   

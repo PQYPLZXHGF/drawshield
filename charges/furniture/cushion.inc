@@ -15,6 +15,7 @@
 // cushion
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/cushion',
  'patterns' => array (
     'cushions?',
   ),

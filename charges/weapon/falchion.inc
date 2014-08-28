@@ -16,6 +16,7 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/f/falchion',
   'patterns' => array (
   'falchions?',
   ),

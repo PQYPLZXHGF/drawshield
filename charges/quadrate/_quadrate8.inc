@@ -23,74 +23,20 @@ $charge['modifiers'] = array (
     array ( null, 'ringed', 'warn', 'ringed' ),
 );
 
+$charge['file'] = 'inkscape/compass-rose.svg'; // Overridden by code
+
 if ( $node != null ) {
-  $fitchy = get_mod($node,'fitchy');
-  $voided = get_mod($node,'voided');
-  $pierced = get_mod($node,'pierced');
-  $fimbriated = get_mod_node($node,'fimbriated');
-  if ( !isset($main ) ) {
-    draw_message('internal',"No Cross of type $crossType" );
-  } else {
-    if ( !isset($size) ) $size = 100;
-    if ( !isset($start) ) $start = 100;
-    if ( !isset($voidStart) ) $voidStart = 70;
-    if ( !isset($void) ) $void = 'h5v65';
-    if ( !isset($pierce) ) $pierce = 'c 4.566474,0.144509 5.1445087,0.144509 7.6011561,2.83237';
-    if ( !isset($pierceStart) ) $pierceStart = 10;
-    if ( !isset($fitch) ) $fitch = 'v60l-10,30'; // standard fitchy, 20 wide, 100 high
-    if ( !isset($foot) ) $foot = 'x';
-    if ( !isset($mirror) ) $mirror = reversePath(mirrorPath($main,'y'));
-    $path = $main;
-    $path .= rotatePath($mirror,90);
-    $path .= rotatePath($main,90);
-    if ( ($fitchy == 'foot') && ($foot != 'x') ) {
-      $path .= $foot;
-      $path .= reversePath(mirrorPath($foot,'y'));
-    } elseif ( ($fitchy) && ($fitch != 'x') ) {
-      $path .= $fitch;
-      $path .= reversePath(mirrorPath($fitch,'y'));
-    } else {
-      $path .= rotatePath($mirror,180);
-      $path .= rotatePath($main,180);
-    }
-    $path .= rotatePath($mirror,270);
-    $path .= rotatePath($main,270);
-    $path .= $mirror;
-    $path = 'm' . $size . ',' . ($size - $start) . $path . ((isset($separate))? '' : 'z');
-    if ( $pierced ) {
-      if ( $pierce != 'x' ) {
-        $pierceMirror = reversePath(mirrorPath($pierce,'y'));
-        $piercepath = $pierce;
-        $piercepath .= rotatePath($pierceMirror,90);
-        $piercepath .= rotatePath($pierce,90);
-        $piercepath .= rotatePath($pierceMirror,180);
-        $piercepath .= rotatePath($pierce,180);
-        $piercepath .= rotatePath($pierceMirror,270);
-        $piercepath .= rotatePath($pierce,270);
-        $piercepath .= $pierceMirror;
-        $path .= ' M' . $size . ',' . ($size - $pierceStart) . reversePath($piercepath) . 'z';
-      } else
-        draw_message('warning','Cannot draw cross pierced' );
-    }
-    elseif ( $voided ) {
-      if ( $void != 'x' ) {
-        $voidMirror = reversePath(mirrorPath($void,'y'));
-        $voidpath = $void;
-        $voidpath .= rotatePath($voidMirror,90);
-        $voidpath .= rotatePath($void,90);
-        $voidpath .= rotatePath($voidMirror,180);
-        $voidpath .= rotatePath($void,180);
-        $voidpath .= rotatePath($voidMirror,270);
-        $voidpath .= rotatePath($void,270);
-        $voidpath .= $voidMirror;
-        $path .= ' M' . $size . ',' . ($size - $voidStart) . reversePath($voidpath) . 'z';
-      } else
-        draw_message('warning','Cannot draw cross voided' );
-    }
-	  $stroke = ( $fimbriated ) ? 'stroke="' . get_rgb( get_tincture($fimbriated) ) . '" stroke-width="4"' : '';
-    $charge['height'] = $size * 2;
-    $charge['width'] = $size * 2;
-    $charge['body'] = "<path $stroke d=\"$path\" />";
-  }
+  $cross = $node->getAttribute('subtype');
+  $path = 'charges/' . $node->getAttribute('type');
+  // Careful of the order here, first match wins!
+  $filename = "inkscape/$cross.svg";
+  if (get_mod($node,'fitchy') == 'foot' and file_exists($path . "/inkscape/$cross-fitchy-foot.svg"))
+    $filename = "inkscape/$cross-fitchy-foot.svg";
+  elseif (get_mod($node,'fitchy') and file_exists($path . "/inkscape/$cross-fitchy.svg"))
+  $filename = "inkscape/$cross-fitchy.svg";
+  elseif (get_mod($node,'voided') and file_exists($path . "/inkscape/$cross-voided.svg"))
+    $filename = "inkscape/$cross-voided.svg";
+  elseif (get_mod($node,'pierced') and file_exists($path . "/inkscape/$cross-pierced.svg"))
+    $filename = "inkscape/$cross-pierced.svg";
+  $charge['file'] = $filename;
 }
-?>

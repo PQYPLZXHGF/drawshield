@@ -16,6 +16,7 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/d/dagger',
   'patterns' => array (
   '?rondel daggers?',
   'dirks?',

@@ -15,6 +15,7 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/s/seax',
   'patterns' => array (
   'seaxe?s?',
   ),

@@ -1,37 +1,23 @@
-<?php /* Copyright 2010 Karl R. Wilcox
+<?php
+/**
+ * Drawshield PHP Source File
+ *
+ * Description...
+ *
+ * @author Karl R. Wilcox <karl@karlwilcox.com>
+ * @copyright Karl R. Wilcox 2014
+ * @license http://www.apache.org/licenses/LICENSE-2.0
+ * Date: 12/08/14
+ * Time: 18:50
+ */
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License. */
-
-// roundel
-
-$charge = array (
-
-  'patterns' => array (
-	  'pommes?' ,
-  ),
-
-  'doc' => 'A Roundel Vert',
-
-  'flags' => array (
-    'always_proper' => true,
-  ),
-
-  'proper' => rgb('vert'),
-
-  'width' => 500,
-  'height' => 500,
-  'body' => '<circle cx="250" cy="250" r="250" />',
-
+$charge = array(
+'file' => 'inkscape/pomme.svg',
+'patterns' => array (
+  0 => 'pommes?',
+),
+'flags' => array (
+  'always_proper' => true,
+),
+'proper' => rgb('vert'),
 );
-
-?>

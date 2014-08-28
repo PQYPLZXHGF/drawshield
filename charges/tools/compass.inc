@@ -16,7 +16,8 @@
 
 $charge = array (
  'patterns' => array (
-    'compass(es?)',
+    'compass(es)?',
   ),
+	'file' => 'inkscape/compass.svg',
 );
 ?>

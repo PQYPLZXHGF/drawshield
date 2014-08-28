@@ -15,6 +15,7 @@
 // cresset
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/cresset',
  'patterns' => array (
     'cressets?',
   ),

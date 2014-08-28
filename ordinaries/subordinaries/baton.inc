@@ -14,6 +14,7 @@
 
 
 $ordinary = array(
+  'link' => 'http://karlwilcox.com/parker/b/baton',
       'patterns' => array (
         '(bas?ton|battoon|batune) ?sinister ?couped',
       ),

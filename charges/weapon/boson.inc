@@ -15,6 +15,7 @@
 // boson
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/b/boson',
  'patterns' => array (
     'b(e|o)sons?',
     'bird bolts?',

@@ -19,5 +19,6 @@ $charge = array (
     'crossbows?',
     'arbalests?',
   ),
+  'file' =>'inkscape/crossbow.svg',
 );
-?>
+

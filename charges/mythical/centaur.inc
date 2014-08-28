@@ -15,8 +15,17 @@
 // centaur
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/centaur',
  'patterns' => array (
-    '(centaurs?|saggitarius|sagittary)',
+    'centaurs?',
+   'saggitarius',
+   'sagittary',
   ),
+
+  'modifiers' => array (
+    array ( 'bow', 'bow(s|ed)?', 'feature'),
+    array ( 'arrow', 'arrow(s|ed)?', 'feature'),
+  ),
+  'file' => 'inkscape/centaur.svg',
 );
-?>
+

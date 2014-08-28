@@ -14,6 +14,7 @@
 
 
 $ordinary = array(
+  'link' => 'http://karlwilcox.com/parker/i/inescutcheon',
       'patterns' => array (
         'inescut?cheon',
       ),

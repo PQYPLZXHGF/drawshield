@@ -36,6 +36,7 @@ function makeDiv_chevronny( $node, $div_num ) {
     $startYC = 1200 - ( $i * 2 * $stepVC );
     $CH .= "V1X500Y{$startYC}D848f{$widthC}H{$upperC}B{$upperC}d{$widthC}F848     ";
   }
+  draw_message('link', 'chevronny http://karlwilcox.com/parker/c/chevronny');
   return compact ( 'CH', 'NC' );
 }
-?>
+

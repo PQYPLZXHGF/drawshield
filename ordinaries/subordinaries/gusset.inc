@@ -14,6 +14,7 @@
 
 
 $ordinary = array(
+  'link' => 'http://karlwilcox.com/parker/g/gusset',
       'patterns' => array (
         'gussets?',
       ),

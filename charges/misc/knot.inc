@@ -20,5 +20,6 @@ $charge = array (
     'harrington knots?',
     'heanage knots?',
   ),
+	'file' => 'inkscape/knot.svg',
 );
 ?>

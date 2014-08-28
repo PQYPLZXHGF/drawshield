@@ -18,5 +18,6 @@ $charge = array (
  'patterns' => array (
     'ankhs?',
   ),
+  'file' => 'inkscape/ankh.svg',
 );
 ?>

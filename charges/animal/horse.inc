@@ -15,6 +15,7 @@
 // horse
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/h/horse',
  'patterns' => array (
     'horses?',
   ),

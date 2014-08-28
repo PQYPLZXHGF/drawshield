@@ -15,9 +15,15 @@
 // fasces
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/f/fasces',
  'patterns' => array (
     'fasces',
   ),
-  'doc' => "lictors axe in a bundle of rods",
+
+  'features' => array (
+    array ( 'axe', '?with axes?', 'feature' ),
+  ),
+
+  'file' => 'inkscape/fasces.svg',
 );
 ?>

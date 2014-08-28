@@ -198,6 +198,7 @@ function parse() {
   if ( ($overall = overall()) != null )
     $node->appendChild($overall);
   
+  // TODO Something is setting this incorrectly (see test below)
   foreach ( $pending_items as $item ) {
     $item->setAttribute('origin','missing');
     parser_message('blazon', 'Tincture missing');

@@ -15,6 +15,7 @@
 // fan
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/f/fan',
  'patterns' => array (
     'ladies fans?',
     'winnowing fans?',

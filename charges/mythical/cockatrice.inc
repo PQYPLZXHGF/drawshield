@@ -15,9 +15,11 @@
 // cockatrice
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/cockatrice',
  'patterns' => array (
     '?amphisien cockatrices?',
     'basilisks?',
+   'amphipteres?',
   ),
 
  'modifiers' => array (

@@ -15,6 +15,7 @@
 // eagle
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/e/eagle',
  'patterns' => array (
     'eagles?',
     'all?erions?',

@@ -15,9 +15,11 @@
 // gorge
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/g/gorge',
  'patterns' => array (
     'g(o|u)rges?',
+   'whirlpools?',
   ),
-  'doc' => "whirlpool",
+  'file' => 'inkscape/whirlpool.svg',
 );
-?>
+

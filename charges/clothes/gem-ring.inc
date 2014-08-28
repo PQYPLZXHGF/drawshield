@@ -15,6 +15,7 @@
 // gem-ring
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/g/gem-ring',
  'patterns' => array (
     'gem rings?',
   ),

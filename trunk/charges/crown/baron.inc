@@ -13,6 +13,7 @@
      limitations under the License. */
 
 $charge = array ( 
+  'link' => 'http://karlwilcox.com/parker/b/baron',
   'patterns' => array (
   'barons? (crown|coronet)s?',
   ),

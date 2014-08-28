@@ -15,8 +15,10 @@
 // catherine-wheel
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/catherine-wheel',
  'patterns' => array (
-    'catherine wheels?',
+    '[kc]atherine wheels?',
   ),
+  'file' => 'inkscape/catherine-wheel.svg'
 );
-?>
+

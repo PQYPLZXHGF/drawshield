@@ -15,8 +15,13 @@
 // cannon
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/cannon',
  'patterns' => array (
     'cannons?',
+   'guns?',
+   'field pieces?',
+   'chambers? ?pieces?',
   ),
+  'file' => 'inkscape/cannon.svg',
 );
-?>
+

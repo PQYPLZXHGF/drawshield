@@ -29,8 +29,8 @@
     <form action="POST" id="myform">
       <table style="width:600px" summary="shield table">
         <tr>
-          <td rowspan="3" style="width: 459px; text-align:center">
-            <textarea name="blazon" rows="5" cols="50"></textarea>
+          <td rowspan="4" style="width: 459px; text-align:center">
+            <textarea name="blazon" rows="6" cols="50"></textarea>
           </td>
           <td style="width: 81px">
             <input type="button" name="createbutton" value="Create!" style="width: 90px"/>
@@ -60,6 +60,11 @@
           </td>
         </tr>
         <tr>
+          <td style="width: 90px">
+            <input type="button" name="printbutton" value="Print" style="width: 90px"/>
+          </td>
+        </tr>
+        <tr>
           <td style="text-align:center" colspan="2">
             <div id="shieldimg">
             </div>
@@ -84,7 +89,7 @@
     <script type="text/javascript">
       //<![CDATA[
       var xmlhttp = new XMLHttpRequest();
-      var incDir = '/include/';
+      var incDir = '/drawshield2';
       var asText;
       var useId;
       function showerrors(evt) {
@@ -133,14 +138,17 @@
         shieldCaption.firstChild.nodeValue= document.forms['myform'].blazon.value;
         choice = document.forms['myform'].format.options.selectedIndex;
         format = document.forms['myform'].format.options[choice].value;
-        requestSVG( incDir + '<?php echo $basedir; ?>/drawshield.php?nolog=1&format=' + format + '&blazon=' + encodeURIComponent(document.forms['myform'].blazon.value),'shieldimg');
+        requestSVG( incDir + '/drawshield.php?highlight=1&nolog=1&format=' + format + '&blazon=' + encodeURIComponent(document.forms['myform'].blazon.value),'shieldimg');
       };
       document.forms['myform'].textbutton.onclick = function () {
-        window.location.replace( incDir + '<?php echo $basedir; ?>/drawshield.php?asfile=1&nolog=1&blazon=' + encodeURIComponent(document.forms['myform'].blazon.value));
+        window.location.replace( incDir + '/drawshield.php?asfile=1&nolog=1&blazon=' + encodeURIComponent(document.forms['myform'].blazon.value));
       };
       document.forms['myform'].searchbutton.onclick = function () {
-        requestSVG( incDir + '<?php echo $basedir; ?>/dbquery.php?term=' + encodeURIComponent(document.forms['myform'].searchterm.value),'resultstable');
+        requestSVG( incDir + '/dbquery.php?term=' + encodeURIComponent(document.forms['myform'].searchterm.value),'resultstable');
       };
+      document.forms['myform'].printbutton.onclick = function () {
+        window.open(incDir + '/drawshield.php?palette=nocolour&printable=1&nolog=1&size=1000&blazon=' + encodeURIComponent(document.forms['myform'].blazon.value),'_blank');
+      }
     function cloneToDoc(node,doc){
       if (!doc) doc=document;
       var clone = doc.createElementNS(node.namespaceURI,node.nodeName);
@@ -158,7 +166,7 @@
       return clone;
     }
     // Run automatically
-    window.onload=requestSVG( incDir + '<?php echo $basedir; ?>/drawshield.php?nolog=1&blazon=','shieldimg');
+    window.onload=requestSVG( incDir + '/drawshield.php?nolog=1&blazon=','shieldimg');
  //]]>
 </script>
 </body>

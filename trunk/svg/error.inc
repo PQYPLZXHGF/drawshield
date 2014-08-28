@@ -20,36 +20,14 @@ function draw_message( $category, $message, $filename = null, $line = null ) {
 
   if (! array_key_exists($category, $message_list)) $message_list[$category] = array();
 	foreach ( $message_list[$category] as $item )
-	  if ( $item['message'] == $message )
+	  if ( strcmp ( $item['message'], $message ) === 0)
 		  return; // ignore duplicate messages
 
   $message_list[$category][] = compact ( 'message', 'filename', 'line');
 }
 
-function format($string) {
-  $lines = array();
-  $line_count = 0;
-  $length = 0;
-  $lines[0] = '';
-
-  $words = explode(' ',$string);
-  foreach($words as $word) {
-    $lines[$line_count] .= $word . ' ';
-    $length += strlen($word) + 1;
-    if ( $length > 65 ) {
-      $line_count += 1;
-      $lines[$line_count] = '';
-      $length = 0;
-    }
-  }
-
-  return $lines;
-}
-
-function get_error_messages() {
-  global $message_list, $dom, $time_start;
-  $yCount = 0;
-  $retval = '';
+function get_error_messages(infobox $infobox) {
+  global $message_list, $dom, $options;
 
   // First, gather any parser messages
   $parser_messages = $dom->documentElement->lastChild;
@@ -58,73 +36,75 @@ function get_error_messages() {
       draw_message($message->getAttribute('category'), $message->firstChild->wholeText);
     }
   }
-  draw_message('information', 'Blazon - ' . $dom->documentElement->getAttribute('blazonText'));
 
-/*  $time_end = microtime(true);
-  $time = $time_end - $time_start;
-  draw_message('information', sprintf ( "Elapsed time %.4f seconds", $time) ); */
-
-
-//  if ( count($message_list) < 1 ) return null;
+  $warnings = array();
+  $errors = array();
+  $credits = array();
+  $other = array();
+  $builtins = array();
   $notify = false;
+  $links = array();
   foreach ( $message_list as $key => $messages ) {
     switch ( $key ) {
       case 'warning':
-        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="orange" >Warnings:' . "</text>\n";
+        foreach ( $messages as $message )
+          $warnings[] = $message['message'];
         $notify = true;
         break;
       case 'blazon':
-        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="red" >Blazon Problems:' . "</text>\n";
+        foreach ( $messages as $message )
+          $errors[] = $message['message'];
         $notify = true;
         break;
       case 'internal':
-        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="red" >Internal Errors:' . "</text>\n";
+        foreach ( $messages as $message )
+          $errors[] = '(Internal) ' . $message['message'];
         $notify = true;
         break;
       case 'licence':
-        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="black" >Image Credits:' . "</text>\n";
+        foreach ( $messages as $message )
+          $credits[] = $message['message'];
         break;
-      case 'information':
-        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="black" >Drawshield Information:' . "</text>\n";
+      case 'builtin':
+        foreach ( $messages as $message )
+          $builtins[] = $message['message'];
+        break;
+      case 'link':
+        foreach ( $messages as $message )
+          $links[] = $message['message'];
         break;
       default:
-        $retval .= '<text x="10" y="' . ($yCount += 30) . '" text-decoration="underline" font-size="30" fill="black" >' . $key . "</text>\n";
+        foreach ( $messages as $message )
+          $other[] = $message['message'];
         break;
     }
-    foreach ( $messages as $message_item ) {
-      $text = $message_item['message'];
-      /* if ( $message_item['filename'] != null ) {
-        $text .= " (${message_item['filename']}";
-        if ( $message_item['line'] != null )
-          $text .= ":${message_item['line']}";
-        $text .= ')'; 
-      }*/
-      $formatted = format($text);
-      foreach($formatted as $line) {
-        $retval .= '<text x="10" y="' . ($yCount += 30) . '" font-size="30" fill="black" >' . htmlspecialchars($line) . "</text>\n";
-      }
-    }
   }
-  $showinfo = '
-  window.showinfo = function() {
-  var infobox = document.getElementById("infotext");
-  if ( infobox.getAttribute("visibility") == "hidden" ) {
-    infobox.setAttribute("visibility","visible");
-  } else {
-    infobox.setAttribute("visibility","hidden");
+  $options['notify'] = $notify;
+  $infobox->setTab(1,'Blazon');
+  $infobox->addText(1,ucfirst($dom->documentElement->getAttribute('blazonText')));
+  if (count($builtins)) {
+    $infobox->addHeader(1,"Referenced Blazons:");
+    foreach($builtins as $item) $infobox->addText(1,$item);
   }
-}
-  
-  ';
-  scripts('add', $showinfo );
-  // $retval = '<g onclick="document.getElementById(\'infotext\').setAttribute(\'visibility\',\'hidden\')" id="infotext" visibility="hidden"><rect x="0" y="0" height="' . ($yCount+30) . '" width="1000" fill="rgb(255,255,255)" />' . $retval . '</g>';
-  $retval = '<g id="infotext" visibility="hidden"><rect x="0" y="0" height="' . ($yCount+30) . '" width="1000" fill="rgb(255,255,255)" />' . $retval . '</g>';
-  // $retval .= '<g  onclick="document.getElementById(\'infotext\').setAttribute(\'visibility\',\'visible\')" >';
-  $retval .= '<g  onclick="window.showinfo()" >';
-  if ( $notify) $retval .= '<text fill="red" text-anchor="end" x="990" y="1160" font-size="30">Error reported</text>';
-  $retval .= '<text fill="black" text-anchor="end" x="990" y="1190" font-size="30">Click for information</text>';
-  $retval .= '</g>';
-  return $retval;
+  if (count($errors)) {
+    $infobox->addHeader(1,'Errors:','red');
+    foreach($errors as $item) $infobox->addText(1,$item);
+  }
+  if ( count($warnings)) {
+    $infobox->addHeader(1,'Warnings:','orange');
+    foreach($warnings as $item) $infobox->addText(1,$item);
+  }
+  if ( count($other)) {
+    $infobox->addHeader(1,'Other Notices:','orange');
+    foreach($other as $item) $infobox->addText(1,$item);
+  }
+  if ( count($credits)) {
+    $infobox->addHeader(4,'Image Component Credits:');
+    foreach($credits as $item) $infobox->addText(4,$item);
+  }
+  $infobox->setTab(2,'Links');
+  foreach($links as $item) $infobox->addText(2,$item);
+
 }
 
 
@@ -147,5 +127,3 @@ function get_error_text() {
   }
   return $retval;
 }
-
-?>

@@ -15,6 +15,7 @@
 // mastiff
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/m/mastiff',
  'patterns' => array (
     'alan(d|t)s',
   ),

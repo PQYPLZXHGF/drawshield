@@ -16,20 +16,23 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/c/cross/patriarchal',
   'patterns' => array (
   'cross(es)? patriarchal',
   ),
-  
-  'either' => array ( 'cross', ),
+  'modifiers' => array (
+    array ( null, '?mounted on # (degree|step|ascent|grice|griece)s?', 'mod', 'mounted' ),
+    array ( null, '(on|with) a grie?ce of # steps?', 'mod', 'mounted' ),
+  ),
 
-  'doc' => 'Stuff...',
+'either' => array ( 'cross', ),
 
-  'height' => 400,
-  'width' => 240,
-  'body' => '<path d="M{START},0h20v50h50v40h-50v50h100v40h-100v250h-40v-250h-100v-40h100v-50h-50v-40h50v-50z" stroke="#000000" stroke-width="4" />',
-
+  'file' => 'inkscape/patriarchal.svg',
 );
 
-include('charges/cross/_addsteps.inc');
-
-?>
+if ( $node != null ) {
+  if  ( $num = get_mod($node,'mounted') ) {
+    if ($num > 9) $num = 9;
+    $charge['file'] = "inkscape/patriarchal-$num.svg";
+  }
+}

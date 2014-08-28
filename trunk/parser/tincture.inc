@@ -101,15 +101,18 @@ function tincture2() {
 
   static $treatments = array(
     // Field treatments
-    // 'plumetty', how to draw this one?
     // array ( 'lozengy',      'lozengy',  ), made this back into a division
+	array ( 'plumetty',     'plumetty' ),
     array ( 'annuletty',    'annuletty',    ),
     array ( 'bezanty',      'bezant(y|e)', true ),
     array ( 'billetty',     'billetty',     ),
     array ( 'checky',       '(checky|cheque?y)' ),
+    array ( 'checky9',      '(checky|cheque?y) of (nine|9)' ),
+    array ( 'checky9',      'equipoll?es?' ),
     array ( 'counter-billetty',     '?billetty counter billetty', ),
     array ( 'crusilly',     'crusilly',     ),
     array ( 'estoilly',     'estoilly',    ),
+	array ( 'ermined',      'ermined' ),
     array ( 'fretty',       'fretty',       ),
     array ( 'goutty',       'go?utty',     ),
     array ( 'grillage',     'grillage',     ),
@@ -185,9 +188,11 @@ function tincture2() {
         $newNode->appendChild($child);
         $semyde->appendChild($newNode); // TODO Handle error if no charge found
         $charge = simple_charge( true ); // Do not worry if no number given
+		if ( $charge != null ) {
         $charge->appendChild( make_mod('hflex','1') );  //TODO are flex modifiers used?
         $charge->appendChild( make_mod('wflex','1') );
         $semyde->appendChild($charge);
+		}
         $child = $semyde;
       }
     }
@@ -220,4 +225,3 @@ function tincture2() {
   }
   return $node;
 }
-?>

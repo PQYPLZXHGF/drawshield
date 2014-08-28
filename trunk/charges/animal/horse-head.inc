@@ -18,8 +18,9 @@ $charge = array (
  'patterns' => array (
     '(nag|horse)s? heads?',
   ),
+  'file' => 'inkscape/horse-head.svg',
+
 );
 
-include 'charges/animal/_head.inc';
 
-?>
+

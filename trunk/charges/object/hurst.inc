@@ -15,6 +15,7 @@
 // hurst
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/h/hurst',
  'patterns' => array (
     'hursts?',
   ),

@@ -14,6 +14,7 @@
 
 
 $ordinary = array(
+  'link' => 'http://karlwilcox.com/parker/q/quarter',
       'patterns' => array (
         'quarter',
       ),

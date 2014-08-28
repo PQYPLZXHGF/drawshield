@@ -15,6 +15,7 @@
 // calf
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/calf',
  'patterns' => array (
     'cal(f|ves)',
   ),

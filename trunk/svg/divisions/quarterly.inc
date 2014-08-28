@@ -23,6 +23,7 @@ function makeDiv_quarterly( $node, $div_num ) {
     'quarterly-per-pale' => array ( 'NC' => 'O1Q1X500Y500C800e600g800a600   O1Q1X500Y500G600a600c600e600',  'CH' => 'O1Q1X500Y700c600e600g600a600   O1Q1X500Y700g600a600c600e600' ),
   );
   $name = $node->getAttribute('subtype');
+  draw_message('link', $name . ' ' . 'http://karlwilcox.com/parker/q/quarterly');
 
   return $q_data[$name];
 }

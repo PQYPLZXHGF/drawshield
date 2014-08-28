@@ -15,6 +15,7 @@
 // deer
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/d/deer',
  'patterns' => array (
     'deers?',
   ),

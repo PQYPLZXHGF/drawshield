@@ -14,8 +14,9 @@
 
 
 $ordinary = array(
+  'link' => 'http://karlwilcox.com/parker/b/base',
       'patterns' => array (
-        'base',
+        '?terrace ?in base',
       ),
       
       'doc' => 'Stuff...',

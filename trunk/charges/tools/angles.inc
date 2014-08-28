@@ -15,6 +15,7 @@
 // angles
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/cross/angles',
  'patterns' => array (
     'angles',
   ),

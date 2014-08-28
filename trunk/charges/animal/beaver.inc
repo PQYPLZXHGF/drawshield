@@ -15,6 +15,7 @@
 // beaver
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/b/beaver',
  'patterns' => array (
     'beavers?',
   ),

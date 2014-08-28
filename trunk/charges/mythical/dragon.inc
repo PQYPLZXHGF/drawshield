@@ -15,6 +15,7 @@
 // dragon
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/d/dragon',
  'patterns' => array (
     'dragons?',
   ),
@@ -23,4 +24,4 @@ $charge = array (
 
  
  );
-?>
+

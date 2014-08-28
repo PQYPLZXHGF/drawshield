@@ -55,7 +55,7 @@ var charges = new Array (
 "cross(es) pointed", "cross(es) pomme", "cross(es) gammadion",
 "fleur-de-lys()", "heart", "flame(s) of fire", "heart(s) crowned", "heart(s) flammant",
 "Lion(s) passant", "Lion(s) rampant", "lion(s) statant", "lion(s) salient", "lion(s) sejant", "lion(s) sejant affronte",
-"lion(s) sejant erect",
+"lion(s) sejant erect", "galley",
 "lion(s) couchant", "Cornish Chough", "escallop",
 "thistle", "cinquefoil", "rose", "sword", "trefoil",
 "Addice", "axe", " cauldron", "chalice", "clarion", "gauntlet", "harp", "helm", "horn", "maunche", "mug", "pheon",
@@ -77,7 +77,7 @@ var multis = new Array (
 );
 
 var singles = new Array (
-  "Virgin and child {colour}", "Paschal Lamb {colour}", "sun in his splendor {colour}"
+  "Virgin and child {colour}", "Paschal Lamb {colour}", "sun in his splendor {colour}", "tower triple towered"
 );
 
   var colours = new Array (
@@ -117,7 +117,7 @@ var singles = new Array (
   var lines = new Array (
   "battled-embattled", "dancetty", "dovetailed", "embattled", "engrailed", "indented", "invected",
   "nebuly", "potenty", "raguly", "rayonny", "urdy", "wavy", "angled", "bevilled", "escartelly", "nowy",
-  "arched", "double-arched"
+  "arched", "double-arched", "twigged"
   );
 
   var treatments = new Array (

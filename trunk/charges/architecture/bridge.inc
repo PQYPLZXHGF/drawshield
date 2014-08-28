@@ -15,6 +15,7 @@
 // bridge
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/b/bridge',
  'patterns' => array (
     'bridges?',
   ),

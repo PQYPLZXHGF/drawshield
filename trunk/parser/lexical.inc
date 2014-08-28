@@ -249,7 +249,7 @@ function search_match ( $terms ) {
   $max_word = null;
   foreach ($terms as $term) {
      if ( !is_array($term) or count($term) < 2 ) {
-       parser_message ( 'internal', 'Bad search term ' . $term[0] );
+       parser_message ( 'internal', 'Bad search term ' . $term[0] . ' ' . $term );
        return null;
      }
      if ( ( $count = check_match($term[1])) ) {

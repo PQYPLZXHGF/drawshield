@@ -57,7 +57,7 @@ function adjacent(&$node, $found_between = false) {
 function bundle ( &$node ) {
   static $bundle_words = array (
     array ( 'bundle', '(sheaf|sheave|bundle|tuft)s?', 3 ),
-    array ( 'bundle', 'pair', 2), // just to demonstrate different defaults really....
+    array ( 'pair', 'pairs?', 2), // just to demonstrate different defaults really....
   );
   static $of_words = array (
     array ( true, 'of', ),

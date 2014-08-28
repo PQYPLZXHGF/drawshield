@@ -15,8 +15,10 @@
 // fox
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/f/fox',
  'patterns' => array (
     'fox(es)?',
   ),
+  'file' => 'inkscape/fox.svg',
 );
-?>
+

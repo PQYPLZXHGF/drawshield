@@ -15,8 +15,11 @@
 // galley
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/g/galley',
+  'file' => 'inkscape/galley.svg',
  'patterns' => array (
     'galleys?',
+   'lymphads?'
   ),
 );
-?>
+

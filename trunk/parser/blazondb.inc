@@ -9,7 +9,6 @@ function context($action) {
   static $wordsStack = array();
   static $cur_wordStack = array();
   static $pending_itemsStack = array();
-  static $matched_tokensStack = array(); // Do we need this?
   static $p_globalsStack = array();
   static $depth = 0;
   
@@ -38,7 +37,6 @@ function context($action) {
 }
 
 function checkDB() {
-  global $dom;
   global $words, $cur_word;
   global $DBList;
   
@@ -49,9 +47,6 @@ function checkDB() {
       'england' => 'gules three lions passant guardant in pale or',
       'france' => 'azure seme de lys or',
       'scrope' => 'azure a bend or',
-      'test1' => 'test1',
-      'test2' => 'test3',
-      'test3' => 'test2',
       'testq' => 'quartered 1st and 4th england 2nd and 3rd france',
       );
     if (array_key_exists($keyname, $blazonDB )) {
@@ -59,6 +54,7 @@ function checkDB() {
         parser_message('warning','Recursion in database blazons');
       else {
         $DBList[] = $keyname;
+        parser_message('builtin', "(" . ucfirst($keyname) . ") " . $blazonDB[$keyname] . ' -- ("local")');
         return $blazonDB[$keyname];
       }
     }
@@ -84,11 +80,10 @@ function checkDB() {
   }
   if ( mysql_num_rows($results) > 0 ) {
     $record = mysql_fetch_assoc($results);
-    parser_message($keyname,$record['blazon'] . ' -- ' . $record['description'] . ' (' . $record['source'] . ')');
+    parser_message('builtin', "(" . ucfirst($keyname) . ") " . $record['blazon'] . ' -- ' . $record['description'] . ' (' . $record['source'] . ')');
     $retval =  $record['blazon'];
   }
   mysql_close($db);
   return $retval;
 }
 
-?>

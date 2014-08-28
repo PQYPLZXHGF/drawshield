@@ -15,6 +15,7 @@
 // fleam
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/f/fleam',
  'patterns' => array (
     'fleams?',
   ),

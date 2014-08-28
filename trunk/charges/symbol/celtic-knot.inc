@@ -19,7 +19,4 @@ $charge = array (
   ),
  
   'file' => 'inkscape/celtic-knot.svg',
-  'licence' => 'Tim Powys-Lybbe, for a miscellany of bygones: http://powys.org/',
 );
-
-?>

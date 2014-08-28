@@ -15,6 +15,7 @@
 // cormorant
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/cormorant',
  'patterns' => array (
     'cormorant',
     'liver bird',

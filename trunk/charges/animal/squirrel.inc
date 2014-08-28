@@ -15,25 +15,19 @@
 // badger
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/s/squirrel',
  'patterns' => array (
     'squirrels?',
   ),
  
   'modifiers' => array (
-    array ( 'sejant', 'seje?ant', 'mod', 'stance' ),
+    array ( null, 'seje?ant', 'ignore' ),
     array ( null, 'cracking ?a nuts?', 'ignore' ),
-    array ( 'courant', 'courant', 'mod', 'stance' ),
    ),
  
- 'file' => 'inkscape/squirrel-sejant.svg',
+ 'file' => 'inkscape/squirrel.svg',
  
  'hflex' => 1.2,
  'wflex' => 1.2,
 );
-
-if ( $node != null ) {
-  if ( ($stance = get_mod($node, 'stance')) == null ) $stance = 'sejant'; 
-  $charge['file'] = 'inkscape/squirrel' . '-' . $stance . '.svg';
-}
-  
 ?>

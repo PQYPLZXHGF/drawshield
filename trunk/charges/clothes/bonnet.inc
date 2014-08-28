@@ -15,6 +15,7 @@
 // bonnet
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/b/bonnet',
  'patterns' => array (
     '?electoral bonnet',
   ),

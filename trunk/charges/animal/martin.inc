@@ -15,6 +15,7 @@
 // martin
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/m/martin',
  'patterns' => array (
     'genets?',
   ),

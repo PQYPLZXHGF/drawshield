@@ -17,7 +17,8 @@
 $charge = array (
  'patterns' => array (
     'garbs?',
-    'shea(f|ves) of corn',
+    'sheaf of corn',
+    'sheaves of corn',
     'wheatsheaf',
     'wheatsheaves',
   ),
@@ -26,4 +27,4 @@ $charge = array (
   'licence' => 'Tim Powys-Lybbe, for a miscellany of bygones: http://powys.org/',
 
 );
-?>
+

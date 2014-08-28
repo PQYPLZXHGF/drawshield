@@ -15,9 +15,11 @@
 // caduceus
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/caduceus',
  'patterns' => array (
-    'caduceus',
+    'caduceus(es)?',
   ),
-  'doc' => "staff of Mercury",
+
+  'file' => 'inkscape/caduceus.svg',
 );
-?>
+

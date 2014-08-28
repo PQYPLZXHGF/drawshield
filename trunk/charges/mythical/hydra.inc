@@ -15,8 +15,10 @@
 // hydra
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/h/hydra',
  'patterns' => array (
     'hydras?',
   ),
+  'file' => 'inkscape/hydra.svg',
 );
-?>
+

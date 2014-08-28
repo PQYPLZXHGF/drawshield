@@ -15,6 +15,7 @@
 // bow
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/b/bow',
  'patterns' => array (
     'bows?',
   ),

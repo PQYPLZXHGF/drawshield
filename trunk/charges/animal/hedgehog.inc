@@ -15,6 +15,7 @@
 // hedgehog
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/h/hedgehog',
  'patterns' => array (
     '(hedgehog|urcheon|urchin)s?',
   ),

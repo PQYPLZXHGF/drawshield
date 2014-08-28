@@ -15,6 +15,7 @@
 // camel
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/camel',
  'patterns' => array (
     'camels?',
   ),

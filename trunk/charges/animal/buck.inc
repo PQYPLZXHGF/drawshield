@@ -15,6 +15,7 @@
 // buck
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/b/buck',
  'patterns' => array (
     'bucks?',
   ),

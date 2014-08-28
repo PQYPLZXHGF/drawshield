@@ -16,7 +16,9 @@
 
 $charge = array (
  'patterns' => array (
-    'cornucopia',
+    'cornucopias?',
   ),
+
+  'file' => 'inkscape/cornucopia.svg',
 );
-?>
+

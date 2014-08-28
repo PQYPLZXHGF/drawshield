@@ -1,32 +1,25 @@
-<?php /* Copyright 2010 Karl R. Wilcox 
+<?php
+/**
+ * Drawshield PHP Source File
+ *
+ * Description...
+ *
+ * @author Karl R. Wilcox <karl@karlwilcox.com>
+ * @copyright Karl R. Wilcox 2014
+ * @license http://www.apache.org/licenses/LICENSE-2.0
+ * Date: 12/08/14
+ * Time: 18:50
+ */
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License. */
-
-// tau
-
-$charge = array (
-
-  'patterns' => array (
-  'tau ?cross(es)?',
-  'cross(es)? ?of (saint|st) anthony',
-	'cross(es)? tau',
-  ),
-  'either' => array ( 'cross', ),
-
-  'doc' => 'Stuff...',
-
-  'height' => 400, 'width' => 300,
-  'body' => '<path d="M0,0L50,25 250,25 300,0 300,100 250,75 175,75 175,350 200,400 100,400 125,350 125,75 50,75 0 100Z" stroke="#000000" stroke-width="4" />'
-)
-
-?>
+$charge = array(
+'file' => 'inkscape/tau.svg',
+  'link' => 'http://karlwilcox.com/parker/t/tau',
+'patterns' => array (
+  0 => 'tau ?cross(es)?',
+  1 => 'cross(es)? ?of (saint|st) anthony',
+  2 => 'cross(es)? tau',
+),
+'either' => array (
+  0 => 'cross',
+),
+);

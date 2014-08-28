@@ -16,6 +16,7 @@
 
 $charge = array (
 
+  'link' => 'http://karlwilcox.com/parker/s/sabre',
   'patterns' => array (
   'sabres?',
   'crooked swords?',

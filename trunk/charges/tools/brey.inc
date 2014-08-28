@@ -12,12 +12,26 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-// brey
 
 $charge = array (
  'patterns' => array (
-    'barnacles?|breys?',
+    'br(a|e)ye?s?',
+    'barnacles?',
+   'hemp (break|bracke)s?',
+   'hackles?',
+   '?horse br[ae]ys?',
   ),
-  'doc' => "Saddlery item",
+ 
+   'modifiers' => array (
+     array ( null, '(expanded|extended)', 'mod', 'expanded' ),
+   ),
+   
+  'file' => 'inkscape/brey1.svg',
+  'licence' => 'Tim Powys-Lybbe, for a miscellany of bygones: http://powys.org/',
 );
-?>
+
+if ($node != null) {
+  if ( get_mod( $node, 'expanded'))
+    $charge['file'] = 'inkscape/brey.svg';
+}
+

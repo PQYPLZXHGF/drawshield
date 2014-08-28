@@ -15,6 +15,7 @@
 // torch
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/t/torch',
  'patterns' => array (
     'flambeaux?',
   ),

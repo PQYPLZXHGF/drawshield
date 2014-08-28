@@ -15,9 +15,19 @@
 // antelope
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/a/antelope',
  'patterns' => array (
-    'antelopes?',
+    '?heraldic antelopes?',
     'ibex(es)?',
   ),
+
+  'file' => 'inkscape/ibex.svg',
+
+  'modifiers' => array (
+    array ( 'hooved', 'unguled', 'feature' ),
+    array ( 'tongued', 'langued', 'feature' ),
+    array ( 'horned', 'horn(s|ed)', 'feature' ),
+    array ( 'rampant', 'rampant', 'mod', 'stance' ),
+  ),
 );
-?>
+

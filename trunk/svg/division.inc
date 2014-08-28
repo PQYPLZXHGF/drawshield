@@ -12,7 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 	 
-function get_div_height ( $node ) {
+function get_div_height ( DOMElement $node ) {
 	// TODO rewrite this, possibly as full rewrite of divisions to match charges and ordinaries
 	// it relies on exact knowledge of internal division name
   $subtype = $node->getAttribute('subtype');
@@ -22,7 +22,7 @@ function get_div_height ( $node ) {
 	  return 1200;
  }
 
-function makeDivision( $node, $counter = false ) {
+function makeDivision( DOMElement $node, $counter = false ) {
 
   $type = $node->getAttribute('type');
   $subtype = $node->getAttribute('subtype');
@@ -38,7 +38,13 @@ function makeDivision( $node, $counter = false ) {
   $line_type = get_mod($node, 'linetype');
   $children = $node->childNodes;
   $secondDiv = null;
+  /**
+   * @var $tinctures DOMelement[]
+   */
   $tinctures = array();
+  /**
+   * @var $child DOMElement
+   */
   foreach ( $children as $child ) {
     if ( $child->nodeName == 'tincture' )
       $tinctures[$child->getAttribute('index')] = $child;
@@ -73,7 +79,5 @@ function makeDivision( $node, $counter = false ) {
   if ( !$counter and $secondDiv ) {
     $retval .= makeDivision( $secondDiv );
   }
-  return $retval;
+  return '<g stroke-width="2" stroke="' . rgb('division-stroke') . '" >' . $retval . '</g>';
 }
-
-?>

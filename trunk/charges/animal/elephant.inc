@@ -15,6 +15,7 @@
 // elephant
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/e/elephant',
  'patterns' => array (
     'elephants?',
   ),

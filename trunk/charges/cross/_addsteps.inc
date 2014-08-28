@@ -29,7 +29,7 @@ if ( $node != null ) {
       $len = 90 + $inc + $inc;
       $ypos = $charge['height'] + $inc;
       $xpos = ($width - $len)/2;
-      $charge['body'] .= '<rect x="' . $xpos . '" y="' . $ypos .'" width="' . $len . '" height="30" stroke="#000000" stroke-width="3" />' . "\n";
+      $charge['body'] .= '<rect x="' . $xpos . '" y="' . $ypos .'" width="' . $len . '" height="30" stroke="' . rgb('charge-stroke') . '" stroke-width="3" />' . "\n";
     }
     $charge['width'] = $width;
     $charge['height'] = $height;

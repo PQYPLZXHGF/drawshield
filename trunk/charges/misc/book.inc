@@ -15,6 +15,7 @@
 // book
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/b/book',
  'patterns' => array (
     '?open books?',
   ),

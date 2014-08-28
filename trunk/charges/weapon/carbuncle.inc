@@ -15,9 +15,10 @@
 // carbuncle
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/carbuncle',
  'patterns' => array (
     '(es)?carbuncles?',
     'charbocles?',
   ),
+  'file' => 'inkscape/carbuncle.svg',
 );
-?>

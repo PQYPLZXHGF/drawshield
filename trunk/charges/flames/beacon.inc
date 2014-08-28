@@ -15,10 +15,14 @@
 // beacon
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/b/beacon',
  'patterns' => array (
     'beacons?',
     'bale fires?',
   ),
+  'modifiers' => array (
+    array ( 'flamed', 'flame[sd]', 'feature', ),
+  ),
   'file' => 'inkscape/beacon.svg',
 );
-?>
+

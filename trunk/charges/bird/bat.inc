@@ -15,6 +15,7 @@
 // bat
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/b/bat',
  'patterns' => array (
     'rerem(ouse|ice)',
     'flitterm(ouse|ice)',

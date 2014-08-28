@@ -15,6 +15,7 @@
 // claymore
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/claymore',
  'patterns' => array (
     'claymores?',
   ),

@@ -13,6 +13,7 @@
      limitations under the License. */
 
 $charge = array ( 
+  'link' => 'http://karlwilcox.com/parker/d/duke',
   'patterns' => array (
   'dukes? (crown|coronet)s?',
   ),

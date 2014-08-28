@@ -15,6 +15,7 @@
 // hornet
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/h/hornet',
  'patterns' => array (
     'hornets?',
   ),

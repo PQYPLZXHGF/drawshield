@@ -15,8 +15,9 @@
 // glove
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/g/glove',
  'patterns' => array (
     'gloves?',
   ),
+  'file' => 'inkscape/glove.svg',
 );
-?>

@@ -15,6 +15,7 @@
 // cap
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/cap',
  'patterns' => array (
     'cap ?of ?estate',
     'cap of maintenance',

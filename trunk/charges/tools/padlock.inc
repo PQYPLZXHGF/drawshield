@@ -15,8 +15,10 @@
 // padlock
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/p/padlock',
  'patterns' => array (
     'fetterlocks?',
   ),
+  'file' => 'inkscape/fetterlock.svg',
 );
 ?>

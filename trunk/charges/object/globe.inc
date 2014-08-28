@@ -15,6 +15,7 @@
 // globe
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/g/globe',
  'patterns' => array (
     'terrestrial globes?',
   ),

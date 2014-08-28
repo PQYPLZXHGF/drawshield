@@ -16,7 +16,7 @@ function rewrite() {
   foreach ( $xpath->query("//charge[@subtype='annulet' and modifier/@name='concentric']") as $item ) {
     $number = $item->getAttribute('number');
     $item->setAttribute('number','1');
-    $mod = make_mod('concentric',"$number");
+    $mod = make_mod('num-concentric',"$number");
     $item->appendChild($mod);
   }
 
@@ -38,7 +38,8 @@ function rewrite() {
   // fountain (is a roundel with wavy bars)
   foreach ( $xpath->query("//charge[@subtype='fountain']") as $item ) {
     $item->setAttribute('subtype','roundel');
-    $tinc = get_child($item, 'tincture'); // replace existing "proper"
+    if ($tinc = get_child($item, 'tincture')) $item->removeChild($tinc);
+	$tinc = $dom->createElement('tincture'); // replace existing "proper"
     $div = $dom->createElement('division');
     $div->setAttribute('type', 'bar');
     $div->setAttribute('subtype', 'barry');
@@ -49,7 +50,7 @@ function rewrite() {
     $div->appendChild($tinc1);
     $div->appendChild($tinc2);
     $div->appendChild($mod);
-    $tinc->replaceChild($div,$tinc->firstChild);
+    $tinc->appendChild($div);
     $item->appendChild($tinc);
   }
 
@@ -79,7 +80,7 @@ function rewrite() {
 
   // bar sinister (is really a bend sinister)
   foreach ( $xpath->query("//ordinary[@subtype='bar' and modifier/@name='sinister']") as $item ) {
-    $item->setAttribute('type','bend');
+    $item->setAttribute('type','major');
     $item->setAttribute('subtype','bend');
   }
 

@@ -268,6 +268,8 @@ function get_placement($item) {
       case 'chevronel': $placement = 'x/x/200,200,180,180:500,900,240,240:800,200,180,180/x/x/x'; break;
       case 'tressure':  $placement = calcPlace('w',$number,$conjoin,'300,300,400,500'); break;
       case 'saltire': $placement = ($chief) ? 'x///150,700,180,180:850,700:500,380,140,140:500,1050,180,180/x/x' : 'x///150,500,180,180:850,500:500,150:500,850/x/x'; break;
+        case 'ribbon':
+        case 'bendlet':
       case 'bend': $placement = ($chief) ? 'x/750,550,250,250:250,950,180,180/250,950,180,180:600,450,200,200:800,650/150,850,180,180:350,1050:600,450,200,200:800,650/600,450,140,140:800,450:800,650:200,900:350,1050:150,1050/s' :
                                  'x/750,250,250,250:250,750/750,250,250,250:200,700,200,200:400,900/200,650,200,200:400,850:600,150:800,350//600,200,140,140:800,200:800,400:200,600:400,800:200,800'; 
         break;
@@ -440,7 +442,7 @@ function get_placement($item) {
           case 'inmidbase': $adjustment = ($cadency) ? '400,800,200,200' : '300,750,400,400'; break;
           case 'inhonpoint': $adjustment = ($cadency) ? '400,250,200,200' : '200,50,500,500'; break;
           case 'infesspoint': $adjustment = ($cadency) ? '400,400,200,200' : '200,200,600,600'; break;
-          case 'innombril': $adjustment = ($cadency) ? '400,800,200,200' : '200,600,600,600'; break;
+          case 'innombril': $adjustment = ($cadency) ? '400,800,200,200' : '200,600,400,400'; break;
           case 'insinside': $adjustment = ($cadency) ? '0,500,200,200' : '0,200,400,400'; break;
           case 'indexside': $adjustment = ($cadency) ? '800,500,200,200' : '600,200,400,400'; break;
           case 'infirst': 

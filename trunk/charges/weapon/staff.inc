@@ -15,8 +15,11 @@
 // staff
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/s/staff',
  'patterns' => array (
-    'staffs?|bourdons?',
+    'staffs?',
+   'bourdons?',
   ),
+  'file' => 'inkscape/staff.svg',
 );
-?>
+

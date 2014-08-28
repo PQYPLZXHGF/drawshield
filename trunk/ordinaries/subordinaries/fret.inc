@@ -14,6 +14,7 @@
 
 
 $ordinary = array(
+  'link' => 'http://karlwilcox.com/parker/f/fret',
       'patterns' => array (
         'frets?',
       ),

@@ -18,5 +18,6 @@ $charge = array (
  'patterns' => array (
     '(octo|eight)foils?',
   ),
+  'file' => 'inkscape/octofoil.svg',
 );
-?>
+

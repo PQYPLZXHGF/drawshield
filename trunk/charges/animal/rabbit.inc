@@ -15,6 +15,7 @@
 // rabbit
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/r/rabbit',
  'patterns' => array (
     'coneys?',
   ),

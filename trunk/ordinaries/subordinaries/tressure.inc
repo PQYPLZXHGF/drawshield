@@ -14,6 +14,7 @@
 
 
 $ordinary = array(
+  'link' => 'http://karlwilcox.com/parker/t/tressure',
       'patterns' => array (
         'trea?s?sure',
       ),

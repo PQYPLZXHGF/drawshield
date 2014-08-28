@@ -30,7 +30,7 @@ function makeDiv_gyronny( $node, $div_num ) {
                         'CH' => '<path  d="M-300,-100 500,700, 169,-100z M500,-100 500,700 831,-100z M1300,-100 500,700 1300,369z M1300,700 500,700 1300,1031z M1300,1500 500,700 831,1500z M500,1500 500,700 169,1500z M-300,1500 500,700 -300,1031z M-300,700 500,700 -300,369z" />'),
   );
   $allowed = array ( '6', '8', '10', '12', '16' );
-
+  draw_message('link',"gyronny http://karlwilcox.com/parker/g/gyronny");
   $num_of = get_mod($node,'ofnum');
   if ( !in_array($num_of, $allowed) ) $num_of = '8';
 

@@ -15,8 +15,10 @@
 // column
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/column',
  'patterns' => array (
     'columns?',
   ),
+  'file' => 'inkscape/column.svg',
 );
-?>
+

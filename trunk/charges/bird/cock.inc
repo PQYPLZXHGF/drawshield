@@ -15,6 +15,7 @@
 // cock
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/cock',
  'patterns' => array (
     '?dunghill cocks?',
     'gamecocks?',

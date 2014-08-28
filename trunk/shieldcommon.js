@@ -19,19 +19,11 @@ var xmlhttp;
 var asText;
 var useId;
 var useHTMLId;
-var IEver = -1;
 var shieldsize = 500;
+var printable = false;
 var shieldtarget = 'shieldimg';
 var captiontarget = 'shieldcaption';
 var tabletarget = 'resultstable';
-
-if (navigator.appName == 'Microsoft Internet Explorer')
-{
-  var ua = navigator.userAgent;
-  var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
-  if (re.exec(ua) != null)
-    IEver = parseFloat( RegExp.$1 );
-}
 
 function updateHTML() {
 	if ( xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
@@ -62,21 +54,7 @@ function updateSVG() {
       errorPara.appendChild(errorText);
       shieldImg.insertBefore(errorPara,null);
     } else {
-      if ( IEver != -1 && IEver < 9.0 ) {
-    	  if ( typeof shieldSize=="undefined" ) {
-    		  var shieldSize = 500;
-    	  }
-      	var width = shieldSize;
-      	var height = (shieldSize * 1.2);
-      	height = height.toFixed();
-        var obj = document.createElement('object', true);
-        obj.setAttribute('type', 'image/svg+xml');
-        obj.setAttribute('data', 'data:image/svg+xml,' + xmlhttp.responseText);
-        obj.setAttribute('width', width.toString());
-        obj.setAttribute('height', height.toString());
-        obj.addEventListener('load', function() { ; }, false);
-        svgweb.appendChild(obj, shieldImg);
-      } else if ( (navigator.userAgent.indexOf( "iPad" ) > 0) ||
+      if ( (navigator.userAgent.indexOf( "iPad" ) > 0) ||
                   (navigator.userAgent.indexOf( "iPod" ) > 0) ||
                   (navigator.userAgent.indexOf( "iPhone" ) > 0) 
                 ) {
@@ -112,7 +90,7 @@ function requestSVG(url,id) {
 
 function saveshield() {
    blazonText = document.getElementById('blazon').value;
-   window.location.replace( '/include/shield/drawshield.php?asfile=1&blazon=' + encodeURIComponent(blazonText));
+   window.location.replace( '/include/shield/drawshield.php?asfile=1' + getOptions() + '&blazon=' + encodeURIComponent(blazonText));
 }
 
 // Function provided by http://stackoverflow.com/users/405017/phrogz
@@ -133,8 +111,48 @@ function cloneToDoc(node,doc){
   return clone;
 }
 
+function getOptions() {
+    // Look for options being set
+    var options = ''
+    option = document.getElementById('f-svg');
+    if (option != null && option.selected)  options += '&saveformat=svg';
+    option = document.getElementById('f-png')
+    if (option != null && option.selected ) options += '&saveformat=png';
+    option = document.getElementById('f-jpg');
+    if (option != null && option.selected ) options += '&saveformat=jpg';
+    option = document.getElementById('p-nocolour');
+    if (option != null && option.selected)  options += '&palette=nocolour';
+    option = document.getElementById('p-wikimedia')
+    if (option != null && option.selected)  options += '&palette=copic';
+    option = document.getElementById('p-wikimedia')
+    if (option != null && option.selected ) options += '&palette=wikimedia';
+    option = document.getElementById('p-vibrant');
+    if (option != null && option.selected ) options += '&palette=vibrant';
+    option = document.getElementById('p-drawshield');
+    if (option != null && option.selected ) options += '&palette=drawshield';
+    option = document.getElementById('highlight');
+    if ( option != null && option.checked == true) {
+        options += '&highlight=1';
+    } else {
+        options += '&highlight=0';
+    }
+    option = document.getElementById('printable');
+    if ( option != null && option.checked == true) {
+        options += '&printable=1';
+        printable = true;
+    }
+    return options;
+}
+
+function randomifempty(){
+  blazon = document.getElementById('blazon');
+  if ( blazon.value.trim() == '' ) {
+    blazon.value = randomShield();
+  }
+}
 
 function drawshield() {
+    // Isolate blazon
    shieldCaption = document.getElementById(captiontarget);
    blazonText = document.getElementById('blazon').value;
    eol1 = blazonText.indexOf('#');
@@ -143,9 +161,13 @@ function drawshield() {
    else if ( eol2 == -1 ) { eol = eol1; }
    else { eol = Math.min(eol1, eol2); }
    if ( eol != -1 ) { shieldCaption.firstChild.nodeValue = blazonText.slice(0,eol);}
-   else { shieldCaption.firstChild.nodeValue= blazonText; } 
-	 // Add a random number to force resend (avoids caching)
-   requestSVG('/include/shield/drawshield.php?&size=' + shieldsize + '&rand=' + Math.random()
+   else { shieldCaption.firstChild.nodeValue= blazonText; }
+    // Add a random number to force resend (avoids caching)
+    myOpts = getOptions(); // set printable as side effect
+    if ( printable )
+      window.open('/include/shield/drawshield.php?' + myOpts + '&size=1000' + '&blazon=' + encodeURIComponent(blazonText),'_blank');
+    else
+      requestSVG('/include/shield/drawshield.php?' + getOptions() + '&size=' + shieldsize + '&rand=' + Math.random()
 	   + '&blazon=' + encodeURIComponent(blazonText),shieldtarget);
 }
 
@@ -171,6 +193,5 @@ function setupshield(target,size,initial,caption) {
   if ( typeof(size) !== 'undefined' && size > 0 ) shieldsize = size;
   shieldCaption = document.getElementById(captiontarget);
   shieldCaption.firstChild.nodeValue = initial;
-	requestSVG('/include/shield/drawshield.php?nolog=1&size=' + shieldsize + initBlazon, shieldtarget);
+	requestSVG('/include/shield/drawshield.php?&highlight=1&size=' + shieldsize + initBlazon, shieldtarget);
 }
-

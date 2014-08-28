@@ -3,7 +3,7 @@
 
 
 <?php
-if (!isset($_GET['keyname']) or !isset($_GET['blazon'])) {
+if (!isset($_GET['keyname']) or !isset($_GET['blazon']) or !(isset($GET['password']) and $_GET['password'] == 'mantic0re')) {
   echo '<p>Must set keyname and blazon</p>';
 } else {
   $pass = trim(file_get_contents('../../../etc/blazondb.txt'));

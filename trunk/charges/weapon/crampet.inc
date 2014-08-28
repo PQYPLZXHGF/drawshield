@@ -15,6 +15,7 @@
 // crampet
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/crampet',
  'patterns' => array (
     'crampets?',
   ),

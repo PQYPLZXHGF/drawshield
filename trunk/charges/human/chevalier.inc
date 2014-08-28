@@ -15,6 +15,7 @@
 // chevalier
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/chevalier',
  'patterns' => array (
     'chevaliers?',
   ),

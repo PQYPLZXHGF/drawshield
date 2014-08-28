@@ -15,6 +15,7 @@
 // chain
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/chain',
  'patterns' => array (
     'chains?',
   ),

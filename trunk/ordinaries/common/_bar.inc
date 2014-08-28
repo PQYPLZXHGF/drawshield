@@ -12,6 +12,7 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
+global $svg_chief;
 
 $ordinary['plural'] = 4;
 
@@ -45,6 +46,9 @@ if ( $node != null ) {
 
   $mods = array_pad(array(), $num, $main_linetype );
   $couped = 'none';
+  /**
+   * @var DOMElement $child
+   */
   foreach ( $node->childNodes as $child ) {
     if ( $child->nodeName == 'modifier' ) {
       switch ( ($mod = $child->getAttribute('name')) ) {
@@ -102,6 +106,9 @@ if ( $node != null ) {
       $linetype_size = 20;
       $bar_width = 400;
       break;
+    case 'ribbon':
+      $bar_width = 80;
+      break;
     case 'bar':
     default:
       $bar_width = 400;
@@ -110,6 +117,7 @@ if ( $node != null ) {
   if ( $num < 1 ) { $num = 1; }
   if ( $num > 8 ) { $num = 8; }
   $body = '';
+  $spec = '';
   $spacing = 1000/($num+1);
   $H1 = min ( 200, ($bar_width / $num) );
   $H2 = $H1 / 2;
@@ -138,10 +146,12 @@ if ( $node != null ) {
         $X1 = (($i+1) * $spacing) - $H2;
         $spec = "X{$X1}Y{$palet_start}a{$H1}C{$palet_length}e{$H1}G{$palet_length}";
         break;
+      case 'ribbon':
       case 'bendlet':
         $W2 = ($H1/0.707) / 2;
         $X1 = (($i+1) * $spacing) - 500 - $W2;
         $Y1 = 500 - (($i+1) * $spacing);
+        if ( $svg_chief == 'CH' ) $Y1 += 300;
         $spec = "X{$X1}Y{$Y1}h{$H1}B1600d{$H1}F1600";
         break;
     }
@@ -149,4 +159,4 @@ if ( $node != null ) {
   }
   $ordinary['body'] = $body;
 }
-?>
+

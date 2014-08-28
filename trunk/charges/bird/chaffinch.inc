@@ -15,6 +15,7 @@
 // chaffinch
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/c/chaffinch',
  'patterns' => array (
     'chaffinch(es)?',
     'pinson',

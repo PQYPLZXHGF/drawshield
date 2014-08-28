@@ -15,6 +15,7 @@
 // grappling-iron
 
 $charge = array (
+  'link' => 'http://karlwilcox.com/parker/g/grappling-iron',
  'patterns' => array (
     'grappling irons?',
   ),
